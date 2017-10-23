@@ -1,5 +1,13 @@
-.idea/
-target/
+# Created by .ignore support plugin (hsz.mobi)
+### Example user template template
+### Example user template
+
+# IntelliJ project files
+.idea
 *.iml
-*.log
-edutest.log*
+out
+gen
+
+# General
+.DS_Store
+.idea/
