@@ -375,6 +375,34 @@ header .tools-bar p {
 .entry .weui-cell:before {
   left: 0;
 }
+.progress {
+  margin-top: 0;
+}
+.progress .weui-cell__hd > img {
+  width: 40px;
+  height: 40px;
+}
+
+.logo-wrap {
+  padding: 10px;
+  margin-bottom: 10px;
+}
+.logo-wrap .logo-hd img {
+  margin: 0 auto 10px;
+  display: block;
+  width: 60px;
+  height: 60px;
+}
+.logo-wrap .logo-bd {
+  text-align: center;
+}
+.logo-wrap .logo-bd span {
+  color: #999;
+  font-size: 14px;
+}
+.logo-wrap + .weui-cells {
+  margin-top: 10px;
+}
 
 .weui-tabbar {
   position: fixed;
