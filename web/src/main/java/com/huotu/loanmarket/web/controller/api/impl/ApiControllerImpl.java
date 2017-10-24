@@ -1,10 +1,20 @@
 package com.huotu.loanmarket.web.controller.api.impl;
 
+import com.huotu.loanmarket.service.Repository.LoanProjectRepository;
+import com.huotu.loanmarket.service.Repository.LoanUserRepository;
+import com.huotu.loanmarket.service.entity.LoanProject;
 import com.huotu.loanmarket.service.searchable.ProjectSearchCondition;
 import com.huotu.loanmarket.web.common.ApiResult;
+import com.huotu.loanmarket.web.common.ResultCodeEnum;
 import com.huotu.loanmarket.web.controller.api.ApiController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.persistence.criteria.Predicate;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author allan
@@ -13,19 +23,40 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/rest/api")
 public class ApiControllerImpl implements ApiController {
+    @Autowired
+    private LoanUserRepository loanUserRepository;
+    @Autowired
+    private LoanProjectRepository loanProjectRepository;
+
     @Override
     public ApiResult appInfo(String appVersion, String osVersion, String osType) {
         return null;
     }
 
     @Override
-    public ApiResult init() {
+    public ApiResult init(int userId) {
+        //App版本信息,存在即表示有更新，否则为null
+        //开机广告信息
+        //如果用户未登录返回null
+        if (userId > 0) {
+            return ApiResult.resultWith(ResultCodeEnum.SUCCESS, loanUserRepository.findOne(userId));
+        }
         return null;
     }
 
     @Override
     public ApiResult projectList(ProjectSearchCondition projectSearchCondition) {
-        return null;
+        Specification<LoanProject> specification = (root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            predicates.add(criteriaBuilder.equal(root.get("desc").as(String.class), projectSearchCondition.getDesc()));
+            predicates.add(criteriaBuilder.equal(root.get("topSortNum").as(Integer.class), projectSearchCondition.getTopNum()));
+            // TODO: 2017-10-24  类目查询
+//            predicates.add(criteriaBuilder.equal(root.get()).as(), projectSearchCondition.getSid())
+            return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
+        };
+
+        List<LoanProject> loanProjectList = loanProjectRepository.findAll(specification);
+        return ApiResult.resultWith(ResultCodeEnum.SUCCESS, loanProjectList);
     }
 
     @Override

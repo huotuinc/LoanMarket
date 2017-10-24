@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author allan
@@ -77,5 +78,42 @@ public class LoanProject {
      */
     @Column(name = "Desc")
     private String desc;
+    /**
+     * 是否删除
+     */
+    @Column(name = "IsDelete")
+    private int isDelete;
+    /**
+     * 应用类型
+     */
+    @Column(name = "Apply_Type")
+    private int applyType;
+    /**
+     * 是否热门
+     */
+    @Column(name = "Is_Hot")
+    private int isHot;
+    /**
+     * 是否最新
+     */
+    @Column(name = "Is_New")
+    private int isNew;
+    /**
+     * 头部排序字段
+     */
+    @Column(name = "Top_Sort_Num")
+    private int topSortNum;
+    /**
+     * 联系人
+     */
+    @Column(name = "Contacter")
+    private String contacter;
+    /**
+     * 电话
+     */
+    @Column(name = "Phone")
+    private String phone;
 
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "loanProject")
+    private List<CategoryRelation> categoryRelationList;
 }
