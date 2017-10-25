@@ -499,16 +499,18 @@ header .tools-bar p {
 .material-list .material-hd {
     width: 30px;
     height: 30px;
-    background: #d0d0d0;
     border-radius: 50%;
     margin-right: 10px;
+    background-color: #d0d0d0;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
-.material-list .material-hd img {
-    display: block;
-    width: 100%;
-    height: 100%;
-}
+/*.material-list .material-hd img {*/
+    /*display: block;*/
+    /*width: 100%;*/
+    /*height: 100%;*/
+/*}*/
 
 .material-list .material-bd {
     -webkit-box-flex: 1;
@@ -516,7 +518,18 @@ header .tools-bar p {
     flex: 1;
     font-size: 14px;
 }
-
+.material .material-icon-info {
+    background-image: url("../image/info.png");
+}
+.material .material-icon-user {
+    background-image: url("../image/user.png");
+}
+.material .material-icon-work {
+    background-image: url("../image/work.png");
+}
+.material .material-icon-phone {
+    background-image: url("../image/phone.png");
+}
 .footer {
     position: fixed;
     left: 0;
