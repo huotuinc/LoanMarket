@@ -84,9 +84,11 @@ ins, a {
     font-size: 14px;
     color: #888;
 }
+
 .weui-cell:before {
     left: 0;
 }
+
 html, body {
     height: 100%;
 }
@@ -462,10 +464,78 @@ header .tools-bar p {
 .loan-calc .weui-cell__ft {
     color: #333;
 }
+
 .loan-calc-info {
     padding-top: 13px;
     padding-bottom: 13px;
     text-align: center;
+}
+
+.material-list .hd {
+    border-left: 4px solid #f13c38;
+}
+.material-list .bd {
+    background: #f2f2f2;
+}
+.material-list .material {
+    padding: 5px 10px;
+    float: left;
+    width: 50%;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    background: #fff;
+    border-top: 1px solid #f6f6f6;
+}
+.material-list .material:nth-child(odd) {
+    border-right: 1px solid #f6f6f6;
+}
+.material-list .material:nth-child(even) {
+    border-left: 1px solid #f6f6f6;
+}
+.material-list .material-hd {
+    width: 30px;
+    height: 30px;
+    background: #d0d0d0;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.material-list .material-hd img {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.material-list .material-bd {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    flex: 1;
+    font-size: 14px;
+}
+
+.footer {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 22px 28px 15px;
+    width: 100%;
+    height: 76px;
+    background: #fff;
+    text-align: center;
+}
+.footer .apply-btn {
+    display: block;
+    width: 100%;
+    height: 100%;
+    line-height: 39px;
+    color: #fff;
+    border-radius: 6px;
+    background: #d80000;
 }
 .weui-tabbar {
     position: fixed;
