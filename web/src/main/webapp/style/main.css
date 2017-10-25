@@ -474,9 +474,11 @@ header .tools-bar p {
 .material-list .hd {
     border-left: 4px solid #f13c38;
 }
+
 .material-list .bd {
     background: #f2f2f2;
 }
+
 .material-list .material {
     padding: 5px 10px;
     float: left;
@@ -490,12 +492,15 @@ header .tools-bar p {
     background: #fff;
     border-top: 1px solid #f6f6f6;
 }
+
 .material-list .material:nth-child(odd) {
     border-right: 1px solid #f6f6f6;
 }
+
 .material-list .material:nth-child(even) {
     border-left: 1px solid #f6f6f6;
 }
+
 .material-list .material-hd {
     width: 30px;
     height: 30px;
@@ -507,9 +512,9 @@ header .tools-bar p {
 }
 
 /*.material-list .material-hd img {*/
-    /*display: block;*/
-    /*width: 100%;*/
-    /*height: 100%;*/
+/*display: block;*/
+/*width: 100%;*/
+/*height: 100%;*/
 /*}*/
 
 .material-list .material-bd {
@@ -518,18 +523,50 @@ header .tools-bar p {
     flex: 1;
     font-size: 14px;
 }
+
 .material .material-icon-info {
     background-image: url("../image/info.png");
 }
+
 .material .material-icon-user {
     background-image: url("../image/user.png");
 }
+
 .material .material-icon-work {
     background-image: url("../image/work.png");
 }
+
 .material .material-icon-phone {
     background-image: url("../image/phone.png");
 }
+
+.content .search-tools {
+    margin-bottom: 0;
+}
+
+.search-tools .weui-cells {
+    margin-top: 0;
+}
+
+.search-tools .search-list .weui-cell {
+    float: left;
+    width: 50%;
+    font-size: 14px;
+}
+.search-tools .search-list .weui-cell .weui-cell__ft {
+    color: #333;
+}
+.no-result {
+    padding: 10px;
+    font-size: 14px;
+    text-align: center;
+}
+.search-number {
+    padding: 8px 10px;
+    font-size: 14px;
+    background: #f2f2f2;
+}
+
 .footer {
     position: fixed;
     left: 0;
@@ -541,6 +578,7 @@ header .tools-bar p {
     background: #fff;
     text-align: center;
 }
+
 .footer .apply-btn {
     display: block;
     width: 100%;
@@ -550,6 +588,7 @@ header .tools-bar p {
     border-radius: 6px;
     background: #d80000;
 }
+
 .weui-tabbar {
     position: fixed;
     z-index: 9999;
