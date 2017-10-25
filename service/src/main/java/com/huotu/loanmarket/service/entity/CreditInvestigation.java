@@ -3,13 +3,7 @@ package com.huotu.loanmarket.service.entity;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Created by hxh on 2017-10-23.
@@ -22,10 +16,11 @@ public class CreditInvestigation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id")
-    private int id;
+    private Integer id;
     /**
      * 用户编号
      */
-    @OneToOne(mappedBy = "Loan_User")
+    @ManyToOne
+    @JoinColumn(name = "Loan_User_Id")
     private LoanUser loanUser;
 }

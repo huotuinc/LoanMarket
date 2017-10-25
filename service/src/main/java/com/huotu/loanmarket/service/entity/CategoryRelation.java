@@ -3,13 +3,7 @@ package com.huotu.loanmarket.service.entity;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * 类目关联表
@@ -22,7 +16,7 @@ import javax.persistence.Table;
 public class CategoryRelation {
     @Id
     @Column(name = "Id")
-    private int id;
+    private Integer id;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST}, optional = false)
     @JoinColumn(name = "Loan_Project_Id")

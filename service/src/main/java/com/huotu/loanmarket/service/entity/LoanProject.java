@@ -5,7 +5,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 
 /**
  * @author allan
@@ -113,8 +112,5 @@ public class LoanProject {
      */
     @Column(name = "Phone")
     private String phone;
-
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "loanProject")
-    private List<CategoryRelation> categoryRelationList;
 
 }

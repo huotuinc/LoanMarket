@@ -1,5 +1,6 @@
 package com.huotu.loanmarket.web.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,6 +17,7 @@ public class IndexController {
     }
 
     @RequestMapping("/index")
+    @PreAuthorize("hasRole('ADMIN')")
     public String index() {
         return "index";
     }

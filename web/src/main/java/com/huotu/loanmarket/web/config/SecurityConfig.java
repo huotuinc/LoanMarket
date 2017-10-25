@@ -31,8 +31,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         web.ignoring().antMatchers(STATIC_RESOURCE_PATH);
     }
 
+
+    @Override
     @Autowired
-    public void registerSharedAuthentication(AuthenticationManagerBuilder auth) throws Exception {
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication().withUser("administrator")
                 .password("hot!@#$")
                 .roles("ADMIN");
