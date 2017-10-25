@@ -1,7 +1,12 @@
 $(function () {
     FastClick.attach(document.body);
-
-    $('#J_amount').picker({
+    var $amount = $('#J_amount');
+    var $deadline = $('#J_deadline');
+    var tag = getQueryString('tag');
+    var amount = parseInt($amount.text());
+    var deadline = parseInt($deadline.text());
+    // console.log(tag, amount, deadline);
+    $amount.picker({
         cols: [
             {
                 textAlign: 'center',
@@ -9,7 +14,7 @@ $(function () {
             }
         ],
         onChange: function (p, v) {
-            $("#J_amount").text(v);
+            $amount.text(v);
         },
         onClose: function (p) {
             // lineCalc = p.value[0];
@@ -17,7 +22,7 @@ $(function () {
         }
     });
 
-    $('#J_deadline').picker({
+    $deadline.picker({
         cols: [
             {
                 textAlign: 'center',
@@ -25,11 +30,41 @@ $(function () {
             }
         ],
         onChange: function (p, v) {
-            $("#J_deadline").text(v);
+            $deadline.text(v);
         },
         onClose: function (p) {
             // lineCalc = p.value[0];
             // calc(lineCalc, deadlineCale);
         }
     });
+
+
+    function searchLoan(tag, amount, deadline) {
+        $.ajax('/search/loan', {
+            method: 'GET',
+            data: {
+                tag: tag,
+                amount: amount,
+                deadline: deadline
+            },
+            dataType: 'json',
+            success: function (res) {
+                var _html = template('J_resultTmp', res);
+                $('#J_resultContainer').html(_html);
+            },
+            error: function () {
+                
+            }
+        });
+    }
+
+
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r !== null) return decodeURIComponent(r[2]);
+        return null;
+    }
+
+    searchLoan(tag, amount, deadline);
 });
