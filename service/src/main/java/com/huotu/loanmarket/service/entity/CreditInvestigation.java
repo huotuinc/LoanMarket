@@ -1,5 +1,8 @@
 package com.huotu.loanmarket.service.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,7 +14,8 @@ import javax.persistence.Table;
 /**
  * Created by hxh on 2017-10-23.
  */
-
+@Getter
+@Setter
 @Entity
 @Table(name = "Credit_Investigation")
 public class CreditInvestigation {

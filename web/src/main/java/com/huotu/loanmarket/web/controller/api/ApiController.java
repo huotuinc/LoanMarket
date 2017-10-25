@@ -37,7 +37,7 @@ public interface ApiController {
      */
     @RequestMapping("/init")
     @ResponseBody
-    ApiResult init(int userId);
+    ApiResult init(Long userId);
 
     /**
      * 分组按条件搜索产品列表

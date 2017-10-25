@@ -116,4 +116,5 @@ public class LoanProject {
 
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "loanProject")
     private List<CategoryRelation> categoryRelationList;
+
 }

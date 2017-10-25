@@ -20,7 +20,7 @@ public class LoanUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id")
-    private int id;
+    private Long id;
     /**
      *用户名
      */
