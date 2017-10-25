@@ -1,7 +1,7 @@
 package com.huotu.loanmarket.web.controller.api.impl;
 
-import com.huotu.loanmarket.service.repositoryhxh.LoanProjectRepository;
-import com.huotu.loanmarket.service.repositoryhxh.LoanUserRepository;
+import com.huotu.loanmarket.service.repository.LoanProjectRepository;
+import com.huotu.loanmarket.service.repository.LoanUserRepository;
 import com.huotu.loanmarket.service.entity.LoanProject;
 import com.huotu.loanmarket.service.entity.LoanUser;
 import com.huotu.loanmarket.service.searchable.ProjectSearchCondition;

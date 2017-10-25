@@ -1,4 +1,4 @@
-package com.huotu.loanmarket.service.repositoryhxh;
+package com.huotu.loanmarket.service.repository;
 
 import com.huotu.loanmarket.service.entity.CreditInvestigation;
 import org.springframework.data.jpa.repository.JpaRepository;

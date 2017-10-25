@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @ComponentScan(basePackages = "com.huotu.loanmarket.service")
 @EnableJpaRepositories(
-        basePackages = "com.huotu.loanmarket.service.repositoryhxh"
+        basePackages = "com.huotu.loanmarket.service.repository"
 )
 @ImportResource({"classpath:service_config_prod.xml", "classpath:service_config_dev.xml"})
 public class ServiceConfig {

@@ -1,4 +1,4 @@
-package com.huotu.loanmarket.service.repositoryhxh;
+package com.huotu.loanmarket.service.repository;
 
 import com.huotu.loanmarket.service.entity.CategoryRelation;
 import org.springframework.data.jpa.repository.JpaRepository;
