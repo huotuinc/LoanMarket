@@ -17,8 +17,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    public static final String LOGIN_PAGE = "/login";
-    public static final String LOGIN_SUCCESS_URL = "/index";
+    public static final String LOGIN_PAGE = "/backend/login";
+    public static final String LOGIN_SUCCESS_URL = "/backend/index";
     public static final String LOGIN_ERROR_URL = "/loginFailed";
     public static final String LOGOUT_SUCCESS_URL = "/";
 
@@ -31,8 +31,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         web.ignoring().antMatchers(STATIC_RESOURCE_PATH);
     }
 
+
+    @Override
     @Autowired
-    public void registerSharedAuthentication(AuthenticationManagerBuilder auth) throws Exception {
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication().withUser("administrator")
                 .password("hot!@#$")
                 .roles("ADMIN");
@@ -44,7 +46,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .headers().frameOptions().sameOrigin()
                 .and()
                 .authorizeRequests()
-                .anyRequest().authenticated()
+                .antMatchers("/backend/**")
+                .authenticated()
                 .and()
                 .csrf().disable()
                 .formLogin()

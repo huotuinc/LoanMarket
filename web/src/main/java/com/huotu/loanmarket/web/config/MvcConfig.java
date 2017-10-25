@@ -37,7 +37,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
      * 静态资源处理,加在这里
      */
     private static String[] STATIC_RESOURCE_PATH = {
-            "resources"
+            "resource"
     };
     @Autowired
     private Environment environment;
@@ -60,7 +60,8 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void configureViewResolvers(ViewResolverRegistry registry) {
-        registry.viewResolver(htmlTemplateResolver());
+        registry.viewResolver(backendTemplateResolver());
+        registry.viewResolver(forendTemplateResolver());
     }
 
     /**
@@ -68,10 +69,9 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
      *
      * @return
      */
-    @Bean
-    public ViewResolver htmlTemplateResolver() {
+    private ViewResolver backendTemplateResolver() {
         SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver();
-        resolver.setPrefix("/templates/");
+        resolver.setPrefix("/templates/backend/");
         resolver.setSuffix(".html");
         resolver.setApplicationContext(applicationContext);
         resolver.setCharacterEncoding(StringUtilsExt.ENCODING_UTF8);
@@ -86,6 +86,34 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
         ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
         viewResolver.setTemplateEngine(engine);
         viewResolver.setOrder(1);
+        viewResolver.setContentType("text/html;charset=utf-8");
+        viewResolver.setCharacterEncoding(StringUtilsExt.ENCODING_UTF8);
+
+        return viewResolver;
+    }
+
+    /**
+     * html解析器
+     *
+     * @return
+     */
+    private ViewResolver forendTemplateResolver() {
+        SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver();
+        resolver.setPrefix("/templates/forend/");
+        resolver.setSuffix(".html");
+        resolver.setApplicationContext(applicationContext);
+        resolver.setCharacterEncoding(StringUtilsExt.ENCODING_UTF8);
+        //设置缓存
+        if (environment.acceptsProfiles("development")) {
+            resolver.setCacheable(false);
+        }
+
+        SpringTemplateEngine engine = new SpringTemplateEngine();
+        engine.setTemplateResolver(resolver);
+
+        ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
+        viewResolver.setTemplateEngine(engine);
+        viewResolver.setOrder(2);
         viewResolver.setContentType("text/html;charset=utf-8");
         viewResolver.setCharacterEncoding(StringUtilsExt.ENCODING_UTF8);
 

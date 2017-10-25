@@ -1,14 +1,6 @@
 package com.huotu.loanmarket.service.entity;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -20,7 +12,7 @@ public class LoanUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id")
-    private int id;
+    private Long id;
     /**
      *用户名
      */
@@ -52,8 +44,4 @@ public class LoanUser {
      */
     @Column(name = "IsFreeze")
     private int isFreeze;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "Loan_User_Id")
-    private CreditInvestigation creditInvestigation;
 }
