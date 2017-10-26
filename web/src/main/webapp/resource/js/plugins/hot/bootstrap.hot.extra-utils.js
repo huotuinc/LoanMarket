@@ -290,8 +290,7 @@ var hot = $.extend({}, hot, {
         }
     },
     //图片上传
-    uploadImg: function (btnFile, uploadPath, callback, data) {
-        var uploadUrl = '/UploadFileEidt.aspx?uploadtype=1&userid=' + uploadPath + '';
+    uploadImg: function (uploadUrl, btnFile, uploadPath, callback, data) {
         $.ajaxFileUpload({
             url: uploadUrl,
             secureuri: false,//安全协议

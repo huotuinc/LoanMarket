@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title>商品列表</title>
+
+    <link href="http://resali.huobanplus.com/cdn/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+    <!-- Morris -->
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/animate.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/style.min-1.0.8.css" rel="stylesheet">
+
+    <!--checkbox-->
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet">
+
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css" rel="stylesheet"/>
+
+    <style>
+
+        #edit_form button {
+            padding: 4px 12px;
+        }
+
+        .hr-line-dashed {
+            margin: 15px 0;
+        }
+
+        .specPanel .input-sm {
+            height: 20px;
+        }
+
+        .specOn {
+            border: 1px solid #FFD400;
+            background-color: #FFF7E6;
+        }
+
+        .bootstrap-tagsinput {
+            width: 80%;
+        }
+
+        .badge-info, .label-info {
+            background-color: #5bc0de;
+        }
+
+        .removeBtn {
+            position: absolute;
+            right: 6px;
+            top: 0px;
+            color: #ccc;
+            background: rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight tooltip-demo">
+    <form role="form" id="edit_form">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox float-e-margins">
+                    <div class="tabs-container">
+                        <div class="tab-content">
+                            <div id="tab-1" class="tab-pane active">
+                                <div class="panel-body good-edit-failure form-horizontal">
+                                    <div class="form-group form-inline">
+                                        <label class="col-sm-2 control-label">所属分类:</label>
+
+                                        <div class="col-sm-10">
+                                            <select class="form-control input-sm">
+                                                <option>请选择</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed "></div>
+                                    <div class="form-group ">
+                                        <label class="col-sm-2 control-label">产品名称:</label>
+
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control input-sm" placeholder="产品名称"/>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed "></div>
+                                    <div class="form-group form-inline">
+                                        <label class="col-sm-2 control-label">
+                                            Logo:
+                                        </label>
+
+                                        <div class="col-sm-10">
+                                            <ul class="list-inline">
+                                                <li style="position: relative;">
+                                                    <img src="img/a5.jpg" class="m-b img-selected" width="92" height="92"/>
+                                                    <span class="removeBtn"><i class="fa fa-close"></i></span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed "></div>
+                                    <div class="form-group form-inline">
+                                        <label class="col-sm-2 control-label">产品标签:</label>
+
+                                        <div class="col-sm-10">
+                                            <input type="text" data-role="tagsinput" value="" placeholder="产品标签，按回车键确认">
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed "></div>
+                                    <div class="form-group form-inline">
+                                        <label class="col-sm-2 control-label">放贷金额:</label>
+
+                                        <div class="col-sm-10">
+                                            <input type="text" data-role="tagsinput" value="" placeholder="放贷金额，按回车键确认">
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed "></div>
+                                    <div class="form-group form-inline">
+                                        <label class="col-sm-2 control-label">放贷期限:</label>
+
+                                        <div class="col-sm-10">
+                                            <input type="text" data-role="tagsinput" value="" placeholder="放贷期限，按回车键确认">
+                                            <select class="form-control input-sm">
+                                                <option>天</option>
+                                                <option>月</option>
+                                                <option>年</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed "></div>
+                                    <div class="form-group form-inline">
+                                        <label class="col-sm-2 control-label">利率:</label>
+
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control input-sm input-s-sm" placeholder="利率"/> %
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+
+                                    <div class="form-group form-inline">
+                                        <label class="col-sm-2 control-label">最快放贷时间:</label>
+
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control input-sm input-s-sm" placeholder="利率"/> 天
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed "></div>
+                                    <div class="form-group ">
+                                        <label class="col-sm-2 control-label">申请资料:</label>
+
+                                        <div class="col-sm-10">
+
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed "></div>
+                                    <div class="form-group ">
+                                        <label class="col-sm-2 control-label">联系人:</label>
+
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control input-sm input-s" placeholder="联系人"/>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed "></div>
+                                    <div class="form-group ">
+                                        <label class="col-sm-2 control-label">联系电话:</label>
+
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control input-sm input-s" placeholder="联系电话"/>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed "></div>
+                                    <div class="form-group form-inline">
+                                        <label class="col-sm-2 control-label">申请类型:</label>
+
+                                        <div class="col-sm-10">
+                                            <select class="form-control input-sm">
+                                                <option value="0">CPA</option>
+                                                <option value="1">CPS</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="hr-line-dashed "></div>
+                                    <div class="form-group ">
+                                        <label class="col-sm-2 control-label">连接url:</label>
+
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control input-sm" placeholder="连接url"/>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed "></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">下架时间:</label>
+
+                                        <div class="col-sm-10">
+                                            <input id="txtDownShelfTime" value="2016-09-11" name="txtDownShelfTime" type="text" class="form-control input-sm input-s" placeholder="上架时间"/>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed "></div>
+                                    <div class="form-group form-inline">
+                                        <label class="col-sm-2 control-label">是否是跨境商品:</label>
+
+                                        <div class="col-sm-10">
+                                            <select class="form-control input-sm" name="ddlIsCrossBorder" id="ddlIsCrossBorder">
+                                                <option value="1">是</option>
+                                                <option selected="selected" value="0">否</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed "></div>
+                                    <div class="form-group form-inline">
+                                        <label class="col-sm-2 control-label">供应商:</label>
+
+                                        <div class="col-sm-10">
+                                            <select class="form-control input-sm" name="ddlSupplier" id="ddlSupplier">
+                                                <option value="0">自有商品</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed "></div>
+                                    <div class="form-group form-inline">
+                                        <label class="col-sm-2 control-label">最低起售:</label>
+
+                                        <div class="col-sm-10">
+                                            <select class="form-control input-sm" name="ddMinBuy" id="ddMinBuy">
+                                                <option value="1">开启</option>
+                                                <option selected="selected" value="0">关闭</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed "></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">自定义字段:</label>
+
+                                        <div class="col-sm-10">
+                                            <div class="form-inline m-b">
+                                                <input type="text" class="form-control input-sm input-s" placeholder="自定义字段,最多5个字符"/>
+                                                <select class="form-control input-sm m-l-sm">
+                                                    <option value="0">单行文本</option>
+                                                    <option value="1">多行文本</option>
+                                                    <option value="2">数字格式</option>
+                                                    <option value="3">邮件格式</option>
+                                                    <option value="4">时间格式</option>
+                                                    <option value="5">日期格式</option>
+                                                    <option value="6">身份证</option>
+                                                    <option value="7">手机格式</option>
+                                                </select>
+
+                                                <div class="checkbox checkbox-primary m-l-sm" style="padding-left: 8px;padding-top: 5px;">
+                                                    <input type="checkbox" id="chkCustomField" name="chkCustomField"/>
+                                                    <label for="chkCustomField">必填</label>
+                                                </div>
+                                                <span class="m-l-sm cursor-point"><i class="fa fa-trash"></i></span>
+                                            </div>
+                                            <div class="form-inline">
+                                                <button type="button" class="btn btn-white m-b-none">新增标签</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed "></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">附加属性:</label>
+
+                                        <div class="col-sm-10">
+                                            <div class="form-inline m-b">
+                                                <input type="text" class="form-control input-sm input-s" placeholder="附属描述"/>
+                                                <span class="m-l-sm cursor-point"><i class="fa fa-trash"></i></span>
+                                            </div>
+                                            <div class="form-inline">
+                                                <button type="button" class="btn btn-white m-b-none">新增附加属性</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed "></div>
+                                    <div class="form-group form-inline">
+                                        <label class="col-sm-2 control-label">促销类型:</label>
+
+                                        <div class="col-sm-10">
+                                            <select class="form-control input-sm" name="ddlSalesId" id="ddlSalesId">
+                                                <option selected="selected" value="0">普通</option>
+                                                <option value="1">限时团购</option>
+                                                <option value="2">零元购</option>
+                                                <option value="3">拼团</option>
+                                                <option value="4">夺宝</option>
+                                                <option value="5">拍卖</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed "></div>
+
+                                </div>
+
+                                <div class="panel-body form-horizontal">
+                                    <div class="form-group form-inline">
+                                        <label class="col-sm-2 control-label">是否投入基金池(梦想/财富):</label>
+
+                                        <div class="col-sm-10">
+                                            <div class="radio radio-primary" style="padding-left: 8px;">
+                                                <input type="radio" id="raCorpFund_0" name="raCorpFund" checked="checked" value="1"/>
+                                                <label for="raCorpFund_0">是</label>
+                                            </div>
+                                            <div class="radio radio-primary" style="padding-left: 8px;">
+                                                <input type="radio" id="raCorpFund_1" name="raCorpFund" value="0"/>
+                                                <label for="raCorpFund_1">否</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed "></div>
+                                    <div class="form-group form-inline">
+                                        <label class="col-sm-2 control-label">是否投入基金池(综合):</label>
+
+                                        <div class="col-sm-10">
+                                            <div class="radio radio-primary" style="padding-left: 8px;">
+                                                <input type="radio" id="raCorpCrowdFund_0" name="raCorpCrowdFund" checked="checked" value="1"/>
+                                                <label for="raCorpCrowdFund_0">是</label>
+                                            </div>
+                                            <div class="radio radio-primary" style="padding-left: 8px;">
+                                                <input type="radio" id="raCorpCrowdFund_1" name="raCorpCrowdFund" value="0"/>
+                                                <label for="raCorpCrowdFund_1">否</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group form-inline">
+                                        <label class="col-sm-12 control-label" style="text-align: left;color: #ed5565;">
+                                            注意：选择"是"后，系统会按利润(成交价-成本价)的一定百分比放入基金池中，请谨慎设置成本价
+                                        </label>
+
+                                    </div>
+                                </div>
+                                <div class="panel-body form-horizontal">
+                                    <div class="form-group form-inline">
+                                        <label class="col-sm-2 control-label">经营者返利分配:</label>
+
+                                        <div class="col-sm-10">
+                                            <div class="checkbox checkbox-primary" style="padding-left: 8px;">
+                                                <input type="checkbox" id="chkTmrCustom" name="chkTmrCustom" value="0"/>
+                                                <label for="chkTmrCustom">个性设置</label>
+                                            </div>
+                                            <label style="padding-left: 20px;color: #ed5565;">默认不选择，按全局配置进行计算</label>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed "></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">经营者分销返利:</label>
+
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control input-sm input-s-sm only-float" placeholder="经营者分销返利"/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="panel-body form-horizontal">
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">商品编号:</label>
+
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control input-sm input-s" placeholder="商品编号"/>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed "></div>
+                                    <div class="form-group form-inline">
+                                        <label class="col-sm-2 control-label">销售价:</label>
+
+                                        <div class="col-sm-10">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control input-sm input-s-sm only-float" placeholder="销售价"/>
+                                                <span class="input-group-btn"><button type="button" class="btn btn-white">会员价</button></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed "></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">成本价:</label>
+
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control input-sm input-s-sm only-float" placeholder="成本价"/>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed "></div>
+                                    <div class="form-group form-inline">
+                                        <label class="col-sm-2 control-label">重量:</label>
+
+                                        <div class="col-sm-10">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control input-sm input-s-sm only-float" placeholder="重量"/>
+                                                <span class="input-group-addon">克(g)</span>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed "></div>
+                                    <div class="form-group form-inline">
+                                        <label class="col-sm-2 control-label">库存:</label>
+
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control input-sm input-s-sm only-num" placeholder="库存"/>
+                                            &nbsp;<span style="color:#ccc;">当前预占库存: 59件</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel-body form-horizontal">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <h5>挑选货品</h5>
+                                        </div>
+                                        <div class="ibox-content m-b" style="border: 1px solid #e7eaec;">
+                                            <div class="col-sm-12 form-group form-inline">
+                                                <label>颜色分类</label>
+                                                <input type="text" class="form-control input-sm input-s-sm" placeholder="规格值搜索"/>
+                                            </div>
+
+
+                                            <div class="form-inline specPanel">
+                                                <div class="form-control checkbox checkbox-primary specOn">
+                                                    <input type="checkbox" id="chkSpecValue_61343" name="chkSpec_Id_7904" checked="checked" value="1"/>
+                                                    <label for="chkSpecValue_61343">深卡其布色</label>
+                                                    <input type="text" class="form-control input-sm input-s-sm" value="深卡其布色"/>
+                                                    <i class="fa fa-image"></i>
+                                                </div>
+                                                <div class="form-control checkbox checkbox-primary">
+                                                    <input type="checkbox" id="chkSpecValue_61343" name="chkSpec_Id_7904" value="1"/>
+                                                    <label for="chkSpecValue_61343">深卡其布色</label>
+                                                </div>
+                                                <div class="form-control checkbox checkbox-primary">
+                                                    <input type="checkbox" id="chkSpecValue_61343" name="chkSpec_Id_7904" checked="checked" value="1"/>
+                                                    <label for="chkSpecValue_61343">深卡其布色</label>
+                                                    <input type="text" class="form-control input-sm input-s-sm" value="深卡其布色"/>
+                                                    <i class="fa fa-image"></i>
+                                                </div>
+                                                <div class="form-control checkbox checkbox-primary">
+                                                    <input type="checkbox" id="chkSpecValue_61343" name="chkSpec_Id_7904" checked="checked" value="1"/>
+                                                    <label for="chkSpecValue_61343">深卡其布色</label>
+                                                    <input type="text" class="form-control input-sm input-s-sm" value="深卡其布色"/>
+                                                    <i class="fa fa-image"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="ibox-content m-b" style="border: 1px solid #e7eaec;">
+                                            <div class="col-sm-12 form-group form-inline">
+                                                <label>机身内存</label>
+                                                <input type="text" class="form-control input-sm input-s-sm" placeholder="规格值搜索"/>
+                                            </div>
+
+                                            <div class="form-inline specPanel">
+                                                <div class="form-control checkbox checkbox-primary">
+                                                    <input type="checkbox" id="chkSpecValue_61343" name="chkSpec_Id_7904" checked="checked" value="1"/>
+                                                    <label for="chkSpecValue_61343">80MB</label>
+                                                    <input type="text" class="form-control input-sm input-s-sm" value="深卡其布色"/>
+                                                    <i class="fa fa-image"></i>
+                                                </div>
+                                                <div class="form-control checkbox checkbox-primary">
+                                                    <input type="checkbox" id="chkSpecValue_61343" name="chkSpec_Id_7904" value="1"/>
+                                                    <label for="chkSpecValue_61343">80MB</label>
+                                                </div>
+                                                <div class="form-control checkbox checkbox-primary">
+                                                    <input type="checkbox" id="chkSpecValue_61343" name="chkSpec_Id_7904" checked="checked" value="1"/>
+                                                    <label for="chkSpecValue_61343">80MB</label>
+                                                    <input type="text" class="form-control input-sm input-s-sm" value="深卡其布色"/>
+                                                    <i class="fa fa-image"></i>
+                                                </div>
+                                                <div class="form-control checkbox checkbox-primary">
+                                                    <input type="checkbox" id="chkSpecValue_61343" name="chkSpec_Id_7904" checked="checked" value="1"/>
+                                                    <label for="chkSpecValue_61343">80MB</label>
+                                                    <input type="text" class="form-control input-sm input-s-sm" value="深卡其布色"/>
+                                                    <i class="fa fa-image"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="col-sm-12">
+                                        <div class="form-group form-inline">
+                                            <label>批量填充:</label>
+                                            <input type="text" class="form-control input-sm input-s-sm m-l" placeholder="库存"/>
+                                            <input type="text" class="form-control input-sm input-s-sm m-l" placeholder="销售价"/>
+                                            <input type="text" class="form-control input-sm input-s-sm m-l" placeholder="成本价"/>
+                                            <input type="text" class="form-control input-sm input-s-sm m-l" placeholder="重量"/>
+                                            <button type="button" class="btn btn-success m-b-none">确定</button>
+                                        </div>
+                                        <div class="hr-line-dashed "></div>
+
+                                        <table class="table table-bordered table-hover table-center">
+                                            <thead>
+                                            <tr>
+                                                <th>商品编号</th>
+                                                <th>规格</th>
+                                                <th>库存</th>
+                                                <th>销售价</th>
+                                                <th>成本价</th>
+                                                <th>重量(g)</th>
+                                                <th>经营者返利分配</th>
+                                                <th>店主返利分配</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td>
+                                                    <input type="text" class="form-control input-sm " placeholder="商品编号"/>
+                                                </td>
+                                                <td>深卡其布色,官方标配,80MB,港澳台</td>
+                                                <td>
+                                                    <input type="text" class="form-control input-sm m-b-n only-num" placeholder="库存"/>
+                                                    <br/>
+                                                    <span style="color: #ccc;">当前预占:0件</span>
+                                                </td>
+                                                <td>
+                                                    <div class="form-group form-inline m-b-n-xs">
+                                                        <div class="input-group">
+                                                            <input type="text" class="form-control input-sm  input-s-sm only-float" placeholder="销售价"/>
+                                                            <span class="input-group-btn"><button type="button" class="btn btn-white">会员价</button></span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="form-control input-sm  only-float" placeholder="成本价"/>
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="form-control input-sm  only-float" placeholder="重量"/>
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="form-control  input-sm only-float" placeholder="经营者返利分配"/>
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="form-control  input-sm only-float" placeholder="店主返利分配"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <input type="text" class="form-control input-sm " placeholder="商品编号"/>
+                                                </td>
+                                                <td>深卡其布色,官方标配,80MB,港澳台</td>
+                                                <td>
+                                                    <input type="text" class="form-control input-sm m-b-n only-num" placeholder="库存"/>
+                                                    <br/>
+                                                    <span style="color: #ccc;">当前预占:0件</span>
+                                                </td>
+                                                <td>
+                                                    <div class="form-group form-inline m-b-n-xs">
+                                                        <div class="input-group">
+                                                            <input type="text" class="form-control input-sm  input-s-sm only-float" placeholder="销售价"/>
+                                                            <span class="input-group-btn"><button type="button" class="btn btn-white">会员价</button></span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="form-control input-sm  only-float" placeholder="成本价"/>
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="form-control input-sm  only-float" placeholder="重量"/>
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="form-control  input-sm only-float" placeholder="经营者返利分配"/>
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="form-control  input-sm only-float" placeholder="店主返利分配"/>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="col-sm-12">
+                                        <label>1.预占库存：当商品被下单(含未支付和已支付)后，预占库存增加，当取消订单或完成发货后，预占库存释放，总库存相应减少。</label>
+                                        <br/>
+                                        <label>2.可用库存=总库存-预占库存。</label>
+                                        <br/>
+                                        <label style="color: #ed5565;">注意：设置过会员价的商品是不能参与“砍价”、“拼团”活动的。</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="tab-2" class="tab-pane">
+                                <div class="panel-body">
+                                    <strong>移动设备优先</strong>
+
+                                    <p>在 Bootstrap 2 中，我们对框架中的某些关键部分增加了对移动设备友好的样式。而在 Bootstrap 3 中，我们重写了整个框架，使其一开始就是对移动设备友好的。这次不是简单的增加一些可选的针对移动设备的样式，而是直接融合进了框架的内核中。也就是说，Bootstrap 是移动设备优先的。针对移动设备的样式融合进了框架的每个角落，而不是增加一个额外的文件。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!--基础框架js-->
+<script src="http://resali.huobanplus.com/cdn/jquery/2.2.4/jquery.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/bootstrap/3.3.5/bootstrap.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/content.min.js"></script>
+
+<!--file-->
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/prettyfile/bootstrap-prettyfile.js"></script>
+
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/SearchableSelect/jquery.searchableSelect.js"></script>
+
+<!--tagsinput-->
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.js"></script>
+
+<script src="../../resource/js/plugins/hot/bootstrap.hot.extra-utils.js"></script>
+<script src="../../resource/js/plugins/hot/bootstrap.hot.extra-init.js"></script>
+
+<script type="text/javascript">
+
+</script>
+</body>
+
+</html>
