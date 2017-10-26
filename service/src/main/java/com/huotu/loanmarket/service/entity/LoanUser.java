@@ -7,24 +7,23 @@ import javax.persistence.*;
 import java.util.Date;
 
 /**
- *
  * @author hxh
  * @date 2017-10-23
  */
 @Getter
 @Setter
 @Entity
-@Table(name = "Load_User")
+@Table(name = "Loan_User")
 public class LoanUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id")
-    private Long id;
+    private Long userId;
     /**
-     *用户名
+     * 用户名
      */
     @Column(name = "Account")
-    private int account;
+    private String account;
     /**
      * 真实姓名
      */

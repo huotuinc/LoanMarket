@@ -1,18 +1,7 @@
 package com.huotu.loanmarket.web.controller.api.impl;
 
-import com.huotu.loanmarket.service.entity.CategoryRelation;
-import com.huotu.loanmarket.service.entity.LoanApplyLog;
-import com.huotu.loanmarket.service.entity.LoanCategory;
-import com.huotu.loanmarket.service.entity.LoanEquipment;
-import com.huotu.loanmarket.service.entity.LoanProject;
-import com.huotu.loanmarket.service.entity.LoanUser;
-import com.huotu.loanmarket.service.entity.LoanViewLog;
-import com.huotu.loanmarket.service.repository.LoanApplyLogRepository;
-import com.huotu.loanmarket.service.repository.LoanCategoryRepository;
-import com.huotu.loanmarket.service.repository.LoanEquipmentRepository;
-import com.huotu.loanmarket.service.repository.LoanProjectRepository;
-import com.huotu.loanmarket.service.repository.LoanUserRepository;
-import com.huotu.loanmarket.service.repository.LoanViewLogRepository;
+import com.huotu.loanmarket.service.entity.*;
+import com.huotu.loanmarket.service.repository.*;
 import com.huotu.loanmarket.service.searchable.ProjectSearchCondition;
 import com.huotu.loanmarket.web.common.ApiResult;
 import com.huotu.loanmarket.web.common.ResultCodeEnum;
@@ -24,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
@@ -71,6 +62,8 @@ public class ApiControllerImpl implements ApiController {
     }
 
     @Override
+    @RequestMapping(value = "/project/list", method = RequestMethod.POST)
+    @ResponseBody
     public ApiResult projectList(ProjectSearchCondition projectSearchCondition) {
         List<Predicate> predicates = new ArrayList<>();
         Specification<LoanProject> specification = (root, criteriaQuery, criteriaBuilder) -> {
@@ -80,8 +73,8 @@ public class ApiControllerImpl implements ApiController {
             Subquery categoryQuery = criteriaQuery.subquery(LoanCategory.class);
             Root categoryQueryRoot = categoryQuery.from(LoanCategory.class);
             //where
-            predicates.add(criteriaBuilder.equal(changeLogRoot.get("loanProject").get("id").as(Integer.class),root.get("id").as(Integer.class)));
-            predicates.add(criteriaBuilder.equal(changeLogRoot.get("loanCategory").get("id").as(Integer.class),categoryQueryRoot.get("id").as(Integer.class)));
+            predicates.add(criteriaBuilder.equal(changeLogRoot.get("loanProject").get("id").as(Integer.class), root.get("id").as(Integer.class)));
+            predicates.add(criteriaBuilder.equal(changeLogRoot.get("loanCategory").get("id").as(Integer.class), categoryQueryRoot.get("id").as(Integer.class)));
             predicates.add(criteriaBuilder.equal(categoryQueryRoot.get("id").as(Integer.class), projectSearchCondition.getSid()));
             predicates.add(criteriaBuilder.equal(root.get("desc").as(String.class), projectSearchCondition.getDesc()));
             return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
@@ -128,15 +121,17 @@ public class ApiControllerImpl implements ApiController {
     }
 
     @Override
+    @RequestMapping(value = "/user/login", method = RequestMethod.POST)
+    @ResponseBody
     public ApiResult login(String mobile, String verifyCode) {
         // TODO: 2017-10-26 验证码待测
-        LoanUser user = loanUserRepository.findOne(Long.parseLong(mobile));
+        LoanUser user = loanUserRepository.findByAccount(mobile);
         if (user == null) {
             user = new LoanUser();
-            user.setId(Long.parseLong(mobile));
+            user.setAccount(mobile);
             loanUserRepository.save(user);
         }
-        return ApiResult.resultWith(ResultCodeEnum.SUCCESS);
+        return ApiResult.resultWith(ResultCodeEnum.SUCCESS, user);
     }
 
     @Override

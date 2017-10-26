@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title>贷款超市 - 登录</title>
+
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="http://resali.huobanplus.com/cdn/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/animate.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/style.min-1.0.8.css" rel="stylesheet">
+    <base target="_blank">
+    <!--[if lt IE 8]>
+    <meta http-equiv="refresh" content="0;ie.html"/>
+    <![endif]-->
+    <script>if (window.top !== window.self) {
+        window.top.location = window.location;
+    }</script>
+</head>
+
+<body class="gray-bg">
+
+<div class="middle-box text-center loginscreen  animated fadeInDown">
+    <div>
+        <div>
+
+            <h1 style="font-size: 136px;" class="logo-name">Loan</h1>
+
+        </div>
+
+        <form class="m-t" th:action="@{/login}" method="post">
+            <div class="form-group">
+                <input type="text" class="form-control" name="username" placeholder="用户名">
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-control" name="password" placeholder="密码">
+            </div>
+            <button type="submit" class="btn btn-primary block full-width m-b">登 录</button>
+        </form>
+    </div>
+</div>
+</body>
+
+</html>
