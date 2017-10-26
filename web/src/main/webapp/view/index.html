@@ -17,19 +17,20 @@
 <header>
     <div class="weui-flex tools-bar">
         <div class="weui-flex__item">
-            <a href="javascript:;">
+            <!--TODO js-needLogin 如果登录，请移除该class-->
+            <a href="javascript:;" class="js-needLogin">
                 <img src="../image/zx@3x.png" alt="征信">
                 <p>征信查询</p>
             </a>
         </div>
         <div class="weui-flex__item">
-            <a href="javascript:;">
+            <a href="javascript:;" class="js-needLogin">
                 <img src="../image/gj@3x.png" alt="公积金">
                 <p>公积金查询</p>
             </a>
         </div>
         <div class="weui-flex__item">
-            <a href="javascript:;">
+            <a href="javascript:;" class="js-needLogin">
                 <img src="../image/sb@3x.png" alt="社保">
                 <p>社保查询</p>
             </a>
@@ -176,4 +177,8 @@
 </body>
 <script src="http://resali.huobanplus.com/cdn/jquery/3.2.1/jquery.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/jquery-weui/1.0.1/jquery-weui.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/game/fastclick.js"></script>
+<script src="../mock/mock-min.js" th:remove="all"></script>
+<script src="../mock/api.js" th:remove="all"></script>
+<script src="../script/loanLogin.js"></script>
 </html>

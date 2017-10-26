@@ -1,6 +1,4 @@
 $(function () {
-    FastClick.attach(document.body);
-
     var $line = $('#J_line');
     var $deadline = $('#J_deadline');
     var line = $line.data('line');
