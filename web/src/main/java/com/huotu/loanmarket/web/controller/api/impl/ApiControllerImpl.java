@@ -25,7 +25,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.persistence.EntityManager;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
@@ -51,8 +50,6 @@ public class ApiControllerImpl implements ApiController {
     private LoanApplyLogRepository loanApplyLogRepository;
     @Autowired
     private LoanViewLogRepository loanViewLogRepository;
-    @Autowired
-    private EntityManager entityManager;
 
     @Override
     public ApiResult appInfo(String appVersion, String osVersion, String osType) {
@@ -66,9 +63,7 @@ public class ApiControllerImpl implements ApiController {
 
     @Override
     public ApiResult init(Long userId) {
-        // TODO: 2017-10-26
-        //App版本信息,存在即表示有更新，否则为null
-        //如果用户未登录返回null
+        //如果用户未登录返回null，登录返回用户信息
         if (userId > 0) {
             return ApiResult.resultWith(ResultCodeEnum.SUCCESS, loanUserRepository.findOne(userId));
         }
@@ -97,7 +92,7 @@ public class ApiControllerImpl implements ApiController {
             pageable = new PageRequest(0, projectSearchCondition.getTopNum());
             flag = false;
         }
-        List<LoanProject> loanProjectList = new ArrayList<>();
+        List<LoanProject> loanProjectList;
         if (flag) {
             Page<LoanProject> loanProjectPage = loanProjectRepository.findAll(specification, pageable);
             loanProjectList = loanProjectPage.getContent();
@@ -134,12 +129,14 @@ public class ApiControllerImpl implements ApiController {
 
     @Override
     public ApiResult login(String mobile, String verifyCode) {
-        // TODO: 2017-10-26
+        // TODO: 2017-10-26 验证码待测
         LoanUser user = loanUserRepository.findOne(Long.parseLong(mobile));
-        if (user != null) {
-            return ApiResult.resultWith(ResultCodeEnum.SUCCESS);
+        if (user == null) {
+            user = new LoanUser();
+            user.setId(Long.parseLong(mobile));
+            loanUserRepository.save(user);
         }
-        return ApiResult.resultWith(ResultCodeEnum.SYSTEM_BAD_REQUEST);
+        return ApiResult.resultWith(ResultCodeEnum.SUCCESS);
     }
 
     @Override

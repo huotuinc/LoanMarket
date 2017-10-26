@@ -35,7 +35,7 @@ public class ApiControllerTest extends CommonTestBase {
         projectSearchCondition.setDesc(UUID.randomUUID().toString());
         projectSearchCondition.setSid(1);
         ApiResult apiResult = apiController.projectList(projectSearchCondition);
-        Assert.assertTrue(apiResult.getResultCode()==2000);
+        Assert.assertTrue(apiResult.getResultCode() == 2000);
     }
 
     /**
@@ -44,11 +44,27 @@ public class ApiControllerTest extends CommonTestBase {
     @Test
     public void projectCategoryTest() {
         ApiResult apiResult = apiController.projectCategory();
-        Assert.assertTrue(apiResult.getResultCode()==2000);
+        Assert.assertTrue(apiResult.getResultCode() == 2000);
     }
+
     @Test
-    public void projectDetailTest(){
+    public void projectDetailTest() {
         ApiResult apiResult = apiController.projectDetail((int) Math.random() * 10 + 1, (int) Math.random() * 10 + 1);
-        Assert.assertTrue(apiResult.getResultCode()==2000);
+        Assert.assertTrue(apiResult.getResultCode() == 2000);
+    }
+
+    @Test
+    public void loginTest() {
+        ApiResult result = apiController.login("15958039934", "123");
+        Assert.assertTrue(result.getResultCode() == 2000);
+    }
+
+    @Test
+    public void init() {
+        ApiResult apiResult = apiController.init(15958039934L);
+        Assert.assertTrue(apiResult.getResultCode() == 2000);
+        //未登录
+        ApiResult result = apiController.init(0L);
+        Assert.assertTrue(result==null);
     }
 }

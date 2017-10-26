@@ -1,5 +1,8 @@
 package com.huotu.loanmarket.service.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -8,6 +11,8 @@ import java.util.Date;
  * @author hxh
  * @date 2017-10-23
  */
+@Getter
+@Setter
 @Entity
 @Table(name = "Load_User")
 public class LoanUser {
