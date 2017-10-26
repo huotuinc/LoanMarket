@@ -75,7 +75,8 @@ public class ApiControllerImpl implements ApiController {
             List<Predicate> predicates = new ArrayList<>();
 //            catRoot = root.join()
             predicates.add(criteriaBuilder.equal(root.get("desc").as(String.class), projectSearchCondition.getDesc()));
-//            predicates.add(criteriaBuilder.equal(root.join("categoryRelationList").join("loanCategory").get("id").as(Integer.class), projectSearchCondition.getSid()));
+            // TODO: 2017-10-26  
+            //            predicates.add(criteriaBuilder.equal(root.join("categoryRelationList").join("loanCategory").get("id").as(Integer.class), projectSearchCondition.getSid()));
             return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
         };
         Pageable pageable = null;
