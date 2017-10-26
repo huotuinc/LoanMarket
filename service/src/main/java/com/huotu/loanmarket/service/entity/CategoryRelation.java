@@ -7,7 +7,9 @@ import javax.persistence.*;
 
 /**
  * 类目关联表
- * Created by hxh on 2017-10-23.
+ *
+ * @author hxh
+ * @date 2017-10-23
  */
 @Getter
 @Setter

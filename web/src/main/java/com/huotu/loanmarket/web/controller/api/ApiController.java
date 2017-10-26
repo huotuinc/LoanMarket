@@ -33,6 +33,7 @@ public interface ApiController {
     /**
      * 初始化
      *
+     * @param userId
      * @return
      */
     @RequestMapping("/init")
