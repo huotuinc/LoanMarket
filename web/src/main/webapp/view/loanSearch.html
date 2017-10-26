@@ -37,7 +37,7 @@
     <div class="goods-list loan-list">
         <p class="search-number">搜索到{{data.length}}个贷款产品</p>
         {{each data v i}}
-        <a class="loans loans-recommend" href="loanDetail.html?id={{v.id}}">
+        <a class="loans{{v.isHot? ' loans-recommend' : ''}}{{v.isNew? ' loans-new' : ''}}" href="loanDetail.html?id={{v.id}}">
             <div class="loans-flex">
                 <div class="loans-hd">
                     <img src="{{v.logo}}" alt="{{v.name}}">

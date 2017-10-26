@@ -5,7 +5,6 @@ $(function () {
     var tag = getQueryString('tag');
     var amount = parseInt($amount.text());
     var deadline = parseInt($deadline.text());
-    // console.log(tag, amount, deadline);
     $amount.picker({
         cols: [
             {
@@ -17,8 +16,10 @@ $(function () {
             $amount.text(v);
         },
         onClose: function (p) {
-            // lineCalc = p.value[0];
-            // calc(lineCalc, deadlineCale);
+            if( amount !== parseInt(p.value[0])) {
+                amount = parseInt(p.value[0]);
+                searchLoan(tag, amount, deadline);
+            }
         }
     });
 
@@ -33,13 +34,17 @@ $(function () {
             $deadline.text(v);
         },
         onClose: function (p) {
-            // lineCalc = p.value[0];
-            // calc(lineCalc, deadlineCale);
+            if( deadline !== parseInt(p.value[0])) {
+                deadline = parseInt(p.value[0]);
+                searchLoan(tag, amount, deadline);
+            }
         }
+
     });
 
 
     function searchLoan(tag, amount, deadline) {
+        $.showLoading();
         $.ajax('/search/loan', {
             method: 'GET',
             data: {
@@ -49,11 +54,16 @@ $(function () {
             },
             dataType: 'json',
             success: function (res) {
+                $.hideLoading();
+                if(res.resultCode !== 200) {
+                    return $.toptip('请求失败', 'error');
+                }
                 var _html = template('J_resultTmp', res);
                 $('#J_resultContainer').html(_html);
             },
             error: function () {
-                
+                $.hideLoading();
+                $.toptip('请求失败', 'error');
             }
         });
     }
