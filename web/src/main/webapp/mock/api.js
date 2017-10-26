@@ -20,4 +20,26 @@ Mock.mock(/\/search\/loan\?tag=(.*)&amount=(.*)&deadline=(.*)/, {
             'tag|1-3': ['@ctitle(2, 6)']
         }
     ]
-})
+});
+
+Mock.mock(/\/api\/login/, "post", {
+    "resultCode": 200,
+    "resultMsg": "OK",
+    "data": {
+        'name': '@cname',
+        'avatar': Mock.Random.image('40x40', '#894FC4', '#FFF', 'png', 'A')
+    }
+});
+
+Mock.mock(/\/update\/avatar/, "post", {
+    "resultCode": 200,
+    "resultMsg": "OK",
+    "data": {
+        'avatar': Mock.Random.image('40x40', '#ff0000', '#FFF', 'png', '@word(2)')
+    }
+});
+
+Mock.mock(/\/api\/authCode/, "post", {
+    "resultCode": 200,
+    "resultMsg": "OK"
+});

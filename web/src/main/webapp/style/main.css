@@ -58,6 +58,10 @@ ins, a {
     box-sizing: border-box;
 }
 
+input {
+    -webkit-appearance: none;
+}
+
 .clearfix::before, .clearfix::after {
     display: table;
     content: ' ';
@@ -105,7 +109,7 @@ header {
     width: 100%;
     background-color: #f13c38;
     color: #fff;
-    z-index: 9999;
+    z-index: 999;
 }
 
 header .tools-bar {
@@ -393,6 +397,7 @@ header .tools-bar p {
 }
 
 .login-wrap {
+    position: relative;
     padding: 10px;
     margin-bottom: 10px;
     display: -webkit-box;
@@ -420,7 +425,15 @@ header .tools-bar p {
 .login-wrap + .weui-cells {
     margin-top: 10px;
 }
-
+.login-wrap .input-file {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    opacity: 0;
+}
 .entry .weui-cell__hd > img {
     margin-right: 12px;
     width: 15px;
@@ -553,20 +566,82 @@ header .tools-bar p {
     width: 50%;
     font-size: 14px;
 }
+
 .search-tools .search-list .weui-cell .weui-cell__ft {
     color: #333;
 }
+
 .no-result {
     padding: 10px;
     font-size: 14px;
     text-align: center;
 }
+
 .search-number {
     padding: 8px 10px;
     font-size: 14px;
     background: #f2f2f2;
 }
 
+.weui-dialog__hd {
+    padding: .8em;
+}
+
+.weui-dialog__bd {
+    padding: 0 .8em .8em;
+}
+
+.weui-dialog__ft {
+    line-height: 40px;
+}
+
+.weui-dialog__btn {
+    font-size: 15px;
+    color: #333;
+}
+
+.weui-dialog .weui-dialog__btn.default {
+    color: #999;
+}
+
+.login-modal .input-wrap {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+}
+
+.login-modal .input-wrap .input {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    flex: 1;
+    border: 1px solid #e3e3e3;
+    border-radius: 3px;
+    box-sizing: border-box;
+}
+.login-modal .input-wrap .input input {
+    padding: 10px;
+    width: 100%;
+    border: none;
+}
+.login-modal .input-wrap + .input-wrap {
+    margin-top: 10px;
+}
+
+.login-modal .input-wrap .btn {
+    margin-left: 10px;
+    width: 80px;
+    background: #01a9ef;
+    border: 1px solid #01a9ef;
+    color: #fff;
+    border-radius: 3px;
+}
+.login-modal .input-wrap .btn:disabled {
+    background: #999;
+    border: 1px solid #999;
+}
+.weui-toast_content {
+    font-size: 12px;
+}
 .footer {
     position: fixed;
     left: 0;
@@ -591,7 +666,7 @@ header .tools-bar p {
 
 .weui-tabbar {
     position: fixed;
-    z-index: 9999;
+    z-index: 999;
 }
 
 .weui-tabbar__item {
