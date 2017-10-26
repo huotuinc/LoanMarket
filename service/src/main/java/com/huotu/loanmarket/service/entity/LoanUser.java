@@ -1,11 +1,18 @@
 package com.huotu.loanmarket.service.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.util.Date;
 
 /**
- * Created by hxh on 2017-10-23.
+ *
+ * @author hxh
+ * @date 2017-10-23
  */
+@Getter
+@Setter
 @Entity
 @Table(name = "Load_User")
 public class LoanUser {

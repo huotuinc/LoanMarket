@@ -30,7 +30,8 @@ import java.util.List;
 @Configuration
 @EnableWebMvc
 @ComponentScan({
-        "com.huotu.loanmarket.web"
+        "com.huotu.loanmarket.web",
+        "com.huotu.loanmarket.service"
 })
 public class MvcConfig extends WebMvcConfigurerAdapter {
     /**

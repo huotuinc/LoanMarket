@@ -75,7 +75,7 @@ public class LoanProject {
     /**
      * 描述
      */
-    @Column(name = "Desc")
+    @Column(name = "Describe")
     private String desc;
     /**
      * 是否删除
