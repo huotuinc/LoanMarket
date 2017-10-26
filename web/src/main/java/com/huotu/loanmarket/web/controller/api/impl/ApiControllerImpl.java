@@ -1,5 +1,6 @@
 package com.huotu.loanmarket.web.controller.api.impl;
 
+import com.huotu.loanmarket.service.entity.CategoryRelation;
 import com.huotu.loanmarket.service.entity.LoanApplyLog;
 import com.huotu.loanmarket.service.entity.LoanCategory;
 import com.huotu.loanmarket.service.entity.LoanEquipment;
@@ -24,7 +25,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.persistence.EntityManager;
 import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,6 +51,8 @@ public class ApiControllerImpl implements ApiController {
     private LoanApplyLogRepository loanApplyLogRepository;
     @Autowired
     private LoanViewLogRepository loanViewLogRepository;
+    @Autowired
+    private EntityManager entityManager;
 
     @Override
     public ApiResult appInfo(String appVersion, String osVersion, String osType) {
@@ -71,12 +77,18 @@ public class ApiControllerImpl implements ApiController {
 
     @Override
     public ApiResult projectList(ProjectSearchCondition projectSearchCondition) {
+        List<Predicate> predicates = new ArrayList<>();
         Specification<LoanProject> specification = (root, criteriaQuery, criteriaBuilder) -> {
-            List<Predicate> predicates = new ArrayList<>();
-//            catRoot = root.join()
+            //子查询
+            Subquery subquery = criteriaQuery.subquery(CategoryRelation.class);
+            Root changeLogRoot = subquery.from(CategoryRelation.class);
+            Subquery categoryQuery = criteriaQuery.subquery(LoanCategory.class);
+            Root categoryQueryRoot = categoryQuery.from(LoanCategory.class);
+            //where
+            predicates.add(criteriaBuilder.equal(changeLogRoot.get("loanProject").get("id").as(Integer.class),root.get("id").as(Integer.class)));
+            predicates.add(criteriaBuilder.equal(changeLogRoot.get("loanCategory").get("id").as(Integer.class),categoryQueryRoot.get("id").as(Integer.class)));
+            predicates.add(criteriaBuilder.equal(categoryQueryRoot.get("id").as(Integer.class), projectSearchCondition.getSid()));
             predicates.add(criteriaBuilder.equal(root.get("desc").as(String.class), projectSearchCondition.getDesc()));
-            // TODO: 2017-10-26  
-            //            predicates.add(criteriaBuilder.equal(root.join("categoryRelationList").join("loanCategory").get("id").as(Integer.class), projectSearchCondition.getSid()));
             return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
         };
         Pageable pageable = null;
