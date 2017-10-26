@@ -38,21 +38,22 @@
     </div>
     <div class="goods-list loan-calc">
         <div class="weui-cells">
-            <div class="weui-cell weui-cell_access">
-                <div class="weui-cell__bd">贷款金额 <span class="text-small">1000~3000元</span></div>
+            <div class="weui-cell weui-cell_access" id="J_line" data-line="1000,1500,2000,2500,3000,3500,4000,4500,5000,6000,7000,8000">
+                <div class="weui-cell__bd">贷款金额 <span class="text-small">1000~8000元</span></div>
                 <div class="weui-cell__ft">1000元</div>
             </div>
-            <div class="weui-cell weui-cell_access">
-                <div class="weui-cell__bd">分期期限 <span class="text-small">7~15元</span></div>
-                <div class="weui-cell__ft">7天</div>
+            <div class="weui-cell weui-cell_access" id="J_deadline" data-deadline="1,2,3" data-unit="月">
+                <div class="weui-cell__bd">分期期限 <span class="text-small">1~3个月</span></div>
+                <div class="weui-cell__ft">1个月</div>
             </div>
         </div>
         <div class="weui-flex loan-calc-info">
             <div class="weui-flex__item">
-                <p>***.**元</p>
+                <p id="J_repayment">***.**元</p>
                 <span class="text-small">每日应还</span>
+            </div>
             <div class="weui-flex__item">
-                <p>*.**%</p>
+                <p id="J_interestRate">0.60%</p>
                 <span class="text-small">参考日利率</span>
             </div>
             <div class="weui-flex__item">
@@ -61,6 +62,34 @@
             </div>
         </div>
     </div>
+    <div class="goods-list material-list">
+        <div class="hd">申请材料</div>
+        <div class="bd clearfix">
+            <div class="material">
+                <div class="material-hd material-icon-info"></div>
+                <div class="material-bd">基本信息</div>
+            </div>
+            <div class="material">
+                <div class="material-hd material-icon-user"></div>
+                <div class="material-bd">身份信息</div>
+            </div>
+            <div class="material">
+                <div class="material-hd material-icon-work"></div>
+                <div class="material-bd">工作信息</div>
+            </div>
+            <div class="material">
+                <div class="material-hd material-icon-phone"></div>
+                <div class="material-bd">运营商验证</div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="footer">
+    <a href="javascript:;" class="apply-btn">立即申请</a>
 </div>
 </body>
+<script src="http://resali.huobanplus.com/cdn/jquery/3.2.1/jquery.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/jquery-weui/1.0.1/jquery-weui.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/game/fastclick.js"></script>
+<script src="../script/loanDetail.js"></script>
 </html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <title>贷款搜索</title>
+    <link rel="stylesheet" href="http://resali.huobanplus.com/cdn/jquery-weui/1.0.1/weui.min.css">
+    <link rel="stylesheet" href="http://resali.huobanplus.com/cdn/jquery-weui/1.0.1/jquery-weui.min.css">
+    <link rel="stylesheet" href="../style/main.css">
+</head>
+<body>
+<div class="content">
+    <div class="goods-list search-tools">
+        <div class="bd">
+            <div class="weui-cells search-list">
+                <div class="weui-cell weui-cell_access">
+                    <div class="weui-cell__bd">借款金额</div>
+                    <div class="weui-cell__ft" id="J_amount">500元</div>
+                </div>
+                <div class="weui-cell weui-cell_access">
+                    <div class="weui-cell__bd">借款期限</div>
+                    <div class="weui-cell__ft" id="J_deadline">1个月</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="J_resultContainer"></div>
+</div>
+</body>
+<template id="J_resultTmp">
+    {{if data.length}}
+    <div class="goods-list loan-list">
+        <p class="search-number">搜索到{{data.length}}个贷款产品</p>
+        {{each data v i}}
+        <a class="loans{{v.isHot? ' loans-recommend' : ''}}{{v.isNew? ' loans-new' : ''}}" href="loanDetail.html?id={{v.id}}">
+            <div class="loans-flex">
+                <div class="loans-hd">
+                    <img src="{{v.logo}}" alt="{{v.name}}">
+                </div>
+                <div class="loans-bd">
+                    <h3 class="title">{{v.name}}</h3>
+                    <p class="interest">
+                        <span><i>{{v.deadlineUnit}}利率</i>：<b>{{v.interestRate}}%</b></span>
+                        <span>额度：<b>{{v.enableMoney[0]}}~{{v.enableMoney[v.enableMoney.length-1]}}</b>元</span>
+                    </p>
+                </div>
+            </div>
+            <div class="loans-ft">
+                {{each v.tag val key}}
+                <span>{{val}}</span>
+                {{/each}}
+            </div>
+        </a>
+        {{/each}}
+    </div>
+    {{else}}
+    <p class="no-result">没有相关数据</p>
+    {{/if}}
+</template>
+<script src="http://resali.huobanplus.com/cdn/jquery/3.2.1/jquery.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/jquery-weui/1.0.1/jquery-weui.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/game/fastclick.js"></script>
+<script src="../script/template-web.js"></script>
+<script src="../mock/mock-min.js" th:remove="all"></script>
+<script src="../mock/api.js" th:remove="all"></script>
+<script src="../script/loanSearch.js"></script>
+</html>
