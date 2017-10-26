@@ -4,7 +4,9 @@ import javax.persistence.*;
 import java.util.Date;
 
 /**
- * Created by hxh on 2017-10-23.
+ *
+ * @author hxh
+ * @date 2017-10-23
  */
 @Entity
 @Table(name = "Load_User")
