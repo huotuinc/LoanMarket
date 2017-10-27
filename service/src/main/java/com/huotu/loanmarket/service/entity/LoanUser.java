@@ -19,12 +19,12 @@ public class LoanUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id")
-    private Long id;
+    private Integer id;
     /**
-     *用户名
+     *电话号码
      */
     @Column(name = "Account")
-    private int account;
+    private String account;
     /**
      * 真实姓名
      */

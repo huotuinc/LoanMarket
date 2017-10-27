@@ -61,10 +61,10 @@ public class ApiControllerTest extends CommonTestBase {
 
     @Test
     public void init() {
-        ApiResult apiResult = apiController.init(15958039934L);
+        ApiResult apiResult = apiController.init(1);
         Assert.assertTrue(apiResult.getResultCode() == 2000);
         //未登录
-        ApiResult result = apiController.init(0L);
+        ApiResult result = apiController.init(0);
         Assert.assertTrue(result==null);
     }
 }
