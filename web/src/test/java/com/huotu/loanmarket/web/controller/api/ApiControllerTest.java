@@ -65,6 +65,6 @@ public class ApiControllerTest extends CommonTestBase {
         Assert.assertTrue(apiResult.getResultCode() == 2000);
         //未登录
         ApiResult result = apiController.init(0);
-        Assert.assertTrue(result==null);
+        Assert.assertTrue(result.getResultCode()==5000);
     }
 }
