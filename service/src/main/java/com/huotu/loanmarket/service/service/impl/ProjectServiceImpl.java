@@ -29,6 +29,8 @@ import java.util.List;
 @Service
 public class ProjectServiceImpl extends AbstractCrudService<LoanProject, Integer> implements ProjectService {
 
+    @Autowired
+    private ViewService viewService;
     private final LoanProjectRepository projectRepository;
 
     @Autowired
@@ -61,10 +63,10 @@ public class ProjectServiceImpl extends AbstractCrudService<LoanProject, Integer
         }
         List<LoanProject> loanProjectList;
         if (flag) {
-            Page<LoanProject> loanProjectPage = loanProjectRepository.findAll(specification, pageable);
+            Page<LoanProject> loanProjectPage = projectRepository.findAll(specification, pageable);
             loanProjectList = loanProjectPage.getContent();
         } else {
-            loanProjectList = loanProjectRepository.findAll(specification);
+            loanProjectList = projectRepository.findAll(specification);
         }
         return loanProjectList;
     }

@@ -14,12 +14,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl extends AbstractCrudService<LoanUser, Integer> implements UserService {
 
-    @Autowired
-    private LoanUserRepository loanUserRepository;
+    private final LoanUserRepository loanUserRepository;
 
     @Autowired
     public UserServiceImpl(LoanUserRepository repository) {
         super(repository);
+        loanUserRepository = repository;
     }
 
     @Override
