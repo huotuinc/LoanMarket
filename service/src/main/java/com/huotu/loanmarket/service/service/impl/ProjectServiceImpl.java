@@ -29,15 +29,12 @@ import java.util.List;
 @Service
 public class ProjectServiceImpl extends AbstractCrudService<LoanProject, Integer> implements ProjectService {
 
-    @Autowired
-    private LoanProjectRepository loanProjectRepository;
-
-    @Autowired
-    private ViewService viewService;
+    private final LoanProjectRepository projectRepository;
 
     @Autowired
     public ProjectServiceImpl(LoanProjectRepository repository) {
         super(repository);
+        projectRepository = repository;
     }
 
     @Override
