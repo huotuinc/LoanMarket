@@ -10,4 +10,5 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/backend")
 public class BaseController {
+
 }

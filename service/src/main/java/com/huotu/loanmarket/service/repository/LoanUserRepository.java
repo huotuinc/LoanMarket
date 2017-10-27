@@ -4,9 +4,7 @@ import com.huotu.loanmarket.service.entity.LoanUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- *
- * @author hxh
- * @date 2017-10-24
+ * Created by hxh on 2017-10-24.
  */
 public interface LoanUserRepository extends JpaRepository<LoanUser,Integer>{
     /**
