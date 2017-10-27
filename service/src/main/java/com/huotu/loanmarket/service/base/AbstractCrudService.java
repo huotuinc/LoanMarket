@@ -1,5 +1,7 @@
 package com.huotu.loanmarket.service.base;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+
 import java.io.Serializable;
 
 /**
@@ -7,9 +9,9 @@ import java.io.Serializable;
  * @date 26/10/2017
  */
 public abstract class AbstractCrudService<T, ID extends Serializable> implements CrudService<T, ID> {
-    private JpaCrudRepository<T, ID> repository;
+    private JpaRepository<T, ID> repository;
 
-    protected AbstractCrudService(JpaCrudRepository<T, ID> repository) {
+    protected AbstractCrudService(JpaRepository<T, ID> repository) {
         this.repository = repository;
     }
 
