@@ -4,13 +4,11 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- *
- * @author allan
- * @date 23/10/2017
+ * Created by hxh on 2017-10-27.
  */
 @Getter
 @Setter
-public class ProjectSearchCondition {
+public class ProjectSearchTopCondition {
     /**
      * 0：全部，4：top4条
      */
@@ -47,12 +45,4 @@ public class ProjectSearchCondition {
      * 名称
      */
     private String name;
-    /**
-     * 页码，默认1
-     */
-    private int pageIndex;
-    /**
-     * 每页数量，默认10
-     */
-    private int pageSize = 10;
 }

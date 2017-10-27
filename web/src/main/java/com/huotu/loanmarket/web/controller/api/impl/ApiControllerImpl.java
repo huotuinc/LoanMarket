@@ -5,6 +5,7 @@ import com.huotu.loanmarket.service.entity.LoanEquipment;
 import com.huotu.loanmarket.service.entity.LoanProject;
 import com.huotu.loanmarket.service.entity.LoanUser;
 import com.huotu.loanmarket.service.searchable.ProjectSearchCondition;
+import com.huotu.loanmarket.service.searchable.ProjectSearchTopCondition;
 import com.huotu.loanmarket.service.service.ApplyLogService;
 import com.huotu.loanmarket.service.service.CategoryService;
 import com.huotu.loanmarket.service.service.EquipmentService;
@@ -69,6 +70,12 @@ public class ApiControllerImpl implements ApiController {
     public ApiResult projectCategory() {
         List<LoanCategory> categoryList = categoryService.getAll();
         return ApiResult.resultWith(ResultCodeEnum.SUCCESS, categoryList);
+    }
+
+    @Override
+    public ApiResult projectTopList(ProjectSearchTopCondition projectSearchTopCondition) {
+        List<LoanProject> projectTopList = projectService.getProjectTopList(projectSearchTopCondition);
+        return ApiResult.resultWith(ResultCodeEnum.SUCCESS, projectTopList);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.huotu.loanmarket.web.controller.api;
 
 import com.huotu.loanmarket.service.searchable.ProjectSearchCondition;
+import com.huotu.loanmarket.service.searchable.ProjectSearchTopCondition;
 import com.huotu.loanmarket.web.CommonTestBase;
 import com.huotu.loanmarket.web.common.ApiResult;
 import org.junit.Assert;
@@ -32,12 +33,23 @@ public class ApiControllerTest extends CommonTestBase {
     public void projectListTest() {
         ProjectSearchCondition projectSearchCondition = new ProjectSearchCondition();
         projectSearchCondition.setTopNum(1);
-        projectSearchCondition.setDesc(UUID.randomUUID().toString());
+        projectSearchCondition.setDescField(1);
         projectSearchCondition.setSid(1);
         ApiResult apiResult = apiController.projectList(projectSearchCondition);
         Assert.assertTrue(apiResult.getResultCode() == 2000);
     }
-
+    /**
+     * 分组按条件搜索产品列表无分页
+     */
+    @Test
+    public void projectTopListTest() {
+        ProjectSearchTopCondition projectSearchTopCondition = new ProjectSearchTopCondition();
+        projectSearchTopCondition.setTopNum(1);
+        projectSearchTopCondition.setDescField(1);
+        projectSearchTopCondition.setSid(1);
+        ApiResult apiResult = apiController.projectTopList(projectSearchTopCondition);
+        Assert.assertTrue(apiResult.getResultCode() == 2000);
+    }
     /**
      * 获取所有分类
      */

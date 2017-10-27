@@ -2,6 +2,7 @@ package com.huotu.loanmarket.web.controller.api;
 
 import com.huotu.loanmarket.service.entity.LoanProject;
 import com.huotu.loanmarket.service.searchable.ProjectSearchCondition;
+import com.huotu.loanmarket.service.searchable.ProjectSearchTopCondition;
 import com.huotu.loanmarket.web.common.ApiResult;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -58,6 +59,15 @@ public interface ApiController {
     @RequestMapping("/project/category")
     @ResponseBody
     ApiResult projectCategory();
+
+    /**
+     * 获取产品没有分页
+     * @param projectSearchTopCondition
+     * @return
+     */
+    @RequestMapping("/project/topList")
+    @ResponseBody
+    ApiResult projectTopList(ProjectSearchTopCondition projectSearchTopCondition);
 
     /**
      * 返回产品详情，同时记录浏览量，未登录不记录
