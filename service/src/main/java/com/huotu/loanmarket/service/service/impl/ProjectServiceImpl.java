@@ -13,8 +13,12 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class ProjectServiceImpl extends AbstractCrudService<LoanProject, Integer> implements ProjectService {
+
+    private final LoanProjectRepository projectRepository;
+
     @Autowired
     public ProjectServiceImpl(LoanProjectRepository repository) {
         super(repository);
+        projectRepository = repository;
     }
 }
