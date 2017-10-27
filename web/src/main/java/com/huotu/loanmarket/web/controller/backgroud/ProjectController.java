@@ -10,13 +10,14 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @date 26/10/2017
  */
 @Controller
-@RequestMapping("/project")
-public class ProjectController extends BaseController {
+@RequestMapping("/backend/project")
+public class ProjectController {
 
     @RequestMapping(value = "/edit", method = RequestMethod.GET)
     public String edit(
             @RequestParam(required = false, defaultValue = "0") int projectId
     ) {
-        return "eidt_project";
+
+        return "edit_project";
     }
 }

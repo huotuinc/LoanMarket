@@ -3,6 +3,7 @@ package com.huotu.loanmarket.web.controller.api.impl;
 import com.huotu.loanmarket.service.entity.*;
 import com.huotu.loanmarket.service.repository.*;
 import com.huotu.loanmarket.service.searchable.ProjectSearchCondition;
+import com.huotu.loanmarket.service.service.ProjectService;
 import com.huotu.loanmarket.web.common.ApiResult;
 import com.huotu.loanmarket.web.common.ResultCodeEnum;
 import com.huotu.loanmarket.web.controller.api.ApiController;
@@ -41,6 +42,8 @@ public class ApiControllerImpl implements ApiController {
     private LoanApplyLogRepository loanApplyLogRepository;
     @Autowired
     private LoanViewLogRepository loanViewLogRepository;
+    @Autowired
+    private ProjectService projectService;
 
     @Override
     public ApiResult appInfo(String appVersion, String osVersion, String osType) {
@@ -147,5 +150,14 @@ public class ApiControllerImpl implements ApiController {
         }
         loanApplyLogRepository.save(applyLog);
         return ApiResult.resultWith(ResultCodeEnum.SUCCESS);
+    }
+
+    @RequestMapping("/test")
+    @ResponseBody
+    public ApiResult test() {
+        LoanProject project = new LoanProject();
+        project.setName("hahatest");
+        projectService.save(project);
+        return ApiResult.resultWith(ResultCodeEnum.SUCCESS, project);
     }
 }
