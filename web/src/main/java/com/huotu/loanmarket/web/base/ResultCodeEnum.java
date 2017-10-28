@@ -1,4 +1,4 @@
-package com.huotu.loanmarket.web.common;
+package com.huotu.loanmarket.web.base;
 
 /**
  * @author allan

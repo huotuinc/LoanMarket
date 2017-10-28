@@ -5,13 +5,9 @@ import com.huotu.loanmarket.service.entity.LoanEquipment;
 import com.huotu.loanmarket.service.entity.LoanProject;
 import com.huotu.loanmarket.service.entity.LoanUser;
 import com.huotu.loanmarket.service.searchable.ProjectSearchCondition;
-import com.huotu.loanmarket.service.service.ApplyLogService;
-import com.huotu.loanmarket.service.service.CategoryService;
-import com.huotu.loanmarket.service.service.EquipmentService;
-import com.huotu.loanmarket.service.service.ProjectService;
-import com.huotu.loanmarket.service.service.UserService;
-import com.huotu.loanmarket.web.common.ApiResult;
-import com.huotu.loanmarket.web.common.ResultCodeEnum;
+import com.huotu.loanmarket.service.service.*;
+import com.huotu.loanmarket.web.base.ApiResult;
+import com.huotu.loanmarket.web.base.ResultCodeEnum;
 import com.huotu.loanmarket.web.controller.api.ApiController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -103,6 +99,11 @@ public class ApiControllerImpl implements ApiController {
         LoanProject project = new LoanProject();
         project.setName("hahatest");
         projectService.save(project);
-        return ApiResult.resultWith(ResultCodeEnum.SUCCESS, project);
+
+        LoanCategory loanCategory = new LoanCategory();
+        loanCategory.setName("test111");
+        categoryService.save(loanCategory);
+
+        return ApiResult.resultWith(ResultCodeEnum.SUCCESS, loanCategory);
     }
 }

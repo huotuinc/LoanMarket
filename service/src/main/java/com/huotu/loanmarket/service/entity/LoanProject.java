@@ -113,4 +113,7 @@ public class LoanProject {
     @Column(name = "Phone")
     private String phone;
 
+    @Column(name = "Categories")
+    private String categories;
+
 }

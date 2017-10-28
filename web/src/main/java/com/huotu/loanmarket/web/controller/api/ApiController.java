@@ -2,7 +2,7 @@ package com.huotu.loanmarket.web.controller.api;
 
 import com.huotu.loanmarket.service.entity.LoanProject;
 import com.huotu.loanmarket.service.searchable.ProjectSearchCondition;
-import com.huotu.loanmarket.web.common.ApiResult;
+import com.huotu.loanmarket.web.base.ApiResult;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;

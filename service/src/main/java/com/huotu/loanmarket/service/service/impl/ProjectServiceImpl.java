@@ -29,9 +29,9 @@ import java.util.List;
 @Service
 public class ProjectServiceImpl extends AbstractCrudService<LoanProject, Integer> implements ProjectService {
 
+    private final LoanProjectRepository projectRepository;
     @Autowired
     private ViewService viewService;
-    private final LoanProjectRepository projectRepository;
 
     @Autowired
     public ProjectServiceImpl(LoanProjectRepository repository) {
@@ -88,5 +88,23 @@ public class ProjectServiceImpl extends AbstractCrudService<LoanProject, Integer
             viewService.save(viewLog);
         }
         return project;
+    }
+
+    @Override
+    public Page<LoanProject> findAll(ProjectSearchCondition searchCondition) {
+        Specification<LoanProject> specification = ((root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            if (searchCondition.getIsHot() != -1) {
+                predicates.add(cb.equal(root.get("isHot").as(Integer.class), searchCondition.getIsHot()));
+            }
+            if (searchCondition.getIsNew() != -1) {
+                predicates.add(cb.equal(root.get("isNew").as(Integer.class), searchCondition.getIsNew()));
+            }
+            if (searchCondition.getCategoryId() > 0) {
+                String categoryStr = "," + searchCondition.getCategoryId() + ",";
+                predicates.add(cb.like(root.get("categories").as(String.class), "%" + categoryStr + "%"));
+            }
+        })
     }
 }

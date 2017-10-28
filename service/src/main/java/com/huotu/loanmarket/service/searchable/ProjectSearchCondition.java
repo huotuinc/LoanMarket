@@ -11,12 +11,14 @@ public class ProjectSearchCondition {
      * 0：全部，4：top4条
      */
     private int topNum;
-    /**
-     * 排序
-     */
-    private String desc;
-    /**
-     * 分类编号
-     */
-    private int sid;
+
+    private int isHot = -1;
+
+    private int isNew = -1;
+
+    private int categoryId;
+
+    private double loanMoney;
+
+    private int pageIndex = 1;
 }

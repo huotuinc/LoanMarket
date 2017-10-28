@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 
 <head>
 
@@ -36,27 +36,6 @@
         .specPanel .input-sm {
             height: 20px;
         }
-
-        .specOn {
-            border: 1px solid #FFD400;
-            background-color: #FFF7E6;
-        }
-
-        .bootstrap-tagsinput {
-            width: 80%;
-        }
-
-        .badge-info, .label-info {
-            background-color: #5bc0de;
-        }
-
-        .removeBtn {
-            position: absolute;
-            right: 6px;
-            top: 0px;
-            color: #ccc;
-            background: rgba(0, 0, 0, 0.3);
-        }
     </style>
 </head>
 
@@ -76,7 +55,11 @@
                                         <div class="col-sm-10" id="cate_div">
                                             <span class="m-l-md">
                                                 <select class="form-control input-sm">
-                                                    <option>请选择</option>
+                                                    <option value="0">请选择</option>
+                                                    <!--/*@thymesVar id="categories" type="java.util.List<com.huotu.loanmarket.service.entity.LoanCategory>"*/-->
+                                                    <th:block th:each="category:${categories}">
+                                                        <option th:value="${category.id}" th:text="${category.name}"></option>
+                                                    </th:block>
                                                 </select>
                                                 <span style="cursor:pointer;" onclick="deleteCate(this)" class="deleteCate">x</span>
                                             </span>
@@ -101,8 +84,9 @@
                                         <div class="col-sm-10">
                                             <ul class="list-inline">
                                                 <li style="position: relative;">
-                                                    <img src="" class="m-b img-selected img-rounded" width="92" height="92"/>
+                                                    <img src="" id="img_logo" class="m-b img-selected img-rounded" width="92" height="92"/>
                                                     <input type="hidden" id="logo"/>
+                                                    <input type="file" id="btnFile" name="img" style="display: none">
                                                 </li>
                                             </ul>
                                         </div>
@@ -215,21 +199,21 @@
 <script src="http://resali.huobanplus.com/cdn/bootstrap/3.3.5/bootstrap.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/content.min.js"></script>
 
-<!--file-->
-<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/prettyfile/bootstrap-prettyfile.js"></script>
 
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/SearchableSelect/jquery.searchableSelect.js"></script>
 
 <!--tagsinput-->
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.js"></script>
-
+<script th:src="@{/resource/js/plugins/ajaxfileupload.js}" src="../../resource/js/plugins/ajaxfileupload.js"></script>
 <script src="../../resource/js/plugins/hot/bootstrap.hot.extra-utils.js"></script>
 <script src="../../resource/js/plugins/hot/bootstrap.hot.extra-init.js"></script>
 
-<script type="text/javascript">
+<script type="text/javascript" th:inline="javascript">
+    var uploadUrl = /*[[@{/resource/upload/img}]]*/ "";
+
     $("#save").click(function () {
 
-    })
+    });
 
     $("#addCate").click(function () {
         $(this).before(
@@ -240,6 +224,22 @@
     function deleteCate(obj) {
         $(obj).parent().remove();
     }
+
+    $("#uploadBtn").click(function () {
+        hot.uploadImg(uploadUrl, "btnFile", null, function (fileUrl) {
+            alert(fileUrl);
+        })
+    });
+
+    $("#img_logo").click(function () {
+        $("#btnFile").click();
+    })
+
+    $("#btnFile").change(function () {
+        hot.fileUpload(uploadUrl, "btnFile", null, function (file) {
+            $("#img_logo").attr("src", file.fileUrl);
+        })
+    })
 </script>
 </body>
 

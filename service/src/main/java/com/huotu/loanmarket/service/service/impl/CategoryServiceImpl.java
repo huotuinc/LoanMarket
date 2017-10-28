@@ -1,7 +1,6 @@
 package com.huotu.loanmarket.service.service.impl;
 
 import com.huotu.loanmarket.service.base.AbstractCrudService;
-import com.huotu.loanmarket.service.base.JpaCrudRepository;
 import com.huotu.loanmarket.service.entity.LoanCategory;
 import com.huotu.loanmarket.service.repository.LoanCategoryRepository;
 import com.huotu.loanmarket.service.service.CategoryService;
@@ -16,9 +15,12 @@ import java.util.List;
  */
 @Service
 public class CategoryServiceImpl extends AbstractCrudService<LoanCategory, Integer> implements CategoryService {
+    private LoanCategoryRepository categoryRepository;
+
     @Autowired
-    public CategoryServiceImpl(JpaCrudRepository<LoanCategory, Integer> repository) {
+    public CategoryServiceImpl(LoanCategoryRepository repository) {
         super(repository);
+        categoryRepository = repository;
     }
 
     @Override

@@ -12,11 +12,11 @@ import java.net.URISyntaxException;
  * @date 26/10/2017
  */
 public interface StaticResourceService {
-    URI uploadResource(String urlPrefix, String path, InputStream data) throws IOException, IllegalStateException, URISyntaxException;
+    URI upload(String path, InputStream data) throws IOException, IllegalStateException, URISyntaxException;
 
-    URI getResource(String urlPrefix, String path) throws URISyntaxException;
+    URI get(String path) throws URISyntaxException;
 
-    void deleteResource(String path) throws IOException;
+    void delete(String path) throws IOException;
 
-    void deleteResource(URI uri) throws IOException;
+    void delete(URI uri) throws IOException;
 }
