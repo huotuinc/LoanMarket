@@ -112,6 +112,11 @@ public class LoanProject {
      */
     @Column(name = "Phone")
     private String phone;
+    /**
+     * 最高可贷款金额
+     */
+    @Column(name = "Max_Money")
+    private float maxMoney;
 
     @Column(name = "Categories")
     private String categories;
