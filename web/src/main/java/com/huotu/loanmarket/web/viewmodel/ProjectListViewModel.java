@@ -15,7 +15,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ApiProjectList {
+public class ProjectListViewModel {
     private long totalRecord;
     private int pageIndex;
     private int totalPage;

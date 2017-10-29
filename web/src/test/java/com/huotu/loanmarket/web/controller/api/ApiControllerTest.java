@@ -10,7 +10,7 @@ import com.huotu.loanmarket.service.service.CategoryService;
 import com.huotu.loanmarket.service.service.ProjectService;
 import com.huotu.loanmarket.web.base.ApiResult;
 import com.huotu.loanmarket.web.base.ApiTestBase;
-import com.huotu.loanmarket.web.viewmodel.ApiProjectList;
+import com.huotu.loanmarket.web.viewmodel.ProjectListViewModel;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -154,7 +154,7 @@ public class ApiControllerTest extends ApiTestBase {
                 .andExpect(jsonPath("$.data.totalRecord").value(mockProjects.size()))
                 .andReturn();
 
-        ApiResult<ApiProjectList> apiResult = JSON.parseObject(mvcResult.getResponse().getContentAsString(), new TypeReference<ApiResult<ApiProjectList>>() {
+        ApiResult<ProjectListViewModel> apiResult = JSON.parseObject(mvcResult.getResponse().getContentAsString(), new TypeReference<ApiResult<ProjectListViewModel>>() {
         });
 
         int actualPageCount = mockProjects.size() / SysConstant.API_DEFALUT_PAGE_SIZE;
@@ -172,7 +172,7 @@ public class ApiControllerTest extends ApiTestBase {
                 .andReturn();
         mvcResult.getResponse().setCharacterEncoding(StringUtilsExt.ENCODING_UTF8);
 
-        apiResult = JSON.parseObject(mvcResult.getResponse().getContentAsString(), new TypeReference<ApiResult<ApiProjectList>>() {
+        apiResult = JSON.parseObject(mvcResult.getResponse().getContentAsString(), new TypeReference<ApiResult<ProjectListViewModel>>() {
         });
 
         assertEquals(topNum, apiResult.getData().getList().size());
@@ -205,7 +205,7 @@ public class ApiControllerTest extends ApiTestBase {
                 .andExpect(jsonPath("$.resultCode").value(2000))
                 .andReturn();
         mvcResult.getResponse().setCharacterEncoding(StringUtilsExt.ENCODING_UTF8);
-        apiResult = JSON.parseObject(mvcResult.getResponse().getContentAsString(), new TypeReference<ApiResult<ApiProjectList>>() {
+        apiResult = JSON.parseObject(mvcResult.getResponse().getContentAsString(), new TypeReference<ApiResult<ProjectListViewModel>>() {
         });
 
         List<LoanProject> expectedList = mockProjects.stream().filter(p ->

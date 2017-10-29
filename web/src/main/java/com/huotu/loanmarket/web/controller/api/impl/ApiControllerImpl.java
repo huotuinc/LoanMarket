@@ -9,7 +9,7 @@ import com.huotu.loanmarket.service.service.*;
 import com.huotu.loanmarket.web.base.ApiResult;
 import com.huotu.loanmarket.web.base.ResultCodeEnum;
 import com.huotu.loanmarket.web.controller.api.ApiController;
-import com.huotu.loanmarket.web.viewmodel.ApiProjectList;
+import com.huotu.loanmarket.web.viewmodel.ProjectListViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -72,10 +72,10 @@ public class ApiControllerImpl implements ApiController {
     ) {
         Page<LoanProject> projectPage = projectService.findAll(pageIndex, pageSize, projectSearchCondition);
 
-        ApiProjectList apiProjectList = new ApiProjectList();
-        apiProjectList.toApiProjectList(projectPage);
+        ProjectListViewModel projectListViewModel = new ProjectListViewModel();
+        projectListViewModel.toApiProjectList(projectPage);
 
-        return ApiResult.resultWith(ResultCodeEnum.SUCCESS, apiProjectList);
+        return ApiResult.resultWith(ResultCodeEnum.SUCCESS, projectListViewModel);
     }
 
     @Override
