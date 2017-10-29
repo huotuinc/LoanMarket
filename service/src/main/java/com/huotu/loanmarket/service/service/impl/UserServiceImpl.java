@@ -7,6 +7,8 @@ import com.huotu.loanmarket.service.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 /**
  * @author hxh
  * @date 2017-10-27
@@ -29,6 +31,7 @@ public class UserServiceImpl extends AbstractCrudService<LoanUser, Integer> impl
         if (user == null) {
             user = new LoanUser();
             user.setAccount(mobile);
+            user.setCreateTime(new Date());
             this.repository.save(user);
         }
         return user;

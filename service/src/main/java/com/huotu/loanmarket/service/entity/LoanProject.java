@@ -116,7 +116,7 @@ public class LoanProject {
      * 最高可贷款金额
      */
     @Column(name = "Max_Money")
-    private float maxMoney;
+    private double maxMoney;
 
     @Column(name = "Categories")
     private String categories;

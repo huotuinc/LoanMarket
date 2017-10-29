@@ -13,11 +13,21 @@ import java.util.List;
  * @date 23/10/2017
  */
 public interface ProjectService extends CrudService<LoanProject, Integer> {
-    List<LoanProject> getProjectList(ProjectSearchCondition projectSearchCondition);
-
+    /**
+     * 得到top几条
+     *
+     * @param projectSearchTopCondition
+     * @return
+     */
     List<LoanProject> getProjectTopList(ProjectSearchTopCondition projectSearchTopCondition);
 
-    LoanProject getProjectDetail(int projectId, int userId);
-
-    Page<LoanProject> findAll(ProjectSearchCondition searchCondition);
+    /**
+     * 按条件分组查询
+     *
+     * @param pageIndex       页码，索引从1开始
+     * @param pageSize        每页条数
+     * @param searchCondition {@link ProjectSearchCondition}
+     * @return
+     */
+    Page<LoanProject> findAll(int pageIndex, int pageSize, ProjectSearchCondition searchCondition);
 }
