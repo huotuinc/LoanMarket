@@ -1,9 +1,20 @@
 package com.huotu.loanmarket.web.controller.backgroud;
 
+import com.huotu.loanmarket.service.entity.LoanCategory;
 import com.huotu.loanmarket.service.service.CategoryService;
+import com.huotu.loanmarket.web.common.ApiResult;
+import com.huotu.loanmarket.web.common.ResultCodeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
+
+
 
 @Controller
 @RequestMapping("/backend/category")
@@ -12,16 +23,72 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @RequestMapping("/list")
-    public String list(){
+    public String list(Model model) {
+        List<LoanCategory> items = categoryService.findAll();
+        model.addAttribute("items", items);
         return "category_list";
     }
 
 
+    /**
+     * 编辑分类
+     *
+     * @param categoryId
+     * @param model
+     * @return
+     */
     @RequestMapping("/edit")
-    public  String edit(){
+    public String edit(
+            @RequestParam(required = false, defaultValue = "0") Integer categoryId,
+            Model model
+    ) {
+
+        LoanCategory category;
+        if (categoryId == 0) {
+            category = new LoanCategory();
+        } else {
+            category = categoryService.findOne(categoryId);
+        }
+        model.addAttribute("category", category);
+
+        List<LoanCategory> items = categoryService.findAll();
+
+        items.removeIf(item -> item.getId().equals(categoryId));
 
 
+        model.addAttribute("items", items);
         return "category_edit";
     }
 
+
+    /**
+     * 保存分类数据
+     *
+     * @param categoryId
+     * @param categoryName
+     * @param categoryIcon
+     * @param categoryParentId
+     * @return
+     */
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResult save(@RequestParam(required = false, defaultValue = "0") int categoryId,
+                          @RequestParam String categoryName,
+                          @RequestParam String categoryIcon,
+                          @RequestParam(required = false, defaultValue = "0") String categoryParentId
+    ) {
+
+        LoanCategory category;
+
+        if (categoryId > 0) {
+            category = categoryService.findOne(categoryId);
+        } else {
+            category = new LoanCategory();
+        }
+        category.setName(categoryName);
+        category.setIcon(categoryIcon);
+        category.setParentId(categoryParentId);
+        category = categoryService.save(category);
+        return ApiResult.resultWith(ResultCodeEnum.SUCCESS, category);
+    }
 }
