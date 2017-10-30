@@ -84,9 +84,9 @@
                                         <div class="col-sm-10">
                                             <ul class="list-inline">
                                                 <li style="position: relative;">
-                                                    <img src="" th:src="*{logo}" id="img_logo" class="m-b img-selected img-rounded" width="92" height="92"/>
+                                                    <img src="" th:src="*{logo}" id="img_logo" onclick="javascript:$('#btnFile').click();" class="m-b img-selected img-rounded" width="92" height="92"/>
                                                     <input type="hidden" id="logo" th:value="*{logo}"/>
-                                                    <input type="file" id="btnFile" name="img" style="display: none">
+                                                    <input type="file" id="btnFile" onchange="uploadImg()" name="img" style="display: none">
                                                 </li>
                                             </ul>
                                         </div>
@@ -217,79 +217,78 @@
     var uploadUrl = /*[[@{/resource/upload/img}]]*/ "";
     var requestUrl = /*[[@{/backend/project/edit}]]*/ "";
 
-    $("#addCate").click(function () {
-        $(this).before(
-            $(this).prev().prop("outerHTML")
-        );
+    $(function () {
+        $("#addCate").click(function () {
+            $(this).before(
+                $(this).prev().prop("outerHTML")
+            );
+        });
+
+        $("#save").click(function () {
+            var categories = ",";
+            $(".selCategory").each(function () {
+                if (parseInt($(this).val()) != 0) {
+                    categories += $(this.val()) + ",";
+                }
+            });
+            var name = $.trim($('#name').val());
+            var logo = $("#logo").val();
+            var tags = $("#tags").val();
+            var enableMoney = $("#enable_money").val();
+            var deadline = $("#deadline").val();
+            var deadlineUnit = $("#deadline_unit").val();
+            var rate = $.trim($("#rate").val());
+            var fastestGetTime = $.trim($("#fastest_get_time").val());
+            var applicationMaterials = "";
+            $("input[name=applicationMaterial]:checked").each(function () {
+                applicationMaterials += $(this).val() + ",";
+            });
+            applicationMaterials = applicationMaterials.substring(0, applicationMaterials.length - 1);
+            var contact = $.trim($("#contact").val());
+            var contactPhone = $.trim($("#contact_phone").val());
+            var applyType = $("#apply_type").val();
+            var apply_url = $.trim($("#apply_url").val());
+
+            var requestData = {
+                id: $("#project_id").val(),
+                name: name,
+                tag: tags,
+                enableMoney: enableMoney,
+                deadline: deadline,
+                deadlineUnit: deadlineUnit,
+                interestRate: rate,
+                fastestGetTime: fastestGetTime,
+                applicationMaterial: applicationMaterials,
+                logo: logo,
+                applyType: applyType,
+                contact: contact,
+                phone: contactPhone,
+                categories: categories
+            };
+
+            hot.ajax(requestUrl, requestData, function (apiResult) {
+                hot.loading.hide();
+                if (apiResult.resultCode == 2000) {
+                    window.location.reload();
+                } else {
+                    hot.error("保存失败");
+                }
+            }, function () {
+            }, "post", 200);
+        })
     });
 
     function deleteCate(obj) {
         $(obj).parent().remove();
     }
 
-    $("#img_logo").click(function () {
-        $("#btnFile").click();
-    });
-
-    $("#btnFile").change(function () {
+    function uploadImg() {
         hot.fileUpload(uploadUrl, "btnFile", null, function (file) {
             $("#img_logo").attr("src", file.fileUrl);
             $("#logo").val(file.fileUrl);
-        })
-    });
-
-    $("#save").click(function () {
-        var categories = ",";
-        $(".selCategory").each(function () {
-            if (parseInt($(this).val()) != 0) {
-                categories += $(this.val()) + ",";
-            }
         });
-        var name = $.trim($('#name').val());
-        var logo = $("#logo").val();
-        var tags = $("#tags").val();
-        var enableMoney = $("#enable_money").val();
-        var deadline = $("#deadline").val();
-        var deadlineUnit = $("#deadline_unit").val();
-        var rate = $.trim($("#rate").val());
-        var fastestGetTime = $.trim($("#fastest_get_time").val());
-        var applicationMaterials = "";
-        $("input[name=applicationMaterial]:checked").each(function () {
-            applicationMaterials += $(this).val() + ",";
-        });
-        applicationMaterials = applicationMaterials.substring(0, applicationMaterials.length - 1);
-        var contact = $.trim($("#contact").val());
-        var contactPhone = $.trim($("#contact_phone").val());
-        var applyType = $("#apply_type").val();
-        var apply_url = $.trim($("#apply_url").val());
+    }
 
-        var requestData = {
-            id: $("#project_id").val(),
-            name: name,
-            tag: tags,
-            enableMoney: enableMoney,
-            deadline: deadline,
-            deadlineUnit: deadlineUnit,
-            interestRate: rate,
-            fastestGetTime: fastestGetTime,
-            applicationMaterial: applicationMaterials,
-            logo: logo,
-            applyType: applyType,
-            contact: contact,
-            phone: contactPhone,
-            categories: categories
-        };
-
-        hot.ajax(requestUrl, requestData, function (apiResult) {
-            hot.loading.hide();
-            if (apiResult.resultCode == 2000) {
-                window.location.reload();
-            } else {
-                hot.error("保存失败");
-            }
-        }, function () {
-        }, "post", 200);
-    })
 </script>
 </body>
 

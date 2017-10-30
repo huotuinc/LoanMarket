@@ -22,19 +22,19 @@ import java.net.URISyntaxException;
 @Profile("!container")
 public class LocalStaticResourceServiceImpl implements StaticResourceService {
     private URI uriPrefix;
-    private URI fileHome;
+    private File fileHome;
 
     @Autowired
     public void initService(WebApplicationContext context) throws URISyntaxException {
-        File file = new File(context.getServletContext().getRealPath("/resource/upload/"));
-        this.fileHome = file.toURI();
+        fileHome = new File(context.getServletContext().getRealPath("/resource/upload/"));
+        fileHome.mkdirs();
         this.uriPrefix = new URI("http://localhost:8080" + context.getServletContext().getContextPath() + "/resource/upload/");
     }
 
 
     @Override
     public URI upload(String path, InputStream data) throws IOException, IllegalStateException, URISyntaxException {
-        File file = new File(fileHome.toString(), path);
+        File file = new File(fileHome, path);
         file.getParentFile().mkdirs();
 
         if (file.exists()) {
@@ -42,7 +42,10 @@ public class LocalStaticResourceServiceImpl implements StaticResourceService {
         }
         try (FileOutputStream outputStream = new FileOutputStream(file)) {
             StreamUtils.copy(data, outputStream);
+            outputStream.close();
         }
+
+        data.close();
         return get(path);
     }
 
