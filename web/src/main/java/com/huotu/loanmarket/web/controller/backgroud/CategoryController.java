@@ -52,7 +52,7 @@ public class CategoryController {
 
         List<LoanCategory> items = categoryService.findAll();
 
-        items.removeIf(item -> item.getId().equals(categoryId));
+        items.removeIf(item -> item.getCategoryId().equals(categoryId));
 
 
         model.addAttribute("items", items);
