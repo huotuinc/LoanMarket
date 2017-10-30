@@ -50,7 +50,7 @@
                             <div id="tab-1" class="tab-pane active">
                                 <!--/*@thymesVar id="project" type="com.huotu.loanmarket.service.entity.LoanProject"*/-->
                                 <div class="panel-body good-edit-failure form-horizontal" th:object="${project}">
-                                    <input type="hidden" id="project_id" th:value="*{id}"/>
+                                    <input type="hidden" id="project_id" th:value="*{loanId}"/>
                                     <div class="form-group form-inline">
                                         <label class="col-sm-2 control-label">所属分类:</label>
 
@@ -209,9 +209,9 @@
 
 <!--tagsinput-->
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.js"></script>
-<script th:src="@{/resource/js/plugins/ajaxfileupload.js}" src="../../resource/js/plugins/ajaxfileupload.js"></script>
-<script src="../../resource/js/plugins/hot/bootstrap.hot.extra-utils.js"></script>
-<script src="../../resource/js/plugins/hot/bootstrap.hot.extra-init.js"></script>
+<script th:src="@{/resource/js/plugins/ajaxfileupload.js}" src="../resource/js/plugins/ajaxfileupload.js"></script>
+<script src="../resource/js/plugins/hot/bootstrap.hot.extra-utils.js"></script>
+<script src="../resource/js/plugins/hot/bootstrap.hot.extra-init.js"></script>
 
 <script type="text/javascript" th:inline="javascript">
     var uploadUrl = /*[[@{/resource/upload/img}]]*/ "";

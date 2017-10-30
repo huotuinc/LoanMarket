@@ -9,8 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * @date 19/10/2017
  */
 @Controller
-@RequestMapping("/backend")
-public class IndexController extends BaseController {
+public class IndexController {
     @RequestMapping(value = {"", "/", "/login"}, method = RequestMethod.GET)
     public String login() {
         return "login";

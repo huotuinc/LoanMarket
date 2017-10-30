@@ -17,8 +17,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    public static final String LOGIN_PAGE = "/backend/login";
-    public static final String LOGIN_SUCCESS_URL = "/backend/index";
+    public static final String LOGIN_PAGE = "/login";
+    public static final String LOGIN_SUCCESS_URL = "/index";
     public static final String LOGIN_ERROR_URL = "/loginFailed";
     public static final String LOGOUT_SUCCESS_URL = "/";
 
@@ -46,14 +46,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .headers().frameOptions().sameOrigin()
                 .and()
                 .authorizeRequests()
-                .antMatchers("/forend/**", "/rest/api/**", "/resource/upload/**").permitAll()
-                .antMatchers("/backend/**").hasRole("ADMIN")
+                .antMatchers("/forend/**", "/rest/api/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .csrf().disable()
                 .formLogin()
                 .loginPage(LOGIN_PAGE)
-                .loginProcessingUrl("/backend/login")
                 .permitAll()
                 .defaultSuccessUrl(LOGIN_SUCCESS_URL)
                 .and()
