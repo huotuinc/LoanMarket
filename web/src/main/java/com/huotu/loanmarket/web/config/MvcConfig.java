@@ -81,6 +81,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
         if (environment.acceptsProfiles("development")) {
             resolver.setCacheable(false);
         }
+        resolver.setOrder(1);
 
         SpringTemplateEngine engine = new SpringTemplateEngine();
         engine.setTemplateResolver(resolver);
@@ -109,6 +110,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
         if (environment.acceptsProfiles("development")) {
             resolver.setCacheable(false);
         }
+        resolver.setOrder(2);
 
         SpringTemplateEngine engine = new SpringTemplateEngine();
         engine.setTemplateResolver(resolver);
