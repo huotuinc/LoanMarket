@@ -26,7 +26,8 @@ public class LocalStaticResourceServiceImpl implements StaticResourceService {
 
     @Autowired
     public void initService(WebApplicationContext context) throws URISyntaxException {
-        this.fileHome = new URI(context.getServletContext().getRealPath("/resource/upload/"));
+        File file = new File(context.getServletContext().getRealPath("/resource/upload/"));
+        this.fileHome = file.toURI();
         this.uriPrefix = new URI("http://localhost:8080" + context.getServletContext().getContextPath() + "/resource/upload/");
     }
 
