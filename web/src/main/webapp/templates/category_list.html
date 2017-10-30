@@ -77,7 +77,6 @@
 
 <script src="../resource/js/plugins/hot/bootstrap.hot.extra-utils.js"></script>
 <script src="../resource/js/plugins/hot/bootstrap.hot.extra-init.js"></script>
-
 <script type="text/javascript">
     var pageIndex = 1;
     var totalPage = 20;
@@ -85,10 +84,14 @@
     var categoryListHandler = {
         deleteCategory: function (categoryId) {
             hot.confirm("确定要删除该分类?", function () {
-                J.PostJson("/backend/category/delete", {categoryId: categoryId}, function (ret) {
-                    if (ret.resultCode == 2000)
+                hot.ajax("/category/delete", {categoryId: categoryId}, function (ret) {
+                    if (ret.resultCode == 2000) {
                         hot.tip.success("删除成功");
-                });
+                        window.location.reload();
+                    }
+                }, function (err) {
+
+                }, "post");
             })
         },
         editCategory: function (categoryId) {

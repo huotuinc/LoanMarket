@@ -99,7 +99,7 @@ public class ApiControllerTest extends ApiTestBase {
             project.setMaxMoney(nextMoney);
             StringBuilder categories = new StringBuilder(",");
             for (int j = 0; j < nextIntInSection(1, mockCategories.size()); j++) {
-                categories.append(mockCategories.get(j).getId()).append(",");
+                categories.append(mockCategories.get(j).getCategoryId()).append(",");
             }
             project.setCategories(categories.toString());
             projectService.save(project);
@@ -204,7 +204,7 @@ public class ApiControllerTest extends ApiTestBase {
         //加入筛选条件
         int isNew = nextIntInSection(0, 1);
         int isHot = nextIntInSection(0, 1);
-        int categoryId = mockCategories.get(nextIntInSection(0, mockCategories.size() - 1)).getId();
+        int categoryId = mockCategories.get(nextIntInSection(0, mockCategories.size() - 1)).getCategoryId();
 
         mvcResult = mockMvc.perform(post(url)
                 .param("isNew", String.valueOf(isNew))
