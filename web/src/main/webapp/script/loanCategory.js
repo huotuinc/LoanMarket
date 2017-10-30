@@ -24,16 +24,20 @@ $(function () {
      * 上传icon
      */
     $("#uploadCategoryIcon").click(function () {
+        $("#fileIcon").unbind("change").bind("change", fileChangeEvent);
         $("#fileIcon").click();
     });
 
-    $("#fileIcon").change(function () {
+    function fileChangeEvent() {
         if ($("#fileIcon").val().length > 0) {
             hot.fileUpload('/resource/upload/img', 'fileIcon', null, function (res) {
                 $("#categoryIcon").val(res.fileUrl);
                 $("#uploadCategoryIcon").attr("src", res.fileUrl);
+                $("#fileIcon").val("");
+
             });
         }
-    })
+    }
+
 
 });
