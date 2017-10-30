@@ -119,19 +119,28 @@ public class ApiControllerTest extends ApiTestBase {
     }
 
     @Test
-    public void appInfoTest() throws Exception {
+    public void InitTest() throws Exception {
         equipmentRepository.deleteAll();
         String appVersion = UUID.randomUUID().toString().substring(5);
         String osVersion = UUID.randomUUID().toString().substring(5);
         String osType = "IOS";
-
-        mockMvc.perform(post(requestUrl + "/appInfo")
+        //没有传userId
+        mockMvc.perform(post(requestUrl + "/user/init")
                 .param("appVersion", appVersion)
                 .param("osVersion", osVersion)
                 .param("osType", osType))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.resultCode").value(2000));
-
+                .andExpect(jsonPath("$.resultCode").value(5000));
+        //登录情况下，有传userId
+        LoanUser expectedUser = mockUsers.get(nextIntInSection(0, mockUsers.size() - 1));
+        mockMvc.perform(post(requestUrl + "/user/init")
+                .param("appVersion", appVersion)
+                .param("osVersion", osVersion)
+                .param("osType", osType)
+                .param("userId", String.valueOf(expectedUser.getUserId())))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.resultCode").value(2000))
+        .andExpect(jsonPath("$.data.userId").value(expectedUser.getUserId()));
         LoanEquipment equipment = equipmentRepository.findAll().get(0);
         assertEquals(appVersion, equipment.getAppVersion());
         assertEquals(osVersion, equipment.getOsVersion());
@@ -241,11 +250,11 @@ public class ApiControllerTest extends ApiTestBase {
 
         //未登录情况
         mockMvc.perform(post(requestUrl + "/project/detail")
-                .param("projectId", String.valueOf(expectedProject.getId())))
+                .param("projectId", String.valueOf(expectedProject.getLoanId())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.resultCode").value(2000))
                 .andExpect(jsonPath("$.data").isNotEmpty())
-                .andExpect(jsonPath("$.data.id").value(expectedProject.getId()))
+                .andExpect(jsonPath("$.data.loanId").value(expectedProject.getLoanId()))
                 .andReturn();
 
         List<LoanUserViewLog> viewLogs = viewLogRepository.findAll();
@@ -256,35 +265,16 @@ public class ApiControllerTest extends ApiTestBase {
 
         mockMvc.perform(post(requestUrl + "/project/detail")
                 .param("userId", String.valueOf(expectedUser.getUserId()))
-                .param("projectId", String.valueOf(expectedProject.getId())))
+                .param("projectId", String.valueOf(expectedProject.getLoanId())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.resultCode").value(2000))
                 .andExpect(jsonPath("$.data").isNotEmpty())
-                .andExpect(jsonPath("$.data.id").value(expectedProject.getId()))
+                .andExpect(jsonPath("$.data.loanId").value(expectedProject.getLoanId()))
                 .andReturn();
 
         viewLogs = viewLogRepository.findAll();
         assertEquals(viewLogs.size(), 1);
         assertEquals(expectedUser.getUserId().intValue(), viewLogs.get(0).getUserId());
-
-
-    }
-
-    @Test
-    public void userDetailTest() throws Exception {
-        //未登录情况
-        mockMvc.perform(post(requestUrl + "/user/detail"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.resultCode").value(5000));
-
-        //登录情况
-        LoanUser expectedUser = mockUsers.get(nextIntInSection(0, mockUsers.size() - 1));
-
-        mockMvc.perform(post(requestUrl + "/user/detail")
-                .param("userId", String.valueOf(expectedUser.getUserId())))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.resultCode").value(2000))
-                .andExpect(jsonPath("$.data.userId").value(expectedUser.getUserId()));
     }
 
     @Test

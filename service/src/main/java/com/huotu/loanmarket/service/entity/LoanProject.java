@@ -18,7 +18,7 @@ public class LoanProject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id")
-    private Integer id;
+    private Integer loanId;
     /**
      * 名称
      */
@@ -59,6 +59,10 @@ public class LoanProject {
     private int fastestGetTime;
     /**
      * 申请材料，英文逗号分割
+     * 0：基本信息
+     * 1：身份信息
+     * 2：工作信息
+     * 3:运营商信息
      */
     @Column(name = "Application_Material")
     private String applicationMaterial;
@@ -83,7 +87,7 @@ public class LoanProject {
     @Column(name = "IsDelete")
     private int isDelete;
     /**
-     * 应用类型
+     * 申请类型
      */
     @Column(name = "Apply_Type")
     private int applyType;
@@ -107,7 +111,7 @@ public class LoanProject {
     /**
      * 联系人
      */
-    @Column(name = "contact")
+    @Column(name = "Contact")
     private String contact;
     /**
      * 电话

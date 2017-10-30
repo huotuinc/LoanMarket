@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>添加分类</title>
+    <link href="http://resali.huobanplus.com/cdn/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+    <!-- Morris -->
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/animate.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/style.min-1.0.8.css" rel="stylesheet">
+
+    <!--checkbox-->
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css"
+          rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css"
+          rel="stylesheet"/>
+    <style>
+
+        #edit_form button {
+            padding: 4px 12px;
+            text-align: center;
+
+        }
+
+        .hr-line-dashed {
+            margin: 15px 0;
+        }
+
+        .specPanel .input-sm {
+            height: 20px;
+        }
+    </style>
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight tooltip-demo">
+    <form role="form" id="edit_form">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox float-e-margins">
+                    <div class="tabs-container">
+                        <div class="tab-content">
+                            <div id="tab-1" class="tab-pane active">
+                                <div class="panel-body good-edit-failure form-horizontal">
+                                    <input type="hidden" id="categoryId" value="0" th:value="${category.Id}"/>
+                                    <div class="hr-line-dashed "></div>
+                                    <div class="form-group form-inline">
+                                        <label class="col-sm-2 control-label">所属父级:</label>
+
+                                        <div class="col-sm-10">
+                                            <select id="categoryParentId" name="categoryParentId"
+                                                    class="form-control input-sm">
+                                                <option value="0">顶级分类</option>
+                                                <option value="0" th:each="category:${items}" th:value="${category.Id}"
+                                                        th:text="${category.name}"></option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed "></div>
+                                    <div class="form-group ">
+                                        <label class="col-sm-2 control-label">分类名称:</label>
+
+                                        <div class="col-sm-10">
+                                            <input type="text" th:value="${category.name}" class="form-control input-sm"
+                                                   id="categoryName" name="categoryName" placeholder="分类名称"/>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed "></div>
+                                    <div class="form-group form-inline">
+                                        <label class="col-sm-2 control-label">
+                                            Logo:
+                                        </label>
+
+                                        <div class="col-sm-10">
+                                            <ul class="list-inline">
+                                                <li style="position: relative;">
+                                                    <div style="display: none;">
+                                                        <input type="file" id="fileIcon" name="img"/>
+                                                    </div>
+                                                    <img src="" th:src="${category.icon}" id="uploadCategoryIcon"
+                                                         class="m-b img-selected img-rounded" width="92" height="92"/>
+                                                    <input type="hidden" id="categoryIcon" th:value="${category.icon}"/>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="button" id="save" class="btn btn-white m-b-none">保存</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!--基础框架js-->
+<script src="http://resali.huobanplus.com/cdn/jquery/2.2.4/jquery.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/bootstrap/3.3.5/bootstrap.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/content.min.js"></script>
+
+<!--file-->
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/prettyfile/bootstrap-prettyfile.js"></script>
+
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/SearchableSelect/jquery.searchableSelect.js"></script>
+
+<!--tagsinput-->
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.js"></script>
+
+<script src="../../resource/js/plugins/ajaxfileupload.js"></script>
+<script src="../../resource/js/plugins/hot/jquery.utils.js"></script>
+<script src="../../resource/js/plugins/hot/bootstrap.hot.extra-utils.js"></script>
+<script src="../../resource/js/plugins/hot/bootstrap.hot.extra-init.js"></script>
+<script src="../../script/loanCategory.js"></script>
+</body>
+
+</html>

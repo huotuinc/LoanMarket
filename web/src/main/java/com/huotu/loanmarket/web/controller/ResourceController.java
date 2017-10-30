@@ -40,7 +40,7 @@ public class ResourceController {
         }
         // TODO: 27/10/2017 图片属性校验
         String prefix = fileName.substring(fileName.lastIndexOf(".") + 1);
-        String path = StringUtilsExt.dateFormat(now, "yyyyMMdd") + "/"
+        String path = "loanMarket/" + StringUtilsExt.dateFormat(now, "yyyyMMdd") + "/"
                 + StringUtilsExt.dateFormat(now, "yyyyMMddHHmmSS") + "." + prefix;
 
         URI uri = resourceService.upload(path, file.getInputStream());
