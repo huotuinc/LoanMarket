@@ -10,7 +10,9 @@ import org.apache.commons.vfs2.provider.sftp.SftpFileSystemConfigBuilder;
 import org.springframework.stereotype.Service;
 
 /**
- * Created by allan on 26/10/2017.
+ *
+ * @author allan
+ * @date 26/10/2017
  */
 @Service
 public class VFSHelper {

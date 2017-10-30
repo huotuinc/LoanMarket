@@ -290,7 +290,7 @@ var hot = $.extend({}, hot, {
         }
     },
     //图片上传
-    uploadImg: function (uploadUrl, btnFile, uploadPath, callback, data) {
+    fileUpload: function (uploadUrl, btnFile, data, callback) {
         $.ajaxFileUpload({
             url: uploadUrl,
             secureuri: false,//安全协议
@@ -301,9 +301,9 @@ var hot = $.extend({}, hot, {
             error: function (data, status, e) {
             },
             success: function (json) {
-                if (json.success) {
+                if (json.resultCode == 2000) {
                     hot.tip.success("上传成功");
-                    callback(json.fileUrl);
+                    callback(json.data);
                 } else {
                     hot.tip.error("上传失败");
                 }

@@ -1,5 +1,6 @@
 package com.huotu.loanmarket.service.base;
 
+
 import java.io.Serializable;
 
 /**
@@ -7,7 +8,7 @@ import java.io.Serializable;
  * @date 26/10/2017
  */
 public abstract class AbstractCrudService<T, ID extends Serializable> implements CrudService<T, ID> {
-    private JpaCrudRepository<T, ID> repository;
+    protected final JpaCrudRepository<T, ID> repository;
 
     protected AbstractCrudService(JpaCrudRepository<T, ID> repository) {
         this.repository = repository;

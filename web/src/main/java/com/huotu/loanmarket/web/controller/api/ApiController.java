@@ -1,8 +1,7 @@
 package com.huotu.loanmarket.web.controller.api;
 
-import com.huotu.loanmarket.service.entity.LoanProject;
 import com.huotu.loanmarket.service.searchable.ProjectSearchCondition;
-import com.huotu.loanmarket.web.common.ApiResult;
+import com.huotu.loanmarket.web.base.ApiResult;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -38,17 +37,19 @@ public interface ApiController {
      */
     @RequestMapping("/init")
     @ResponseBody
-    ApiResult init(Long userId);
+    ApiResult userDetail(int userId);
 
     /**
      * 分组按条件搜索产品列表
      *
-     * @param projectSearchCondition 搜索条件, {@link ProjectSearchCondition}
-     * @return {@link LoanProject}
+     * @param pageIndex              页码，索引从1开始
+     * @param pageSize               每页数量，默认10
+     * @param projectSearchCondition 搜索条件，{@link ProjectSearchCondition}
+     * @return
      */
     @RequestMapping("/project/list")
     @ResponseBody
-    ApiResult projectList(ProjectSearchCondition projectSearchCondition);
+    ApiResult projectList(int pageIndex, int pageSize, ProjectSearchCondition projectSearchCondition);
 
     /**
      * 获得所有分类
@@ -58,6 +59,16 @@ public interface ApiController {
     @RequestMapping("/project/category")
     @ResponseBody
     ApiResult projectCategory();
+
+    /**
+     * 获取产品没有分页（废弃，直接使用projectList）
+     *
+     * @param projectSearchTopCondition
+     * @return
+     */
+//    @RequestMapping("/project/topList")
+//    @ResponseBody
+//    ApiResult projectTopList(ProjectSearchTopCondition projectSearchTopCondition);
 
     /**
      * 返回产品详情，同时记录浏览量，未登录不记录
@@ -93,5 +104,5 @@ public interface ApiController {
      */
     @RequestMapping("/project/applyCount")
     @ResponseBody
-    ApiResult applyCount(int userId, int projectId);
+    ApiResult applyLog(int userId, int projectId);
 }

@@ -1,15 +1,16 @@
-package com.huotu.loanmarket.web.common;
+package com.huotu.loanmarket.web.base;
 
 import lombok.Data;
 
 /**
- * Created by allan on 23/10/2017.
+ * @author allan
+ * @date 23/10/2017
  */
 @Data
-public class ApiResult {
+public class ApiResult<T> {
     private int resultCode;
     private String resultMsg;
-    private Object data;
+    private T data;
 
     public static ApiResult resultWith(ResultCodeEnum resultCode, Object data) {
         ApiResult apiResult = new ApiResult();
