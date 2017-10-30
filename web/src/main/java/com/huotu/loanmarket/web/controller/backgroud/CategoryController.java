@@ -15,8 +15,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 
 
+/**
+ * @author allan
+ */
 @Controller
-@RequestMapping("/backend/category")
+@RequestMapping("/category")
 public class CategoryController {
     @Autowired
     private CategoryService categoryService;
