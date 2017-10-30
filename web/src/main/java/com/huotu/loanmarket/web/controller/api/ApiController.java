@@ -13,31 +13,21 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/rest/api")
 public interface ApiController {
-    /**
-     * 接收设备信息
-     *
-     * @param appVersion app版本
-     * @param osVersion  手机操作系统
-     * @param osType     操作类型
-     * @return
-     */
-    @RequestMapping("/appInfo")
-    @ResponseBody
-    ApiResult appInfo(
-            String appVersion,
-            String osVersion,
-            String osType
-    );
 
     /**
-     * 初始化
+     * 初始化：设备信息，用户登录返回用户信息
      *
      * @param userId
+     * @param appVersion
+     * @param osType
+     * @param osVersion
      * @return
      */
-    @RequestMapping("/init")
+    @RequestMapping("//user/init")
     @ResponseBody
-    ApiResult userDetail(int userId);
+    ApiResult userDetail(int userId,String appVersion,
+                         String osVersion,
+                         String osType);
 
     /**
      * 分组按条件搜索产品列表
@@ -56,7 +46,7 @@ public interface ApiController {
      *
      * @return
      */
-    @RequestMapping("/project/category")
+    @RequestMapping("/project/categories")
     @ResponseBody
     ApiResult projectCategory();
 
@@ -92,7 +82,7 @@ public interface ApiController {
      * @param projectId 项目id
      * @return
      */
-    @RequestMapping("/project/applyCount")
+    @RequestMapping("/project/applyLog")
     @ResponseBody
     ApiResult applyLog(int userId, int projectId);
 }

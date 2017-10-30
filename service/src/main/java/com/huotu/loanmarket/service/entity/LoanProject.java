@@ -105,8 +105,8 @@ public class LoanProject {
     /**
      * 联系人
      */
-    @Column(name = "Contacter")
-    private String contacter;
+    @Column(name = "Contact")
+    private String contact;
     /**
      * 电话
      */

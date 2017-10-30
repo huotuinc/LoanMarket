@@ -5,6 +5,8 @@ import com.huotu.loanmarket.service.entity.LoanProject;
 import com.huotu.loanmarket.service.searchable.ProjectSearchCondition;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 /**
  * @author allan
  * @date 23/10/2017
