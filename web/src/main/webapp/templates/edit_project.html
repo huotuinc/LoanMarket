@@ -74,7 +74,7 @@
                                             <select class="form-control input-sm" id="categoryId">
                                                 <option value="0">请选择</option>
                                                 <!--/*@thymesVar id="categories" type="java.util.List<com.huotu.loanmarket.service.entity.LoanCategory>"*/-->
-                                                <option th:each="category:${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+                                                <option th:each="category:${categories}" th:value="${category.categoryId}" th:text="${category.name}"></option>
                                             </select>
                                             <button type="button" id="addCate" class="btn btn-white m-b-none m-l-md">添加</button>
                                             <input type="hidden" id="categories" th:value="*{categories}"/>
