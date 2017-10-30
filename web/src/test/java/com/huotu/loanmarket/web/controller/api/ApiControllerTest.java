@@ -241,11 +241,11 @@ public class ApiControllerTest extends ApiTestBase {
 
         //未登录情况
         mockMvc.perform(post(requestUrl + "/project/detail")
-                .param("projectId", String.valueOf(expectedProject.getId())))
+                .param("projectId", String.valueOf(expectedProject.getLoanId())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.resultCode").value(2000))
                 .andExpect(jsonPath("$.data").isNotEmpty())
-                .andExpect(jsonPath("$.data.id").value(expectedProject.getId()))
+                .andExpect(jsonPath("$.data.id").value(expectedProject.getLoanId()))
                 .andReturn();
 
         List<LoanUserViewLog> viewLogs = viewLogRepository.findAll();
@@ -256,11 +256,11 @@ public class ApiControllerTest extends ApiTestBase {
 
         mockMvc.perform(post(requestUrl + "/project/detail")
                 .param("userId", String.valueOf(expectedUser.getUserId()))
-                .param("projectId", String.valueOf(expectedProject.getId())))
+                .param("projectId", String.valueOf(expectedProject.getLoanId())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.resultCode").value(2000))
                 .andExpect(jsonPath("$.data").isNotEmpty())
-                .andExpect(jsonPath("$.data.id").value(expectedProject.getId()))
+                .andExpect(jsonPath("$.data.id").value(expectedProject.getLoanId()))
                 .andReturn();
 
         viewLogs = viewLogRepository.findAll();
