@@ -11,3 +11,5 @@ gen
 # General
 .DS_Store
 .idea/
+
+target/
