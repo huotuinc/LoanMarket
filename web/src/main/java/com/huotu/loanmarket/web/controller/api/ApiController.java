@@ -23,7 +23,7 @@ public interface ApiController {
      * @param osVersion
      * @return
      */
-    @RequestMapping("//user/init")
+    @RequestMapping("/user/init")
     @ResponseBody
     ApiResult userDetail(int userId,String appVersion,
                          String osVersion,
@@ -85,4 +85,14 @@ public interface ApiController {
     @RequestMapping("/project/applyLog")
     @ResponseBody
     ApiResult applyLog(int userId, int projectId);
+
+    /**
+     * 获取首页数据（返回最新和最热的产品数据，没有分页）
+     *
+     * @return
+     */
+    @RequestMapping("/project/index")
+    @ResponseBody
+    ApiResult projectIndex();
+
 }

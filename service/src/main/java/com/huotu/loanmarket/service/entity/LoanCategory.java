@@ -19,7 +19,7 @@ public class LoanCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id")
-    private Integer id;
+    private Integer categoryId;
     /**
      * 类目名称
      */
