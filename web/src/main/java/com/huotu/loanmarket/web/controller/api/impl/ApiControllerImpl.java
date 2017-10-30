@@ -14,6 +14,7 @@ import com.huotu.loanmarket.web.base.ApiResult;
 import com.huotu.loanmarket.web.base.ResultCodeEnum;
 import com.huotu.loanmarket.web.controller.api.ApiController;
 import com.huotu.loanmarket.web.service.StaticResourceService;
+import com.huotu.loanmarket.web.viewmodel.ProjectIndexViewModel;
 import com.huotu.loanmarket.web.viewmodel.ProjectListViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -134,5 +135,17 @@ public class ApiControllerImpl implements ApiController {
     public ApiResult applyLog(int userId, int projectId) {
         applyLogService.log(userId, projectId);
         return ApiResult.resultWith(ResultCodeEnum.SUCCESS);
+    }
+
+    @Override
+    @RequestMapping("/project/index")
+    @ResponseBody
+    public ApiResult projectIndex() {
+        ProjectIndexViewModel model = new ProjectIndexViewModel();
+        List<LoanProject> hotList = projectService.getHotProject();
+        List<LoanProject> newList = projectService.getNewProject();
+        model.setHotProjectList(hotList);
+        model.setNewProjectList(newList);
+        return ApiResult.resultWith(ResultCodeEnum.SUCCESS, model);
     }
 }
