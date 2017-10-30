@@ -94,7 +94,7 @@ public class ApiControllerTest extends ApiTestBase {
             project.setIsHot(nextIntInSection(0, 1));
             project.setIsNew(nextIntInSection(0, 1));
             project.setApplyType(nextIntInSection(0, 1));
-            project.setContacter(UUID.randomUUID().toString().substring(5));
+            project.setContact(UUID.randomUUID().toString().substring(5));
             project.setPhone(UUID.randomUUID().toString().substring(10));
             project.setMaxMoney(nextMoney);
             StringBuilder categories = new StringBuilder(",");

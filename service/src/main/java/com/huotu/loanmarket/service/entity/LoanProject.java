@@ -61,7 +61,7 @@ public class LoanProject {
      * 申请材料，英文逗号分割
      */
     @Column(name = "Application_Material")
-    private String ApplicationMaterial;
+    private String applicationMaterial;
     /**
      * 创建时间
      */
@@ -87,6 +87,8 @@ public class LoanProject {
      */
     @Column(name = "Apply_Type")
     private int applyType;
+    @Column(name = "Apply_Url")
+    private String applyUrl;
     /**
      * 是否热门
      */
@@ -105,8 +107,8 @@ public class LoanProject {
     /**
      * 联系人
      */
-    @Column(name = "Contacter")
-    private String contacter;
+    @Column(name = "contact")
+    private String contact;
     /**
      * 电话
      */
