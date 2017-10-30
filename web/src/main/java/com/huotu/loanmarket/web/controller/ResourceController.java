@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.naming.spi.DirectoryManager;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
@@ -40,8 +42,10 @@ public class ResourceController {
         }
         // TODO: 27/10/2017 图片属性校验
         String prefix = fileName.substring(fileName.lastIndexOf(".") + 1);
-        String path = "loanMarket/" + StringUtilsExt.dateFormat(now, "yyyyMMdd") + "/"
-                + StringUtilsExt.dateFormat(now, "yyyyMMddHHmmSS") + "." + prefix;
+
+        String dirPath = "loanMarket/" + StringUtilsExt.dateFormat(now, "yyyyMMdd");
+
+        String path = dirPath + "/" + StringUtilsExt.dateFormat(now, "yyyyMMddHHmmSS") + "." + prefix;
 
         URI uri = resourceService.upload(path, file.getInputStream());
 

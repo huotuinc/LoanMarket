@@ -38,7 +38,8 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
      * 静态资源处理,加在这里
      */
     private static String[] STATIC_RESOURCE_PATH = {
-            "resource"
+            "resource",
+            "script"
     };
     @Autowired
     private Environment environment;

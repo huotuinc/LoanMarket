@@ -26,7 +26,7 @@ public class ProjectController {
             @RequestParam(required = false, defaultValue = "0") int projectId,
             Model model
     ) {
-        List<LoanCategory> categories = categoryService.getAll();
+        List<LoanCategory> categories = categoryService.findAll();
         model.addAttribute("categories", categories);
         return "edit_project";
     }

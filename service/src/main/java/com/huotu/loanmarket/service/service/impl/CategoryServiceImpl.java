@@ -1,6 +1,7 @@
 package com.huotu.loanmarket.service.service.impl;
 
 import com.huotu.loanmarket.service.base.AbstractCrudService;
+import com.huotu.loanmarket.service.base.JpaCrudRepository;
 import com.huotu.loanmarket.service.entity.LoanCategory;
 import com.huotu.loanmarket.service.repository.LoanCategoryRepository;
 import com.huotu.loanmarket.service.service.CategoryService;
@@ -9,22 +10,19 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-/**
- * @author hxh
- * @date 2017-10-27
- */
 @Service
-public class CategoryServiceImpl extends AbstractCrudService<LoanCategory, Integer> implements CategoryService {
-    private LoanCategoryRepository categoryRepository;
+public class CategoryServiceImpl extends AbstractCrudService<LoanCategory,Integer> implements CategoryService {
+
+    LoanCategoryRepository loanCategoryRepository;
 
     @Autowired
-    public CategoryServiceImpl(LoanCategoryRepository repository) {
+    public CategoryServiceImpl(LoanCategoryRepository repository){
         super(repository);
-        categoryRepository = repository;
+        this.loanCategoryRepository = repository;
     }
 
     @Override
-    public List<LoanCategory> getAll() {
-        return this.repository.findAll();
+    public List<LoanCategory> findAll() {
+        return loanCategoryRepository.findAll();
     }
 }
