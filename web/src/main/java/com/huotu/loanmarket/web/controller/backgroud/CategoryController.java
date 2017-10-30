@@ -2,8 +2,8 @@ package com.huotu.loanmarket.web.controller.backgroud;
 
 import com.huotu.loanmarket.service.entity.LoanCategory;
 import com.huotu.loanmarket.service.service.CategoryService;
-import com.huotu.loanmarket.web.common.ApiResult;
-import com.huotu.loanmarket.web.common.ResultCodeEnum;
+import com.huotu.loanmarket.web.base.ApiResult;
+import com.huotu.loanmarket.web.base.ResultCodeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
-
 
 
 @Controller
@@ -90,5 +89,20 @@ public class CategoryController {
         category.setParentId(categoryParentId);
         category = categoryService.save(category);
         return ApiResult.resultWith(ResultCodeEnum.SUCCESS, category);
+    }
+
+    /**
+     * 删除分类，只是简单的删除当前分类，为做关联删除逻辑
+     *
+     * @param categoryId
+     * @return
+     */
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResult delete(@RequestParam int categoryId) {
+
+        categoryService.delete(categoryId);
+
+        return ApiResult.resultWith(ResultCodeEnum.SUCCESS);
     }
 }

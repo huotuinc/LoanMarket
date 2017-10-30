@@ -39,12 +39,12 @@
                                 <td th:text="${item.name}"></td>
                                 <td><img src="" th:src="${item.icon}" width="80" height="80"/></td>
                                 <td>
-                                    <span th:onclick="categoryListHandler.deleteCategory(${item.Id})"
+                                    <span th:onclick="'javascript:categoryListHandler.editCategory('+${item.Id}+')'"
                                           class="cursor-point"><i class="fa fa-pencil tooltips" data-placement="top"
                                                                   data-toggle="tooltip"
                                                                   data-original-title="编辑"></i></span>
                                     &nbsp;
-                                    <span th:onclick="categoryListHandler.editCategory(${item.Id})"
+                                    <span th:onclick="'javascript:categoryListHandler.deleteCategory('+${item.Id}+')'"
                                           class="cursor-point">
                                         <i class="fa fa-trash tooltips"
                                            data-placement="top" data-toggle="tooltip" data-original-title="删除"></i>
@@ -82,23 +82,17 @@
     var pageIndex = 1;
     var totalPage = 20;
 
-    //    $(function () {
-    //        //初始化分页
-    //        var pageinate = new hot.paging(".pagination", pageIndex, totalPage, 7);
-    //
-    //        pageinate.init(function (p) {
-    //
-    //        });
-    //    });
-
     var categoryListHandler = {
         deleteCategory: function (categoryId) {
-            hot.confirm("确定要删除该商品?", function () {
-                hot.tip.success("删除成功");
+            hot.confirm("确定要删除该分类?", function () {
+                J.PostJson("/backend/category/delete", {categoryId: categoryId}, function (ret) {
+                    if (ret.resultCode == 2000)
+                        hot.tip.success("删除成功");
+                });
             })
         },
         editCategory: function (categoryId) {
-            window.location.href = "edit?categoryid=" + categoryId;
+            window.location.href = "edit?categoryId=" + categoryId;
         }
     }
 </script>

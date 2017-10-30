@@ -13,12 +13,12 @@ import java.util.List;
 @Service
 public class CategoryServiceImpl extends AbstractCrudService<LoanCategory,Integer> implements CategoryService {
 
-    @Autowired
     LoanCategoryRepository loanCategoryRepository;
 
     @Autowired
     public CategoryServiceImpl(LoanCategoryRepository repository){
         super(repository);
+        this.loanCategoryRepository = repository;
     }
 
     @Override

@@ -24,15 +24,16 @@ $(function () {
      * 上传icon
      */
     $("#uploadCategoryIcon").click(function () {
-
         $("#fileIcon").click();
-        if ($("#fileIcon").val().length > 0) {
-            hot.uploadImg('/resource/upload/upload', 'fileIcon', "", function (res) {
-                $("#categoryIcon").val(res);
-                $("#uploadCategoryIcon").attr("src", res);
-            }, {});
-        }
     });
 
+    $("#fileIcon").change(function () {
+        if ($("#fileIcon").val().length > 0) {
+            hot.fileUpload('/resource/upload/img', 'fileIcon', null, function (res) {
+                $("#categoryIcon").val(res.fileUrl);
+                $("#uploadCategoryIcon").attr("src", res.fileUrl);
+            });
+        }
+    })
 
 });
