@@ -82,7 +82,7 @@ public class ApiControllerImpl implements ApiController {
     @RequestMapping("/project/categories")
     @ResponseBody
     public ApiResult projectCategory() {
-        List<LoanCategory> categoryList = categoryService.getAll();
+        List<LoanCategory> categoryList = categoryService.findAll();
         categoryList.forEach(p -> {
             if (!StringUtils.isEmpty(p.getIcon())) {
                 try {

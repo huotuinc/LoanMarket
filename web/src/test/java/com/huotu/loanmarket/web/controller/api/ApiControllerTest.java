@@ -254,7 +254,7 @@ public class ApiControllerTest extends ApiTestBase {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.resultCode").value(2000))
                 .andExpect(jsonPath("$.data").isNotEmpty())
-                .andExpect(jsonPath("$.data.id").value(expectedProject.getLoanId()))
+                .andExpect(jsonPath("$.data.loanId").value(expectedProject.getLoanId()))
                 .andReturn();
 
         List<LoanUserViewLog> viewLogs = viewLogRepository.findAll();
@@ -269,7 +269,7 @@ public class ApiControllerTest extends ApiTestBase {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.resultCode").value(2000))
                 .andExpect(jsonPath("$.data").isNotEmpty())
-                .andExpect(jsonPath("$.data.id").value(expectedProject.getLoanId()))
+                .andExpect(jsonPath("$.data.loanId").value(expectedProject.getLoanId()))
                 .andReturn();
 
         viewLogs = viewLogRepository.findAll();
