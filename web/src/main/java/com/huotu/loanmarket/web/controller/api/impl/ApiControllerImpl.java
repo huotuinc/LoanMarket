@@ -98,14 +98,14 @@ public class ApiControllerImpl implements ApiController {
     @Override
     @RequestMapping("/project/index")
     @ResponseBody
-    public ApiResult projectIndex(ProjectSearchCondition projectSearchCondition) {
+    public ApiResult projectIndex() {
         ProjectIndexViewModel model = new ProjectIndexViewModel();
         List<LoanProject> hotList = projectService.getHotProject();
-        List<LoanProject> newList = projectService.getNewProject();
+    List<LoanProject> newList = projectService.getNewProject();
         model.setHotProjectList(hotList);
         model.setNewProjectList(newList);
         return ApiResult.resultWith(ResultCodeEnum.SUCCESS, model);
-    }
+}
 
     @Override
     @RequestMapping("/project/detail")

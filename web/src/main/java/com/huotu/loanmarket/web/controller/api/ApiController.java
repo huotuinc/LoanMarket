@@ -72,12 +72,11 @@ public interface ApiController {
     /**
      * 获取首页数据（返回最新和最热的产品数据，没有分页）
      *
-     * @param projectSearchCondition 搜索条件，{@link ProjectSearchCondition}
      * @return
      */
     @RequestMapping("/project/index")
     @ResponseBody
-    ApiResult projectIndex( ProjectSearchCondition projectSearchCondition);
+    ApiResult projectIndex();
 
 
     /**
