@@ -36,7 +36,7 @@ public class ProjectController {
             Model model
     ) {
         //分类
-        List<LoanCategory> categories = categoryService.getAll();
+        List<LoanCategory> categories = categoryService.findAll();
         //申请材料
         ApplicationMaterialEnum[] applicationMaterials = ApplicationMaterialEnum.values();
 
@@ -55,7 +55,7 @@ public class ProjectController {
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     @ResponseBody
     public ApiResult edit(LoanProject project) {
-        if (project.getId() == 0) {
+        if (project.getLoanId() == 0) {
             project.setCreateTime(new Date());
         }
         String[] enableMoneyArray = project.getEnableMoney().split(",");
