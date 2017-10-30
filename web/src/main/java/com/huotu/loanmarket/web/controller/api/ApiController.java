@@ -61,16 +61,6 @@ public interface ApiController {
     ApiResult projectCategory();
 
     /**
-     * 获取产品没有分页（废弃，直接使用projectList）
-     *
-     * @param projectSearchTopCondition
-     * @return
-     */
-//    @RequestMapping("/project/topList")
-//    @ResponseBody
-//    ApiResult projectTopList(ProjectSearchTopCondition projectSearchTopCondition);
-
-    /**
      * 返回产品详情，同时记录浏览量，未登录不记录
      *
      * @param projectId 产品id

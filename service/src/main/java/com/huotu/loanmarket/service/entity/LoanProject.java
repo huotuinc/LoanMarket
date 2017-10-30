@@ -83,7 +83,7 @@ public class LoanProject {
     @Column(name = "IsDelete")
     private int isDelete;
     /**
-     * 应用类型
+     * 申请类型
      */
     @Column(name = "Apply_Type")
     private int applyType;

@@ -1,12 +1,14 @@
 package com.huotu.loanmarket.service.searchable;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author allan
  * @date 23/10/2017
  */
-@Data
+@Getter
+@Setter
 public class ProjectSearchCondition {
     /**
      * 0：全部，4：top4条

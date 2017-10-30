@@ -86,12 +86,6 @@ public class ApiControllerImpl implements ApiController {
         return ApiResult.resultWith(ResultCodeEnum.SUCCESS, categoryList);
     }
 
-//    @Override
-//    public ApiResult projectTopList(ProjectSearchTopCondition projectSearchTopCondition) {
-//        List<LoanProject> projectTopList = projectService.getProjectTopList(projectSearchTopCondition);
-//        return ApiResult.resultWith(ResultCodeEnum.SUCCESS, projectTopList);
-//    }
-
     @Override
     @RequestMapping("/project/detail")
     @ResponseBody
