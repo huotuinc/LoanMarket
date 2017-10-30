@@ -30,4 +30,16 @@ public interface ProjectService extends CrudService<LoanProject, Integer> {
      * @return
      */
     Page<LoanProject> findAll(int pageIndex, int pageSize, ProjectSearchCondition searchCondition);
+
+    /**
+     * 获得最热数据
+     * @return
+     */
+    List<LoanProject> getHotProject();
+
+    /**
+     * 获得最新数据
+     * @return
+     */
+    List<LoanProject> getNewProject();
 }

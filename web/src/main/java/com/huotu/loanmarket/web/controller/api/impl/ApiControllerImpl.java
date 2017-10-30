@@ -5,10 +5,12 @@ import com.huotu.loanmarket.service.entity.LoanEquipment;
 import com.huotu.loanmarket.service.entity.LoanProject;
 import com.huotu.loanmarket.service.entity.LoanUser;
 import com.huotu.loanmarket.service.searchable.ProjectSearchCondition;
+import com.huotu.loanmarket.service.searchable.ProjectSearchTopCondition;
 import com.huotu.loanmarket.service.service.*;
 import com.huotu.loanmarket.web.base.ApiResult;
 import com.huotu.loanmarket.web.base.ResultCodeEnum;
 import com.huotu.loanmarket.web.controller.api.ApiController;
+import com.huotu.loanmarket.web.viewmodel.ProjectIndexViewModel;
 import com.huotu.loanmarket.web.viewmodel.ProjectListViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -91,6 +93,19 @@ public class ApiControllerImpl implements ApiController {
 //        List<LoanProject> projectTopList = projectService.getProjectTopList(projectSearchTopCondition);
 //        return ApiResult.resultWith(ResultCodeEnum.SUCCESS, projectTopList);
 //    }
+
+
+    @Override
+    @RequestMapping("/project/index")
+    @ResponseBody
+    public ApiResult projectIndex(ProjectSearchCondition projectSearchCondition) {
+        ProjectIndexViewModel model = new ProjectIndexViewModel();
+        List<LoanProject> hotList = projectService.getHotProject();
+        List<LoanProject> newList = projectService.getNewProject();
+        model.setHotProjectList(hotList);
+        model.setNewProjectList(newList);
+        return ApiResult.resultWith(ResultCodeEnum.SUCCESS, model);
+    }
 
     @Override
     @RequestMapping("/project/detail")
