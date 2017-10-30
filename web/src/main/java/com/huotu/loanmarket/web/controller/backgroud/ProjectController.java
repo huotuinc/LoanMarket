@@ -23,7 +23,7 @@ import java.util.List;
  * @date 26/10/2017
  */
 @Controller
-@RequestMapping("/backend/project")
+@RequestMapping("/project")
 public class ProjectController {
     @Autowired
     private CategoryService categoryService;
