@@ -51,7 +51,7 @@ public class ProjectController {
 
         model.addAttribute("project", project);
 
-        return "edit_project";
+        return "project_edit";
     }
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
