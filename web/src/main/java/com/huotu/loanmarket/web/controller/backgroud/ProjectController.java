@@ -1,5 +1,6 @@
 package com.huotu.loanmarket.web.controller.backgroud;
 
+import com.huotu.loanmarket.common.SysConstant;
 import com.huotu.loanmarket.common.ienum.ApplicationMaterialEnum;
 import com.huotu.loanmarket.service.entity.LoanCategory;
 import com.huotu.loanmarket.service.entity.LoanProject;
@@ -8,6 +9,7 @@ import com.huotu.loanmarket.service.service.ProjectService;
 import com.huotu.loanmarket.web.base.ApiResult;
 import com.huotu.loanmarket.web.base.ResultCodeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,10 +54,26 @@ public class ProjectController {
         return "edit_project";
     }
 
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    public String list(
+            @RequestParam(required = false, defaultValue = "0") int pageIndex,
+            Model model
+    ) {
+        List<LoanCategory> categories = categoryService.findAll();
+        Page<LoanProject> projectPage = projectService.findAll(pageIndex, SysConstant.BACKEND_DEFALUT_PAGE_SIZE, null);
+
+        model.addAttribute("categories", categories);
+        model.addAttribute("pageIndex", pageIndex);
+        model.addAttribute("totalRecord", projectPage.getTotalElements());
+        model.addAttribute("projects", projectPage.getContent());
+
+        return "project_list";
+    }
+
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     @ResponseBody
     public ApiResult edit(LoanProject project) {
-        if (project.getLoanId() == 0) {
+        if (project.getLoanId() == null || project.getLoanId() == 0) {
             project.setCreateTime(new Date());
         }
         String[] enableMoneyArray = project.getEnableMoney().split(",");
