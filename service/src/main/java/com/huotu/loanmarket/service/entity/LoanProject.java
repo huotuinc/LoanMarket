@@ -1,9 +1,15 @@
 package com.huotu.loanmarket.service.entity;
 
+import com.huotu.loanmarket.common.ienum.LoanTermEnum;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Date;
 
 /**
@@ -46,7 +52,7 @@ public class LoanProject {
      * 2-年
      */
     @Column(name = "Deadline_Unit")
-    private int deadlineUnit;
+    private LoanTermEnum deadlineUnit = LoanTermEnum.DAY;
     /**
      * 利率，对应单位
      */
@@ -123,6 +129,11 @@ public class LoanProject {
      */
     @Column(name = "Max_Money")
     private double maxMoney;
+    /**
+     * 最小可贷款金额
+     */
+    @Column(name = "Min_Money")
+    private double minMoney;
 
     @Column(name = "Categories")
     private String categories;

@@ -16,7 +16,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/forend")
-public class ForendIndexController {
+public class WebIndexController {
     @Autowired
     private ProjectService projectService;
     @RequestMapping("/index")

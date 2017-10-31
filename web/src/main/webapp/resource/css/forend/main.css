@@ -369,13 +369,13 @@ header .tools-bar p {
     right: 10px;
     width: 25px;
     height: 25px;
-    background-image: url("../image/tj@2x.png");
+    background-image: url("../../img/forend/tj@2x.png");
     background-size: cover;
 }
 
 @media (-webkit-min-device-pixel-ratio: 3), (min-device-pixel-ratio: 3) {
     .loan-list .loans-recommend::after {
-        background-image: url("../image/tj@3x.png");
+        background-image: url("../../img/forend/tj@3x.png");
     }
 }
 
@@ -386,13 +386,13 @@ header .tools-bar p {
     right: 10px;
     width: 25px;
     height: 25px;
-    background-image: url("../image/xp@2x.png");
+    background-image: url("../../img/forend/xp@2x.png");
     background-size: cover;
 }
 
 @media (-webkit-min-device-pixel-ratio: 3), (min-device-pixel-ratio: 3) {
     .loan-list .loans-new::after {
-        background-image: url("../image/xp@3x.png");
+        background-image: url("../../img/forend/xp@3x.png");
     }
 }
 
@@ -544,19 +544,19 @@ header .tools-bar p {
 }
 
 .material .material-icon-info {
-    background-image: url("../image/info.png");
+    background-image: url("../../img/forend/info.png");
 }
 
 .material .material-icon-user {
-    background-image: url("../image/user.png");
+    background-image: url("../../img/forend/user.png");
 }
 
 .material .material-icon-work {
-    background-image: url("../image/work.png");
+    background-image: url("../../img/forend/work.png");
 }
 
 .material .material-icon-phone {
-    background-image: url("../image/phone.png");
+    background-image: url("../../img/forend/phone.png");
 }
 
 .content .search-tools {
