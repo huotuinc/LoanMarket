@@ -36,6 +36,22 @@
         .specPanel .input-sm {
             height: 20px;
         }
+
+        .cate-select {
+            margin-left: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 5px;
+            cursor: pointer;
+        }
+
+        .bootstrap-tagsinput {
+            width: 80%;
+        }
+
+        .badge-info, .label-info {
+            background-color: #1c84c6;
+        }
     </style>
 </head>
 
@@ -55,16 +71,18 @@
                                         <label class="col-sm-2 control-label">所属分类:</label>
 
                                         <div class="col-sm-10" id="cate_div">
-                                            <span class="m-l-md">
-                                                <select class="form-control input-sm selCategory">
-                                                    <option value="0">请选择</option>
-                                                    <!--/*@thymesVar id="categories" type="java.util.List<com.huotu.loanmarket.service.entity.LoanCategory>"*/-->
-                                                    <option th:each="category:${categories}" th:value="${category.id}" th:text="${category.name}"></option>
-                                                </select>
-                                                <span style="cursor:pointer;" onclick="deleteCate(this)" class="deleteCate">x</span>
-                                            </span>
+                                            <select class="form-control input-sm" id="categoryId">
+                                                <option value="0">请选择</option>
+                                                <!--/*@thymesVar id="categories" type="java.util.List<com.huotu.loanmarket.service.entity.LoanCategory>"*/-->
+                                                <option th:each="category:${categories}" th:value="${category.categoryId}" th:text="${category.name}"></option>
+                                            </select>
                                             <button type="button" id="addCate" class="btn btn-white m-b-none m-l-md">添加</button>
                                             <input type="hidden" id="categories" th:value="*{categories}"/>
+                                            <br/><br/>
+                                            <p class="form-control-static color-notice">
+                                                已选分类：
+                                                <span id="selectedCate"></span>
+                                            </p>
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed "></div>
@@ -96,7 +114,7 @@
                                         <label class="col-sm-2 control-label">产品标签:</label>
 
                                         <div class="col-sm-10">
-                                            <input type="text" id="tags" th:value="*{tag}" data-role="tagsinput" value="" placeholder="产品标签，按回车键确认">
+                                            <input type="text" id="tags" class="form-control input-sm input-tags" th:value="*{tag}" data-role="tagsinput" value="" placeholder="产品标签，按回车键确认">
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed "></div>
@@ -144,8 +162,8 @@
                                         <div class="col-sm-10">
                                             <!--/*@thymesVar id="applicationMaterials" type="com.huotu.loanmarket.common.ienum.ApplicationMaterialEnum[]"*/-->
                                             <div class="checkbox checkbox-primary" style="padding-left: 8px;" th:each="applicationMaterial:${applicationMaterials}">
-                                                <input type="checkbox" id="tag_0" name="applicationMaterial" value="" th:value="${applicationMaterial.code}"/>
-                                                <label for="tag_0" th:text="${applicationMaterial.name}">111</label>
+                                                <input type="checkbox" id="tag_0" th:id="${'tag_'+applicationMaterial.code}" name="applicationMaterial" value="" th:value="${applicationMaterial.code}"/>
+                                                <label for="tag_0" th:for="${'tag_'+applicationMaterial.code}" th:text="${applicationMaterial.name}">111</label>
                                             </div>
                                             <input type="hidden" id="applicationMaterials" th:value="*{applicationMaterial}"/>
                                         </div>
@@ -186,13 +204,28 @@
                                             <input type="text" id="apply_url" th:value="*{applyUrl}" class="form-control input-sm" placeholder="连接url"/>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <button type="button" id="save" class="btn btn-white m-b-none">保存</button>
+                                    <div class="hr-line-dashed "></div>
+
+                                    <div class="form-group text-center">
+
+                                        <button type="button" id="save" class="btn btn-success m-b-none m-l">保存</button>
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="col-lg-12">
+
+                            </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="panel-body">
+                <div class="row">
+
                 </div>
             </div>
         </div>
@@ -213,24 +246,58 @@
 <script src="../resource/js/plugins/hot/bootstrap.hot.extra-utils.js"></script>
 <script src="../resource/js/plugins/hot/bootstrap.hot.extra-init.js"></script>
 
+<script type="text/html" id="category_template">
+    <span class="m-l-md">
+        <select class="form-control input-sm selCategory" value="{categoryId}">
+            <option value="0">请选择</option>
+            <!--/*@thymesVar id="categories" type="java.util.List<com.huotu.loanmarket.service.entity.LoanCategory>"*/-->
+            <option th:each="category:${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+        </select>
+        <span style="cursor:pointer;" onclick="deleteCate(this)" class="deleteCate">x</span>
+    </span>
+</script>
+
 <script type="text/javascript" th:inline="javascript">
     var uploadUrl = /*[[@{/resource/upload/img}]]*/ "";
-    var requestUrl = /*[[@{/backend/project/edit}]]*/ "";
+    var requestUrl = /*[[@{/project/edit}]]*/ "";
 
     $(function () {
+        var hdCategories = $("#categories").val();
+        if (hdCategories.length > 0) {
+            hdCategories = hdCategories.substring(1, hdCategories.length - 1);
+            $.each(hdCategories.split(","), function (o, item) {
+                $("#selectedCate").append('<span class="cate-select tooltips" onclick="deleteCate(this)" data-placement="top" data-toggle="tooltip" data-original-title="点击删除" categoryId="' + item + '">'
+                    + $("#categoryId").find("option[value=" + item + "]").text() + '</span>');
+            });
+        }
+
+        var hdApplicationMaterials = $("#applicationMaterials").val();
+        if (hdApplicationMaterials.length > 0) {
+            var materialArray = hdApplicationMaterials.split(",");
+            $.each(materialArray, function (o, item) {
+                $("input[name=applicationMaterial][value=" + item + "]").prop("checked", "checked");
+            });
+        }
+
+
         $("#addCate").click(function () {
-            $(this).before(
-                $(this).prev().prop("outerHTML")
-            );
+            var categoryId = $("#categoryId").val();
+
+            if (categoryId == 0) {
+                hot.tip.msg("未选择分类");
+                return;
+            }
+            if (getSelectedCate().indexOf("," + categoryId + ",") > -1) {
+                hot.tip.msg("已选择该分类");
+                return;
+            }
+
+            $("#selectedCate").append('<span class="cate-select tooltips" onclick="deleteCate(this)" data-placement="top" data-toggle="tooltip" data-original-title="点击删除" categoryId="' + categoryId + '">'
+                + $("#categoryId").find("option:selected").text() + '</span>');
+            $("#categoryId").val("0");
         });
 
         $("#save").click(function () {
-            var categories = ",";
-            $(".selCategory").each(function () {
-                if (parseInt($(this).val()) != 0) {
-                    categories += $(this.val()) + ",";
-                }
-            });
             var name = $.trim($('#name').val());
             var logo = $("#logo").val();
             var tags = $("#tags").val();
@@ -250,7 +317,7 @@
             var apply_url = $.trim($("#apply_url").val());
 
             var requestData = {
-                id: $("#project_id").val(),
+                loanId: $("#project_id").val(),
                 name: name,
                 tag: tags,
                 enableMoney: enableMoney,
@@ -263,15 +330,16 @@
                 applyType: applyType,
                 contact: contact,
                 phone: contactPhone,
-                categories: categories
+                categories: getSelectedCate()
             };
 
             hot.ajax(requestUrl, requestData, function (apiResult) {
-                hot.loading.hide();
                 if (apiResult.resultCode == 2000) {
-                    window.location.reload();
+                    hot.tip.success("保存成功", function () {
+                        window.location.reload();
+                    });
                 } else {
-                    hot.error("保存失败");
+                    hot.tip.error("保存失败");
                 }
             }, function () {
             }, "post", 200);
@@ -279,7 +347,9 @@
     });
 
     function deleteCate(obj) {
-        $(obj).parent().remove();
+        $(obj).tooltip('hide');
+        $(obj).remove();
+
     }
 
     function uploadImg() {
@@ -287,6 +357,15 @@
             $("#img_logo").attr("src", file.fileUrl);
             $("#logo").val(file.fileUrl);
         });
+    }
+
+    function getSelectedCate() {
+        var selectedCategory = ",";
+        $(".cate-select").each(function () {
+            selectedCategory += $(this).attr("categoryId") + ",";
+        });
+
+        return selectedCategory;
     }
 
 </script>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title>商品列表</title>
+
+    <link href="http://resali.huobanplus.com/cdn/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+    <!-- Morris -->
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/animate.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/style.min-1.0.8.css" rel="stylesheet">
+
+    <!--checkbox-->
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet">
+
+    <!--datetimepick-->
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/datetimepick/daterangepicker.css" rel="stylesheet"/>
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight tooltip-demo">
+    <!--search-->
+    <form role="form" class="search-panel">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content p-m no-borders">
+                        <div class="form-inline">
+                            <div class="form-group m-r-sm">
+                                <label class="control-label" for="goodName">产品名称：</label>
+                                <input type="text" class="form-control input-sm mb10" id="goodName" name="goodName" placeholder="商品名称"/>
+                            </div>
+                            <div class="form-group m-r-sm">
+                                <label class="control-label" for="goodCat">产品分类：</label>
+                                <select class="form-control input-sm" name="stdType" id="goodCat">
+                                    <option>--请选择--</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <p style="height: 8px;"></p>
+
+                        <div class="form-inline" style="max-width: 926px; text-align: right;">
+                            <button type="button" onclick="orderListHandler.search(1)" class="btn btn-success">筛选</button>
+                            <button type="button" onclick="orderListHandler.searchAll()" class="btn btn-success">显示全部</button>
+                            <button type="button" class="btn btn-white" id="btnBatchExplor">批量上架</button>
+                            <button type="button" id="btnBatchDeliver" class="btn btn-white">批量上架</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <!--search-->
+
+    <!--list-->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins m-b-none">
+                <div class="ibox-content p-xxs no-top-border">
+                    <div class="panel-body">
+                        <table class="table table-bordered table-hover table-center">
+                            <thead>
+                            <tr>
+                                <th>
+                                    <div class="checkbox checkbox-primary m-b-none m-t-none">
+                                        <input type="checkbox" id="chkAll" name="chkAll"/>
+                                        <label for="chkAll"></label>
+                                    </div>
+                                </th>
+                                <th>产品名称</th>
+                                <th>贷款额度</th>
+                                <th>贷款期数</th>
+                                <th>利率</th>
+                                <th>添加时间</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <div class="checkbox checkbox-primary m-b-none m-t-none">
+                                        <input type="checkbox" id="chk1" name="chkGood"/>
+                                        <label for="chk1"></label>
+                                    </div>
+                                </td>
+                                <td style="width: 30%;">
+                                    <p style="width: 100%; height: 50px;">
+                                        <!--商品-->
+                                        <img style="width: 50px; height: 50px; float: left; margin-left: 5px;" src=""/>
+                                        <span data-placement="top" data-toggle="tooltip" data-original-title="AGLEROC/鹰岩 露营旅游登山3-4人户外帐篷套餐 多人双层双开门防雨-----AGLEROC/鹰岩 露营旅游登山3-4人户外帐篷套餐 多人双层双开门防雨-----AGLEROC/鹰岩 露营旅游登山3-4人户外帐篷套餐 多人双层双开门防雨888"
+                                              class="font-hidden" style="width: 76%;float: left;">
+                                                AGLEROC/鹰岩 露营旅游登山3-4人户外帐篷套餐 多人双层双开门防雨-----AGLEROC/鹰岩 露营旅游登山3-4人户外帐篷套餐 多人双层双开门防雨-----AGLEROC/鹰岩 露营旅游登山3-4人户外帐篷套餐 多人双层双开门防雨888
+                                            </span>
+                                    </p>
+                                </td>
+                                <td>sdfsdfee11</td>
+                                <td>￥398</td>
+                                <td>多人帐篷</td>
+                                <td>上架</td>
+                                <td>
+                                    <span class="cursor-point"><i class="fa fa-pencil tooltips" data-placement="top" data-toggle="tooltip" data-original-title="编辑"></i></span>
+                                    &nbsp;
+                                    <span onclick="goodListHandler.deleteGood(1)" class="cursor-point">
+                                        <i class="fa fa-trash tooltips"
+                                           data-placement="top" data-toggle="tooltip" data-original-title="删除"></i>
+                                    </span>
+                                    &nbsp;
+                                    <span class="cursor-point"><i class="fa fa-credit-card" data-placement="top" data-toggle="tooltip" data-original-title="销量配置"></i></span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <p style="float: left; margin: 20px 0;">共1条记录，当前第1/1，每页20条记录</p>
+                        <ul style="float: right;" class="pagination pagination-split">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--基础框架js-->
+<script src="http://resali.huobanplus.com/cdn/jquery/2.2.4/jquery.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/bootstrap/3.3.5/bootstrap.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/content.min.js"></script>
+
+<!--日期选择-->
+<script src="../resource/js/plugins/datetimepick/js/moment.js" th:src="@{/resource/js/plugins/datetimepick/js/moment.js}"></script>
+<script src="../resource/js/plugins/datetimepick/js/daterangepicker.js" th:src="@{/resource/js/plugins/datetimepick/js/daterangepicker.js}"></script>
+
+<script src="../resource/js/plugins/hot/bootstrap.hot.extra-utils.js" th:src="@{/resource/js/plugins/hot/bootstrap.hot.extra-utils.js}"></script>
+<script src="../resource/js/plugins/hot/bootstrap.hot.extra-init.js" th:src="@{/resource/js/plugins/hot/bootstrap.hot.extra-init.js}"></script>
+
+<script type="text/javascript">
+    var pageIndex = 1;
+    var totalPage = 20;
+
+    $(function () {
+        //初始化分页
+        var pageinate = new hot.paging(".pagination", pageIndex, totalPage, 7);
+
+        pageinate.init(function (p) {
+
+        });
+    });
+
+    var goodListHandler = {
+        deleteGood: function (goodId) {
+            hot.confirm("确定要删除该商品?", function () {
+                hot.tip.success("删除成功");
+            })
+        }
+    }
+</script>
+</body>
+
+</html>
