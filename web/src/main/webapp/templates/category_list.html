@@ -39,12 +39,12 @@
                                 <td th:text="${item.name}"></td>
                                 <td><img src="" th:src="${item.icon}" width="80" height="80"/></td>
                                 <td>
-                                    <span th:onclick="'javascript:categoryListHandler.editCategory('+${item.Id}+')'"
+                                    <span th:onclick="'javascript:categoryListHandler.editCategory('+${item.categoryId}+')'"
                                           class="cursor-point"><i class="fa fa-pencil tooltips" data-placement="top"
                                                                   data-toggle="tooltip"
                                                                   data-original-title="编辑"></i></span>
                                     &nbsp;
-                                    <span th:onclick="'javascript:categoryListHandler.deleteCategory('+${item.Id}+')'"
+                                    <span th:onclick="'javascript:categoryListHandler.deleteCategory('+${item.categoryId}+')'"
                                           class="cursor-point">
                                         <i class="fa fa-trash tooltips"
                                            data-placement="top" data-toggle="tooltip" data-original-title="删除"></i>

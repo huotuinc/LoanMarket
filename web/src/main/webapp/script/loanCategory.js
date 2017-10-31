@@ -19,7 +19,7 @@ $(function () {
             hot.loading.close();
             if (ret.resultCode == 2000) {
                 hot.tip.success("保存成功");
-                $("#categoryId").val(ret.data.id);
+                $("#categoryId").val(ret.data.categoryId);
             }
         }, function (err) {
             hot.loading.close();
