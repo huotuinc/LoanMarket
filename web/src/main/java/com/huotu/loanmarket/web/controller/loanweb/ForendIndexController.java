@@ -1,7 +1,13 @@
 package com.huotu.loanmarket.web.controller.loanweb;
 
+import com.huotu.loanmarket.service.entity.LoanProject;
+import com.huotu.loanmarket.service.service.ProjectService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
 
 /**
  *
@@ -11,9 +17,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/forend")
 public class ForendIndexController {
+    @Autowired
+    private ProjectService projectService;
     @RequestMapping("/index")
-    public String index(){
-       return "forend/home";
+    public String index(Model model){
+        List<LoanProject> hotProject = projectService.getHotProject();
+        List<LoanProject> newProject = projectService.getNewProject();
+        model.addAttribute("hotProject",hotProject);
+        model.addAttribute("newProject",newProject);
+        return "forend/home";
     }
 }
 
