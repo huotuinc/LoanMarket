@@ -95,4 +95,12 @@ public interface ApiController {
     @ResponseBody
     ApiResult projectIndex();
 
+    /**
+     * 检测app的版本信息
+     * @return
+     */
+    @RequestMapping("/app/checkAppVersion")
+    @ResponseBody
+    ApiResult checkAppVersion(int appVersionCode );
+
 }
