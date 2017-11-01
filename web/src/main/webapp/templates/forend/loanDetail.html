@@ -12,7 +12,7 @@
     <title>贷款详情</title>
     <link rel="stylesheet" href="http://resali.huobanplus.com/cdn/jquery-weui/1.0.1/weui.min.css">
     <link rel="stylesheet" href="http://resali.huobanplus.com/cdn/jquery-weui/1.0.1/jquery-weui.min.css">
-    <link rel="stylesheet" href="../style/main.css">
+    <link rel="stylesheet" href="../../../webapp/style/main.css">
 </head>
 <body>
 <div class="content">
@@ -50,10 +50,12 @@
         <div class="weui-flex loan-calc-info">
             <div class="weui-flex__item">
                 <p id="J_repayment">***.**元</p>
+                <!--TODO 注意单位-->
                 <span class="text-small">每日应还</span>
             </div>
             <div class="weui-flex__item">
                 <p id="J_interestRate">0.60%</p>
+                <!--TODO 注意单位-->
                 <span class="text-small">参考日利率</span>
             </div>
             <div class="weui-flex__item">
@@ -91,8 +93,8 @@
 <script src="http://resali.huobanplus.com/cdn/jquery/3.2.1/jquery.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/jquery-weui/1.0.1/jquery-weui.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/game/fastclick.js"></script>
-<script src="../mock/mock-min.js" th:remove="all"></script>
-<script src="../mock/api.js" th:remove="all"></script>
-<script src="../script/loanLogin.js"></script>
-<script src="../script/loanDetail.js"></script>
+<script src="../../../webapp/mock/mock-min.js" th:remove="all"></script>
+<script src="../../../webapp/mock/api.js" th:remove="all"></script>
+<script src="../../../webapp/script/loanLogin.js"></script>
+<script src="../../../webapp/script/loanDetail.js"></script>
 </html>
