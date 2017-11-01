@@ -104,6 +104,7 @@ public class CategoryController {
     @ResponseBody
     public ApiResult delete(@RequestParam int categoryId) {
 
+
         categoryService.delete(categoryId);
 
         return ApiResult.resultWith(ResultCodeEnum.SUCCESS);

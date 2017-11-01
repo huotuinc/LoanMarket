@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -11,152 +11,60 @@
     <title>贷款</title>
     <link rel="stylesheet" href="http://resali.huobanplus.com/cdn/jquery-weui/1.0.1/weui.min.css">
     <link rel="stylesheet" href="http://resali.huobanplus.com/cdn/jquery-weui/1.0.1/jquery-weui.min.css">
-    <link rel="stylesheet" href="../style/main.css">
+    <link rel="stylesheet" href="../../resource/css/forend/main.css">
 </head>
 <body>
 <div class="content">
     <div class="goods-list tag-list">
         <div class="bd clearfix">
-            <a class="tags" href="loanSearch.html?tag=1">
+            <a th:each="categroy:${categoryList}" class="tags">
+                <!--/*@thymesVar id="categroy" type="com.huotu.loanmarket.service.entity.LoanCategory"*/-->
                 <div class="tags-hd">
-                    <img src="http://iph.href.lu/40x40" alt="产品">
+                    <img th:src="${categroy.icon}" src="http://iph.href.lu/40x40">
                 </div>
                 <div class="tags-bd">
-                    <h3 class="title">社保贷</h3>
-                </div>
-            </a>
-            <a class="tags" href="loanSearch.html?tag=2">
-                <div class="tags-hd">
-                    <img src="http://iph.href.lu/40x40" alt="产品">
-                </div>
-                <div class="tags-bd">
-                    <h3 class="title">芝麻分贷</h3>
-                </div>
-            </a>
-            <a class="tags" href="loanSearch.html?tag=3">
-                <div class="tags-hd">
-                    <img src="http://iph.href.lu/40x40" alt="产品">
-                </div>
-                <div class="tags-bd">
-                    <h3 class="title">TOP排行榜</h3>
-                </div>
-            </a>
-            <a class="tags" href="loanSearch.html?tag=4">
-                <div class="tags-hd">
-                    <img src="http://iph.href.lu/40x40" alt="产品">
-                </div>
-                <div class="tags-bd">
-                    <h3 class="title">极速贷</h3>
-                </div>
-            </a>
-            <a class="tags" href="loanSearch.html?tag=5">
-                <div class="tags-hd">
-                    <img src="http://iph.href.lu/40x40" alt="产品">
-                </div>
-                <div class="tags-bd">
-                    <h3 class="title">信用卡</h3>
-                </div>
-            </a>
-            <a class="tags" href="loanSearch.html?tag=6">
-                <div class="tags-hd">
-                    <img src="http://iph.href.lu/40x40" alt="产品">
-                </div>
-                <div class="tags-bd">
-                    <h3 class="title">企业个体</h3>
-                </div>
-            </a>
-            <a class="tags" href="loanSearch.html?tag=7">
-                <div class="tags-hd">
-                    <img src="http://iph.href.lu/40x40" alt="产品">
-                </div>
-                <div class="tags-bd">
-                    <h3 class="title">贷款搜索</h3>
-                </div>
-            </a>
-            <a class="tags" href="loanSearch.html?tag=8">
-                <div class="tags-hd">
-                    <img src="http://iph.href.lu/40x40" alt="产品">
-                </div>
-                <div class="tags-bd">
-                    <h3 class="title">公积金</h3>
+                    <h3 th:text="${categroy.name}" class="title">社保贷</h3>
                 </div>
             </a>
         </div>
     </div>
     <div class="goods-list loan-list">
-        <a class="loans loans-recommend" href="loanDetail.html">
+        <a th:each="project:${projectList}" th:class="${project.isHot>0 ? 'loans loans-recommend':'loans'}" class="loans loans-recommend" onclick="loanHandle.getProjectDetail(this)" th:attr="projectId=${project.loanId}">
+            <!--/*@thymesVar id="project" type="com.huotu.loanmarket.service.entity.LoanProject"*/-->
             <div class="loans-flex">
                 <div class="loans-hd">
-                    <img src="http://iph.href.lu/40x40" alt="产品">
+                    <img th:src="${project.logo}" src="http://iph.href.lu/40x40">
                 </div>
                 <div class="loans-bd">
-                    <h3 class="title">平安i贷款</h3>
+                    <h3 th:text="${project.name}" class="title">平安i贷款</h3>
                     <p class="interest">
-                        <span><i>月利率</i>：<b>0.05%</b></span>
-                        <span>额度：<b>1000~30000</b>元</span>
+                        <span><i th:text="${project.deadlineUnit.getName()}+'利率'"></i>：<b th:text="${project.interestRate+'%'}">0.05%</b></span>
+                        <span>额度：<b th:text="${project.minMoney+'~'+project.maxMoney}">1000~30000</b>元</span>
                     </p>
                 </div>
             </div>
-            <div class="loans-ft">
-                <span>最快3分钟下单</span>
-                <span>本平台通过率最高</span>
-            </div>
-        </a>
-        <a class="loans loans-new" href="loanDetail.html">
-            <div class="loans-flex">
-                <div class="loans-hd">
-                    <img src="http://iph.href.lu/40x40" alt="产品">
-                </div>
-                <div class="loans-bd">
-                    <h3 class="title">啪啪钱包</h3>
-                    <p class="interest">
-                        <span><i>日利率</i>：<b>0.05%</b></span>
-                        <span>额度：<b>1000~1500</b>元</span>
-                    </p>
-                </div>
-            </div>
-            <div class="loans-ft">
-                <span>仅需身份证即可贷款</span>
-                <span>最快2小时放款</span>
-            </div>
-        </a>
-        <a class="loans" href="loanDetail.html">
-            <div class="loans-flex">
-                <div class="loans-hd">
-                    <img src="http://iph.href.lu/40x40" alt="产品">
-                </div>
-                <div class="loans-bd">
-                    <h3 class="title">快贷</h3>
-                    <p class="interest">
-                        <span><i>月利率</i>：<b>0.05%</b></span>
-                        <span>额度：<b>1000~30000</b>元</span>
-                    </p>
-                </div>
-            </div>
-            <div class="loans-ft">
-                <span>申请资料简单</span>
-                <span>短期灵活周转</span>
-                <span>下款快</span>
+            <div class="loans-ft" >
+                <span th:each="tag:${#strings.arraySplit(project.tag,',')}" th:text="${tag}" style="margin-right: 5px;">最快3分钟下单</span>
             </div>
         </a>
     </div>
 </div>
 <div class="weui-tabbar">
-    <a href="index.html" class="weui-tabbar__item">
+    <a href="/forend/index" class="weui-tabbar__item">
         <div class="weui-tabbar__icon">
-            <img src="../image/home@3x.png" alt="首页">
+            <img src="../../resource/img/forend/home@3x.png" alt="首页">
         </div>
         <p class="weui-tabbar__label">首页</p>
     </a>
-    <a href="javascript:;" class="weui-tabbar__item weui-bar__item--on">
+    <a href="/forend/category/list" class="weui-tabbar__item weui-bar__item--on">
         <div class="weui-tabbar__icon">
-            <img src="../image/dk@3x_b.png" alt="贷款">
+            <img src="../../resource/img/forend/dk@3x_b.png">
         </div>
         <p class="weui-tabbar__label">贷款</p>
     </a>
-    <a href="user.html" class="weui-tabbar__item">
+    <a href="/forend/person/center" class="weui-tabbar__item">
         <div class="weui-tabbar__icon">
-            <img src="../image/gre@3x.png" alt="我的">
+            <img src="../../resource/img/forend/gre@3x.png">
         </div>
         <p class="weui-tabbar__label">我的</p>
     </a>
@@ -164,4 +72,12 @@
 </body>
 <script src="http://resali.huobanplus.com/cdn/jquery/3.2.1/jquery.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/jquery-weui/1.0.1/jquery-weui.min.js"></script>
+<script type="text/javascript">
+    var loanHandle = {
+        getProjectDetail:function (obj) {
+            var projectId = $(obj).attr("projectId");
+            window.location.href = "/forend/project/getDetail?projectId="+projectId;
+        }
+    }
+</script>
 </html>

@@ -108,4 +108,12 @@ public interface ApiController {
     @ResponseBody
     ApiResult sendVerifyCode(String mobile) throws IOException;
 
+    /**
+     * 检测app的版本信息
+     * @return
+     */
+    @RequestMapping("/app/checkAppVersion")
+    @ResponseBody
+    ApiResult checkAppVersion(int appVersionCode );
+
 }

@@ -1,5 +1,6 @@
 package com.huotu.loanmarket.web.controller.api.impl;
 
+import com.huotu.loanmarket.service.entity.AppVersion;
 import com.huotu.loanmarket.service.entity.LoanCategory;
 import com.huotu.loanmarket.service.entity.LoanProject;
 import com.huotu.loanmarket.service.entity.LoanUser;
@@ -47,6 +48,8 @@ public class ApiControllerImpl implements ApiController {
     private StaticResourceService staticResourceService;
     @Autowired
     private VerifyCodeService verifyCodeService;
+    @Autowired
+    private AppVersionService appVersionService;
 
     @Override
     @RequestMapping("/user/init")
@@ -161,5 +164,13 @@ public class ApiControllerImpl implements ApiController {
         }
 
         return ApiResult.resultWith(ResultCodeEnum.SYSTEM_BAD_REQUEST);
+    }
+
+    @Override
+    @RequestMapping("/app/checkAppVersion")
+    @ResponseBody
+    public ApiResult checkAppVersion(int appVersionCode) {
+        AppVersion appVersion =  appVersionService.check( appVersionCode );
+        return ApiResult.resultWith( ResultCodeEnum.SUCCESS , appVersion );
     }
 }

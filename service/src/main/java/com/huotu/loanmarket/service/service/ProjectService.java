@@ -23,6 +23,13 @@ public interface ProjectService extends CrudService<LoanProject, Integer> {
     Page<LoanProject> findAll(int pageIndex, int pageSize, ProjectSearchCondition searchCondition);
 
     /**
+     * 查询所有
+     *
+     * @return
+     */
+    List<LoanProject> findAll();
+
+    /**
      * 获得最热数据
      *
      * @return
