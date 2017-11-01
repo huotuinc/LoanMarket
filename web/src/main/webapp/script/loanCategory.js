@@ -1,6 +1,9 @@
 $(function () {
-    var url = "/backend/category"
+    var url = "/category"
     $("#save").click(function () {
+
+        if (!checkForm())
+            return;
 
         var data = {
             categoryId: $("#categoryId").val(),
@@ -8,14 +11,20 @@ $(function () {
             categoryIcon: $("#categoryIcon").val(),
             categoryParentId: $("#categoryParentId").val()
         };
-        J.PostJson(url + "/save", data, function (ret) {
+
+        hot.loading.show();
+
+
+        hot.ajax(url + "/save", data, function (ret) {
+            hot.loading.close();
             if (ret.resultCode == 2000) {
-                alert(ret.resultMsg);
-                $("#categoryId").val(ret.data.Id);
+                hot.tip.success("保存成功");
+                $("#categoryId").val(ret.data.categoryId);
             }
         }, function (err) {
-
-        });
+            hot.loading.close();
+            hot.tip.error(err.statusText);
+        }, "post");
 
     });
 
@@ -39,5 +48,21 @@ $(function () {
         }
     }
 
+    /**
+     * 检查
+     * @returns {boolean}
+     */
+    function checkForm() {
+        if ($("#categoryName").val().length == 0) {
+            hot.tip.error("请输入分类标题");
+            $("#categoryName").focus();
+            return false;
+        }
+        if ($("#categoryIcon").val().length == 0) {
+            hot.tip.error("请上传分类图标");
+            return false;
+        }
+        return true;
+    }
 
 });

@@ -39,12 +39,12 @@
                                 <td th:text="${item.name}"></td>
                                 <td><img src="" th:src="${item.icon}" width="80" height="80"/></td>
                                 <td>
-                                    <span th:onclick="'javascript:categoryListHandler.editCategory('+${item.Id}+')'"
+                                    <span th:onclick="'javascript:categoryListHandler.editCategory('+${item.categoryId}+')'"
                                           class="cursor-point"><i class="fa fa-pencil tooltips" data-placement="top"
                                                                   data-toggle="tooltip"
                                                                   data-original-title="编辑"></i></span>
                                     &nbsp;
-                                    <span th:onclick="'javascript:categoryListHandler.deleteCategory('+${item.Id}+')'"
+                                    <span th:onclick="'javascript:categoryListHandler.deleteCategory('+${item.categoryId}+')'"
                                           class="cursor-point">
                                         <i class="fa fa-trash tooltips"
                                            data-placement="top" data-toggle="tooltip" data-original-title="删除"></i>
@@ -77,7 +77,6 @@
 
 <script src="../resource/js/plugins/hot/bootstrap.hot.extra-utils.js"></script>
 <script src="../resource/js/plugins/hot/bootstrap.hot.extra-init.js"></script>
-
 <script type="text/javascript">
     var pageIndex = 1;
     var totalPage = 20;
@@ -85,10 +84,14 @@
     var categoryListHandler = {
         deleteCategory: function (categoryId) {
             hot.confirm("确定要删除该分类?", function () {
-                J.PostJson("/backend/category/delete", {categoryId: categoryId}, function (ret) {
-                    if (ret.resultCode == 2000)
+                hot.ajax("/category/delete", {categoryId: categoryId}, function (ret) {
+                    if (ret.resultCode == 2000) {
                         hot.tip.success("删除成功");
-                });
+                        window.location.reload();
+                    }
+                }, function (err) {
+
+                }, "post");
             })
         },
         editCategory: function (categoryId) {
