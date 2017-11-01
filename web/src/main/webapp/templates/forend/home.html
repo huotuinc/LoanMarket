@@ -42,7 +42,7 @@
     <div class="hot-goods goods-list">
         <div class="hd">
             <p>热门推荐</p>
-            <a href="loan.html" class="more">查看更多&nbsp;</a>
+            <a href="/forend/category/list" class="more">查看更多&nbsp;</a>
         </div>
         <div class="bd clearfix">
             <a th:each="project:${hotProject}" class="goods" onclick="homeHandler.getProjectDetail(this)" th:attr="projectId=${project.loanId}">

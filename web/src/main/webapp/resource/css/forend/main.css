@@ -543,19 +543,19 @@ header .tools-bar p {
     font-size: 14px;
 }
 
-.material .material-icon-info {
+.material .material-icon-0 {
     background-image: url("../../img/forend/info.png");
 }
 
-.material .material-icon-user {
+.material .material-icon-1 {
     background-image: url("../../img/forend/user.png");
 }
 
-.material .material-icon-work {
+.material .material-icon-3 {
     background-image: url("../../img/forend/work.png");
 }
 
-.material .material-icon-phone {
+.material .material-icon-4 {
     background-image: url("../../img/forend/phone.png");
 }
 

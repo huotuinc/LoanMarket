@@ -65,10 +65,6 @@ public class LoanProject {
     private int fastestGetTime;
     /**
      * 申请材料，英文逗号分割
-     * 0：基本信息
-     * 1：身份信息
-     * 2：工作信息
-     * 3:运营商信息
      */
     @Column(name = "Application_Material")
     private String applicationMaterial;

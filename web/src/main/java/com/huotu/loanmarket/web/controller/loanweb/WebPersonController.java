@@ -15,4 +15,16 @@ public class WebPersonController {
     public String getPersonInfo(){
         return "forend/user";
     }
+    @RequestMapping("/about")
+    public String about(){
+        return "forend/about";
+    }
+    @RequestMapping("/set")
+    public String setUp(){
+        return "forend/setUp";
+    }
+    @RequestMapping("/agreement")
+    public String agreement(){
+        return "forend/agreement";
+    }
 }
