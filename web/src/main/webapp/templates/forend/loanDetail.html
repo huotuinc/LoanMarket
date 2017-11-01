@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -12,9 +12,11 @@
     <title>贷款详情</title>
     <link rel="stylesheet" href="http://resali.huobanplus.com/cdn/jquery-weui/1.0.1/weui.min.css">
     <link rel="stylesheet" href="http://resali.huobanplus.com/cdn/jquery-weui/1.0.1/jquery-weui.min.css">
-    <link rel="stylesheet" href="../../../webapp/style/main.css">
+    <link rel="stylesheet" href="../../resource/css/forend/main.css">
 </head>
 <body>
+<!--/*@thymesVar id="loanProject" type="com.huotu.loanmarket.service.entity.LoanProject"*/-->
+<!--/*@thymesVar id="material" type="com.huotu.loanmarket.common.ienum.ApplicationMaterialEnum"*/-->
 <div class="content">
     <div class="goods-list loan-list">
         <div class="loans">
@@ -23,28 +25,32 @@
                     <img src="http://iph.href.lu/40x40" alt="产品">
                 </div>
                 <div class="loans-bd">
-                    <h3 class="title">平安i贷款</h3>
+
+                    <h3 th:text="${loanProject.name}" class="title">平安i贷款</h3>
                     <p class="interest">
-                        <span><i>月利率</i>：<b>0.05%</b></span>
-                        <span>额度：<b>1000~30000</b>元</span>
+                        <span><i th:text="${loanProject.deadlineUnit.getName()}+'利率'"></i>：<b
+                                th:text="${loanProject.interestRate+'%'}">0.05%</b></span>
+                        <span>额度：<b th:text="${minMoney+'~'+maxMoney}"></b>元</span>
                     </p>
                 </div>
             </div>
             <div class="loans-ft">
-                <span>最快3分钟下单</span>
-                <span>本平台通过率最高</span>
+                <span th:text="${minMoney+'~'+maxMoney}"
+                      style="margin-right: 5px;">最快3分钟下单</span>
             </div>
         </div>
     </div>
     <div class="goods-list loan-calc">
         <div class="weui-cells">
-            <div class="weui-cell weui-cell_access" id="J_line" data-line="1000,2000,3000,4000,5000">
-                <div class="weui-cell__bd">贷款金额 <span class="text-small">1000~5000元</span></div>
-                <div class="weui-cell__ft">1000元</div>
+            <div class="weui-cell weui-cell_access" id="J_line" th:data-line="${loanProject.enableMoney}">
+                <div class="weui-cell__bd">贷款金额 <span class="text-small" th:text="${minMoney+'~'+maxMoney}">1000~5000元</span></div>
+                <div class="weui-cell__ft" th:text="${minMoney}">1000元</div>
             </div>
-            <div class="weui-cell weui-cell_access" id="J_deadline" data-deadline="30" data-unit="月">
-                <div class="weui-cell__bd">分期期限 <span class="text-small">30~30个月</span></div>
-                <div class="weui-cell__ft">30个月</div>
+            <div class="weui-cell weui-cell_access" id="J_deadline" th:data-deadline="${loanProject.deadline}"
+                 th:data-unit="${loanProject.deadlineUnit.getName()=='日'?'日':'个月'}">
+                <div class="weui-cell__bd">分期期限 <span class="text-small" th:text="${minDeadline+'~'}+${maxDeadline}">1~3个月</span>
+                </div>
+                <div class="weui-cell__ft" th:text="${minDeadline}">1个月</div>
             </div>
         </div>
         <div class="weui-flex loan-calc-info">
@@ -54,12 +60,11 @@
                 <span class="text-small">每月应还</span>
             </div>
             <div class="weui-flex__item">
-                <p id="J_interestRate">17.30%</p>
-                <!--TODO 注意单位-->
-                <span class="text-small">参考月利率</span>
+                <p id="J_interestRate" th:text="${loanProject.interestRate+'%'}">0.60%</p>
+                <span class="text-small" th:text="'参考'+${loanProject.deadlineUnit.getName()}+'利率'">参考日利率</span>
             </div>
             <div class="weui-flex__item">
-                <p>1天</p>
+                <p th:text="${loanProject.fastestGetTime}">1天</p>
                 <span class="text-small">最快放款时间</span>
             </div>
         </div>
@@ -67,21 +72,9 @@
     <div class="goods-list material-list">
         <div class="hd">申请材料</div>
         <div class="bd clearfix">
-            <div class="material">
-                <div class="material-hd material-icon-info"></div>
-                <div class="material-bd">基本信息</div>
-            </div>
-            <div class="material">
-                <div class="material-hd material-icon-user"></div>
-                <div class="material-bd">身份信息</div>
-            </div>
-            <div class="material">
-                <div class="material-hd material-icon-work"></div>
-                <div class="material-bd">工作信息</div>
-            </div>
-            <div class="material">
-                <div class="material-hd material-icon-phone"></div>
-                <div class="material-bd">运营商验证</div>
+            <div class="material" th:each="material:${materials}">
+                <div th:class="'material-hd material-icon-'+${material.code}" class="material-hd material-icon-0"></div>
+                <div class="material-bd" th:text="${material.name}">基本信息</div>
             </div>
             <div class="material">
                 <div class="material-hd material-icon-shop"></div>
@@ -105,8 +98,8 @@
 <script src="http://resali.huobanplus.com/cdn/jquery/3.2.1/jquery.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/jquery-weui/1.0.1/jquery-weui.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/game/fastclick.js"></script>
-<script src="../../../webapp/mock/mock-min.js" th:remove="all"></script>
-<script src="../../../webapp/mock/api.js" th:remove="all"></script>
-<script src="../../../webapp/script/loanLogin.js"></script>
-<script src="../../../webapp/script/loanDetail.js"></script>
+<script src="../../resource/js/mock/mock-min.js" th:remove="all"></script>
+<script src="../../resource/js/mock/api.js" th:remove="all"></script>
+<script src="../../resource/js/forend/loanLogin.js"></script>
+<script src="../../resource/js/forend/loanDetail.js"></script>
 </html>

@@ -33,49 +33,6 @@ public class ProjectServiceImpl extends AbstractCrudService<LoanProject, Integer
         projectRepository = repository;
     }
 
-//    @Override
-//    public List<LoanProject> getProjectTopList(ProjectSearchTopCondition projectSearchTopCondition) {
-//        List<Predicate> predicates = new ArrayList<>();
-//        Specification<LoanProject> specification = (root, criteriaQuery, criteriaBuilder) -> {
-//            //子查询
-//            Subquery subquery = criteriaQuery.subquery(CategoryRelation.class);
-//            Root changeLogRoot = subquery.from(CategoryRelation.class);
-//            Subquery categoryQuery = criteriaQuery.subquery(LoanCategory.class);
-//            Root categoryQueryRoot = categoryQuery.from(LoanCategory.class);
-//            //where
-//            predicates.add(criteriaBuilder.equal(changeLogRoot.get("loanProject").get("id").as(Integer.class), root.get("id").as(Integer.class)));
-//            predicates.add(criteriaBuilder.equal(changeLogRoot.get("loanCategory").get("id").as(Integer.class), categoryQueryRoot.get("id").as(Integer.class)));
-//            predicates.add(criteriaBuilder.equal(categoryQueryRoot.get("id").as(Integer.class), projectSearchTopCondition.getSid()));
-//            predicates.add(criteriaBuilder.equal(root.get("isHot").as(Integer.class), projectSearchTopCondition.getIsHot()));
-//            predicates.add(criteriaBuilder.equal(root.get("isNew").as(Integer.class), projectSearchTopCondition.getIsNew()));
-//            predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("maxMoney").as(Float.class), projectSearchTopCondition.getMoney()));
-//            if (!StringUtils.isEmpty(projectSearchTopCondition.getName())) {
-//                predicates.add(criteriaBuilder.equal(root.get("name").as(String.class), projectSearchTopCondition.getName()));
-//            }
-//            return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
-//        };
-//        Sort sort;
-//        if (projectSearchTopCondition.getSortType() == 0) {
-//            sort = new Sort(Sort.Direction.ASC, "createTime");
-//        } else {
-//            sort = new Sort(Sort.Direction.DESC, "createTime");
-//        }
-//        Pageable pageable = null;
-//        boolean flag = true;
-//        if (projectSearchTopCondition.getTopNum() > 0) {
-//            pageable = new PageRequest(0, projectSearchTopCondition.getTopNum(), sort);
-//            flag = false;
-//        }
-//        List<LoanProject> loanProjectList;
-//        if (flag) {
-//            Page<LoanProject> loanProjectPage = projectRepository.findAll(specification, pageable);
-//            loanProjectList = loanProjectPage.getContent();
-//        } else {
-//            loanProjectList = projectRepository.findAll(specification);
-//        }
-//        return loanProjectList;
-//    }
-
     @Override
     public Page<LoanProject> findAll(int pageIndex, int pageSize, ProjectSearchCondition searchCondition) {
         Specification<LoanProject> specification = (root, query, cb) -> {
@@ -111,37 +68,20 @@ public class ProjectServiceImpl extends AbstractCrudService<LoanProject, Integer
         return projectRepository.findAll(specification, pageable);
     }
 
+    @Override
+    public List<LoanProject> findAll() {
+        return this.repository.findAll();
+    }
+
 
     @Override
     public List<LoanProject> getHotProject() {
         List<Predicate> predicates = new ArrayList<>();
         Specification<LoanProject> specification = (root, criteriaQuery, criteriaBuilder) -> {
-            //子查询
-//            Subquery subquery = criteriaQuery.subquery(CategoryRelation.class);
-//            Root changeLogRoot = subquery.from(CategoryRelation.class);
-//            Subquery categoryQuery = criteriaQuery.subquery(LoanCategory.class);
-//            Root categoryQueryRoot = categoryQuery.from(LoanCategory.class);
-            //where
-            //predicates.add(criteriaBuilder.equal(changeLogRoot.get("loanProject").get("id").as(Integer.class), root.get("id").as(Integer.class)));
-            //predicates.add(criteriaBuilder.equal(changeLogRoot.get("loanCategory").get("id").as(Integer.class), categoryQueryRoot.get("id").as(Integer.class)));
-            //predicates.add(criteriaBuilder.equal(categoryQueryRoot.get("id").as(Integer.class), projectSearchTopCondition.getSid()));
             predicates.add(criteriaBuilder.equal(root.get("isHot").as(Integer.class), 1));
-            //predicates.add(criteriaBuilder.equal(root.get("isNew").as(Integer.class), projectSearchTopCondition.getIsNew()));
-            //predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("maxMoney").as(Float.class), projectSearchTopCondition.getMoney()));
-            //if (!StringUtils.isEmpty(projectSearchTopCondition.getName())) {
-            //    predicates.add(criteriaBuilder.equal(root.get("name").as(String.class), projectSearchTopCondition.getName()));
-            //}
             return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
         };
-        //Sort sort;
-        //if (projectSearchTopCondition.getSortType() == 0) {
-        //    sort = new Sort(Sort.Direction.ASC, "createTime");
-        //} else {
-        //    sort = new Sort(Sort.Direction.DESC, "createTime");
-        //}
-        List<LoanProject> loanProjectList = projectRepository.findAll(specification);
-
-        return loanProjectList;
+        return projectRepository.findAll(specification);
     }
 
     @Override
@@ -151,8 +91,6 @@ public class ProjectServiceImpl extends AbstractCrudService<LoanProject, Integer
             predicates.add(criteriaBuilder.equal(root.get("isNew").as(Integer.class), 1));
             return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
         };
-        //Sort sort = new Sort(Sort.Direction.DESC, "createTime");
-        List<LoanProject> loanProjectList = projectRepository.findAll(specification);
-        return loanProjectList;
+        return projectRepository.findAll(specification);
     }
 }

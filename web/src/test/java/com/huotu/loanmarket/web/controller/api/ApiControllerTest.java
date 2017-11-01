@@ -3,6 +3,7 @@ package com.huotu.loanmarket.web.controller.api;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.huotu.loanmarket.common.SysConstant;
+import com.huotu.loanmarket.common.ienum.LoanTermEnum;
 import com.huotu.loanmarket.common.utils.StringUtilsExt;
 import com.huotu.loanmarket.service.entity.*;
 import com.huotu.loanmarket.service.repository.*;
@@ -88,7 +89,7 @@ public class ApiControllerTest extends ApiTestBase {
                 deadline.append(nextDeadline).append(",");
             }
             project.setDeadline(deadline.toString().substring(0, deadline.toString().length() - 1));
-            project.setDeadlineUnit(nextIntInSection(0, 2));
+            project.setDeadlineUnit(LoanTermEnum.DAY);
             project.setInterestRate(nextDoubleInSection(0, 1));
             project.setCreateTime(createTime);
             project.setIsHot(nextIntInSection(0, 1));

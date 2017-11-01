@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -11,27 +11,28 @@
     <title>贷款超市</title>
     <link rel="stylesheet" href="http://resali.huobanplus.com/cdn/jquery-weui/1.0.1/weui.min.css">
     <link rel="stylesheet" href="http://resali.huobanplus.com/cdn/jquery-weui/1.0.1/jquery-weui.min.css">
-    <link rel="stylesheet" href="../style/main.css">
+    <link rel="stylesheet" href="../../resource/css/forend/main.css">
 </head>
 <body>
+<!--/*@thymesVar id="project" type="com.huotu.loanmarket.service.entity.LoanProject"*/-->
 <header>
     <div class="weui-flex tools-bar">
         <div class="weui-flex__item">
             <!--TODO js-needLogin 如果登录，请移除该class-->
             <a href="javascript:;" class="js-needLogin">
-                <img src="../image/zx@3x.png" alt="征信">
+                <img src="../../resource/img/forend/zx@3x.png">
                 <p>征信查询</p>
             </a>
         </div>
         <div class="weui-flex__item">
             <a href="javascript:;" class="js-needLogin">
-                <img src="../image/gj@3x.png" alt="公积金">
+                <img src="../../resource/img/forend/gj@3x.png">
                 <p>公积金查询</p>
             </a>
         </div>
         <div class="weui-flex__item">
             <a href="javascript:;" class="js-needLogin">
-                <img src="../image/sb@3x.png" alt="社保">
+                <img src="../../resource/img/forend/sb@3x.png">
                 <p>社保查询</p>
             </a>
         </div>
@@ -41,43 +42,16 @@
     <div class="hot-goods goods-list">
         <div class="hd">
             <p>热门推荐</p>
-            <a href="loan.html" class="more">查看更多&nbsp;</a>
+            <a href="/forend/category/list" class="more">查看更多&nbsp;</a>
         </div>
         <div class="bd clearfix">
-            <a class="goods" href="loanDetail.html">
+            <a th:each="project:${hotProject}" class="goods" onclick="homeHandler.getProjectDetail(this)" th:attr="projectId=${project.loanId}">
                 <div class="goods-hd">
-                    <img src="http://iph.href.lu/40x40" alt="产品">
+                    <img th:src="${project.logo}" src="http://iph.href.lu/40x40">
                 </div>
                 <div class="goods-bd">
-                    <h3 class="title">贷款超市</h3>
-                    <p class="interest">日利率：0.05%</p>
-                </div>
-            </a>
-            <a class="goods" href="loanDetail.html">
-                <div class="goods-hd">
-                    <img src="http://iph.href.lu/40x40" alt="产品">
-                </div>
-                <div class="goods-bd">
-                    <h3 class="title">贷款超市</h3>
-                    <p class="interest">日利率：0.05%</p>
-                </div>
-            </a>
-            <a class="goods" href="loanDetail.html">
-                <div class="goods-hd">
-                    <img src="http://iph.href.lu/40x40" alt="产品">
-                </div>
-                <div class="goods-bd">
-                    <h3 class="title">贷款超市</h3>
-                    <p class="interest">日利率：0.05%</p>
-                </div>
-            </a>
-            <a class="goods" href="loanDetail.html">
-                <div class="goods-hd">
-                    <img src="http://iph.href.lu/40x40" alt="产品">
-                </div>
-                <div class="goods-bd">
-                    <h3 class="title">贷款超市</h3>
-                    <p class="interest">日利率：0.05%</p>
+                    <h3 th:text="${project.name}" class="title">贷款超市</h3>
+                    <p th:text="${project.interestRate}" class="interest">日利率：0.05%</p>
                 </div>
             </a>
         </div>
@@ -87,68 +61,12 @@
             <p>最新产品</p>
         </div>
         <div class="bd clearfix">
-            <a class="goods" href="loanDetail.html">
+            <a th:each="project:${newProject}" class="goods" onclick="homeHandler.getProjectDetail(this)" th:attr="projectId=${project.loanId}">
                 <div class="goods-hd">
-                    <img src="http://iph.href.lu/40x40" alt="产品">
+                    <img th:src="${project.logo}" src="http://iph.href.lu/40x40">
                 </div>
                 <div class="goods-bd">
-                    <h3 class="title">贷款超市</h3>
-                </div>
-            </a>
-            <a class="goods" href="loanDetail.html">
-                <div class="goods-hd">
-                    <img src="http://iph.href.lu/40x40" alt="产品">
-                </div>
-                <div class="goods-bd">
-                    <h3 class="title">贷款超市</h3>
-                </div>
-            </a>
-            <a class="goods" href="loanDetail.html">
-                <div class="goods-hd">
-                    <img src="http://iph.href.lu/40x40" alt="产品">
-                </div>
-                <div class="goods-bd">
-                    <h3 class="title">贷款超市</h3>
-                </div>
-            </a>
-            <a class="goods" href="loanDetail.html">
-                <div class="goods-hd">
-                    <img src="http://iph.href.lu/40x40" alt="产品">
-                </div>
-                <div class="goods-bd">
-                    <h3 class="title">贷款超市</h3>
-                </div>
-            </a>
-            <a class="goods" href="loanDetail.html">
-                <div class="goods-hd">
-                    <img src="http://iph.href.lu/40x40" alt="产品">
-                </div>
-                <div class="goods-bd">
-                    <h3 class="title">贷款超市</h3>
-                </div>
-            </a>
-            <a class="goods" href="loanDetail.html">
-                <div class="goods-hd">
-                    <img src="http://iph.href.lu/40x40" alt="产品">
-                </div>
-                <div class="goods-bd">
-                    <h3 class="title">贷款超市</h3>
-                </div>
-            </a>
-            <a class="goods" href="loanDetail.html">
-                <div class="goods-hd">
-                    <img src="http://iph.href.lu/40x40" alt="产品">
-                </div>
-                <div class="goods-bd">
-                    <h3 class="title">贷款超市</h3>
-                </div>
-            </a>
-            <a class="goods" href="loanDetail.html">
-                <div class="goods-hd">
-                    <img src="http://iph.href.lu/40x40" alt="产品">
-                </div>
-                <div class="goods-bd">
-                    <h3 class="title">贷款超市</h3>
+                    <h3 th:text="${project.name}" class="title">贷款超市</h3>
                 </div>
             </a>
         </div>
@@ -157,19 +75,19 @@
 <div class="weui-tabbar">
     <a href="javascript:;" class="weui-tabbar__item weui-bar__item--on">
         <div class="weui-tabbar__icon">
-            <img src="../image/home@2x_b.png" alt="首页">
+            <img src="../../resource/img/forend/home@2x_b.png" alt="首页">
         </div>
         <p class="weui-tabbar__label">首页</p>
     </a>
-    <a href="loan.html" class="weui-tabbar__item">
+    <a href="/forend/category/list" class="weui-tabbar__item">
         <div class="weui-tabbar__icon">
-            <img src="../image/dk@3x.png" alt="贷款">
+            <img src="../../resource/img/forend/dk@3x.png" alt="贷款">
         </div>
         <p class="weui-tabbar__label">贷款</p>
     </a>
-    <a href="user.html" class="weui-tabbar__item">
+    <a class="weui-tabbar__item" onclick="homeHandler.personCenter()">
         <div class="weui-tabbar__icon">
-            <img src="../image/gre@3x.png" alt="我的">
+            <img src="../../resource/img/forend/gre@3x.png" alt="我的">
         </div>
         <p class="weui-tabbar__label">我的</p>
     </a>
@@ -178,7 +96,18 @@
 <script src="http://resali.huobanplus.com/cdn/jquery/3.2.1/jquery.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/jquery-weui/1.0.1/jquery-weui.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/game/fastclick.js"></script>
-<script src="../mock/mock-min.js" th:remove="all"></script>
-<script src="../mock/api.js" th:remove="all"></script>
-<script src="../script/loanLogin.js"></script>
+<script src="../../resource/js/mock/mock-min.js" th:remove="all"></script>
+<script src="../../resource/js/mock/api.js" th:remove="all"></script>
+<script src="../../resource/js/forend/loanLogin.js"></script>
+<script type="text/javascript">
+    var homeHandler ={
+        getProjectDetail:function (obj) {
+        var projectId = $(obj).attr("projectId");
+        window.location.href = "/forend/project/getDetail?projectId="+projectId;
+        },
+        personCenter:function () {
+            window.location.href="/forend/person/center"
+        }
+    }
+</script>
 </html>
