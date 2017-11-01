@@ -5,11 +5,21 @@ $(function () {
     var line = $line.data('line');
     // 分期期限，取值为 #J_deadline 的 data-deadline 属性，服务端请留意渲染
     var deadline = $deadline.data('deadline');
-    // 数据处理成数组
-    var lineArray = line.split(',');
-    var deadlineArray = deadline.split(',');
+    // 数据处理成数组，处理可能仅仅有一个值的情况
+    var lineArray = [];
+    var deadlineArray = [];
+    try {
+        lineArray = line.split(',');
+    } catch (e) {
+        lineArray.push(line)
+    }
+    try {
+        deadlineArray = deadline.split(',');
+    } catch (e) {
+        deadlineArray.push(deadline);
+    }
     // 获取分期期限单位，取值为 #J_deadline 的 data-unit 属性，服务端请留意渲染
-    var unit = $deadline.data('unit') === '日' ? '日': '个月';
+    var unit = $deadline.data('unit') === '日' ? '日' : '个月';
     // 全局变量。获取贷款金额数组和分期期限数组的第一个参数，用于页面的初始化渲染 见64行
     var lineCalc = lineArray[0];
     var deadlineCale = deadlineArray[0];
