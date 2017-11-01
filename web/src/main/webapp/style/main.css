@@ -559,6 +559,18 @@ header .tools-bar p {
     background-image: url("../image/phone.png");
 }
 
+.material .material-icon-shop {
+    background-image: url("../image/shop.png");
+}
+
+.material .material-icon-auth {
+    background-image: url("../image/auth.png");
+}
+
+.material .material-icon-contacts {
+    background-image: url("../image/contacts.png");
+}
+
 .content .search-tools {
     margin-bottom: 0;
 }
