@@ -18,7 +18,7 @@ import java.net.URISyntaxException;
  * @author allan
  * @date 26/10/2017
  */
-@Service
+@Service("resourceService")
 @Profile("!container")
 public class LocalStaticResourceServiceImpl implements StaticResourceService {
     private URI uriPrefix;

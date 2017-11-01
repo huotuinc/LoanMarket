@@ -9,6 +9,8 @@
     <artifactId>web</artifactId>
     <packaging>war</packaging>
     <name>Loanmarket Webapp</name>
+
+
     <dependencies>
         <!--test-->
         <dependency>
@@ -90,6 +92,8 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
         </dependency>
+
+
     </dependencies>
     <build>
         <finalName>web</finalName>

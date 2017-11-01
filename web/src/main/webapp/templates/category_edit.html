@@ -37,6 +37,7 @@
 
 <body class="gray-bg">
 <div class="wrapper wrapper-content animated fadeInRight tooltip-demo">
+    <!--/*@thymesVar id="category" type="com.huotu.loanmarket.service.entity.LoanCategory"*/-->
     <form role="form" id="edit_form">
         <div class="row">
             <div class="col-lg-12">
@@ -45,7 +46,7 @@
                         <div class="tab-content">
                             <div id="tab-1" class="tab-pane active">
                                 <div class="panel-body good-edit-failure form-horizontal">
-                                    <input type="hidden" id="categoryId" value="0" th:value="${category.Id}"/>
+                                    <input type="hidden" id="categoryId" value="0" th:value="${category.categoryId}"/>
                                     <div class="hr-line-dashed "></div>
                                     <div class="form-group form-inline">
                                         <label class="col-sm-2 control-label">所属父级:</label>
@@ -54,7 +55,7 @@
                                             <select id="categoryParentId" name="categoryParentId"
                                                     class="form-control input-sm">
                                                 <option value="0">顶级分类</option>
-                                                <option value="0" th:each="category:${items}" th:value="${category.Id}"
+                                                <option value="0" th:each="category:${items}" th:value="${category.categoryId}"
                                                         th:text="${category.name}"></option>
                                             </select>
                                         </div>
@@ -80,7 +81,7 @@
                                                     <div style="display: none;">
                                                         <input type="file" id="fileIcon" name="img"/>
                                                     </div>
-                                                    <img src="" th:src="${category.icon}" id="uploadCategoryIcon"
+                                                    <img src="" th:src="${@resourceService.get(category.icon).toString()}" id="uploadCategoryIcon"
                                                          class="m-b img-selected img-rounded" width="92" height="92"/>
                                                     <input type="hidden" id="categoryIcon" th:value="${category.icon}"/>
                                                 </li>
