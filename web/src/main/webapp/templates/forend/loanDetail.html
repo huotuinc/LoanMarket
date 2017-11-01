@@ -27,24 +27,31 @@
 
                     <h3 th:text="${loanProject.name}" class="title">平安i贷款</h3>
                     <p class="interest">
-                        <span><i th:text="${loanProject.deadlineUnit.getName()}+'利率'"></i>：<b th:text="${loanProject.interestRate+'%'}">0.05%</b></span>
+                        <span><i th:text="${loanProject.deadlineUnit.getName()}+'利率'"></i>：<b
+                                th:text="${loanProject.interestRate+'%'}">0.05%</b></span>
                         <span>额度：<b th:text="${loanProject.minMoney+'~'+loanProject.maxMoney}">1000~30000</b>元</span>
                     </p>
                 </div>
             </div>
-            <div class="loans-ft" >
-                <span th:each="tag:${#strings.arraySplit(loanProject.tag,',')}" th:text="${tag}" style="margin-right: 5px;">最快3分钟下单</span>
+            <div class="loans-ft">
+                <span th:each="tag:${#strings.arraySplit(loanProject.tag,',')}" th:text="${tag}"
+                      style="margin-right: 5px;">最快3分钟下单</span>
             </div>
         </div>
     </div>
     <div class="goods-list loan-calc">
         <div class="weui-cells">
-            <div class="weui-cell weui-cell_access" id="J_line" data-line="1000,1500,2000,2500,3000,3500,4000,4500,5000,6000,7000,8000">
-                <div class="weui-cell__bd">贷款金额 <span class="text-small" th:text="${loanProject.minMoney+'~'+loanProject.maxMoney}">1000~8000元</span></div>
+            <div class="weui-cell weui-cell_access" id="J_line"
+                 data-line="1000,1500,2000,2500,3000,3500,4000,4500,5000,6000,7000,8000">
+                <div class="weui-cell__bd">贷款金额 <span class="text-small"
+                                                      th:text="${loanProject.minMoney+'~'+loanProject.maxMoney}">1000~8000元</span>
+                </div>
                 <div class="weui-cell__ft" th:text="${loanProject.minMoney}">1000元</div>
             </div>
-            <div class="weui-cell weui-cell_access" id="J_deadline" data-deadline="1,2,3" data-unit="月">
-                <div class="weui-cell__bd">分期期限 <span class="text-small" th:text="${minDeadline+'~'}+${maxDeadline}">1~3个月</span></div>
+            <div class="weui-cell weui-cell_access" id="J_deadline" data-deadline="1,2,3"
+                 th:data-unit="${loanProject.deadlineUnit.getName()=='日'?'日':'个月'}">
+                <div class="weui-cell__bd">分期期限 <span class="text-small" th:text="${minDeadline+'~'}+${maxDeadline}">1~3个月</span>
+                </div>
                 <div class="weui-cell__ft" th:text="${minDeadline}">1个月</div>
             </div>
         </div>

@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
+
 /**
  *
  * @author hxh
@@ -25,5 +27,11 @@ public class WebProjectController {
         model.addAttribute("maxDeadline",deadline[deadline.length-1]);
         model.addAttribute("loanProject",loanProject);
         return "forend/loanDetail";
+    }
+    @RequestMapping("/loanProcess")
+    public String loanProcess(Model model){
+        List<LoanProject> hotProject = projectService.getHotProject();
+        model.addAttribute("hotProject",hotProject);
+        return "forend/loanProgress";
     }
 }

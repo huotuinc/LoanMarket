@@ -85,7 +85,7 @@
         </div>
         <p class="weui-tabbar__label">贷款</p>
     </a>
-    <a href="user.html" class="weui-tabbar__item">
+    <a class="weui-tabbar__item" onclick="homeHandler.personCenter()">
         <div class="weui-tabbar__icon">
             <img src="../../resource/img/forend/gre@3x.png" alt="我的">
         </div>
@@ -104,6 +104,9 @@
         getProjectDetail:function (obj) {
         var projectId = $(obj).attr("projectId");
         window.location.href = "/forend/project/getDetail?projectId="+projectId;
+        },
+        personCenter:function () {
+            window.location.href="/forend/person/center"
         }
     }
 </script>
