@@ -1,15 +1,11 @@
 package com.huotu.loanmarket.web.controller.api.impl;
 
+import com.huotu.loanmarket.service.entity.AppVersion;
 import com.huotu.loanmarket.service.entity.LoanCategory;
 import com.huotu.loanmarket.service.entity.LoanProject;
 import com.huotu.loanmarket.service.entity.LoanUser;
 import com.huotu.loanmarket.service.searchable.ProjectSearchCondition;
-import com.huotu.loanmarket.service.service.ApplyLogService;
-import com.huotu.loanmarket.service.service.CategoryService;
-import com.huotu.loanmarket.service.service.EquipmentService;
-import com.huotu.loanmarket.service.service.ProjectService;
-import com.huotu.loanmarket.service.service.UserService;
-import com.huotu.loanmarket.service.service.ViewLogService;
+import com.huotu.loanmarket.service.service.*;
 import com.huotu.loanmarket.web.base.ApiResult;
 import com.huotu.loanmarket.web.base.ResultCodeEnum;
 import com.huotu.loanmarket.web.controller.api.ApiController;
@@ -49,6 +45,8 @@ public class ApiControllerImpl implements ApiController {
     private ViewLogService viewLogService;
     @Autowired
     private StaticResourceService staticResourceService;
+    @Autowired
+    private AppVersionService appVersionService;
 
     @Override
     @RequestMapping("/user/init")
@@ -147,5 +145,13 @@ public class ApiControllerImpl implements ApiController {
         model.setHotProjectList(hotList);
         model.setNewProjectList(newList);
         return ApiResult.resultWith(ResultCodeEnum.SUCCESS, model);
+    }
+
+    @Override
+    @RequestMapping("/app/checkAppVersion")
+    @ResponseBody
+    public ApiResult checkAppVersion(int appVersionCode) {
+        AppVersion appVersion =  appVersionService.check( appVersionCode );
+        return ApiResult.resultWith( ResultCodeEnum.SUCCESS , appVersion );
     }
 }
