@@ -1,9 +1,9 @@
 package com.huotu.loanmarket.web.service.impl;
 
 import com.huotu.loanmarket.web.service.StaticResourceService;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Service;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -18,14 +18,17 @@ import java.net.URISyntaxException;
  * @author allan
  * @date 26/10/2017
  */
-@Service("resourceService")
-@Profile("!container")
+//@Service("resourceService")
+//@Profile("!container")
 public class LocalStaticResourceServiceImpl implements StaticResourceService {
+    private static final Log log = LogFactory.getLog(LocalStaticResourceServiceImpl.class);
+
     private URI uriPrefix;
     private File fileHome;
 
     @Autowired
     public void initService(WebApplicationContext context) throws URISyntaxException {
+        log.info("============local==========");
         fileHome = new File(context.getServletContext().getRealPath("/resource/upload/"));
         fileHome.mkdirs();
         this.uriPrefix = new URI("http://localhost:8080" + context.getServletContext().getContextPath() + "/resource/upload/");

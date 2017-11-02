@@ -12,6 +12,8 @@ import com.huotu.loanmarket.web.controller.api.ApiController;
 import com.huotu.loanmarket.web.service.StaticResourceService;
 import com.huotu.loanmarket.web.viewmodel.ProjectIndexViewModel;
 import com.huotu.loanmarket.web.viewmodel.ProjectListViewModel;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -32,6 +34,8 @@ import java.util.List;
 @Controller
 @RequestMapping(value = "/rest/api", method = RequestMethod.POST)
 public class ApiControllerImpl implements ApiController {
+    private static final Log log = LogFactory.getLog(ApiControllerImpl.class);
+
     @Autowired
     private ProjectService projectService;
     @Autowired
@@ -167,10 +171,10 @@ public class ApiControllerImpl implements ApiController {
     }
 
     @Override
-    @RequestMapping("/app/checkAppVersion")
+    @RequestMapping(value = "/app/checkAppVersion",method = RequestMethod.GET)
     @ResponseBody
     public ApiResult checkAppVersion(int appVersionCode) {
-        AppVersion appVersion =  appVersionService.check( appVersionCode );
-        return ApiResult.resultWith( ResultCodeEnum.SUCCESS , appVersion );
+        AppVersion appVersion = appVersionService.check(appVersionCode);
+        return ApiResult.resultWith(ResultCodeEnum.SUCCESS, appVersion);
     }
 }

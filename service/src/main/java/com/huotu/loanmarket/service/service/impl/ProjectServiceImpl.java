@@ -53,7 +53,7 @@ public class ProjectServiceImpl extends AbstractCrudService<LoanProject, Integer
                 predicates.add(cb.greaterThanOrEqualTo(root.get("maxMoney").as(Double.class), searchCondition.getLoanMoney()));
             }
             if (!StringUtils.isEmpty(searchCondition.getName())) {
-                predicates.add(cb.like(root.get("Name").as(String.class), searchCondition.getName()));
+                predicates.add(cb.like(root.get("name").as(String.class), searchCondition.getName()));
             }
 
             return cb.and(predicates.toArray(new Predicate[predicates.size()]));
