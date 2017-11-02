@@ -25,7 +25,8 @@ public class UserServiceImpl extends AbstractCrudService<LoanUser, Integer> impl
     }
 
     @Override
-    public LoanUser checkLogin(String mobile, String verifyCode) {
+    public LoanUser checkLogin(String mobile) {
+
         // TODO: 2017-10-26 验证码待测
         LoanUser user = loanUserRepository.findByAccount(mobile);
         if (user == null) {

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
 
@@ -45,6 +46,8 @@ public class ApiControllerImpl implements ApiController {
     private ViewLogService viewLogService;
     @Autowired
     private StaticResourceService staticResourceService;
+    @Autowired
+    private VerifyCodeService verifyCodeService;
     @Autowired
     private AppVersionService appVersionService;
 
@@ -120,7 +123,10 @@ public class ApiControllerImpl implements ApiController {
     @RequestMapping(value = "/user/login")
     @ResponseBody
     public ApiResult login(String mobile, String verifyCode) {
-        LoanUser user = userService.checkLogin(mobile, verifyCode);
+        if (!verifyCodeService.verifyCode(mobile, verifyCode)) {
+            return ApiResult.resultWith(ResultCodeEnum.SYSTEM_BAD_REQUEST, "验证码不正确", null);
+        }
+        LoanUser user = userService.checkLogin(mobile);
         if (user != null) {
             return ApiResult.resultWith(ResultCodeEnum.SUCCESS, user);
         }
@@ -145,6 +151,19 @@ public class ApiControllerImpl implements ApiController {
         model.setHotProjectList(hotList);
         model.setNewProjectList(newList);
         return ApiResult.resultWith(ResultCodeEnum.SUCCESS, model);
+    }
+
+    @Override
+    @RequestMapping("/sendVerifyCode")
+    @ResponseBody
+    public ApiResult sendVerifyCode(String mobile) throws IOException {
+        String message = "您好，您的验证码是{code}";
+
+        if (verifyCodeService.sendCode(mobile, message)) {
+            return ApiResult.resultWith(ResultCodeEnum.SUCCESS);
+        }
+
+        return ApiResult.resultWith(ResultCodeEnum.SYSTEM_BAD_REQUEST);
     }
 
     @Override

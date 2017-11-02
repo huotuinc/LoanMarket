@@ -42,4 +42,20 @@ public interface ProjectService extends CrudService<LoanProject, Integer> {
      * @return
      */
     List<LoanProject> getNewProject();
+
+    /**
+     * 设置热卖属性
+     *
+     * @param isHot
+     * @param projectIdsStr
+     */
+    void setHot(int isHot, String projectIdsStr);
+
+    /**
+     * 设置新品属性
+     *
+     * @param isNew
+     * @param projectIdsStr
+     */
+    void setNew(int isNew, String projectIdsStr);
 }

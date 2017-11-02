@@ -21,36 +21,50 @@
 
     <!--datetimepick-->
     <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/datetimepick/daterangepicker.css" rel="stylesheet"/>
+    <style>
+        .cate-select {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 5px;
+        }
+    </style>
 </head>
 
 <body class="gray-bg">
 <div class="wrapper wrapper-content animated fadeInRight tooltip-demo">
     <!--search-->
-    <form role="form" class="search-panel">
+    <!--/*@thymesVar id="searchCondition" type="com.huotu.loanmarket.service.searchable.ProjectSearchCondition"*/-->
+    <form role="form" id="searchForm" class="search-panel" th:action="@{/project/list}" method="get" th:object="${searchCondition}">
+        <input type="hidden" name="pageIndex" th:value="${pageIndex}"/>
         <div class="row">
             <div class="col-lg-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-content p-m no-borders">
                         <div class="form-inline">
                             <div class="form-group m-r-sm">
-                                <label class="control-label" for="goodName">产品名称：</label>
-                                <input type="text" class="form-control input-sm mb10" id="goodName" name="goodName" placeholder="商品名称"/>
+                                <label class="control-label" for="name">产品名称：</label>
+                                <input type="text" class="form-control input-sm mb10" id="name" name="name" th:value="*{name}" placeholder="产品名称"/>
                             </div>
                             <div class="form-group m-r-sm">
-                                <label class="control-label" for="goodCat">产品分类：</label>
-                                <select class="form-control input-sm" name="stdType" id="goodCat">
-                                    <option>--请选择--</option>
+                                <label class="control-label" for="categoryId">产品分类：</label>
+                                <select class="form-control input-sm" name="categoryId" id="categoryId">
+                                    <option th:selected="*{categoryId==0}" value="0">--请选择--</option>
+                                    <!--/*@thymesVar id="categories" type="java.util.List<com.huotu.loanmarket.service.entity.LoanCategory>"*/-->
+                                    <option th:each="category:${categories}" th:value="${category.categoryId}" th:text="${category.name}"
+                                            th:selected="${category.categoryId}==*{categoryId}"></option>
                                 </select>
                             </div>
                         </div>
 
                         <p style="height: 8px;"></p>
 
-                        <div class="form-inline" style="max-width: 926px; text-align: right;">
-                            <button type="button" onclick="orderListHandler.search(1)" class="btn btn-success">筛选</button>
-                            <button type="button" onclick="orderListHandler.searchAll()" class="btn btn-success">显示全部</button>
-                            <button type="button" class="btn btn-white" id="btnBatchExplor">批量上架</button>
-                            <button type="button" id="btnBatchDeliver" class="btn btn-white">批量上架</button>
+                        <div class="form-inline">
+                            <button type="button" onclick="projectListHandler.search(1)" class="btn btn-success">筛选</button>
+                            <button type="button" onclick="projectListHandler.searchAll()" class="btn btn-success">显示全部</button>
+                            <button type="button" class="btn btn-white" id="btnBatchSetHot" onclick="projectListHandler.setHot(1,0)">批量热卖</button>
+                            <button type="button" class="btn btn-white" id="btnBatchCancelHot" onclick="projectListHandler.setHot(0,0)">批量取消热卖</button>
+                            <button type="button" id="btnBatchSetNew" class="btn btn-white" onclick="projectListHandler.setNew(1,0)">批量新品</button>
+                            <button type="button" id="btnBatchCancelNew" class="btn btn-white" onclick="projectListHandler.setNew(0,0)">批量取消新品</button>
                         </div>
                     </div>
                 </div>
@@ -78,46 +92,54 @@
                                 <th>贷款额度</th>
                                 <th>贷款期数</th>
                                 <th>利率</th>
+                                <th>状态</th>
                                 <th>添加时间</th>
                                 <th>操作</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
+                            <!--/*@thymesVar id="projects" type="java.util.List<com.huotu.loanmarket.service.entity.LoanProject>"*/-->
+                            <tr th:each="project:${projects}">
                                 <td>
                                     <div class="checkbox checkbox-primary m-b-none m-t-none">
-                                        <input type="checkbox" id="chk1" name="chkGood"/>
+                                        <input type="checkbox" id="chk1" th:value="${project.loanId}" name="chkProject"/>
                                         <label for="chk1"></label>
                                     </div>
                                 </td>
                                 <td style="width: 30%;">
                                     <p style="width: 100%; height: 50px;">
                                         <!--商品-->
-                                        <img style="width: 50px; height: 50px; float: left; margin-left: 5px;" src=""/>
-                                        <span data-placement="top" data-toggle="tooltip" data-original-title="AGLEROC/鹰岩 露营旅游登山3-4人户外帐篷套餐 多人双层双开门防雨-----AGLEROC/鹰岩 露营旅游登山3-4人户外帐篷套餐 多人双层双开门防雨-----AGLEROC/鹰岩 露营旅游登山3-4人户外帐篷套餐 多人双层双开门防雨888"
-                                              class="font-hidden" style="width: 76%;float: left;">
-                                                AGLEROC/鹰岩 露营旅游登山3-4人户外帐篷套餐 多人双层双开门防雨-----AGLEROC/鹰岩 露营旅游登山3-4人户外帐篷套餐 多人双层双开门防雨-----AGLEROC/鹰岩 露营旅游登山3-4人户外帐篷套餐 多人双层双开门防雨888
-                                            </span>
+                                        <img style="width: 50px; height: 50px; float: left; margin-left: 5px;" src="" th:src="${@resourceService.get(project.logo).toString()}"/>
+                                        <span class="font-hidden" style="width: 76%;float: left;" th:text="${project.name}"></span>
                                     </p>
                                 </td>
                                 <td>sdfsdfee11</td>
                                 <td>￥398</td>
-                                <td>多人帐篷</td>
-                                <td>上架</td>
+                                <td th:text="${project.interestRate}"></td>
                                 <td>
-                                    <span class="cursor-point"><i class="fa fa-pencil tooltips" data-placement="top" data-toggle="tooltip" data-original-title="编辑"></i></span>
+                                    <span th:if="${project.isHot==1}" class="cate-select">热卖</span>
+                                    <span th:if="${project.isNew==1}" class="cate-select">新品</span>
+                                </td>
+                                <td th:text="${#dates.format(project.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+                                <td>
+                                    <span class="cursor-point" th:onclick="|javascript:hot.newTab('@{/project/edit(projectId=${project.loanId})}','${project.name}')|"><i class="fa fa-pencil tooltips" data-placement="top" data-toggle="tooltip" data-original-title="编辑"></i></span>
                                     &nbsp;
-                                    <span onclick="goodListHandler.deleteGood(1)" class="cursor-point">
+                                    <span th:onclick="|projectListHandler.deletePro(${project.loanId})|" class="cursor-point">
                                         <i class="fa fa-trash tooltips"
                                            data-placement="top" data-toggle="tooltip" data-original-title="删除"></i>
                                     </span>
-                                    &nbsp;
-                                    <span class="cursor-point"><i class="fa fa-credit-card" data-placement="top" data-toggle="tooltip" data-original-title="销量配置"></i></span>
                                 </td>
                             </tr>
                             </tbody>
                         </table>
-                        <p style="float: left; margin: 20px 0;">共1条记录，当前第1/1，每页20条记录</p>
+                        <p style="float: left; margin: 20px 0;">共
+                            <th:block th:text="${totalRecord}"></th:block>
+                            条记录，当前第
+                            <th:block th:text="${pageIndex}"></th:block>
+                            /
+                            <th:block th:text="${totalPage}"></th:block>
+                            ，每页20条记录
+                        </p>
                         <ul style="float: right;" class="pagination pagination-split">
                         </ul>
                     </div>
@@ -139,24 +161,105 @@
 <script src="../resource/js/plugins/hot/bootstrap.hot.extra-utils.js" th:src="@{/resource/js/plugins/hot/bootstrap.hot.extra-utils.js}"></script>
 <script src="../resource/js/plugins/hot/bootstrap.hot.extra-init.js" th:src="@{/resource/js/plugins/hot/bootstrap.hot.extra-init.js}"></script>
 
-<script type="text/javascript">
-    var pageIndex = 1;
-    var totalPage = 20;
+<script type="text/javascript" th:inline="javascript">
+    var listUrl = /*[[@{/project/list}]]*/ "";
+    var ajaxUrl = /*[[@{/project/}]]*/ "";
+    var totalPage = /*[[${totalPage}]]*/ 10;
+</script>
 
+<script type="text/javascript">
     $(function () {
         //初始化分页
-        var pageinate = new hot.paging(".pagination", pageIndex, totalPage, 7);
+        var pageinate = new hot.paging(".pagination", $("input[name=pageIndex]").val(), totalPage, 7);
 
         pageinate.init(function (p) {
-
+            projectListHandler.search(p);
         });
+
+        $("#chkAll").click(function () {
+            if ($(this).prop("checked")) {
+                $("input[name=chkProject]").prop("checked", "checked");
+            } else {
+                $("input[name=chkProject]").removeAttr("checked");
+            }
+
+        })
     });
 
-    var goodListHandler = {
-        deleteGood: function (goodId) {
-            hot.confirm("确定要删除该商品?", function () {
-                hot.tip.success("删除成功");
-            })
+    var projectListHandler = {
+        search: function (pageIndex) {
+            $("input[name=pageIndex]").val(pageIndex);
+            $("#searchForm").submit();
+        },
+        searchAll: function () {
+            window.location.href = listUrl;
+        },
+        deletePro: function (projectId) {
+            hot.ajax(ajaxUrl + "delete", {
+                projectId: projectId
+            }, function (apiResult) {
+                if (apiResult.resultCode == 2000) {
+                    hot.tip.success("删除成功");
+                    window.location.reload();
+                } else {
+                    hot.tip.error("删除失败");
+                }
+            }, function () {
+            }, "post", 100);
+        },
+        setHot: function (isHot, projectId) {
+            var projectIdsStr = "";
+            if (projectId > 0) {
+                projectIdsStr += projectId;
+                isHot = isHot == 0 ? 1 : 0;
+            } else {
+                $("input[name=chkProject]:checked").each(function () {
+                    projectIdsStr += $(this).val() + ",";
+                })
+                projectIdsStr = projectIdsStr.substring(0, projectIdsStr.length - 1);
+            }
+            if (projectIdsStr.length == 0) {
+                hot.tip.msg("未选择任何产品");
+                return;
+            }
+            var requestData = {
+                isHot: isHot,
+                projectIdsStr: projectIdsStr
+            };
+            hot.ajax(ajaxUrl + "setHot", requestData, function (apiResult) {
+                if (apiResult.resultCode == 2000) {
+                    hot.tip.success("设置成功");
+                    window.location.reload();
+                }
+            }, function () {
+            }, "post", 100);
+        },
+        setNew: function (isNew, projectId) {
+            var projectIdsStr = "";
+            if (projectId > 0) {
+                projectIdsStr += projectId;
+                isNew = isNew == 0 ? 1 : 0;
+            } else {
+                $("input[name=chkProject]:checked").each(function () {
+                    projectIdsStr += $(this).val() + ",";
+                })
+                projectIdsStr = projectIdsStr.substring(0, projectIdsStr.length - 1);
+            }
+            if (projectIdsStr.length == 0) {
+                hot.tip.msg("未选择任何产品");
+                return;
+            }
+            var requestData = {
+                isNew: isNew,
+                projectIdsStr: projectIdsStr
+            };
+            hot.ajax(ajaxUrl + "setNew", requestData, function (apiResult) {
+                if (apiResult.resultCode == 2000) {
+                    hot.tip.success("设置成功");
+                    window.location.reload();
+                }
+            }, function () {
+            }, "post", 100);
         }
     }
 </script>

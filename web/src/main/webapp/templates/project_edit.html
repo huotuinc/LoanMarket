@@ -102,7 +102,7 @@
                                         <div class="col-sm-10">
                                             <ul class="list-inline">
                                                 <li style="position: relative;">
-                                                    <img src="" th:src="*{logo}" id="img_logo" onclick="javascript:$('#btnFile').click();" class="m-b img-selected img-rounded" width="92" height="92"/>
+                                                    <img src="" th:src="${@resourceService.get(project.logo).toString()}" id="img_logo" onclick="javascript:$('#btnFile').click();" class="m-b img-selected img-rounded" width="92" height="92"/>
                                                     <input type="hidden" id="logo" th:value="*{logo}"/>
                                                     <input type="file" id="btnFile" onchange="uploadImg()" name="img" style="display: none">
                                                 </li>
@@ -246,17 +246,6 @@
 <script src="../resource/js/plugins/hot/bootstrap.hot.extra-utils.js"></script>
 <script src="../resource/js/plugins/hot/bootstrap.hot.extra-init.js"></script>
 
-<script type="text/html" id="category_template">
-    <span class="m-l-md">
-        <select class="form-control input-sm selCategory" value="{categoryId}">
-            <option value="0">请选择</option>
-            <!--/*@thymesVar id="categories" type="java.util.List<com.huotu.loanmarket.service.entity.LoanCategory>"*/-->
-            <option th:each="category:${categories}" th:value="${category.id}" th:text="${category.name}"></option>
-        </select>
-        <span style="cursor:pointer;" onclick="deleteCate(this)" class="deleteCate">x</span>
-    </span>
-</script>
-
 <script type="text/javascript" th:inline="javascript">
     var uploadUrl = /*[[@{/resource/upload/img}]]*/ "";
     var requestUrl = /*[[@{/project/edit}]]*/ "";
@@ -355,7 +344,7 @@
     function uploadImg() {
         hot.fileUpload(uploadUrl, "btnFile", null, function (file) {
             $("#img_logo").attr("src", file.fileUrl);
-            $("#logo").val(file.fileUrl);
+            $("#logo").val(file.filePath);
         });
     }
 

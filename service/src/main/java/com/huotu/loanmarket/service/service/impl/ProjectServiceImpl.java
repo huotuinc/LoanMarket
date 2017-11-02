@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.criteria.Predicate;
@@ -37,7 +38,7 @@ public class ProjectServiceImpl extends AbstractCrudService<LoanProject, Integer
     public Page<LoanProject> findAll(int pageIndex, int pageSize, ProjectSearchCondition searchCondition) {
         Specification<LoanProject> specification = (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
-
+            predicates.add(cb.equal(root.get("isDelete").as(Integer.class), 0));
             if (searchCondition.getIsHot() != -1) {
                 predicates.add(cb.equal(root.get("isHot").as(Integer.class), searchCondition.getIsHot()));
             }
@@ -92,5 +93,28 @@ public class ProjectServiceImpl extends AbstractCrudService<LoanProject, Integer
             return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
         };
         return projectRepository.findAll(specification);
+    }
+
+    @Override
+    @Transactional
+    public void setHot(int isHot, String projectIdsStr) {
+        List<Integer> projectIds = projectIds(projectIdsStr);
+        projectRepository.setHot(isHot, projectIds);
+    }
+
+    @Override
+    @Transactional
+    public void setNew(int isNew, String projectIdsStr) {
+        List<Integer> projectIds = projectIds(projectIdsStr);
+        projectRepository.setNew(isNew, projectIds);
+    }
+
+    private List<Integer> projectIds(String projectIdsStr) {
+        String[] projectIdsArray = projectIdsStr.split(",");
+        List<Integer> projectIds = new ArrayList<>();
+        for (String s : projectIdsArray) {
+            projectIds.add(Integer.valueOf(s));
+        }
+        return projectIds;
     }
 }

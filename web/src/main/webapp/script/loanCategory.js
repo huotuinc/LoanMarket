@@ -1,5 +1,5 @@
 $(function () {
-    var url = "/category"
+    var url = "/category";
     $("#save").click(function () {
 
         if (!checkForm())
@@ -12,19 +12,17 @@ $(function () {
             categoryParentId: $("#categoryParentId").val()
         };
 
-        hot.loading.show();
-
-
         hot.ajax(url + "/save", data, function (ret) {
-            hot.loading.close();
             if (ret.resultCode == 2000) {
-                hot.tip.success("保存成功");
-                $("#categoryId").val(ret.data.categoryId);
+                $("#categoryId").val(ret.data.id);
+                hot.tip.success("保存成功", function () {
+                    window.location.reload();
+                });
+
             }
         }, function (err) {
-            hot.loading.close();
             hot.tip.error(err.statusText);
-        }, "post");
+        }, "post", 300);
 
     });
 
@@ -40,10 +38,9 @@ $(function () {
     function fileChangeEvent() {
         if ($("#fileIcon").val().length > 0) {
             hot.fileUpload('/resource/upload/img', 'fileIcon', null, function (res) {
-                $("#categoryIcon").val(res.fileUrl);
+                $("#categoryIcon").val(res.filePath);
                 $("#uploadCategoryIcon").attr("src", res.fileUrl);
                 $("#fileIcon").val("");
-
             });
         }
     }

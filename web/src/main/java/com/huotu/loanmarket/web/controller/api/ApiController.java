@@ -6,6 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.io.IOException;
+
 /**
  * @author allan
  * @date 23/10/2017
@@ -25,7 +27,7 @@ public interface ApiController {
      */
     @RequestMapping("/user/init")
     @ResponseBody
-    ApiResult userDetail(int userId,String appVersion,
+    ApiResult userDetail(int userId, String appVersion,
                          String osVersion,
                          String osType);
 
@@ -94,6 +96,17 @@ public interface ApiController {
     @RequestMapping("/project/index")
     @ResponseBody
     ApiResult projectIndex();
+
+    /**
+     * 发送验证码
+     *
+     * @param mobile
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping("/sendVerifyCode")
+    @ResponseBody
+    ApiResult sendVerifyCode(String mobile) throws IOException;
 
     /**
      * 检测app的版本信息

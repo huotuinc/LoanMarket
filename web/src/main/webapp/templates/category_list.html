@@ -35,9 +35,10 @@
                             </tr>
                             </thead>
                             <tbody>
+                            <!--/*@thymesVar id="items" type="java.util.List<com.huotu.loanmarket.service.entity.LoanCategory>"*/-->
                             <tr th:each="item:${items}">
                                 <td th:text="${item.name}"></td>
-                                <td><img src="" th:src="${item.icon}" width="80" height="80"/></td>
+                                <td><img src="" th:src="${@resourceService.get(item.icon).toString()}" width="80" height="80"/></td>
                                 <td>
                                     <span th:onclick="'javascript:categoryListHandler.editCategory('+${item.categoryId}+')'"
                                           class="cursor-point"><i class="fa fa-pencil tooltips" data-placement="top"
@@ -77,9 +78,10 @@
 
 <script src="../resource/js/plugins/hot/bootstrap.hot.extra-utils.js"></script>
 <script src="../resource/js/plugins/hot/bootstrap.hot.extra-init.js"></script>
+<script type="text/javascript" th:inline="javascript">
+    var editUrl = /*[[@{/category/edit}]]*/ "";
+</script>
 <script type="text/javascript">
-    var pageIndex = 1;
-    var totalPage = 20;
 
     var categoryListHandler = {
         deleteCategory: function (categoryId) {
@@ -95,7 +97,7 @@
             })
         },
         editCategory: function (categoryId) {
-            window.location.href = "edit?categoryId=" + categoryId;
+            hot.newTab(editUrl + "?categoryId=" + categoryId, '编辑分类');
         }
     }
 </script>

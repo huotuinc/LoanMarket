@@ -37,6 +37,7 @@
 
 <body class="gray-bg">
 <div class="wrapper wrapper-content animated fadeInRight tooltip-demo">
+    <!--/*@thymesVar id="category" type="com.huotu.loanmarket.service.entity.LoanCategory"*/-->
     <form role="form" id="edit_form">
         <div class="row">
             <div class="col-lg-12">
@@ -80,7 +81,7 @@
                                                     <div style="display: none;">
                                                         <input type="file" id="fileIcon" name="img"/>
                                                     </div>
-                                                    <img src="" th:src="${category.icon}" id="uploadCategoryIcon"
+                                                    <img src="" th:src="${@resourceService.get(category.icon).toString()}" id="uploadCategoryIcon"
                                                          class="m-b img-selected img-rounded" width="92" height="92"/>
                                                     <input type="hidden" id="categoryIcon" th:value="${category.icon}"/>
                                                 </li>

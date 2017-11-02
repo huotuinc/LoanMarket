@@ -12,7 +12,7 @@
     <meta http-equiv="refresh" content="0;ie.html"/>
     <![endif]-->
 
-    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="shortcut icon" href="../resource/favicon.ico">
     <link href="http://resali.huobanplus.com/cdn/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
     <link href="http://resali.huobanplus.com/cdn/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
     <link href="http://resali.huobanplus.com/cdn/hotui/css/animate.min.css" rel="stylesheet">
@@ -43,7 +43,7 @@
                             <li><a class="J_menuItem" href="/MallManage/MallConfig/ModifyPassword.aspx">修改密码</a>
                             </li>
                             <li class="divider"></li>
-                            <li><a href="loginout.html">安全退出</a>
+                            <li><a href="loginout.html" th:href="@{/logout}">安全退出</a>
                             </li>
                         </ul>
                     </div>
@@ -53,25 +53,21 @@
                     </div>
                 </li>
                 <li>
-                    <a class="J_menuItem" href="http://www.baidu.com">
+                    <a class="J_menuItem" href="">
                         <i class="fa fa-home"></i>
                         <span class="nav-label">桌面</span>
                     </a>
                 </li>
-                <li>
+                <li class="active">
                     <a href="#"><i class="fa fa-edit"></i><span class="nav-label">产品管理</span><span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
-                        <li><a class="J_menuItem" href="form_basic.html">产品列表</a>
+                        <li><a class="J_menuItem" href="form_basic.html" th:href="@{/project/list}">产品列表</a>
                         </li>
                         <li><a class="J_menuItem" href="form_validate.html" th:href="@{/project/edit}">添加产品</a>
                         </li>
                         <li><a class="J_menuItem" href="form_advanced.html" th:href="@{/category/list}">产品分类</a>
                         </li>
                         <li><a class="J_menuItem" href="form_advanced.html" th:href="@{/category/edit}">添加分类</a>
-                        </li>
-                        <li><a class="J_menuItem" href="form_wizard.html">表单向导</a>
-                        </li>
-                        <li><a class="J_menuItem" href="form_wizard.html">申请材料</a>
                         </li>
                     </ul>
                 </li>
@@ -90,7 +86,7 @@
             </button>
             <nav class="page-tabs J_menuTabs" style="margin-left: 80px;">
                 <div class="page-tabs-content">
-                    <a href="javascript:;" class="active J_menuTab" data-id="http://www.baidu.com">首页</a>
+                    <a href="javascript:;" class="active J_menuTab" data-id="http://www.baidu.com">桌面</a>
                 </div>
             </nav>
             <button class="roll-nav roll-right J_tabRight">
@@ -111,10 +107,10 @@
                     </li>
                 </ul>
             </div>
-            <a href="login1.html" class="roll-nav roll-right J_tabExit"><i class="fa fa fa-sign-out"></i>退出</a>
+            <a href="login.html" th:href="@{/logout}" class="roll-nav roll-right J_tabExit"><i class="fa fa fa-sign-out"></i>退出</a>
         </div>
         <div class="row J_mainContent" id="content-main">
-            <iframe class="J_iframe" name="iframe0" width="100%" height="100%" src="http://www.baidu.com" frameborder="0" data-id="http://www.baidu.com" seamless></iframe>
+            <iframe class="J_iframe" name="iframe0" width="100%" height="100%" src="" frameborder="0" data-id="http://www.baidu.com" seamless></iframe>
         </div>
     </div>
     <!--右侧部分结束-->

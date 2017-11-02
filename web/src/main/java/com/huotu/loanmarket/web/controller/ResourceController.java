@@ -47,6 +47,7 @@ public class ResourceController {
 
         JSONObject responseData = new JSONObject();
         responseData.put("fileUrl", uri);
+        responseData.put("filePath", path);
 
         return ApiResult.resultWith(ResultCodeEnum.SUCCESS, responseData);
     }

@@ -54,6 +54,8 @@ public class ApiControllerTest extends ApiTestBase {
     private LoanEquipmentRepository equipmentRepository;
     @Autowired
     private LoanUserViewLogRepository viewLogRepository;
+    @Autowired
+    private LoanVerifyCodeRepository verifyCodeRepository;
 
     @Before
     public void mockData() {
@@ -141,7 +143,7 @@ public class ApiControllerTest extends ApiTestBase {
                 .param("userId", String.valueOf(expectedUser.getUserId())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.resultCode").value(2000))
-        .andExpect(jsonPath("$.data.userId").value(expectedUser.getUserId()));
+                .andExpect(jsonPath("$.data.userId").value(expectedUser.getUserId()));
         LoanEquipment equipment = equipmentRepository.findAll().get(0);
         assertEquals(appVersion, equipment.getAppVersion());
         assertEquals(osVersion, equipment.getOsVersion());
@@ -282,10 +284,31 @@ public class ApiControllerTest extends ApiTestBase {
     public void loginTest() throws Exception {
         String mobile = randomMobile();
 
+        int randomCode = nextIntInSection(1000, 9999);
+        String verifyCode = String.valueOf(randomCode);
+        //测试验证码
+        LoanVerifyCode mockCode = new LoanVerifyCode();
+        mockCode.setMobile(mobile);
+        mockCode.setCode(verifyCode);
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime invalidTime = now.plusMinutes(10);
+        mockCode.setSendTime(Jsr310Converters.LocalDateTimeToDateConverter.INSTANCE.convert(now));
+        mockCode.setInvalidTime(new Date());
+        verifyCodeRepository.save(mockCode);
+        mockMvc.perform(post(requestUrl + "/user/login")
+                .param("mobile", mobile)
+                .param("verifyCode", verifyCode))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.resultCode").value(5000));
+
+        //验证通过
+        mockCode.setInvalidTime(Jsr310Converters.LocalDateTimeToDateConverter.INSTANCE.convert(invalidTime));
+        verifyCodeRepository.save(mockCode);
+
         //没有用户的情况下
         mockMvc.perform(post(requestUrl + "/user/login")
                 .param("mobile", mobile)
-                .param("verifyCode", String.valueOf(nextIntInSection(1000, 9999))))
+                .param("verifyCode", verifyCode))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.resultCode").value(2000))
                 .andExpect(jsonPath("$.data.account").value(mobile));
@@ -298,9 +321,19 @@ public class ApiControllerTest extends ApiTestBase {
         //有用户的情况下
         mockMvc.perform(post(requestUrl + "/user/login")
                 .param("mobile", mobile)
-                .param("verifyCode", String.valueOf(nextIntInSection(1000, 9999))))
+                .param("verifyCode", verifyCode))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.resultCode").value(2000))
                 .andExpect(jsonPath("$.data.account").value(mobile));
+    }
+
+    @Test
+    public void sendVerifyCodeTest() throws Exception {
+        String testMobile = "15558039061";
+
+        mockMvc.perform(post(requestUrl + "/sendVerifyCode")
+                .param("mobile", testMobile))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.resultCode").value(2000));
     }
 }
