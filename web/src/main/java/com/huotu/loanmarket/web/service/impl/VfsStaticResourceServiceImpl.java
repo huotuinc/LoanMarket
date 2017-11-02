@@ -10,6 +10,8 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StreamUtils;
+import org.springframework.util.StringUtils;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,23 +24,25 @@ import java.net.URISyntaxException;
  * @date 27/10/2017
  */
 @Service("resourceService")
-@Profile("container")
-public class VFSStaticResourceServiceImpl implements StaticResourceService {
-    private static final Log log = LogFactory.getLog(VFSStaticResourceServiceImpl.class);
+@Profile({"container", "development"})
+public class VfsStaticResourceServiceImpl implements StaticResourceService {
+    private static final Log log = LogFactory.getLog(VfsStaticResourceServiceImpl.class);
 
     private URI uriPrefix;
     private URI fileHome;
 
     @Autowired
     private VFSHelper vfsHelper;
+    @Autowired
+    private WebApplicationContext context;
 
     @Autowired
     public void initService(Environment environment) throws URISyntaxException {
-        String uriPrefix = environment.getProperty("resourceUri", (String) null);
+        String uriPrefix = environment.getProperty("resourceUri", "http://localhost:8080/resource/upload/");
         if (uriPrefix == null) {
             throw new IllegalStateException("未设置resourceUri");
         }
-        String fileHome = environment.getProperty("resourceHome", (String) null);
+        String fileHome = environment.getProperty("resourceHome", context.getServletContext().getRealPath("/resource/upload/"));
         if (fileHome == null) {
             throw new IllegalStateException("未设置resourceHome");
         }
@@ -75,11 +79,14 @@ public class VFSStaticResourceServiceImpl implements StaticResourceService {
             }
         });
 
-        return null;
+        return get(path);
     }
 
     @Override
     public URI get(String path) throws URISyntaxException {
+        if (StringUtils.isEmpty(path)) {
+            return new URI("");
+        }
         StringBuilder stringBuilder = new StringBuilder(uriPrefix.toString());
         if (!stringBuilder.toString().endsWith("/") && !path.startsWith("/")) {
             stringBuilder.append("/");

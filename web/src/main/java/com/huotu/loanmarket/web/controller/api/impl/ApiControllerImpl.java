@@ -12,6 +12,8 @@ import com.huotu.loanmarket.web.controller.api.ApiController;
 import com.huotu.loanmarket.web.service.StaticResourceService;
 import com.huotu.loanmarket.web.viewmodel.ProjectIndexViewModel;
 import com.huotu.loanmarket.web.viewmodel.ProjectListViewModel;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -32,6 +35,8 @@ import java.util.List;
 @Controller
 @RequestMapping(value = "/rest/api", method = RequestMethod.POST)
 public class ApiControllerImpl implements ApiController {
+    private static final Log log = LogFactory.getLog(ApiControllerImpl.class);
+
     @Autowired
     private ProjectService projectService;
     @Autowired
@@ -50,6 +55,12 @@ public class ApiControllerImpl implements ApiController {
     private VerifyCodeService verifyCodeService;
     @Autowired
     private AppVersionService appVersionService;
+
+    @PostConstruct
+    public void init() {
+        log.info("resourceService====>" + staticResourceService);
+        log.info("resourceService==null" + staticResourceService == null);
+    }
 
     @Override
     @RequestMapping("/user/init")
@@ -170,7 +181,7 @@ public class ApiControllerImpl implements ApiController {
     @RequestMapping("/app/checkAppVersion")
     @ResponseBody
     public ApiResult checkAppVersion(int appVersionCode) {
-        AppVersion appVersion =  appVersionService.check( appVersionCode );
-        return ApiResult.resultWith( ResultCodeEnum.SUCCESS , appVersion );
+        AppVersion appVersion = appVersionService.check(appVersionCode);
+        return ApiResult.resultWith(ResultCodeEnum.SUCCESS, appVersion);
     }
 }

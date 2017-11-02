@@ -9,6 +9,7 @@ import com.huotu.loanmarket.service.entity.*;
 import com.huotu.loanmarket.service.repository.*;
 import com.huotu.loanmarket.service.service.CategoryService;
 import com.huotu.loanmarket.service.service.ProjectService;
+import com.huotu.loanmarket.service.service.VerifyCodeService;
 import com.huotu.loanmarket.web.base.ApiResult;
 import com.huotu.loanmarket.web.base.ApiTestBase;
 import com.huotu.loanmarket.web.viewmodel.ProjectListViewModel;
@@ -327,6 +328,9 @@ public class ApiControllerTest extends ApiTestBase {
                 .andExpect(jsonPath("$.data.account").value(mobile));
     }
 
+    @Autowired
+    private VerifyCodeService verifyCodeService;
+
     @Test
     public void sendVerifyCodeTest() throws Exception {
         String testMobile = "15558039061";
@@ -335,5 +339,7 @@ public class ApiControllerTest extends ApiTestBase {
                 .param("mobile", testMobile))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.resultCode").value(2000));
+
+//        verifyCodeService.send("18324499921", "哎哟，媳妇儿");
     }
 }
