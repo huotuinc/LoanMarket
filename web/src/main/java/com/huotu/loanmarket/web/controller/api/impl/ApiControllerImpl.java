@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.ws.rs.GET;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -167,7 +168,7 @@ public class ApiControllerImpl implements ApiController {
     }
 
     @Override
-    @RequestMapping("/app/checkAppVersion")
+    @RequestMapping(value = "/app/checkAppVersion",method = RequestMethod.GET)
     @ResponseBody
     public ApiResult checkAppVersion(int appVersionCode) {
         AppVersion appVersion =  appVersionService.check( appVersionCode );
