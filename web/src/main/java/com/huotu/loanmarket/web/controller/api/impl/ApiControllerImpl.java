@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.annotation.PostConstruct;
+import javax.ws.rs.GET;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -55,12 +55,6 @@ public class ApiControllerImpl implements ApiController {
     private VerifyCodeService verifyCodeService;
     @Autowired
     private AppVersionService appVersionService;
-
-    @PostConstruct
-    public void init() {
-        log.info("resourceService====>" + staticResourceService);
-        log.info("resourceService==null" + staticResourceService == null);
-    }
 
     @Override
     @RequestMapping("/user/init")
@@ -178,7 +172,7 @@ public class ApiControllerImpl implements ApiController {
     }
 
     @Override
-    @RequestMapping("/app/checkAppVersion")
+    @RequestMapping(value = "/app/checkAppVersion",method = RequestMethod.GET)
     @ResponseBody
     public ApiResult checkAppVersion(int appVersionCode) {
         AppVersion appVersion = appVersionService.check(appVersionCode);

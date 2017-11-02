@@ -27,11 +27,26 @@ public class AppVersion {
     /**
      * 升级说明
      */
-    @Column(name = "description")
+    @Column(name = "description",length = 1024)
     private String description;
     /**
      * app下载地址
      */
-    @Column(name="appUrl")
+    @Column(name="appUrl", length = 1024)
     private String appUrl;
+    /**
+     * 文件的md5
+     */
+    @Column(name="md5")
+    private String md5;
+    /**
+     * 文件大小
+     */
+    @Column(name="size")
+    private long size;
+    /**
+     * 是否强制升级
+     */
+    @Column(name="isForce")
+    private boolean isForce;
 }
