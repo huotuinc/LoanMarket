@@ -559,16 +559,16 @@ header .tools-bar p {
     background-image: url("../../img/forend/phone.png");
 }
 
-.material .material-icon-shop {
-    background-image: url("../image/shop.png");
+.material .material-icon-5 {
+    background-image: url("../../img/forend/shop.png");
 }
 
-.material .material-icon-auth {
-    background-image: url("../image/auth.png");
+.material .material-icon-6 {
+    background-image: url("../../img/forend/auth.png");
 }
 
-.material .material-icon-contacts {
-    background-image: url("../image/contacts.png");
+.material .material-icon-7 {
+    background-image: url("../../img/forend/contacts.png");
 }
 
 .content .search-tools {
