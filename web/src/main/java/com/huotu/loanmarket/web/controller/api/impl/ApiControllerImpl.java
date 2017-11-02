@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.ws.rs.GET;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
