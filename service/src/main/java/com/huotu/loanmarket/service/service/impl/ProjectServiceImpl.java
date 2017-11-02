@@ -70,6 +70,21 @@ public class ProjectServiceImpl extends AbstractCrudService<LoanProject, Integer
     }
 
     @Override
+    public List<LoanProject> findAll(int categoryId, double amount, int deadline) {
+        Specification<LoanProject> specification = (root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            predicates.add(cb.equal(root.get("isDelete").as(Integer.class), 0));
+            String categoryStr = "," + categoryId + ",";
+            predicates.add(cb.like(root.get("categories").as(String.class), "%" + categoryStr + "%"));
+            predicates.add(cb.greaterThanOrEqualTo(root.get("maxMoney").as(Double.class), amount));
+            predicates.add(cb.equal(root.get("deadlineUnit").as(Integer.class), 1));
+            predicates.add(cb.greaterThanOrEqualTo(root.get("maxDeadline").as(Integer.class), deadline));
+            return cb.and(predicates.toArray(new Predicate[predicates.size()]));
+        };
+        return projectRepository.findAll(specification);
+    }
+
+    @Override
     public List<LoanProject> findAll() {
         return this.repository.findAll();
     }

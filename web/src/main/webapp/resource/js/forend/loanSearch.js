@@ -45,17 +45,17 @@ $(function () {
 
     function searchLoan(tag, amount, deadline) {
         $.showLoading();
-        $.ajax('/search/loan', {
+        $.ajax('/forend/project/search/list', {
             method: 'GET',
             data: {
-                tag: tag,
+                categoryId: tag,
                 amount: amount,
                 deadline: deadline
             },
             dataType: 'json',
             success: function (res) {
                 $.hideLoading();
-                if(res.resultCode !== 200) {
+                if(res.resultCode !== 2000) {
                     return $.toptip('请求失败', 'error');
                 }
                 var _html = template('J_resultTmp', res);

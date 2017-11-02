@@ -22,6 +22,8 @@ public interface ProjectService extends CrudService<LoanProject, Integer> {
      */
     Page<LoanProject> findAll(int pageIndex, int pageSize, ProjectSearchCondition searchCondition);
 
+    List<LoanProject> findAll(int categoryId,double amount,int deadline);
+
     /**
      * 查询所有
      *

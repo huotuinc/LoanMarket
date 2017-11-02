@@ -17,7 +17,7 @@
 <div class="content">
     <div class="goods-list tag-list">
         <div class="bd clearfix">
-            <a th:each="categroy:${categoryList}" class="tags">
+            <a th:each="categroy:${categoryList}" class="tags" onclick="loanHandle.getCategory(this)" th:attr="categoryId=${categroy.categoryId}">
                 <!--/*@thymesVar id="categroy" type="com.huotu.loanmarket.service.entity.LoanCategory"*/-->
                 <div class="tags-hd">
                     <img th:src="${categroy.icon}" src="http://iph.href.lu/40x40">
@@ -29,7 +29,9 @@
         </div>
     </div>
     <div class="goods-list loan-list">
-        <a th:each="project:${projectList}" th:class="${project.isHot>0 ? 'loans loans-recommend':'loans'}" class="loans loans-recommend" onclick="loanHandle.getProjectDetail(this)" th:attr="projectId=${project.loanId}">
+        <a th:each="project:${projectList}" th:class="'loans '+${project.isHot>0?'loans-recommend ':''}+${project.isNew>0?'loans-new':''}"
+           class="loans loans-recommend" onclick="loanHandle.getProjectDetail(this)"
+           th:attr="projectId=${project.loanId}">
             <!--/*@thymesVar id="project" type="com.huotu.loanmarket.service.entity.LoanProject"*/-->
             <div class="loans-flex">
                 <div class="loans-hd">
@@ -38,12 +40,13 @@
                 <div class="loans-bd">
                     <h3 th:text="${project.name}" class="title">平安i贷款</h3>
                     <p class="interest">
-                        <span><i th:text="${project.deadlineUnit.getName()}+'利率'"></i>：<b th:text="${project.interestRate+'%'}">0.05%</b></span>
+                        <span><i th:text="${project.deadlineUnit=='0'?'日':'月'}+'利率'"></i>：<b
+                                th:text="${project.interestRate+'%'}">0.05%</b></span>
                         <span>额度：<b th:text="${project.minMoney+'~'+project.maxMoney}">1000~30000</b>元</span>
                     </p>
                 </div>
             </div>
-            <div class="loans-ft" >
+            <div class="loans-ft">
                 <span th:each="tag:${#strings.arraySplit(project.tag,',')}" th:text="${tag}" style="margin-right: 5px;">最快3分钟下单</span>
             </div>
         </a>
@@ -74,9 +77,13 @@
 <script src="http://resali.huobanplus.com/cdn/jquery-weui/1.0.1/jquery-weui.min.js"></script>
 <script type="text/javascript">
     var loanHandle = {
-        getProjectDetail:function (obj) {
+        getProjectDetail: function (obj) {
             var projectId = $(obj).attr("projectId");
-            window.location.href = "/forend/project/getDetail?projectId="+projectId;
+            window.location.href = "/forend/project/getDetail?projectId=" + projectId;
+        },
+        getCategory:function (obj) {
+            var categoryId  = $(obj).attr("categoryId");
+            window.location.href = "/forend/project/list?tag="+categoryId;
         }
     }
 </script>

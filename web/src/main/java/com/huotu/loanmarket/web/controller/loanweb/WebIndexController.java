@@ -27,5 +27,6 @@ public class WebIndexController {
         model.addAttribute("newProject",newProject);
         return "forend/home";
     }
+
 }
 

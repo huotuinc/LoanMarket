@@ -130,6 +130,11 @@ public class LoanProject {
     @Column(name = "Min_Money")
     private double minMoney;
 
+    /**
+     * 最大可贷款期限
+     */
+    @Column(name = "Max_Deadline")
+    private int maxDeadline;
     @Column(name = "Categories")
     private String categories;
 
