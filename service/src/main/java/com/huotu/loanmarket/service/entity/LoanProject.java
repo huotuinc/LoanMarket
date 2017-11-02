@@ -1,6 +1,5 @@
 package com.huotu.loanmarket.service.entity;
 
-import com.huotu.loanmarket.common.ienum.LoanTermEnum;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -46,13 +45,13 @@ public class LoanProject {
     @Column(name = "Deadline")
     private String deadline;
     /**
-     * 贷款期限单位
+     * 贷款期限单位（默认只有天和月）
      * 0-天
      * 1-月
      * 2-年
      */
     @Column(name = "Deadline_Unit")
-    private LoanTermEnum deadlineUnit = LoanTermEnum.DAY;
+    private int deadlineUnit;
     /**
      * 利率，对应单位
      */

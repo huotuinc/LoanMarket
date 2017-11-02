@@ -28,7 +28,7 @@
 
                     <h3 th:text="${loanProject.name}" class="title">平安i贷款</h3>
                     <p class="interest">
-                        <span><i th:text="${loanProject.deadlineUnit.getName()}+'利率'"></i>：<b
+                        <span><i th:text="${loanProject.deadlineUnit==0?'日':'月'}+'利率'"></i>：<b
                                 th:text="${loanProject.interestRate+'%'}">0.05%</b></span>
                         <span>额度：<b th:text="${minMoney+'~'+maxMoney}"></b>元</span>
                     </p>
@@ -43,11 +43,12 @@
     <div class="goods-list loan-calc">
         <div class="weui-cells">
             <div class="weui-cell weui-cell_access" id="J_line" th:data-line="${loanProject.enableMoney}">
-                <div class="weui-cell__bd">贷款金额 <span class="text-small" th:text="${minMoney+'~'+maxMoney}">1000~5000元</span></div>
+                <div class="weui-cell__bd">贷款金额 <span class="text-small"
+                                                      th:text="${minMoney+'~'+maxMoney}">1000~5000元</span></div>
                 <div class="weui-cell__ft" th:text="${minMoney}">1000元</div>
             </div>
             <div class="weui-cell weui-cell_access" id="J_deadline" th:data-deadline="${loanProject.deadline}"
-                 th:data-unit="${loanProject.deadlineUnit.getName()=='日'?'日':'个月'}">
+                 th:data-unit="${loanProject.deadlineUnit==0?'日':'月'}">
                 <div class="weui-cell__bd">分期期限 <span class="text-small" th:text="${minDeadline+'~'}+${maxDeadline}">1~3个月</span>
                 </div>
                 <div class="weui-cell__ft" th:text="${minDeadline}">1个月</div>
@@ -61,7 +62,7 @@
             </div>
             <div class="weui-flex__item">
                 <p id="J_interestRate" th:text="${loanProject.interestRate+'%'}">0.60%</p>
-                <span class="text-small" th:text="'参考'+${loanProject.deadlineUnit.getName()}+'利率'">参考日利率</span>
+                <span class="text-small" th:text="'参考'+${loanProject.deadlineUnit==0?'日':'个月'}+'利率'">参考日利率</span>
             </div>
             <div class="weui-flex__item">
                 <p th:text="${loanProject.fastestGetTime}">1天</p>
@@ -75,18 +76,6 @@
             <div class="material" th:each="material:${materials}">
                 <div th:class="'material-hd material-icon-'+${material.code}" class="material-hd material-icon-0"></div>
                 <div class="material-bd" th:text="${material.name}">基本信息</div>
-            </div>
-            <div class="material">
-                <div class="material-hd material-icon-shop"></div>
-                <div class="material-bd">电商验证</div>
-            </div>
-            <div class="material">
-                <div class="material-hd material-icon-auth"></div>
-                <div class="material-bd">授权征信查询</div>
-            </div>
-            <div class="material">
-                <div class="material-hd material-icon-contacts"></div>
-                <div class="material-bd">联系人信息</div>
             </div>
         </div>
     </div>
