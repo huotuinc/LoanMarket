@@ -24,7 +24,7 @@ import java.net.URISyntaxException;
  * @date 27/10/2017
  */
 @Service("resourceService")
-@Profile({"container", "development"})
+@Profile("container")
 public class VfsStaticResourceServiceImpl implements StaticResourceService {
     private static final Log log = LogFactory.getLog(VfsStaticResourceServiceImpl.class);
 
