@@ -94,6 +94,7 @@ public class ProjectServiceImpl extends AbstractCrudService<LoanProject, Integer
     public List<LoanProject> getHotProject() {
         List<Predicate> predicates = new ArrayList<>();
         Specification<LoanProject> specification = (root, criteriaQuery, criteriaBuilder) -> {
+            predicates.add(criteriaBuilder.equal(root.get("isDelete").as(Integer.class), 0));
             predicates.add(criteriaBuilder.equal(root.get("isHot").as(Integer.class), 1));
             return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
         };
@@ -104,6 +105,7 @@ public class ProjectServiceImpl extends AbstractCrudService<LoanProject, Integer
     public List<LoanProject> getNewProject() {
         List<Predicate> predicates = new ArrayList<>();
         Specification<LoanProject> specification = (root, criteriaQuery, criteriaBuilder) -> {
+            predicates.add(criteriaBuilder.equal(root.get("isDelete").as(Integer.class), 0));
             predicates.add(criteriaBuilder.equal(root.get("isNew").as(Integer.class), 1));
             return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
         };
