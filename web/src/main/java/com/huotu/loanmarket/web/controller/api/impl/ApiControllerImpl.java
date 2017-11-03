@@ -80,12 +80,17 @@ public class ApiControllerImpl implements ApiController {
 
         ProjectListViewModel projectListViewModel = new ProjectListViewModel();
         projectListViewModel.toApiProjectList(projectPage);
-        projectListViewModel.getList().forEach(p->{
-            if(!StringUtils.isEmpty(p.getLogo())){
+        projectListViewModel.getList().forEach(p -> {
+            if (!StringUtils.isEmpty(p.getLogo())) {
                 try {
-                   p.setLogo(staticResourceService.get(p.getLogo()).toString());
+                    p.setLogo(staticResourceService.get(p.getLogo()).toString());
                 } catch (URISyntaxException e) {
                 }
+            }
+            if (!StringUtils.isEmpty(p.getTag()) && p.getTag().split(",").length > 3) {
+                String[] tags = p.getTag().split(",");
+                String tag = tags[0]+","+tags[1]+","+tags[2];
+                p.setTag(tag);
             }
         });
         return ApiResult.resultWith(ResultCodeEnum.SUCCESS, projectListViewModel);
@@ -121,6 +126,11 @@ public class ApiControllerImpl implements ApiController {
                 project.setLogo(staticResourceService.get(project.getLogo()).toString());
             } catch (URISyntaxException e) {
             }
+        }
+        if (!StringUtils.isEmpty(project.getTag()) && project.getTag().split(",").length > 3) {
+            String[] tags = project.getTag().split(",");
+            String tag = tags[0]+","+tags[1]+","+tags[2];
+            project.setTag(tag);
         }
         if (userId > 0) {
             //记录日志  注：这是两个完全不同的业务没必要封装在同一个方法中
@@ -159,20 +169,30 @@ public class ApiControllerImpl implements ApiController {
         ProjectIndexViewModel model = new ProjectIndexViewModel();
         List<LoanProject> hotList = projectService.getHotProject();
         List<LoanProject> newList = projectService.getNewProject();
-        hotList.forEach(p->{
-            if(!StringUtils.isEmpty(p.getLogo())){
+        hotList.forEach(p -> {
+            if (!StringUtils.isEmpty(p.getLogo())) {
                 try {
                     p.setLogo(staticResourceService.get(p.getLogo()).toString());
                 } catch (URISyntaxException e) {
                 }
             }
+            if (!StringUtils.isEmpty(p.getTag()) && p.getTag().split(",").length > 3) {
+                String[] tags = p.getTag().split(",");
+                String tag = tags[0]+","+tags[1]+","+tags[2];
+                p.setTag(tag);
+            }
         });
-        newList.forEach(project->{
-            if(!StringUtils.isEmpty(project.getLogo())){
+        newList.forEach(project -> {
+            if (!StringUtils.isEmpty(project.getLogo())) {
                 try {
                     project.setLogo(staticResourceService.get(project.getLogo()).toString());
                 } catch (URISyntaxException e) {
                 }
+            }
+            if (!StringUtils.isEmpty(project.getTag()) && project.getTag().split(",").length > 3) {
+                String[] tags = project.getTag().split(",");
+                String tag = tags[0]+","+tags[1]+","+tags[2];
+                project.setTag(tag);
             }
         });
         model.setHotProjectList(hotList);
@@ -194,7 +214,7 @@ public class ApiControllerImpl implements ApiController {
     }
 
     @Override
-    @RequestMapping(value = "/app/checkAppVersion",method = RequestMethod.GET)
+    @RequestMapping(value = "/app/checkAppVersion", method = RequestMethod.GET)
     @ResponseBody
     public ApiResult checkAppVersion(int appVersionCode) {
         AppVersion appVersion = appVersionService.check(appVersionCode);
