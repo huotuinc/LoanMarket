@@ -60,4 +60,17 @@ public class WebProjectController {
         model.addAttribute("hotProject", hotProject);
         return "forend/loanProgress";
     }
+    @RequestMapping("/apply")
+    @ResponseBody
+    public void apply(){
+        /**从cookie中获取购物车*/
+//        try {
+//            String cartsStr = CookieHelper.getCookieVal(request, "jd_cart_" + customId);
+//            if (!StringUtils.isEmpty(cartsStr)) {
+//                carts = URLDecoder.decode(cartsStr, "utf-8");
+//            }
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//        }
+    }
 }

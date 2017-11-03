@@ -18,6 +18,20 @@ $(function () {
     var loginUrl = '/api/login';
     var sendAuthCodeUrl = '/api/authCode';
     $('.js-needLogin').click(function () {
+        $.ajax("/forend/checkLogin",{
+            method:"GET",
+            dataType: 'json',
+            success: function (res) {
+                if (res.resultCode == 2000) {
+                    return ;
+                }
+            },
+            error: function () {
+                $.toptip("系统错误");
+            }
+            }
+
+        );
         var self = $(this);
         var flag = self.hasClass('js-loginBox');
         $.modal({
