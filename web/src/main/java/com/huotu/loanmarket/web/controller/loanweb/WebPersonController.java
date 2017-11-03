@@ -1,6 +1,10 @@
 package com.huotu.loanmarket.web.controller.loanweb;
 
+import com.huotu.loanmarket.service.entity.LoanUser;
+import com.huotu.loanmarket.service.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -11,8 +15,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/forend/person")
 public class WebPersonController {
+    @Autowired
+    private UserService userService;
     @RequestMapping("/center")
-    public String getPersonInfo(){
+    public String getPersonInfo(Model model){
+        String mobile = userService.checkLogin();
+        if(mobile!=null){
+            LoanUser user = userService.checkLogin(mobile);
+            model.addAttribute("user",user);
+        }
         return "forend/user";
     }
     @RequestMapping("/about")

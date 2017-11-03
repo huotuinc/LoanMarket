@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -14,11 +14,12 @@
     <link rel="stylesheet" href="../../resource/css/forend/main.css">
 </head>
 <body>
+<!--/*@thymesVar id="user" type="com.huotu.loanmarket.service.entity.LoanUser"*/-->
 <div class="content">
     <!--TODO 未登录class js-needLogin 已登录移除它-->
     <div class="login-wrap js-loginBox js-needLogin">
         <div class="login-hd">
-            <img src="http://iph.href.lu/40x40" alt="avatar">
+            <img th:src="${user.}" src="http://iph.href.lu/40x40" alt="avatar">
         </div>
         <div class="login-bd">
             <p>未登录</p>

@@ -80,7 +80,14 @@ public class ApiControllerImpl implements ApiController {
 
         ProjectListViewModel projectListViewModel = new ProjectListViewModel();
         projectListViewModel.toApiProjectList(projectPage);
-
+        projectListViewModel.getList().forEach(p->{
+            if(!StringUtils.isEmpty(p.getLogo())){
+                try {
+                   p.setLogo(staticResourceService.get(p.getLogo()).toString());
+                } catch (URISyntaxException e) {
+                }
+            }
+        });
         return ApiResult.resultWith(ResultCodeEnum.SUCCESS, projectListViewModel);
     }
 
