@@ -6,12 +6,15 @@ import com.huotu.loanmarket.service.entity.LoanProject;
 import com.huotu.loanmarket.service.service.ProjectService;
 import com.huotu.loanmarket.web.base.ApiResult;
 import com.huotu.loanmarket.web.base.ResultCodeEnum;
+import com.huotu.loanmarket.web.service.StaticResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +27,8 @@ import java.util.List;
 public class WebProjectController {
     @Autowired
     private ProjectService projectService;
+    @Autowired
+    private StaticResourceService staticResourceService;
 
     @RequestMapping("/search/list")
     @ResponseBody
@@ -45,6 +50,12 @@ public class WebProjectController {
             ApplicationMaterialEnum enumType = EnumHelper.getEnumType(ApplicationMaterialEnum.class, Integer.parseInt(materials[i]));
             materialEnumList.add(enumType);
         }
+        if(!StringUtils.isEmpty(loanProject.getLogo())){
+            try {
+                loanProject.setLogo(staticResourceService.get(loanProject.getLogo()).toString());
+            } catch (URISyntaxException e) {
+            }
+        }
         model.addAttribute("minDeadline", deadline[0]);
         model.addAttribute("maxDeadline", deadline[deadline.length - 1]);
         model.addAttribute("minMoney", enableMoney[0]);
@@ -59,18 +70,5 @@ public class WebProjectController {
         List<LoanProject> hotProject = projectService.getHotProject();
         model.addAttribute("hotProject", hotProject);
         return "forend/loanProgress";
-    }
-    @RequestMapping("/apply")
-    @ResponseBody
-    public void apply(){
-        /**从cookie中获取购物车*/
-//        try {
-//            String cartsStr = CookieHelper.getCookieVal(request, "jd_cart_" + customId);
-//            if (!StringUtils.isEmpty(cartsStr)) {
-//                carts = URLDecoder.decode(cartsStr, "utf-8");
-//            }
-//        } catch (UnsupportedEncodingException e) {
-//            e.printStackTrace();
-//        }
     }
 }

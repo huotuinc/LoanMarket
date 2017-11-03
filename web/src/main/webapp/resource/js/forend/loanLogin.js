@@ -15,22 +15,40 @@ $(function () {
         '            <button type="button" class="btn js-authCodeBtn">获取验证码</button>' +
         '        </div>' +
         '    </div>';
-    var loginUrl = '/api/login';
-    var sendAuthCodeUrl = '/api/authCode';
+    var loginUrl = '/forend/verifyCodeCheck';
+    var sendAuthCodeUrl = '/forend/verifyCode';
+    var applyCount = '/rest/api/project/applyLog';
     $('.js-needLogin').click(function () {
-        $.ajax("/forend/checkLogin",{
-            method:"GET",
-            dataType: 'json',
-            success: function (res) {
-                if (res.resultCode == 2000) {
-                    return ;
+        $.ajax("/forend/checkLogin", {
+                method: "GET",
+                async: false,
+                dataType: 'json',
+                success: function (res) {
+                    if (res.resultCode == 2000) {
+                        $.ajax(applyCount, {
+                                method: 'POST',
+                                data: {
+                                    userId: res.data,
+                                    projectId: $("#projectId").html()
+                                },
+                                dataType: 'json',
+                                success: function (res) {
+                                    if (res.resultCode == 2000) {
+                                        return $.toast('申请成功');
+                                    }
+                                    return $.toast('申请失败', 'cancel');
+                                },
+                                error: function () {
+                                    $.toptip("系统错误");
+                                }
+                            }
+                        );
+                    }
+                },
+                error: function () {
+                    $.toptip("系统错误");
                 }
-            },
-            error: function () {
-                $.toptip("系统错误");
             }
-            }
-
         );
         var self = $(this);
         var flag = self.hasClass('js-loginBox');
@@ -58,13 +76,13 @@ $(function () {
                                     method: 'POST',
                                     data: {
                                         mobile: mobile,
-                                        authCode: authCode
+                                        verifyCode: authCode
                                     },
                                     dataType: 'json',
                                     success: function (res) {
                                         $.hideLoading();
-                                        if (res.resultCode !== 200) {
-                                            return $.toptip(res.resultMsg, 'error');
+                                        if (res.resultCode !== 2000) {
+                                            return $.toast(res.resultMsg, 'cancel');
                                         }
                                         self.removeClass('js-needLogin').off('click');
                                         if (flag) {
@@ -107,7 +125,7 @@ $(function () {
                 },
                 dataType: 'json',
                 success: function (res) {
-                    if (res.resultCode !== 200) {
+                    if (res.resultCode !== 2000) {
                         $.toptip(res.resultMsg);
                         return false;
                     }

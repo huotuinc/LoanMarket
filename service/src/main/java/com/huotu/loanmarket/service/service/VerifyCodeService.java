@@ -34,4 +34,6 @@ public interface VerifyCodeService extends CrudService<LoanVerifyCode, Long> {
      * @return
      */
     boolean verifyCode(String mobile, String code);
+
+    boolean codeCheck(String mobile, String code);
 }

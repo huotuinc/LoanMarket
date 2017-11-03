@@ -83,4 +83,15 @@ public class VerifyCodeServiceImpl extends AbstractCrudService<LoanVerifyCode, L
 
         return System.currentTimeMillis() <= invalidTime.getTime();
     }
+
+    @Override
+    public boolean codeCheck(String mobile, String code) {
+        LoanVerifyCode verifyCode = verifyCodeRepository.findByMobile(mobile);
+        if (verifyCode == null) {
+            return false;
+        }
+        Date invalidTime = verifyCode.getInvalidTime();
+
+        return (System.currentTimeMillis() - invalidTime.getTime()) < 60000 && verifyCode.getCode().equals(code);
+    }
 }

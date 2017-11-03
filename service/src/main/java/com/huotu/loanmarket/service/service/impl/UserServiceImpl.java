@@ -46,7 +46,7 @@ public class UserServiceImpl extends AbstractCrudService<LoanUser, Integer> impl
     }
 
     @Override
-    public boolean checkLogin() {
+    public String checkLogin() {
         /**从cookie中获取用户信息*/
         String mobile = null;
         try {
@@ -56,6 +56,6 @@ public class UserServiceImpl extends AbstractCrudService<LoanUser, Integer> impl
             }
         } catch (UnsupportedEncodingException e) {
         }
-        return !StringUtils.isEmpty(mobile);
+        return mobile;
     }
 }

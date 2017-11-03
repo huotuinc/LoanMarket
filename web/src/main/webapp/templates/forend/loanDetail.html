@@ -25,7 +25,7 @@
                     <img src="http://iph.href.lu/40x40" alt="产品">
                 </div>
                 <div class="loans-bd">
-
+                    <h3 type="hidden" id="projectId" th:text="${loanProject.loanId}"></h3>
                     <h3 th:text="${loanProject.name}" class="title">平安i贷款</h3>
                     <p class="interest">
                         <span><i th:text="${loanProject.deadlineUnit==0?'日':'月'}+'利率'"></i>：<b

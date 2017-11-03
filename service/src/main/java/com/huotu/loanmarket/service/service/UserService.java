@@ -16,5 +16,5 @@ public interface UserService extends CrudService<LoanUser, Integer> {
      */
     LoanUser checkLogin(String mobile);
 
-    boolean checkLogin();
+    String checkLogin();
 }
