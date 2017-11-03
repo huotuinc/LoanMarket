@@ -152,6 +152,22 @@ public class ApiControllerImpl implements ApiController {
         ProjectIndexViewModel model = new ProjectIndexViewModel();
         List<LoanProject> hotList = projectService.getHotProject();
         List<LoanProject> newList = projectService.getNewProject();
+        hotList.forEach(p->{
+            if(!StringUtils.isEmpty(p.getLogo())){
+                try {
+                    p.setLogo(staticResourceService.get(p.getLogo()).toString());
+                } catch (URISyntaxException e) {
+                }
+            }
+        });
+        newList.forEach(project->{
+            if(!StringUtils.isEmpty(project.getLogo())){
+                try {
+                    project.setLogo(staticResourceService.get(project.getLogo()).toString());
+                } catch (URISyntaxException e) {
+                }
+            }
+        });
         model.setHotProjectList(hotList);
         model.setNewProjectList(newList);
         return ApiResult.resultWith(ResultCodeEnum.SUCCESS, model);
