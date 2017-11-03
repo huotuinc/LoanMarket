@@ -22,10 +22,10 @@
         <div class="loans">
             <div class="loans-flex">
                 <div class="loans-hd">
-                    <img src="http://iph.href.lu/40x40" alt="产品">
+                    <img th:src="${loanProject.logo}" src="http://iph.href.lu/40x40">
                 </div>
                 <div class="loans-bd">
-                    <h3 type="hidden" id="projectId" th:text="${loanProject.loanId}"></h3>
+                    <span style="display: none" id="projectId" th:text="${loanProject.loanId}"></span>
                     <h3 th:text="${loanProject.name}" class="title">平安i贷款</h3>
                     <p class="interest">
                         <span><i th:text="${loanProject.deadlineUnit==0?'日':'月'}+'利率'"></i>：<b
