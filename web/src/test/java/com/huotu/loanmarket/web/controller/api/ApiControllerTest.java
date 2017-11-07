@@ -339,6 +339,5 @@ public class ApiControllerTest extends ApiTestBase {
 //                .andExpect(status().isOk())
 //                .andExpect(jsonPath("$.resultCode").value(2000));
 
-//        verifyCodeService.send("18324499921", "哎哟，媳妇儿");
     }
 }
