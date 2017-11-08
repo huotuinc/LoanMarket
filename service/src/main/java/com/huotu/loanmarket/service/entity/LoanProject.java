@@ -86,7 +86,7 @@ public class LoanProject {
     /**
      * 描述
      */
-    @Column(name = "Describe")
+    @Column(name = "`Describe`")
     private String desc;
     /**
      * 是否删除
