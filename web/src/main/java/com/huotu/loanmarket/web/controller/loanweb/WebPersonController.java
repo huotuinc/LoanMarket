@@ -20,10 +20,13 @@ public class WebPersonController {
     @RequestMapping("/center")
     public String getPersonInfo(Model model){
         String mobile = userService.checkLogin();
+        boolean flag = false;
         if(mobile!=null){
             LoanUser user = userService.checkLogin(mobile);
             model.addAttribute("user",user);
+            flag = true;
         }
+        model.addAttribute("flag",flag);
         return "forend/user";
     }
     @RequestMapping("/about")

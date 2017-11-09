@@ -20,7 +20,7 @@ public class LoanUser {
     @Column(name = "Id")
     private Integer userId;
     /**
-     * 用户名
+     * 手机号
      */
     @Column(name = "Account")
     private String account;

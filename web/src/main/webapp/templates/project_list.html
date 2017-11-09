@@ -102,8 +102,8 @@
                             <tr th:each="project:${projects}">
                                 <td>
                                     <div class="checkbox checkbox-primary m-b-none m-t-none">
-                                        <input type="checkbox" id="chk1" th:value="${project.loanId}" name="chkProject"/>
-                                        <label for="chk1"></label>
+                                        <input type="checkbox" th:id="${project.loanId}" th:value="${project.loanId}" name="chkProject"/>
+                                        <label th:for="${project.loanId}"></label>
                                     </div>
                                 </td>
                                 <td style="width: 30%;">
