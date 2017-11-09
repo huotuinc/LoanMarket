@@ -4,18 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.huotu.loanmarket.common.SysConstant;
 import com.huotu.loanmarket.common.utils.StringUtilsExt;
-import com.huotu.loanmarket.service.entity.LoanCategory;
-import com.huotu.loanmarket.service.entity.LoanEquipment;
-import com.huotu.loanmarket.service.entity.LoanProject;
-import com.huotu.loanmarket.service.entity.LoanUser;
-import com.huotu.loanmarket.service.entity.LoanUserViewLog;
-import com.huotu.loanmarket.service.entity.LoanVerifyCode;
-import com.huotu.loanmarket.service.repository.LoanCategoryRepository;
-import com.huotu.loanmarket.service.repository.LoanEquipmentRepository;
-import com.huotu.loanmarket.service.repository.LoanProjectRepository;
-import com.huotu.loanmarket.service.repository.LoanUserRepository;
-import com.huotu.loanmarket.service.repository.LoanUserViewLogRepository;
-import com.huotu.loanmarket.service.repository.LoanVerifyCodeRepository;
+import com.huotu.loanmarket.service.entity.*;
+import com.huotu.loanmarket.service.repository.*;
 import com.huotu.loanmarket.service.service.CategoryService;
 import com.huotu.loanmarket.service.service.ProjectService;
 import com.huotu.loanmarket.service.service.VerifyCodeService;
@@ -342,13 +332,12 @@ public class ApiControllerTest extends ApiTestBase {
 
     @Test
     public void sendVerifyCodeTest() throws Exception {
-        String testMobile = "15558039061";
+//        String testMobile = "15558039061";
+//
+//        mockMvc.perform(post(requestUrl + "/sendVerifyCode")
+//                .param("mobile", testMobile))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.resultCode").value(2000));
 
-        mockMvc.perform(post(requestUrl + "/sendVerifyCode")
-                .param("mobile", testMobile))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.resultCode").value(2000));
-
-//        verifyCodeService.send("18324499921", "哎哟，媳妇儿");
     }
 }

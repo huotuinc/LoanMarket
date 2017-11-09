@@ -1,14 +1,18 @@
+/*
+ *   ~ 版权所有:杭州火图科技有限公司
+ *   ~ 地址:浙江省杭州市滨江区西兴街道阡陌路智慧E谷B幢4楼
+ *   ~
+ *   ~ (c) Copyright Hangzhou Hot Technology Co., Ltd.
+ *   ~ Floor 4,Block B,Wisdom E Valley,Qianmo Road,Binjiang District
+ *   ~ 2017-2020. All rights reserved.
+ */
+
 package com.huotu.loanmarket.service.entity;
 
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -52,6 +56,8 @@ public class LoanProject {
      */
     @Column(name = "Deadline_Unit")
     private int deadlineUnit;
+    @Transient
+    private String deadlineUnitDesc;
     /**
      * 利率，对应单位
      */
@@ -80,7 +86,7 @@ public class LoanProject {
     /**
      * 描述
      */
-    @Column(name = "Describe")
+    @Column(name = "`Describe`")
     private String desc;
     /**
      * 是否删除
@@ -135,6 +141,11 @@ public class LoanProject {
      */
     @Column(name = "Max_Deadline")
     private int maxDeadline;
+    /**
+     * 最小可贷款期限
+     */
+    @Transient
+    private int minDeadline;
     @Column(name = "Categories")
     private String categories;
 
