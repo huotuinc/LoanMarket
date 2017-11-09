@@ -84,11 +84,6 @@ public class LoanProject {
     @Column(name = "Logo")
     private String logo;
     /**
-     * 描述
-     */
-    @Column(name = "`Describe`")
-    private String desc;
-    /**
      * 是否删除
      */
     @Column(name = "IsDelete")
