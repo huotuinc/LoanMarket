@@ -47,9 +47,7 @@
         <div class="bd clearfix">
             <a th:each="project:${hotProject}" class="goods" onclick="homeHandler.getProjectDetail(this)" th:attr="projectId=${project.loanId}">
                 <div class="goods-hd">
-                    <img th:if="${project.logo!=null}" th:src="${project.logo}" style="width:100px;height:100px;">
-                    </img>
-                    <img th:if="${project.logo==null}" src="http://iph.href.lu/40x40" style="width:100px;height:100px;">
+                    <img th:src="${project.logo}" style="width:100px;height:100px;">
                     </img>
                 </div>
                 <div class="goods-bd">
