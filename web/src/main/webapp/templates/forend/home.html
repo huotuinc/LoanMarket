@@ -47,11 +47,14 @@
         <div class="bd clearfix">
             <a th:each="project:${hotProject}" class="goods" onclick="homeHandler.getProjectDetail(this)" th:attr="projectId=${project.loanId}">
                 <div class="goods-hd">
-                    <img th:src="${project.logo}" src="http://iph.href.lu/40x40">
+                    <img th:if="${project.logo!=null}" th:src="${project.logo}" style="width:100px;height:100px;">
+                    </img>
+                    <img th:if="${project.logo==null}" src="http://iph.href.lu/40x40" style="width:100px;height:100px;">
+                    </img>
                 </div>
                 <div class="goods-bd">
                     <h3 th:text="${project.name}" class="title">贷款超市</h3>
-                    <p th:text="${project.interestRate}" class="interest">日利率：0.05%</p>
+                    <p th:text="${project.interestRate}+' %'" class="interest">日利率：0.05%</p>
                 </div>
             </a>
         </div>

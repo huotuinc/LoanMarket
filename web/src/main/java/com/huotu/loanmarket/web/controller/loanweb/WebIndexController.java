@@ -46,6 +46,11 @@ public class WebIndexController {
                 } catch (URISyntaxException e) {
                 }
             }
+            if (!StringUtils.isEmpty(p.getTag()) && p.getTag().split(",").length > 3) {
+                String[] tags = p.getTag().split(",");
+                String tag = tags[0]+","+tags[1]+","+tags[2];
+                p.setTag(tag);
+            }
         });
         newProject.forEach(p -> {
             if (!StringUtils.isEmpty(p.getLogo())) {
@@ -53,6 +58,11 @@ public class WebIndexController {
                     p.setLogo(staticResourceService.get(p.getLogo()).toString());
                 } catch (URISyntaxException e) {
                 }
+            }
+            if (!StringUtils.isEmpty(p.getTag()) && p.getTag().split(",").length > 3) {
+                String[] tags = p.getTag().split(",");
+                String tag = tags[0]+","+tags[1]+","+tags[2];
+                p.setTag(tag);
             }
         });
         model.addAttribute("hotProject", hotProject);

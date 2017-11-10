@@ -56,6 +56,11 @@ public class WebProjectController {
             } catch (URISyntaxException e) {
             }
         }
+        if (!StringUtils.isEmpty(loanProject.getTag()) && loanProject.getTag().split(",").length > 3) {
+            String[] tags = loanProject.getTag().split(",");
+            String tag = tags[0]+","+tags[1]+","+tags[2];
+            loanProject.setTag(tag);
+        }
         model.addAttribute("minDeadline", deadline[0]);
         model.addAttribute("maxDeadline", deadline[deadline.length - 1]);
         model.addAttribute("minMoney", enableMoney[0]);

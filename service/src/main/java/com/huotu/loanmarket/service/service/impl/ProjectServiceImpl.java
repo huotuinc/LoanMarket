@@ -86,7 +86,8 @@ public class ProjectServiceImpl extends AbstractCrudService<LoanProject, Integer
 
     @Override
     public List<LoanProject> findAll() {
-        return this.repository.findAll();
+        Sort sort = new Sort(Sort.Direction.DESC, "createTime");
+        return this.repository.findAll(sort);
     }
 
 
