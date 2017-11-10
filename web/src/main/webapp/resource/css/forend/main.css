@@ -362,23 +362,6 @@ header .tools-bar p {
     background-color: #ececec;
 }
 
-.loan-list .loans-recommend::after {
-    content: ' ';
-    position: absolute;
-    top: -2px;
-    right: 10px;
-    width: 25px;
-    height: 25px;
-    background-image: url("../../img/forend/tj@2x.png");
-    background-size: cover;
-}
-
-@media (-webkit-min-device-pixel-ratio: 3), (min-device-pixel-ratio: 3) {
-    .loan-list .loans-recommend::after {
-        background-image: url("../../img/forend/tj@3x.png");
-    }
-}
-
 .loan-list .loans-new::after {
     content: ' ';
     position: absolute;
@@ -393,6 +376,23 @@ header .tools-bar p {
 @media (-webkit-min-device-pixel-ratio: 3), (min-device-pixel-ratio: 3) {
     .loan-list .loans-new::after {
         background-image: url("../../img/forend/xp@3x.png");
+    }
+}
+
+.loan-list .loans-recommend::after {
+    content: ' ';
+    position: absolute;
+    top: -2px;
+    right: 10px;
+    width: 25px;
+    height: 25px;
+    background-image: url("../../img/forend/tj@2x.png");
+    background-size: cover;
+}
+
+@media (-webkit-min-device-pixel-ratio: 3), (min-device-pixel-ratio: 3) {
+    .loan-list .loans-recommend::after {
+        background-image: url("../../img/forend/tj@3x.png");
     }
 }
 
