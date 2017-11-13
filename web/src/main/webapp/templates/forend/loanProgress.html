@@ -19,7 +19,7 @@
     <div class="weui-cells entry progress">
         <a th:each="project:${hotProject}" class="weui-cell weui-cell_access" href="tel:400-812-8018">
             <div class="weui-cell__hd">
-                <img src="../../resource/img/forend/logo@3x.png">
+                <img th:src="${project.logo}" src="../../resource/img/forend/logo@3x.png">
             </div>
             <div th:text="${project.name}" class="weui-cell__bd">贷款超市</div>
             <div th:text="${project.phone}" class="weui-cell__ft">400-812-8018</div>

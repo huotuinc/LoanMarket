@@ -32,13 +32,17 @@ public class WebProjectController {
 
     @RequestMapping("/search/list")
     @ResponseBody
-    public ApiResult getProjectList(int categoryId, double amount, int deadline){
-        return ApiResult.resultWith(ResultCodeEnum.SUCCESS,projectService.findAll(categoryId, amount, deadline));
+    public ApiResult getProjectList(int categoryId, double amount, int deadline) {
+        return ApiResult.resultWith(ResultCodeEnum.SUCCESS, projectService.findAll(categoryId, amount, deadline));
     }
+
     @RequestMapping("/list")
-    public String getProjectList(){
+    public String getProjectList(int tag, Model model) {
+        List<LoanProject> LoanProjectList = projectService.findByTag(tag);
+        model.addAttribute("projectList", LoanProjectList);
         return "forend/loanList";
     }
+
     @RequestMapping("/getDetail")
     public String getProjectDetail(int projectId, Model model) {
         LoanProject loanProject = projectService.findOne(projectId);
@@ -50,7 +54,7 @@ public class WebProjectController {
             ApplicationMaterialEnum enumType = EnumHelper.getEnumType(ApplicationMaterialEnum.class, Integer.parseInt(materials[i]));
             materialEnumList.add(enumType);
         }
-        if(!StringUtils.isEmpty(loanProject.getLogo())){
+        if (!StringUtils.isEmpty(loanProject.getLogo())) {
             try {
                 loanProject.setLogo(staticResourceService.get(loanProject.getLogo()).toString());
             } catch (URISyntaxException e) {
@@ -58,7 +62,7 @@ public class WebProjectController {
         }
         if (!StringUtils.isEmpty(loanProject.getTag()) && loanProject.getTag().split(",").length > 3) {
             String[] tags = loanProject.getTag().split(",");
-            String tag = tags[0]+","+tags[1]+","+tags[2];
+            String tag = tags[0] + "," + tags[1] + "," + tags[2];
             loanProject.setTag(tag);
         }
         model.addAttribute("minDeadline", deadline[0]);
@@ -73,6 +77,14 @@ public class WebProjectController {
     @RequestMapping("/loanProcess")
     public String loanProcess(Model model) {
         List<LoanProject> hotProject = projectService.getHotProject();
+        hotProject.forEach(p -> {
+            if (!StringUtils.isEmpty(p.getLogo())) {
+                try {
+                    p.setLogo(staticResourceService.get(p.getLogo()).toString());
+                } catch (URISyntaxException e) {
+                }
+            }
+        });
         model.addAttribute("hotProject", hotProject);
         return "forend/loanProgress";
     }

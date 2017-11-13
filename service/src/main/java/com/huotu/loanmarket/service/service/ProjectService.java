@@ -68,4 +68,12 @@ public interface ProjectService extends CrudService<LoanProject, Integer> {
      * @param projectIdsStr
      */
     void setNew(int isNew, String projectIdsStr);
+
+    /**
+     * 根据类目编号查询
+     *
+     * @param tag 类目编号
+     * @return
+     */
+    List<LoanProject> findByTag(int tag);
 }

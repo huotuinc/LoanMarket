@@ -14,60 +14,35 @@
     <link rel="stylesheet" href="../../resource/css/forend/main.css">
 </head>
 <body>
-
-<div class="content">
-    <div class="goods-list search-tools">
-        <div class="bd">
-            <div class="weui-cells search-list">
-                <div class="weui-cell weui-cell_access">
-                    <div class="weui-cell__bd">借款金额</div>
-                    <div class="weui-cell__ft" id="J_amount">500元</div>
-                </div>
-                <div class="weui-cell weui-cell_access">
-                    <div class="weui-cell__bd">借款期限</div>
-                    <div class="weui-cell__ft" id="J_deadline">1个月</div>
-                </div>
+<h2  th:unless="${not #lists.isEmpty(projectList)}">没有产品</h2>
+<div class="goods-list loan-list">
+    <a th:each="project:${projectList}" th:class="'loans '+${project.isHot>0?'loans-recommend ':''}+${project.isNew>0?'loans-new':''}"
+       class="loans loans-recommend" onclick="loanHandle.getProjectDetail(this)"
+       th:attr="projectId=${project.loanId}">
+        <!--/*@thymesVar id="project" type="com.huotu.loanmarket.service.entity.LoanProject"*/-->
+        <div class="loans-flex">
+            <div class="loans-hd">
+                <img th:src="${project.logo}" src="http://iph.href.lu/40x40">
+            </div>
+            <div class="loans-bd">
+                <h3 th:text="${project.name}" class="title">平安i贷款</h3>
+                <p class="interest">
+                        <span><i th:text="${project.deadlineUnit=='0'?'日':'月'}+'利率'"></i>：<b
+                                th:text="${project.interestRate+'%'}">0.05%</b></span>
+                    <span>额度：<b th:text="${project.minMoney+'~'+project.maxMoney}">1000~30000</b>元</span>
+                </p>
             </div>
         </div>
-    </div>
-    <div id="J_resultContainer"></div>
+        <div class="loans-ft">
+            <span th:each="tag:${#strings.arraySplit(project.tag,',')}" th:text="${tag}" style="margin-right: 5px;">最快3分钟下单</span>
+        </div>
+    </a>
 </div>
 </body>
-<template id="J_resultTmp">
-    {{if data.length}}
-    <div class="goods-list loan-list">
-        <p class="search-number">搜索到{{data.length}}个贷款产品</p>
-        {{each data v i}}
-        <a class="loans{{v.isNew? ' loans-new' : ''}}{{v.isHot? ' loans-recommend' : ''}}" href="/forend/project/getDetail?projectId={{v.loanId}}">
-            <div class="loans-flex">
-                <div class="loans-hd">
-                    <img src="{{v.logo}}">
-                </div>
-                <div class="loans-bd">
-                    <h3 class="title">{{v.name}}</h3>
-                    <p class="interest">
-                        <span><i>{{v.deadlineUnit?'日':'月'}}利率</i>：<b>{{v.interestRate}}%</b></span>
-                        <span>额度：<b>{{v.minMoney}}~{{v.maxMoney}}</b>元</span>
-                    </p>
-                </div>
-            </div>
-            <div class="loans-ft">
-                {{each v.tag val key}}
-                <span>{{val}}</span>
-                {{/each}}
-            </div>
-        </a>
-        {{/each}}
-    </div>
-    {{else}}
-    <p class="no-result">没有相关数据</p>
-    {{/if}}
-</template>
 <script src="http://resali.huobanplus.com/cdn/jquery/3.2.1/jquery.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/jquery-weui/1.0.1/jquery-weui.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/game/fastclick.js"></script>
 <script src="../../resource/js/forend/template-web.js"></script>
 <script src="../../resource/js/mock/mock-min.js" th:remove="all"></script>
 <script src="../../resource/js/mock/api.js" th:remove="all"></script>
-<script src="../../resource/js/forend/loanSearch.js"></script>
 </html>

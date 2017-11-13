@@ -127,6 +127,18 @@ public class ProjectServiceImpl extends AbstractCrudService<LoanProject, Integer
         projectRepository.setNew(isNew, projectIds);
     }
 
+    @Override
+    public List<LoanProject> findByTag(int tag) {
+        Specification<LoanProject> specification = (root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            predicates.add(cb.equal(root.get("isDelete").as(Integer.class), 0));
+            String categoryStr = "," + tag + ",";
+            predicates.add(cb.like(root.get("categories").as(String.class), "%" + categoryStr + "%"));
+            return cb.and(predicates.toArray(new Predicate[predicates.size()]));
+        };
+        return projectRepository.findAll(specification);
+    }
+
     private List<Integer> projectIds(String projectIdsStr) {
         String[] projectIdsArray = projectIdsStr.split(",");
         List<Integer> projectIds = new ArrayList<>();
