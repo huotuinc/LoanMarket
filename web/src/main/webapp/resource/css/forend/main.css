@@ -208,11 +208,15 @@ header .tools-bar p {
 .hot-goods .goods .goods-bd .title {
     color: #333;
     font-size: 14px;
+    height: 22px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .hot-goods .goods .goods-bd .interest {
     font-size: 12px;
     color: #888;
+    height: 19px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
