@@ -39,6 +39,14 @@ public class WebProjectController {
     @RequestMapping("/list")
     public String getProjectList(int tag, Model model) {
         List<LoanProject> LoanProjectList = projectService.findByTag(tag);
+        LoanProjectList.forEach(p->{
+            if(!StringUtils.isEmpty(p.getLogo())){
+                try {
+                    p.setLogo(staticResourceService.get(p.getLogo()).toString());
+                } catch (URISyntaxException e) {
+                }
+            }
+        });
         model.addAttribute("projectList", LoanProjectList);
         return "forend/loanList";
     }
