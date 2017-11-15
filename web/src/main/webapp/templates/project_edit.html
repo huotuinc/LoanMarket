@@ -61,6 +61,7 @@
         .badge-info, .label-info {
             background-color: #1c84c6;
         }
+
         .webuploader-pick {
             background: #1a7bb9;
         }
@@ -105,7 +106,8 @@
                                     </div>
                                     <div class="hr-line-dashed "></div>
                                     <div class="form-group ">
-                                        <label class="col-sm-2 control-label">产品名称 <span class="asterisk text-danger">*</span>：</label>
+                                        <label class="col-sm-2 control-label">产品名称 <span
+                                                class="asterisk text-danger">*</span>：</label>
 
                                         <div class="col-sm-10">
                                             <input type="text" class="form-control input-sm" id="name"
@@ -122,9 +124,13 @@
                                         <div class="col-sm-10">
                                             <ul class="list-inline">
                                                 <li>
-                                                    <img src="../resource/img/logo.png" th:src="${@resourceService.get(project.logo).toString()}" id="J_imgLogo"
+                                                    <img src="../resource/img/logo.png"
+                                                         th:src="${@resourceService.get(project.logo).toString()}"
+                                                         id="J_imgLogo"
                                                          class="img-rounded" width="92" height="92"/>
-                                                    <div id="J_uploadFile" style="display: inline-block;vertical-align: bottom">选择文件</div>
+                                                    <div id="J_uploadFile"
+                                                         style="display: inline-block;vertical-align: bottom">选择文件
+                                                    </div>
                                                     <input type="hidden" id="logo" th:value="*{logo}"/>
                                                 </li>
                                             </ul>
@@ -143,7 +149,8 @@
                                     </div>
                                     <div class="hr-line-dashed "></div>
                                     <div class="form-group form-inline">
-                                        <label class="col-sm-2 control-label">放贷金额 <span class="asterisk text-danger">*</span>：</label>
+                                        <label class="col-sm-2 control-label">放贷金额 <span
+                                                class="asterisk text-danger">*</span>：</label>
 
                                         <div class="col-sm-10">
                                             <input type="text" id="enable_money" th:value="*{enableMoney}"
@@ -153,7 +160,8 @@
                                     </div>
                                     <div class="hr-line-dashed "></div>
                                     <div class="form-group form-inline">
-                                        <label class="col-sm-2 control-label">放贷期限 <span class="asterisk text-danger">*</span>：</label>
+                                        <label class="col-sm-2 control-label">放贷期限 <span
+                                                class="asterisk text-danger">*</span>：</label>
 
                                         <div class="col-sm-10">
                                             <input type="text" id="deadline" th:value="*{deadline}"
@@ -169,7 +177,8 @@
                                     </div>
                                     <div class="hr-line-dashed "></div>
                                     <div class="form-group form-inline">
-                                        <label class="col-sm-2 control-label">利率 <span class="asterisk text-danger">*</span>：</label>
+                                        <label class="col-sm-2 control-label">利率 <span
+                                                class="asterisk text-danger">*</span>：</label>
 
                                         <div class="col-sm-10">
                                             <input type="text" id="rate" th:value="*{interestRate}"
@@ -288,8 +297,8 @@
             hdCategories = hdCategories.substring(1, hdCategories.length - 1);
             $.each(hdCategories.split(","), function (o, item) {
                 var categoryName = "";
-                if(item!=""){
-                     categoryName = $("#categoryId").find("option[value=" + item + "]").text();
+                if (item != "") {
+                    categoryName = $("#categoryId").find("option[value=" + item + "]").text();
                 }
                 if (categoryName != null && categoryName != "") {
                     $("#selectedCate").append('<span class="cate-select tooltips" onclick="deleteCate(this)" data-placement="top" data-toggle="tooltip" data-original-title="点击删除" categoryId="' + item + '">'
@@ -303,7 +312,7 @@
         if (hdApplicationMaterials.length > 0) {
             var materialArray = hdApplicationMaterials.split(",");
             $.each(materialArray, function (o, item) {
-                if(item!=""){
+                if (item != "") {
                     $("input[name=applicationMaterial][value=" + item + "]").prop("checked", "checked");
                 }
             });
@@ -329,12 +338,12 @@
 
         $("#save").click(function () {
             var name = $.trim($('#name').val());
-            if(name.length === 0 ) {
+            if (name.length === 0) {
                 hot.tip.error("请输入产品名称");
                 return;
             }
             var logo = $("#logo").val();
-            if(logo.length === 0 ) {
+            if (logo.length === 0) {
                 hot.tip.error("请上传产品LOGO");
                 return;
             }
@@ -345,16 +354,17 @@
                 return;
             }
             var deadline = $("#deadline").val();
-            if (enableMoney == "") {
+            if (deadline == "") {
                 hot.tip.error("请输入放贷期限");
                 return;
             }
-            var deadlineUnit = $("#deadline_unit").val();
-            if(logo.length === 0 ) {
+            var rate = $.trim($("#rate").val());
+            console.log(rate > 0)
+            if (rate.length === 0 || !(rate > 0)) {
                 hot.tip.error("请输入利率");
                 return;
             }
-            var rate = $.trim($("#rate").val());
+            var deadlineUnit = $("#deadline_unit").val();
             var fastestGetTime = $.trim($("#fastest_get_time").val());
             var applicationMaterials = "";
             $("input[name=applicationMaterial]:checked").each(function () {
@@ -384,8 +394,8 @@
                 phone: contactPhone,
                 categories: getSelectedCate(),
                 applyUrl: apply_url,
-                isNew:isNew,
-                isHot:isHot
+                isNew: isNew,
+                isHot: isHot
             };
 
             hot.ajax(requestUrl, requestData, function (apiResult) {
@@ -417,21 +427,21 @@
     }
 
     $('#enable_money').on('beforeItemAdd', function (event) {
-        if(!(/^[1-9]\d*$/.test(event.item))) {
+        if (!(/^[1-9]\d*$/.test(event.item))) {
             event.cancel = true;
             hot.tip.error("输入值不正确");
         }
-        if(Number(event.item) < 100 ) {
+        if (Number(event.item) < 100) {
             event.cancel = true;
             hot.tip.error("输入值不正确");
         }
     });
     $('#deadline').on('beforeItemAdd', function (event) {
-        if(!(/^[1-9]\d*$/.test(event.item))) {
+        if (!(/^[1-9]\d*$/.test(event.item))) {
             event.cancel = true;
             hot.tip.error("输入值不正确");
         }
-        if(Number(event.item) > 365 ) {
+        if (Number(event.item) > 365) {
             event.cancel = true;
             hot.tip.error("输入值不正确");
         }
