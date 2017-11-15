@@ -43,3 +43,10 @@ Mock.mock(/\/api\/authCode/, "post", {
     "resultCode": 200,
     "resultMsg": "OK"
 });
+
+var uploaderImg = Mock.Random.image('228x178', '#50B347', '#FFF', 'Mock.js');
+
+Mock.mock(/\/resource\/upload\/img/, {
+    "id": "filePath",
+    "filePath": uploaderImg
+});

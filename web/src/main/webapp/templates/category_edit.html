@@ -18,6 +18,7 @@
     <link href="http://resali.huobanplus.com/cdn/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
     <link href="http://resali.huobanplus.com/cdn/hotui/css/animate.min.css" rel="stylesheet">
     <link href="http://resali.huobanplus.com/cdn/hotui/css/style.min-1.0.8.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://resali.huobanplus.com/cdn/WebUploader/0.1.6/webuploader.css">
     <style>
 
         #edit_form button {
@@ -32,6 +33,9 @@
 
         .specPanel .input-sm {
             height: 20px;
+        }
+        .webuploader-pick {
+            background: #1a7bb9;
         }
     </style>
 </head>
@@ -78,15 +82,14 @@
 
                                         <div class="col-sm-10">
                                             <ul class="list-inline">
-                                                <li style="position: relative;">
-                                                    <div style="display: none;">
-                                                        <input type="file" id="fileIcon" name="img"/>
-                                                    </div>
-                                                    <img src="" th:src="${@resourceService.get(category.icon).toString()}" id="uploadCategoryIcon"
-                                                         class="m-b img-selected img-rounded" width="92" height="92"/>
+                                                <li>
+                                                    <img src="../resource/img/logo.png" th:src="${@resourceService.get(category.icon).toString()}" id="uploadCategoryIcon"
+                                                         class="img-rounded" width="92" height="92"/>
+                                                    <div id="J_uploadFile" style="display: inline-block;vertical-align: bottom">选择文件</div>
                                                     <input type="hidden" id="categoryIcon" th:value="${category.icon}"/>
                                                 </li>
                                             </ul>
+                                            <span class="help-block m-b-none">支持格式为：.jpg，.png</span>
                                         </div>
                                     </div>
                                     <div class="form-group" style="text-align: center;">
@@ -109,6 +112,9 @@
 <script src="http://resali.huobanplus.com/cdn/layer/3.1.0/layer.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/v2/bootstrap.hot.extra-utils.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/v2/bootstrap.hot.extra-init.js"></script>
+<script src="http://resali.huobanplus.com/cdn/WebUploader/0.1.6/webuploader.min.js"></script>
+<script src="../resource/js/mock/mock-min.js" th:remove="all"></script>
+<script src="../resource/js/mock/api.js" th:remove="all"></script>
 <script src="../resource/js/forend/loanCategory.js" th:src="@{/resource/js/forend/loanCategory.js}"></script>
 </body>
 

@@ -26,25 +26,49 @@ $(function () {
 
     });
 
-
-    /**
-     * 上传icon
-     */
-    $("#uploadCategoryIcon").click(function () {
-        $("#fileIcon").unbind("change").bind("change", fileChangeEvent);
-        $("#fileIcon").click();
+    // 上传图片插件调用
+    var uploader = WebUploader.create({
+        auto: true,
+        swf: 'http://resali.huobanplus.com/cdn/WebUploader/0.1.6/Uploader.swf',
+        server: '/resource/upload/img',
+        pick: {
+            id: '#J_uploadFile',
+            multiple: false,
+            name: 'img'
+        },
+        accept: {
+            title: 'Images',
+            extensions: 'jpg,jpeg,png',
+            mimeTypes: 'image/jpg,image/jpeg,image/png'
+        }
     });
 
-    function fileChangeEvent() {
-        if ($("#fileIcon").val().length > 0) {
-            hot.fileUpload('/resource/upload/img', 'fileIcon', null, function (res) {
-                $("#categoryIcon").val(res.filePath);
-                $("#uploadCategoryIcon").attr("src", res.fileUrl);
-                $("#fileIcon").val("");
-            });
-        }
-    }
+    uploader.on('fileQueued', function (file) {
+        uploader.makeThumb(file, function (error, src) {
+            if (error) {
+                return;
+            }
+            $("#uploadCategoryIcon").attr("src", src);
+        });
+    });
+    uploader.on('uploadSuccess', function (file, response) {
+        $("#categoryIcon").val(response.filePath);
+        hot.tip.success("上传成功");
+        uploader.reset();
+    });
+    uploader.on('uploadError', function () {
+        hot.tip.error("上传失败，重新上传");
+        uploader.reset();
+    });
 
+    uploader.on('error', function (type) {
+        if (type === 'Q_EXCEED_NUM_LIMIT') {
+            hot.tip.error("超出数量限制");
+        }
+        if (type === 'Q_TYPE_DENIED') {
+            hot.tip.error("文件类型不支持");
+        }
+    });
     /**
      * 检查
      * @returns {boolean}

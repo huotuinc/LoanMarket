@@ -23,6 +23,7 @@
 
     <link href="http://resali.huobanplus.com/cdn/hotui/css/animate.min.css" rel="stylesheet">
     <link href="http://resali.huobanplus.com/cdn/hotui/css/style.min-1.0.8.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://resali.huobanplus.com/cdn/WebUploader/0.1.6/webuploader.css">
 
     <!--checkbox-->
     <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css"
@@ -59,6 +60,9 @@
 
         .badge-info, .label-info {
             background-color: #1c84c6;
+        }
+        .webuploader-pick {
+            background: #1a7bb9;
         }
     </style>
 </head>
@@ -114,16 +118,14 @@
 
                                         <div class="col-sm-10">
                                             <ul class="list-inline">
-                                                <li style="position: relative;">
-                                                    <img src=""
-                                                         th:src="${@resourceService.get(project.logo).toString()}"
-                                                         id="img_logo" onclick="javascript:$('#btnFile').click();"
-                                                         class="m-b img-selected img-rounded" width="92" height="92"/>
+                                                <li>
+                                                    <img src="../resource/img/logo.png" th:src="${@resourceService.get(project.logo).toString()}" id="J_imgLogo"
+                                                         class="img-rounded" width="92" height="92"/>
+                                                    <div id="J_uploadFile" style="display: inline-block;vertical-align: bottom">选择文件</div>
                                                     <input type="hidden" id="logo" th:value="*{logo}"/>
-                                                    <input type="file" id="btnFile" onchange="uploadImg()" name="img"
-                                                           style="display: none">
                                                 </li>
                                             </ul>
+                                            <span class="help-block m-b-none">支持格式为：.jpg，.png</span>
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed "></div>
@@ -267,12 +269,14 @@
 
 <!--tagsinput-->
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.js"></script>
-<script th:src="@{/resource/js/plugins/ajaxfileupload.js}" src="../resource/js/plugins/ajaxfileupload.js"></script>
+<script src="http://resali.huobanplus.com/cdn/WebUploader/0.1.6/webuploader.min.js"></script>
+
 <script src="http://resali.huobanplus.com/cdn/hotui/js/v2/bootstrap.hot.extra-utils.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/v2/bootstrap.hot.extra-init.js"></script>
-
+<script src="../resource/js/mock/mock-min.js" th:remove="all"></script>
+<script src="../resource/js/mock/api.js" th:remove="all"></script>
 <script type="text/javascript" th:inline="javascript">
-    var uploadUrl = /*[[@{/resource/upload/img}]]*/ "";
+    var uploadUrl = /*[[@{/resource/upload/img}]]*/ "/resource/upload/img";
     var requestUrl = /*[[@{/project/save}]]*/ "";
 
     $(function () {
@@ -396,13 +400,6 @@
 
     }
 
-    function uploadImg() {
-        hot.fileUpload(uploadUrl, "btnFile", null, function (file) {
-            $("#img_logo").attr("src", file.fileUrl);
-            $("#logo").val(file.filePath);
-        });
-    }
-
     function getSelectedCate() {
         var selectedCategory = ",";
         $(".cate-select").each(function () {
@@ -411,6 +408,50 @@
 
         return selectedCategory;
     }
+
+    // 上传图片插件调用
+    var uploader = WebUploader.create({
+        auto: true,
+        swf: 'http://resali.huobanplus.com/cdn/WebUploader/0.1.6/Uploader.swf',
+        server: uploadUrl,
+        pick: {
+            id: '#J_uploadFile',
+            multiple: false,
+            name: 'img'
+        },
+        accept: {
+            title: 'Images',
+            extensions: 'jpg,jpeg,png',
+            mimeTypes: 'image/jpg,image/jpeg,image/png'
+        }
+    });
+
+    uploader.on('fileQueued', function (file) {
+        uploader.makeThumb(file, function (error, src) {
+            if (error) {
+                return;
+            }
+            $("#J_imgLogo").attr("src", src);
+        });
+    });
+    uploader.on('uploadSuccess', function (file, response) {
+        $("#logo").val(response.filePath);
+        hot.tip.success("上传成功");
+        uploader.reset();
+    });
+    uploader.on('uploadError', function () {
+        hot.tip.error("上传失败，重新上传");
+        uploader.reset();
+    });
+
+    uploader.on('error', function (type) {
+        if (type === 'Q_EXCEED_NUM_LIMIT') {
+            hot.tip.error("超出数量限制");
+        }
+        if (type === 'Q_TYPE_DENIED') {
+            hot.tip.error("文件类型不支持");
+        }
+    });
 
 </script>
 </body>
