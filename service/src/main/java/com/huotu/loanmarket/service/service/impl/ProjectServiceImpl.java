@@ -136,7 +136,8 @@ public class ProjectServiceImpl extends AbstractCrudService<LoanProject, Integer
             predicates.add(cb.like(root.get("categories").as(String.class), "%" + categoryStr + "%"));
             return cb.and(predicates.toArray(new Predicate[predicates.size()]));
         };
-        return projectRepository.findAll(specification);
+        Sort sort = new Sort(Sort.Direction.DESC, "createTime");
+        return projectRepository.findAll(specification,sort);
     }
 
     private List<Integer> projectIds(String projectIdsStr) {

@@ -67,7 +67,7 @@ public class LoanProject {
      * 最快放款时间，单位：天
      */
     @Column(name = "Fastest_GetTime")
-    private int fastestGetTime;
+    private double fastestGetTime;
     /**
      * 申请材料，英文逗号分割
      */

@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -71,21 +72,23 @@ public class ProjectController {
         Page<LoanProject> projectPage = projectService.findAll(pageIndex, SysConstant.BACKEND_DEFALUT_PAGE_SIZE, searchCondition);
 
         projectPage.getContent().forEach(project -> {
-            String[] deadlineArray = project.getDeadline().split(",");
-            project.setMinDeadline(Integer.parseInt(deadlineArray[0]));
-            project.setMaxDeadline(Integer.parseInt(deadlineArray[deadlineArray.length - 1]));
-            switch (project.getDeadlineUnit()) {
-                case 0:
-                    project.setDeadlineUnitDesc("天");
-                    break;
-                case 1:
-                    project.setDeadlineUnitDesc("月");
-                    break;
-                case 2:
-                    project.setDeadlineUnitDesc("年");
-                    break;
-                default:
-                    break;
+            if(!StringUtils.isEmpty(project.getDeadline())){
+                String[] deadlineArray = project.getDeadline().split(",");
+                project.setMinDeadline(Integer.parseInt(deadlineArray[0]));
+                project.setMaxDeadline(Integer.parseInt(deadlineArray[deadlineArray.length - 1]));
+                switch (project.getDeadlineUnit()) {
+                    case 0:
+                        project.setDeadlineUnitDesc("天");
+                        break;
+                    case 1:
+                        project.setDeadlineUnitDesc("月");
+                        break;
+                    case 2:
+                        project.setDeadlineUnitDesc("年");
+                        break;
+                    default:
+                        break;
+                }
             }
         });
 
