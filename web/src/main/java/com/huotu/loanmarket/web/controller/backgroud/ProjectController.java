@@ -72,8 +72,8 @@ public class ProjectController {
         projectPage.getContent().forEach(project -> {
             if(!StringUtils.isEmpty(project.getDeadline())){
                 String[] deadlineArray = project.getDeadline().split(",");
-                project.setMinDeadline(Double.parseDouble(deadlineArray[0]));
-                project.setMaxDeadline(Double.parseDouble(deadlineArray[deadlineArray.length - 1]));
+                project.setMinDeadline(Integer.parseInt(deadlineArray[0]));
+                project.setMaxDeadline(Integer.parseInt(deadlineArray[deadlineArray.length - 1]));
                 switch (project.getDeadlineUnit()) {
                     case 0:
                         project.setDeadlineUnitDesc("天");
@@ -107,8 +107,11 @@ public class ProjectController {
         if (project.getLoanId() == null || project.getLoanId() == 0) {
             project.setCreateTime(new Date());
         }
-        String[] enableMoneyArray = project.getEnableMoney().split(",");
-        project.setMaxMoney(Double.parseDouble(enableMoneyArray[enableMoneyArray.length - 1]));
+        if (!StringUtils.isEmpty(project.getEnableMoney())){
+            String[] enableMoneyArray = project.getEnableMoney().split(",");
+            project.setMaxMoney(Double.parseDouble(enableMoneyArray[enableMoneyArray.length - 1]));
+            project.setMinMoney(Double.parseDouble(enableMoneyArray[0]));
+        }
         projectService.save(project);
         return ApiResult.resultWith(ResultCodeEnum.SUCCESS);
     }

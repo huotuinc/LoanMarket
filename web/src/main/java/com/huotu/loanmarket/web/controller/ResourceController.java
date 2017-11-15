@@ -32,7 +32,7 @@ public class ResourceController {
 
     @RequestMapping("/img")
     @ResponseBody
-    public ApiResult upload(@RequestParam(value = "img", required = false) MultipartFile file) throws IOException, URISyntaxException {
+    public ApiResult upload(@RequestParam(value = "file", required = false) MultipartFile file) throws IOException, URISyntaxException {
         Date now = new Date();
         String fileName = file.getOriginalFilename();
         if (StringUtils.isEmpty(fileName)) {

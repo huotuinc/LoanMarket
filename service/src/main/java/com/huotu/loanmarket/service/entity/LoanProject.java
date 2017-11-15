@@ -135,12 +135,12 @@ public class LoanProject {
      * 最大可贷款期限
      */
     @Column(name = "Max_Deadline")
-    private double maxDeadline;
+    private int maxDeadline;
     /**
      * 最小可贷款期限
      */
     @Transient
-    private double minDeadline;
+    private int minDeadline;
     @Column(name = "Categories")
     private String categories;
 

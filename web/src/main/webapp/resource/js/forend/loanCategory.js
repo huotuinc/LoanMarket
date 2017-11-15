@@ -52,7 +52,7 @@ $(function () {
         });
     });
     uploader.on('uploadSuccess', function (file, response) {
-        $("#categoryIcon").val(response.filePath);
+        $("#categoryIcon").val(response.data.filePath);
         hot.tip.success("上传成功");
         uploader.reset();
     });

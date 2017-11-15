@@ -79,6 +79,8 @@
                                 <!--/*@thymesVar id="project" type="com.huotu.loanmarket.service.entity.LoanProject"*/-->
                                 <div class="panel-body good-edit-failure form-horizontal" th:object="${project}">
                                     <input type="hidden" id="project_id" th:value="*{loanId}"/>
+                                    <input type="hidden" id="isNew" th:value="*{isNew}">
+                                    <input type="hidden" id="isHot" th:value="*{isHot}">
                                     <div class="form-group form-inline">
                                         <label class="col-sm-2 control-label">所属分类：</label>
 
@@ -107,7 +109,8 @@
 
                                         <div class="col-sm-10">
                                             <input type="text" class="form-control input-sm" id="name"
-                                                   th:value="*{name}" placeholder="产品名称"/>
+                                                   th:value="*{name}" placeholder="产品名称" maxlength="20"/>
+                                            <span class="help-block m-b-none">分类名称不要超过20个字符</span>
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed "></div>
@@ -362,6 +365,8 @@
             var contactPhone = $.trim($("#contact_phone").val());
             var applyType = $("#apply_type").val();
             var apply_url = $.trim($("#apply_url").val());
+            var isNew = $.trim($("#isNew").val());
+            var isHot = $.trim($("#isHot").val())
 
             var requestData = {
                 loanId: $("#project_id").val(),
@@ -378,7 +383,9 @@
                 contact: contact,
                 phone: contactPhone,
                 categories: getSelectedCate(),
-                applyUrl: apply_url
+                applyUrl: apply_url,
+                isNew:isNew,
+                isHot:isHot
             };
 
             hot.ajax(requestUrl, requestData, function (apiResult) {
@@ -455,7 +462,7 @@
         });
     });
     uploader.on('uploadSuccess', function (file, response) {
-        $("#logo").val(response.filePath);
+        $("#logo").val(response.data.filePath);
         hot.tip.success("上传成功");
         uploader.reset();
     });
