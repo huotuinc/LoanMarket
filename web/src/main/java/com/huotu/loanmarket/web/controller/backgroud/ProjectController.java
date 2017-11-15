@@ -74,8 +74,8 @@ public class ProjectController {
         projectPage.getContent().forEach(project -> {
             if(!StringUtils.isEmpty(project.getDeadline())){
                 String[] deadlineArray = project.getDeadline().split(",");
-                project.setMinDeadline(Integer.parseInt(deadlineArray[0]));
-                project.setMaxDeadline(Integer.parseInt(deadlineArray[deadlineArray.length - 1]));
+                project.setMinDeadline(Double.parseDouble(deadlineArray[0]));
+                project.setMaxDeadline(Double.parseDouble(deadlineArray[deadlineArray.length - 1]));
                 switch (project.getDeadlineUnit()) {
                     case 0:
                         project.setDeadlineUnitDesc("天");
