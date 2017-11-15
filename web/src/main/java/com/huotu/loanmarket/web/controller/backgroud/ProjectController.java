@@ -56,9 +56,7 @@ public class ProjectController {
         if (project == null) {
             project = new LoanProject();
         }
-
         model.addAttribute("project", project);
-
         return "project_edit";
     }
 
@@ -89,6 +87,8 @@ public class ProjectController {
                     default:
                         break;
                 }
+            }else {
+                project.setDeadlineUnitDesc("天");
             }
         });
 
@@ -101,7 +101,7 @@ public class ProjectController {
         return "project_list";
     }
 
-    @RequestMapping(value = "/edit", method = RequestMethod.POST)
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ResponseBody
     public ApiResult edit(LoanProject project) {
         if (project.getLoanId() == null || project.getLoanId() == 0) {

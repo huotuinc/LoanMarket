@@ -28,9 +28,11 @@
     <link href="http://resali.huobanplus.com/cdn/hotui/css/style.min-1.0.8.css" rel="stylesheet">
 
     <!--checkbox-->
-    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css"
+          rel="stylesheet">
 
-    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css" rel="stylesheet"/>
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css"
+          rel="stylesheet"/>
 
     <style>
 
@@ -83,9 +85,13 @@
                                             <select class="form-control input-sm" id="categoryId">
                                                 <option value="0">请选择</option>
                                                 <!--/*@thymesVar id="categories" type="java.util.List<com.huotu.loanmarket.service.entity.LoanCategory>"*/-->
-                                                <option th:each="category:${categories}" th:value="${category.categoryId}" th:text="${category.name}"></option>
+                                                <option th:each="category:${categories}"
+                                                        th:value="${category.categoryId}"
+                                                        th:text="${category.name}"></option>
                                             </select>
-                                            <button type="button" id="addCate" class="btn btn-white m-b-none m-l-md">添加</button>
+                                            <button type="button" id="addCate" class="btn btn-white m-b-none m-l-md">
+                                                添加
+                                            </button>
                                             <input type="hidden" id="categories" th:value="*{categories}"/>
                                             <br/><br/>
                                             <p class="form-control-static color-notice">
@@ -99,7 +105,8 @@
                                         <label class="col-sm-2 control-label">产品名称:</label>
 
                                         <div class="col-sm-10">
-                                            <input type="text" class="form-control input-sm" id="name" th:value="*{name}" placeholder="产品名称"/>
+                                            <input type="text" class="form-control input-sm" id="name"
+                                                   th:value="*{name}" placeholder="产品名称"/>
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed "></div>
@@ -111,9 +118,13 @@
                                         <div class="col-sm-10">
                                             <ul class="list-inline">
                                                 <li style="position: relative;">
-                                                    <img src="" th:src="${@resourceService.get(project.logo).toString()}" id="img_logo" onclick="javascript:$('#btnFile').click();" class="m-b img-selected img-rounded" width="92" height="92"/>
+                                                    <img src=""
+                                                         th:src="${@resourceService.get(project.logo).toString()}"
+                                                         id="img_logo" onclick="javascript:$('#btnFile').click();"
+                                                         class="m-b img-selected img-rounded" width="92" height="92"/>
                                                     <input type="hidden" id="logo" th:value="*{logo}"/>
-                                                    <input type="file" id="btnFile" onchange="uploadImg()" name="img" style="display: none">
+                                                    <input type="file" id="btnFile" onchange="uploadImg()" name="img"
+                                                           style="display: none">
                                                 </li>
                                             </ul>
                                         </div>
@@ -123,7 +134,9 @@
                                         <label class="col-sm-2 control-label">产品标签:</label>
 
                                         <div class="col-sm-10">
-                                            <input type="text" id="tags" class="form-control input-sm input-tags" th:value="*{tag}" data-role="tagsinput" value="" placeholder="产品标签，按回车键确认">
+                                            <input type="text" id="tags" class="form-control input-sm input-tags"
+                                                   th:value="*{tag}" data-role="tagsinput" value=""
+                                                   placeholder="产品标签，按回车键确认">
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed "></div>
@@ -131,7 +144,8 @@
                                         <label class="col-sm-2 control-label">放贷金额:</label>
 
                                         <div class="col-sm-10">
-                                            <input type="text" id="enable_money" th:value="*{enableMoney}" data-role="tagsinput" value="" placeholder="放贷金额，按回车键确认">
+                                            <input type="text" id="enable_money" th:value="*{enableMoney}"
+                                                   data-role="tagsinput" value="" placeholder="放贷金额，按回车键确认">
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed "></div>
@@ -139,8 +153,10 @@
                                         <label class="col-sm-2 control-label">放贷期限:</label>
 
                                         <div class="col-sm-10">
-                                            <input type="text" id="deadline" th:value="*{deadline}" data-role="tagsinput" value="" placeholder="放贷期限，按回车键确认">
-                                            <select id="deadline_unit" class="form-control input-sm" th:value="*{deadlineUnit}">
+                                            <input type="text" id="deadline" th:value="*{deadline}"
+                                                   data-role="tagsinput" value="" placeholder="放贷期限，按回车键确认">
+                                            <select id="deadline_unit" class="form-control input-sm"
+                                                    th:value="*{deadlineUnit}">
                                                 <option value="0">天</option>
                                                 <option value="1">月</option>
                                                 <option value="2">年</option>
@@ -152,7 +168,8 @@
                                         <label class="col-sm-2 control-label">利率:</label>
 
                                         <div class="col-sm-10">
-                                            <input type="text" id="rate" th:value="*{interestRate}" class="form-control input-sm input-s-sm" placeholder="利率"/> %
+                                            <input type="text" id="rate" th:value="*{interestRate}"
+                                                   class="form-control input-sm input-s-sm" placeholder="利率"/> %
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
@@ -161,7 +178,8 @@
                                         <label class="col-sm-2 control-label">最快放贷时间:</label>
 
                                         <div class="col-sm-10">
-                                            <input type="text" id="fastest_get_time" th:value="*{fastestGetTime}" class="form-control input-sm input-s-sm" placeholder="最快放贷时间"/> 天
+                                            <input type="text" id="fastest_get_time" th:value="*{fastestGetTime}"
+                                                   class="form-control input-sm input-s-sm" placeholder="最快放贷时间"/> 天
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed "></div>
@@ -170,11 +188,17 @@
 
                                         <div class="col-sm-10">
                                             <!--/*@thymesVar id="applicationMaterials" type="com.huotu.loanmarket.common.ienum.ApplicationMaterialEnum[]"*/-->
-                                            <div class="checkbox checkbox-primary" style="padding-left: 8px;" th:each="applicationMaterial:${applicationMaterials}">
-                                                <input type="checkbox" id="tag_0" th:id="${'tag_'+applicationMaterial.code}" name="applicationMaterial" value="" th:value="${applicationMaterial.code}"/>
-                                                <label for="tag_0" th:for="${'tag_'+applicationMaterial.code}" th:text="${applicationMaterial.name}">111</label>
+                                            <div class="checkbox checkbox-primary" style="padding-left: 8px;"
+                                                 th:each="applicationMaterial:${applicationMaterials}">
+                                                <input type="checkbox" id="tag_0"
+                                                       th:id="${'tag_'+applicationMaterial.code}"
+                                                       name="applicationMaterial" value=""
+                                                       th:value="${applicationMaterial.code}"/>
+                                                <label for="tag_0" th:for="${'tag_'+applicationMaterial.code}"
+                                                       th:text="${applicationMaterial.name}">111</label>
                                             </div>
-                                            <input type="hidden" id="applicationMaterials" th:value="*{applicationMaterial}"/>
+                                            <input type="hidden" id="applicationMaterials"
+                                                   th:value="*{applicationMaterial}"/>
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed "></div>
@@ -182,7 +206,8 @@
                                         <label class="col-sm-2 control-label">联系人:</label>
 
                                         <div class="col-sm-10">
-                                            <input type="text" id="contact" th:value="*{contact}" class="form-control input-sm input-s" placeholder="联系人"/>
+                                            <input type="text" id="contact" th:value="*{contact}"
+                                                   class="form-control input-sm input-s" placeholder="联系人"/>
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed "></div>
@@ -190,7 +215,8 @@
                                         <label class="col-sm-2 control-label">联系电话:</label>
 
                                         <div class="col-sm-10">
-                                            <input type="text" id="contact_phone" th:value="*{phone}" class="form-control input-sm input-s" placeholder="联系电话"/>
+                                            <input type="text" id="contact_phone" th:value="*{phone}"
+                                                   class="form-control input-sm input-s" placeholder="联系电话"/>
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed "></div>
@@ -198,7 +224,8 @@
                                         <label class="col-sm-2 control-label">申请类型:</label>
 
                                         <div class="col-sm-10">
-                                            <select id="apply_type" class="form-control input-sm" th:value="*{applyType}">
+                                            <select id="apply_type" class="form-control input-sm"
+                                                    th:value="*{applyType}">
                                                 <option value="0">CPA</option>
                                                 <option value="1">CPS</option>
                                             </select>
@@ -210,7 +237,8 @@
                                         <label class="col-sm-2 control-label">连接url:</label>
 
                                         <div class="col-sm-10">
-                                            <input type="text" id="apply_url" th:value="*{applyUrl}" class="form-control input-sm" placeholder="连接url"/>
+                                            <input type="text" id="apply_url" th:value="*{applyUrl}"
+                                                   class="form-control input-sm" placeholder="连接url"/>
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed "></div>
@@ -257,14 +285,17 @@
 
 <script type="text/javascript" th:inline="javascript">
     var uploadUrl = /*[[@{/resource/upload/img}]]*/ "";
-    var requestUrl = /*[[@{/project/edit}]]*/ "";
+    var requestUrl = /*[[@{/project/save}]]*/ "";
 
     $(function () {
         var hdCategories = $("#categories").val();
         if (hdCategories.length > 0) {
             hdCategories = hdCategories.substring(1, hdCategories.length - 1);
             $.each(hdCategories.split(","), function (o, item) {
-                var categoryName = $("#categoryId").find("option[value=" + item + "]").text();
+                var categoryName = "";
+                if(item!=""){
+                     categoryName = $("#categoryId").find("option[value=" + item + "]").text();
+                }
                 if (categoryName != null && categoryName != "") {
                     $("#selectedCate").append('<span class="cate-select tooltips" onclick="deleteCate(this)" data-placement="top" data-toggle="tooltip" data-original-title="点击删除" categoryId="' + item + '">'
                         + categoryName + '</span>');
@@ -277,7 +308,9 @@
         if (hdApplicationMaterials.length > 0) {
             var materialArray = hdApplicationMaterials.split(",");
             $.each(materialArray, function (o, item) {
-                $("input[name=applicationMaterial][value=" + item + "]").prop("checked", "checked");
+                if(item!=""){
+                    $("input[name=applicationMaterial][value=" + item + "]").prop("checked", "checked");
+                }
             });
         }
 
@@ -304,6 +337,10 @@
             var logo = $("#logo").val();
             var tags = $("#tags").val();
             var enableMoney = $("#enable_money").val();
+            if (enableMoney == "") {
+                hot.tip.error("请输入放贷金额");
+                return;
+            }
             var deadline = $("#deadline").val();
             var deadlineUnit = $("#deadline_unit").val();
             var rate = $.trim($("#rate").val());
