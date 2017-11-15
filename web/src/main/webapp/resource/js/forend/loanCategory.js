@@ -55,6 +55,12 @@ $(function () {
             $("#categoryName").focus();
             return false;
         }
+        console.log($("#categoryName").val().length);
+        if($("#categoryName").val().length > 20) {
+            hot.tip.error("超过限制长度");
+            $("#categoryName").focus();
+            return false;
+        }
         if ($("#categoryIcon").val().length == 0) {
             hot.tip.error("请上传分类图标");
             return false;
