@@ -76,9 +76,9 @@ $(function () {
          */
         var dayInterest = (10000 * interestRate * lineSet) / 10000;
         if(deadlineSet < 1) {
-            res = lineSet + (dayInterest * deadlineSet);
+            res = Number(lineSet) + Number(dayInterest * deadlineSet);
         } else {
-            res = (lineSet / deadlineSet) + dayInterest;
+            res = Number(lineSet / deadlineSet) + Number(dayInterest);
         }
         //保留两位小数，展示到页面
         $('#J_repayment').text(Number(res).toFixed(2) + '元');

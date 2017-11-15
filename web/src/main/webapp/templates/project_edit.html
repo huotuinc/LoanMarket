@@ -145,7 +145,7 @@
                                         <div class="col-sm-10">
                                             <input type="text" id="enable_money" th:value="*{enableMoney}"
                                                    data-role="tagsinput" value="" placeholder="放贷金额，按回车键确认">
-                                            <span class="help-block m-b-none">金额最小为10元</span>
+                                            <span class="help-block m-b-none">金额最小为100元并且为整数</span>
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed "></div>
@@ -409,6 +409,26 @@
         return selectedCategory;
     }
 
+    $('#enable_money').on('beforeItemAdd', function (event) {
+        if(!(/^[1-9]\d*$/.test(event.item))) {
+            event.cancel = true;
+            hot.tip.error("输入值不正确");
+        }
+        if(Number(event.item) < 100 ) {
+            event.cancel = true;
+            hot.tip.error("输入值不正确");
+        }
+    });
+    $('#deadline').on('beforeItemAdd', function (event) {
+        if(!(/^[1-9]\d*$/.test(event.item))) {
+            event.cancel = true;
+            hot.tip.error("输入值不正确");
+        }
+        if(Number(event.item) > 365 ) {
+            event.cancel = true;
+            hot.tip.error("输入值不正确");
+        }
+    });
     // 上传图片插件调用
     var uploader = WebUploader.create({
         auto: true,

@@ -51,12 +51,12 @@
                 <div class="weui-cell__ft" th:text="${minMoney+'元'}">1000元</div>
             </div>
             <div class="weui-cell weui-cell_access" id="J_deadline"
-                 data-deadline="0.5,1.5,2.5,3"
+                 data-deadline="1,2,3"
                  th:data-deadline="${loanProject.deadline}"
                  th:data-unit="${loanProject.deadlineUnit==0?'日':'月'}">
-                <div class="weui-cell__bd">分期期限 <span class="text-small" th:text="${minDeadline+'~'}+${maxDeadline}">0.5~3</span><span class="text-small" th:text="'${loanProject.deadlineUnit==0?'日':'个月'}">日</span>
+                <div class="weui-cell__bd">分期期限 <span class="text-small" th:text="${minDeadline+'~'}+${maxDeadline}">1~3</span><span class="text-small" th:text="'${loanProject.deadlineUnit==0?'日':'个月'}">日</span>
                 </div>
-                <div class="weui-cell__ft"><span th:text="${minDeadline}"></span>0.5<span th:text="'${loanProject.deadlineUnit==0?'日':'个月'}"></span>个月</div>
+                <div class="weui-cell__ft"><span th:text="${minDeadline}"></span>1<span th:text="'${loanProject.deadlineUnit==0?'日':'个月'}"></span>个月</div>
             </div>
         </div>
         <div class="weui-flex loan-calc-info">
@@ -66,7 +66,7 @@
                 <span class="text-small" th:text="'每'+${loanProject.deadlineUnit==0?'日':'月'}+'应还'">每月应还</span>
             </div>
             <div class="weui-flex__item">
-                <p id="J_interestRate" th:text="${loanProject.interestRate+'%'}">0.60%</p>
+                <p id="J_interestRate" th:text="${loanProject.interestRate+'%'}">0.04%</p>
                 <span class="text-small" th:text="'参考'+${loanProject.deadlineUnit==0?'日':'月'}+'利率'">参考日利率</span>
             </div>
             <div class="weui-flex__item">
