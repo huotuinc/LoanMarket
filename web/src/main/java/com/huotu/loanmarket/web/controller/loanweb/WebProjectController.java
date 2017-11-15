@@ -54,13 +54,23 @@ public class WebProjectController {
     @RequestMapping("/getDetail")
     public String getProjectDetail(int projectId, Model model) {
         LoanProject loanProject = projectService.findOne(projectId);
-        String[] deadline = loanProject.getDeadline().split(",");
-        String[] enableMoney = loanProject.getEnableMoney().split(",");
-        String[] materials = loanProject.getApplicationMaterial().split(",");
+        if(!StringUtils.isEmpty(loanProject.getDeadline())){
+            String[] deadline = loanProject.getDeadline().split(",");
+            loanProject.setMinDeadline(Integer.parseInt(deadline[0]));
+            loanProject.setMaxDeadline(Integer.parseInt(deadline[deadline.length-1]));
+        }
+        if(!StringUtils.isEmpty(loanProject.getEnableMoney())){
+            String[] enableMoney = loanProject.getEnableMoney().split(",");
+            loanProject.setMinMoney(Double.parseDouble(enableMoney[0]));
+            loanProject.setMaxMoney(Double.parseDouble(enableMoney[enableMoney.length-1]));
+        }
         List<ApplicationMaterialEnum> materialEnumList = new ArrayList<>();
-        for (int i = 0; i < materials.length; i++) {
-            ApplicationMaterialEnum enumType = EnumHelper.getEnumType(ApplicationMaterialEnum.class, Integer.parseInt(materials[i]));
-            materialEnumList.add(enumType);
+        if(!StringUtils.isEmpty((loanProject.getApplicationMaterial()))){
+            String[] materials = loanProject.getApplicationMaterial().split(",");
+            for (int i = 0; i < materials.length; i++) {
+                ApplicationMaterialEnum enumType = EnumHelper.getEnumType(ApplicationMaterialEnum.class, Integer.parseInt(materials[i]));
+                materialEnumList.add(enumType);
+            }
         }
         if (!StringUtils.isEmpty(loanProject.getLogo())) {
             try {
@@ -73,10 +83,6 @@ public class WebProjectController {
             String tag = tags[0] + "," + tags[1] + "," + tags[2];
             loanProject.setTag(tag);
         }
-        model.addAttribute("minDeadline", deadline[0]);
-        model.addAttribute("maxDeadline", deadline[deadline.length - 1]);
-        model.addAttribute("minMoney", enableMoney[0]);
-        model.addAttribute("maxMoney", enableMoney[enableMoney.length - 1]);
         model.addAttribute("materials", materialEnumList);
         model.addAttribute("loanProject", loanProject);
         return "forend/loanDetail";

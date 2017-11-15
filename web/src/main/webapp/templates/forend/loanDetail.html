@@ -30,12 +30,12 @@
                     <p class="interest">
                         <span><i th:text="${loanProject.deadlineUnit==0?'日':'月'}+'利率'">日利率</i>：<b
                                 th:text="${loanProject.interestRate+'%'}">0.05%</b></span>
-                        <span>额度：<b th:text="${minMoney+'~'+maxMoney}"></b>元</span>
+                        <span>额度：<b th:text="${loanProject.minMoney+'~'+loanProject.maxMoney}"></b>元</span>
                     </p>
                 </div>
             </div>
             <div class="loans-ft">
-                <span th:text="${minMoney+'~'+maxMoney}"
+                <span th:text="${loanProject.minMoney+'~'+loanProject.maxMoney}"
                       style="margin-right: 5px;">最快3分钟下单</span>
             </div>
         </div>
@@ -47,16 +47,16 @@
                  th:data-line="${loanProject.enableMoney}"
                  >
                 <div class="weui-cell__bd">贷款金额 <span class="text-small"
-                                                      th:text="${minMoney+'~'+maxMoney+'元'}">1000~5000元</span></div>
-                <div class="weui-cell__ft" th:text="${minMoney+'元'}">1000元</div>
+                                                      th:text="${loanProject.minMoney+'~'+loanProject.maxMoney+'元'}">1000~5000元</span></div>
+                <div class="weui-cell__ft" th:text="${loanProject.minMoney+'元'}">1000元</div>
             </div>
             <div class="weui-cell weui-cell_access" id="J_deadline"
                  data-deadline="1,2,3"
                  th:data-deadline="${loanProject.deadline}"
                  th:data-unit="${loanProject.deadlineUnit==0?'日':'月'}">
-                <div class="weui-cell__bd">分期期限 <span class="text-small" th:text="${minDeadline+'~'}+${maxDeadline}">1~3</span><span class="text-small" th:text="'${loanProject.deadlineUnit==0?'日':'个月'}">日</span>
+                <div class="weui-cell__bd">分期期限 <span class="text-small" th:text="${loanProject.minDeadline+'~'}+${loanProject.maxDeadline}">1~3</span><span class="text-small" th:text="${loanProject.deadlineUnit==0?'日':'个月'}">日</span>
                 </div>
-                <div class="weui-cell__ft"><span th:text="${minDeadline}"></span>1<span th:text="'${loanProject.deadlineUnit==0?'日':'个月'}"></span>个月</div>
+                <div class="weui-cell__ft"><span th:text="${loanProject.minDeadline}"></span>1<span th:text="${loanProject.deadlineUnit==0 ? '日':'月'}"></span></div>
             </div>
         </div>
         <div class="weui-flex loan-calc-info">
