@@ -197,6 +197,7 @@ header .tools-bar p {
 
 .hot-goods .goods .goods-hd img {
     width: 100%;
+    height: 100%;
 }
 
 .hot-goods .goods .goods-bd {
@@ -243,6 +244,7 @@ header .tools-bar p {
 
 .new-goods .goods .goods-hd img {
     width: 100%;
+    height: 100%;
 }
 
 .new-goods .goods:active {
@@ -256,6 +258,9 @@ header .tools-bar p {
 .new-goods .goods-bd .title {
     color: #333;
     font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .tag-list {
@@ -279,6 +284,7 @@ header .tools-bar p {
 
 .tag-list .tags .tags-hd img {
     width: 100%;
+    height: 100%;
 }
 
 .tag-list .tags:active {
@@ -322,6 +328,7 @@ header .tools-bar p {
 
 .loan-list .loans .loans-flex .loans-hd img {
     width: 100%;
+    height: 100%;
 }
 
 .loan-list .loans .loans-flex .loans-bd {

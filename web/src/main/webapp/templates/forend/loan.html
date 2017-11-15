@@ -41,7 +41,7 @@
                 <div class="loans-bd">
                     <h3 th:text="${project.name}" class="title">平安i贷款</h3>
                     <p class="interest">
-                        <span><i th:text="${project.deadlineUnit=='0'?'日':'月'}+'利率'"></i>：<b
+                        <span><i th:text="${project.deadlineUnit=='0'?'日':'月'}+'利率'">日利率</i>：<b
                                 th:text="${project.interestRate+'%'}">0.05%</b></span>
                         <span>额度：<b th:text="${project.minMoney+'~'+project.maxMoney}">1000~30000</b>元</span>
                     </p>

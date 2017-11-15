@@ -28,7 +28,7 @@
                     <span style="display: none" id="projectId" th:text="${loanProject.loanId}"></span>
                     <h3 th:text="${loanProject.name}" class="title">平安i贷款</h3>
                     <p class="interest">
-                        <span><i th:text="${loanProject.deadlineUnit==0?'日':'月'}+'利率'"></i>：<b
+                        <span><i th:text="${loanProject.deadlineUnit==0?'日':'月'}+'利率'">日利率</i>：<b
                                 th:text="${loanProject.interestRate+'%'}">0.05%</b></span>
                         <span>额度：<b th:text="${minMoney+'~'+maxMoney}"></b>元</span>
                     </p>
@@ -42,16 +42,21 @@
     </div>
     <div class="goods-list loan-calc">
         <div class="weui-cells">
-            <div class="weui-cell weui-cell_access" id="J_line" th:data-line="${loanProject.enableMoney}">
+            <div class="weui-cell weui-cell_access" id="J_line"
+                 data-line="1000,5000"
+                 th:data-line="${loanProject.enableMoney}"
+                 >
                 <div class="weui-cell__bd">贷款金额 <span class="text-small"
                                                       th:text="${minMoney+'~'+maxMoney}">1000~5000元</span></div>
                 <div class="weui-cell__ft" th:text="${minMoney}">1000元</div>
             </div>
-            <div class="weui-cell weui-cell_access" id="J_deadline" th:data-deadline="${loanProject.deadline}"
+            <div class="weui-cell weui-cell_access" id="J_deadline"
+                 data-deadline="0.5,1.5,2.5,3"
+                 th:data-deadline="${loanProject.deadline}"
                  th:data-unit="${loanProject.deadlineUnit==0?'日':'月'}">
-                <div class="weui-cell__bd">分期期限 <span class="text-small" th:text="${minDeadline+'~'}+${maxDeadline}">1~3个月</span>
+                <div class="weui-cell__bd">分期期限 <span class="text-small" th:text="${minDeadline+'~'}+${maxDeadline}">0.5~3天</span>
                 </div>
-                <div class="weui-cell__ft" th:text="${minDeadline}">1个月</div>
+                <div class="weui-cell__ft" th:text="${minDeadline}">0.5个月</div>
             </div>
         </div>
         <div class="weui-flex loan-calc-info">

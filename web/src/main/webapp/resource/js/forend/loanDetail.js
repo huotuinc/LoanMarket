@@ -67,6 +67,7 @@ $(function () {
      * @param deadlineSet 分期期限
      */
     function calc(lineSet, deadlineSet) {
+        var res;
         // 利率
         var interestRate = toPoint($('#J_interestRate').text());
         /**
@@ -74,9 +75,13 @@ $(function () {
          * @type {number}
          */
         var dayInterest = (10000 * interestRate * lineSet) / 10000;
-        var res = (lineSet / deadlineSet) + dayInterest;
+        if(deadlineSet < 1) {
+            res = lineSet + (dayInterest * deadlineSet);
+        } else {
+            res = (lineSet / deadlineSet) + dayInterest;
+        }
         //保留两位小数，展示到页面
-        $('#J_repayment').text(res.toFixed(2) + '元');
+        $('#J_repayment').text(Number(res).toFixed(2) + '元');
 
     }
 
