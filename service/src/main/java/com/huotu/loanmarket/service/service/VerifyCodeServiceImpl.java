@@ -61,7 +61,8 @@ public class VerifyCodeServiceImpl extends AbstractCrudService<LoanVerifyCode, L
             response = response.replace("\n", ",");
             String[] responseArray = response.split(",");
             log.info("发送验证码：end");
-            log.info("sendInfo："+responseArray);
+            log.info("result：" + response);
+            log.info("sendInfo：" + responseArray);
             return Integer.valueOf(responseArray[1]) == 0;
         } catch (Exception e) {
             log.info("发送信息失败---" + e.getMessage());
