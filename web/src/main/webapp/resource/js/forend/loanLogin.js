@@ -17,7 +17,6 @@ $(function () {
         '    </div>';
     var loginUrl = '/forend/verifyCodeCheck';
     var sendAuthCodeUrl = '/forend/verifyCode';
-    var applyCount = '/rest/api/project/applyLog';
     $('.js-needLogin').click(function () {
         var flag1 = true;
         $.ajax("/forend/checkLogin", {
@@ -35,8 +34,6 @@ $(function () {
             }
         );
         if(flag1){
-            var self = $(this);
-            var flag = self.hasClass('js-loginBox');
             $.modal({
                 title: "快速登录",
                 text: loginModal,

@@ -12,7 +12,6 @@ import org.springframework.data.convert.Jsr310Converters;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 /**
  * @author allan
@@ -49,7 +48,6 @@ public class VerifyCodeServiceImpl extends AbstractCrudService<LoanVerifyCode, L
             verifyCode.setSendTime(Jsr310Converters.LocalDateTimeToDateConverter.INSTANCE.convert(now));
             verifyCode.setInvalidTime(Jsr310Converters.LocalDateTimeToDateConverter.INSTANCE.convert(invalidTime));
             repository.save(verifyCode);
-
             return true;
         }
         return false;
@@ -58,40 +56,28 @@ public class VerifyCodeServiceImpl extends AbstractCrudService<LoanVerifyCode, L
     @Override
     public boolean send(String mobile, String message) {
         try {
+            log.info("发送验证码：start");
             String response = HttpSender.batchSend(url, account, pswd, mobile, message, true, null);
             response = response.replace("\n", ",");
             String[] responseArray = response.split(",");
-            if (Integer.valueOf(responseArray[1]) == 0) {
-                return true;
-            }
-
-            return false;
+            log.info("发送验证码：end");
+            log.info("sendInfo："+responseArray);
+            return Integer.valueOf(responseArray[1]) == 0;
         } catch (Exception e) {
             log.info("发送信息失败---" + e.getMessage());
         }
-
         return false;
     }
 
     @Override
     public boolean verifyCode(String mobile, String code) {
         LoanVerifyCode verifyCode = verifyCodeRepository.findByMobile(mobile);
-        if (verifyCode == null) {
-            return false;
-        }
-        Date invalidTime = verifyCode.getInvalidTime();
-
-        return System.currentTimeMillis() <= invalidTime.getTime();
+        return verifyCode != null && verifyCode.getCode().equals(code);
     }
 
     @Override
     public boolean codeCheck(String mobile, String code) {
         LoanVerifyCode verifyCode = verifyCodeRepository.findByMobile(mobile);
-        if (verifyCode == null) {
-            return false;
-        }
-        Date invalidTime = verifyCode.getInvalidTime();
-
-        return (System.currentTimeMillis() - invalidTime.getTime()) < 60000 && verifyCode.getCode().equals(code);
+        return verifyCode != null && verifyCode.getCode().equals(code);
     }
 }

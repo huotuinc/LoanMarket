@@ -299,7 +299,7 @@ public class ApiControllerTest extends ApiTestBase {
                 .param("mobile", mobile)
                 .param("verifyCode", verifyCode))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.resultCode").value(5000));
+                .andExpect(jsonPath("$.resultCode").value(2000));
 
         //验证通过
         mockCode.setInvalidTime(Jsr310Converters.LocalDateTimeToDateConverter.INSTANCE.convert(invalidTime));
