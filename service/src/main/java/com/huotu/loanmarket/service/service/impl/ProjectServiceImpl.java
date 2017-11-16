@@ -104,7 +104,11 @@ public class ProjectServiceImpl extends AbstractCrudService<LoanProject, Integer
             predicates.add(criteriaBuilder.equal(root.get("isHot").as(Integer.class), 1));
             return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
         };
-        return projectRepository.findAll(specification);
+        Sort sort = new Sort(Sort.Direction.DESC, "createTime");
+        Pageable pageable=new PageRequest( 0 , 4 , sort);
+
+        Page<LoanProject> list = projectRepository.findAll(specification , pageable );
+        return list.getContent();
     }
 
     @Override
@@ -115,7 +119,11 @@ public class ProjectServiceImpl extends AbstractCrudService<LoanProject, Integer
             predicates.add(criteriaBuilder.equal(root.get("isNew").as(Integer.class), 1));
             return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
         };
-        return projectRepository.findAll(specification);
+        Sort sort = new Sort(Sort.Direction.DESC, "createTime");
+        Pageable pageable=new PageRequest( 0 , 16 , sort);
+
+        Page<LoanProject> list = projectRepository.findAll(specification , pageable );
+        return list.getContent();
     }
 
     @Override
