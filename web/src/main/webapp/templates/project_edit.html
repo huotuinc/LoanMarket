@@ -168,9 +168,9 @@
                                                    data-role="tagsinput" value="" placeholder="放贷期限，按回车键确认">
                                             <select id="deadline_unit" class="form-control input-sm"
                                                     th:value="*{deadlineUnit}">
-                                                <option value="0">天</option>
-                                                <option value="1">月</option>
-                                                <option value="2">年</option>
+                                                <option value="0" th:selected="*{deadlineUnit==0}">天</option>
+                                                <option value="1" th:selected="*{deadlineUnit==1}">月</option>
+                                                <option value="2" th:selected="*{deadlineUnit==2}">年</option>
                                             </select>
                                             <span class="help-block m-b-none">期限为整数</span>
                                         </div>
