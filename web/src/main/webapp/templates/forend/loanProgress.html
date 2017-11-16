@@ -17,7 +17,7 @@
 <!--/*@thymesVar id="project" type="com.huotu.loanmarket.service.entity.LoanProject"*/-->
 <div class="content">
     <div class="weui-cells entry progress">
-        <a th:each="project:${hotProject}" class="weui-cell weui-cell_access" href="tel:400-812-8018">
+        <a th:each="project:${hotProject}" class="weui-cell weui-cell_access"  th:href="${'tel:'+ project.phone}">
             <div class="weui-cell__hd">
                 <img th:if="not ${#lists.isEmpty(project.logo)}" th:src="${project.logo}" src="../../resource/img/forend/logo@3x.png">
                 <img th:if="${#lists.isEmpty(project.logo)}" src="../../resource/img/forend/logo@3x.png">
