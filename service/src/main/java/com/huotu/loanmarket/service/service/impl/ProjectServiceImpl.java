@@ -86,8 +86,13 @@ public class ProjectServiceImpl extends AbstractCrudService<LoanProject, Integer
 
     @Override
     public List<LoanProject> findAll() {
+        List<Predicate> predicates = new ArrayList<>();
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
-        return this.repository.findAll(sort);
+        Specification<LoanProject> specification = (root, criteriaQuery, criteriaBuilder) -> {
+            predicates.add(criteriaBuilder.equal(root.get("isDelete").as(Integer.class), 0));
+            return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
+        };
+        return this.repository.findAll(specification,sort);
     }
 
 

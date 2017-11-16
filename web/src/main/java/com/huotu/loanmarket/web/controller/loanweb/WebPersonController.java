@@ -21,11 +21,13 @@ public class WebPersonController {
     public String getPersonInfo(Model model){
         String mobile = userService.checkLogin();
         boolean flag = false;
+        LoanUser user = null;
         if(mobile!=null){
-            LoanUser user = userService.checkLogin(mobile);
+             user= userService.checkLogin(mobile);
             model.addAttribute("user",user);
             flag = true;
         }
+        model.addAttribute("user",user);
         model.addAttribute("flag",flag);
         return "forend/user";
     }

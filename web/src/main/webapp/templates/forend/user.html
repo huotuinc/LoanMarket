@@ -18,11 +18,14 @@
 <div class="content">
     <!--TODO 未登录class js-needLogin 已登录移除它-->
     <div class="login-wrap js-loginBox js-needLogin">
-        <div class="login-hd">
+        <div th:if="${#lists.isEmpty(user)}" class="login-hd">
             <img src="http://iph.href.lu/40x40" alt="avatar">
         </div>
-        <div class="login-bd" th:unless="${flag}">
+        <div class="login-bd" th:if="${#lists.isEmpty(user)}">
             <p>未登录</p>
+        </div>
+        <div class="login-bd" th:if="not${#lists.isEmpty(user)}">
+            <p th:text="${user.account}">未登录</p>
         </div>
         <input type="file" id="J_inputFile" class="input-file" accept="image/*">
     </div>

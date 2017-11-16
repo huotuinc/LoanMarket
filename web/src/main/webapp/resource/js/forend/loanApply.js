@@ -18,7 +18,7 @@ $(function () {
     var loginUrl = '/forend/verifyCodeCheck';
     var sendAuthCodeUrl = '/forend/verifyCode';
     var applyCount = '/rest/api/project/applyLog';
-    $('.js-needLogin').click(function () {
+    $('.js-apply').click(function () {
         var flag1 = true;
         $.ajax("/forend/checkLogin", {
                 method: "GET",
@@ -27,6 +27,24 @@ $(function () {
                 success: function (res) {
                     if (res.resultCode == 2000) {
                         flag1 = false;
+                        $.ajax(applyCount, {
+                                method: 'POST',
+                                data: {
+                                    userId: res.data,
+                                    projectId: $("#projectId").html()
+                                },
+                                dataType: 'json',
+                                success: function (res) {
+                                    if (res.resultCode == 2000) {
+                                        return $.toast('申请成功');
+                                    }
+                                    return $.toast('申请失败', 'cancel');
+                                },
+                                error: function () {
+                                    $.toptip("系统错误");
+                                }
+                            }
+                        );
                     }
                 },
                 error: function () {
@@ -68,6 +86,10 @@ $(function () {
                                             $.hideLoading();
                                             if (res.resultCode !== 2000) {
                                                 return $.toast(res.resultMsg, 'cancel');
+                                            }
+                                            self.removeClass('js-needLogin').off('click');
+                                            if (flag) {
+                                                showLogin(self, res.data);
                                             }
                                             $.toast('登录成功');
                                             $.closeModal();
