@@ -217,7 +217,7 @@
                                     </div>
                                     <div class="hr-line-dashed "></div>
                                     <div class="form-group ">
-                                        <label class="col-sm-2 control-label">联系人：</label>
+                                        <label class="col-sm-2 control-label">联系人<span style="color: #ed5565">*</span>：</label>
 
                                         <div class="col-sm-10">
                                             <input type="text" id="contact" th:value="*{contact}"
@@ -371,6 +371,10 @@
             });
             applicationMaterials = applicationMaterials.substring(0, applicationMaterials.length - 1);
             var contact = $.trim($("#contact").val());
+            if(contact.length==0){
+                hot.tip.error("请输入联系人");
+                return;
+            }
             var contactPhone = $.trim($("#contact_phone").val());
             var applyType = $("#apply_type").val();
             var apply_url = $.trim($("#apply_url").val());
