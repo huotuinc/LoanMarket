@@ -34,7 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     @Autowired
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    protected void configure( AuthenticationManagerBuilder auth ) throws Exception {
         auth.inMemoryAuthentication().withUser("administrator")
                 .password("hot!@#$")
                 .roles("ADMIN");

@@ -106,7 +106,7 @@ public class WebIndexController {
         if (!verifyCodeService.codeCheck(mobile, verifyCode)) {
             return ApiResult.resultWith(ResultCodeEnum.SYSTEM_BAD_REQUEST, "验证码不正确或验证码已过期", null);
         }
-        CookieHelper.setCookie(response, "user", mobile, ".loanmarket.51flashmall.com");
+        CookieHelper.setCookie(response, "user", mobile, ".loanmarket.kanhuotu.cn");
         return ApiResult.resultWith(ResultCodeEnum.SUCCESS);
     }
 }
