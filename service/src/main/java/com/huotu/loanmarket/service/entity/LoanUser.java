@@ -19,6 +19,7 @@ public class LoanUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id")
     private Integer userId;
+
     /**
      * 手机号
      */
