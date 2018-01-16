@@ -19,7 +19,7 @@ import java.util.Date;
  * @date 2017-10-27
  */
 @Service
-public class UserServiceImpl extends AbstractCrudService<LoanUser, Integer> implements UserService {
+public class UserServiceImpl extends AbstractCrudService<LoanUser, Long> implements UserService {
 
     private final LoanUserRepository loanUserRepository;
     @Autowired

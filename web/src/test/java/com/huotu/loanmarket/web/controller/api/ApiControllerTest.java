@@ -283,7 +283,7 @@ public class ApiControllerTest extends ApiTestBase {
                 .andExpect(jsonPath("$.resultCode").value(2000))
                 .andExpect(jsonPath("$.data.account").value(mobile));
 
-        LoanUser expectedUser = loanUserRepository.findByAccount(mobile);
+        LoanUser expectedUser = loanUserRepository.findByUserName(mobile);
 
         assertNotNull(expectedUser);
 

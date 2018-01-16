@@ -7,6 +7,6 @@ import com.huotu.loanmarket.service.entity.LoanUser;
  * @author hxh
  * @date 2017-10-27
  */
-public interface UserService extends CrudService<LoanUser, Integer> {
+public interface UserService extends CrudService<LoanUser, Long> {
 
 }
