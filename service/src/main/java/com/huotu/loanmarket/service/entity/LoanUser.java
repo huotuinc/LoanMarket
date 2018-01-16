@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * @author hxh
@@ -13,42 +13,114 @@ import java.util.Date;
 @Getter
 @Setter
 @Entity
-@Table(name = "Loan_User")
+@Table(name = "sl_users")
 public class LoanUser {
+    /**
+     * 用户编号
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Id")
-    private Integer userId;
-
+    @Column(name = "user_id")
+    private Long userId;
     /**
-     * 手机号
+     * 用户名
      */
-    @Column(name = "Account")
-    private String account;
+    @Column(name = "uname", length = 20)
+    private String userName;
+    /**
+     * 密码
+     */
+    @Column(name = "password", length = 32)
+    private String password;
+
     /**
      * 真实姓名
      */
-    @Column(name = "RealName")
+    @Column(name = "realname", length = 50)
     private String realName;
 
     /**
-     * 昵称
+     * 设备号
      */
-    @Column(name = "NickName")
-    private String nickName;
+    @Column(name = "hwid", length = 50)
+    private String equipmentId;
+
     /**
-     * 身份证号
+     * 设备类型
      */
-    @Column(name = "IdCard")
-    private String idCard;
+    @Column(name = "mobile_type")
+    private String mobileType;
+
     /**
-     * 创建时间
+     * os类型
      */
-    @Column(name = "Create_Time")
-    private Date createTime;
+    @Column(name = "os_type")
+    private String osType;
+    /**
+     * os版本
+     */
+    @Column(name = "os_version", length = 20)
+    private String osVersion;
+    /**
+     * 渠道编号
+     */
+    @Column(name = "ttid", length = 30)
+    private String channelId;
+    /**
+     * 删除标志位
+     */
+    @Column(name = "disabled")
+    private boolean disabled;
     /**
      * 是否冻结
      */
-    @Column(name = "IsFreeze")
-    private int isFreeze;
+    @Column(name = "locked")
+    private boolean locked;
+    /**
+     * 注册ip
+     */
+    @Column(name = "reg_ip", length = 16)
+    private String regIp;
+    /**
+     * 注册时间
+     */
+    @Column(name = "reg_time", columnDefinition = "timestamp")
+    private LocalDateTime regTime;
+    /**
+     * 最后登录时间
+     */
+    @Column(name = "last_logintime", columnDefinition = "timestamp")
+    private LocalDateTime lastLoginTime;
+    /**
+     * 最后登录ip
+     */
+    @Column(name = "last_loginip", length = 16)
+    private String lastLoginIp;
+    /**
+     * 登录次数
+     */
+    @Column(name = "login_count")
+    private int loginCount;
+    /**
+     * 备注
+     */
+    @Column(name = "remark", length = 400)
+    private String remark;
+    /**
+     * 备注类型
+     */
+    @Column(name = "remark_type")
+    private int remarkType;
+    /**
+     * 用户token
+     */
+    @Column(name = "user_token", length = 64)
+    private String userToken;
+    /**
+     * 身份证号码
+     */
+    @Column(name = "user_card_no", length = 19)
+    private String userCardNo;
+
+
 }

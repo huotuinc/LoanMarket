@@ -8,7 +8,6 @@ import com.huotu.loanmarket.service.entity.*;
 import com.huotu.loanmarket.service.repository.*;
 import com.huotu.loanmarket.service.service.CategoryService;
 import com.huotu.loanmarket.service.service.ProjectService;
-import com.huotu.loanmarket.service.service.VerifyCodeService;
 import com.huotu.loanmarket.web.base.ApiResult;
 import com.huotu.loanmarket.web.base.ApiTestBase;
 import com.huotu.loanmarket.web.viewmodel.ProjectListViewModel;
@@ -51,11 +50,7 @@ public class ApiControllerTest extends ApiTestBase {
     private List<LoanProject> mockProjects;
     private List<LoanUser> mockUsers;
     @Autowired
-    private LoanEquipmentRepository equipmentRepository;
-    @Autowired
     private LoanUserViewLogRepository viewLogRepository;
-    @Autowired
-    private LoanVerifyCodeRepository verifyCodeRepository;
 
     @Before
     public void mockData() {
@@ -114,8 +109,6 @@ public class ApiControllerTest extends ApiTestBase {
         //几个用户
         for (int i = 0; i < nextIntInSection(5, 10); i++) {
             LoanUser loanUser = new LoanUser();
-            loanUser.setAccount(randomMobile());
-            loanUser.setCreateTime(new Date());
             loanUserRepository.save(loanUser);
         }
         mockUsers = loanUserRepository.findAll(new Sort(Sort.Direction.DESC, "createTime"));
@@ -123,7 +116,6 @@ public class ApiControllerTest extends ApiTestBase {
 
     @Test
     public void InitTest() throws Exception {
-        equipmentRepository.deleteAll();
         String appVersion = UUID.randomUUID().toString().substring(5);
         String osVersion = UUID.randomUUID().toString().substring(5);
         String osType = "IOS";
@@ -144,10 +136,6 @@ public class ApiControllerTest extends ApiTestBase {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.resultCode").value(2000))
                 .andExpect(jsonPath("$.data.userId").value(expectedUser.getUserId()));
-        LoanEquipment equipment = equipmentRepository.findAll().get(0);
-        assertEquals(appVersion, equipment.getAppVersion());
-        assertEquals(osVersion, equipment.getOsVersion());
-        assertEquals(osType, equipment.getOsType());
     }
 
     /**
@@ -286,24 +274,6 @@ public class ApiControllerTest extends ApiTestBase {
 
         int randomCode = nextIntInSection(1000, 9999);
         String verifyCode = String.valueOf(randomCode);
-        //测试验证码
-        LoanVerifyCode mockCode = new LoanVerifyCode();
-        mockCode.setMobile(mobile);
-        mockCode.setCode(verifyCode);
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime invalidTime = now.plusMinutes(10);
-        mockCode.setSendTime(Jsr310Converters.LocalDateTimeToDateConverter.INSTANCE.convert(now));
-        mockCode.setInvalidTime(new Date());
-        verifyCodeRepository.save(mockCode);
-        mockMvc.perform(post(requestUrl + "/user/login")
-                .param("mobile", mobile)
-                .param("verifyCode", verifyCode))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.resultCode").value(2000));
-
-        //验证通过
-        mockCode.setInvalidTime(Jsr310Converters.LocalDateTimeToDateConverter.INSTANCE.convert(invalidTime));
-        verifyCodeRepository.save(mockCode);
 
         //没有用户的情况下
         mockMvc.perform(post(requestUrl + "/user/login")
@@ -316,7 +286,6 @@ public class ApiControllerTest extends ApiTestBase {
         LoanUser expectedUser = loanUserRepository.findByAccount(mobile);
 
         assertNotNull(expectedUser);
-        assertEquals(expectedUser.getAccount(), mobile);
 
         //有用户的情况下
         mockMvc.perform(post(requestUrl + "/user/login")
@@ -327,8 +296,6 @@ public class ApiControllerTest extends ApiTestBase {
                 .andExpect(jsonPath("$.data.account").value(mobile));
     }
 
-    @Autowired
-    private VerifyCodeService verifyCodeService;
 
     @Test
     public void sendVerifyCodeTest() throws Exception {

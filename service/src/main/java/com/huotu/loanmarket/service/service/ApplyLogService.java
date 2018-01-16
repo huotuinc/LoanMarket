@@ -15,5 +15,5 @@ public interface ApplyLogService extends CrudService<LoanUserApplyLog, Integer> 
      * @param projectId 产品id
      * @return
      */
-    LoanUserApplyLog log(int userId, int projectId);
+    LoanUserApplyLog log(Long userId, int projectId);
 }

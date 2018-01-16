@@ -21,7 +21,7 @@ public class ApplyLogImpl extends AbstractCrudService<LoanUserApplyLog, Integer>
     }
 
     @Override
-    public LoanUserApplyLog log(int userId, int projectId) {
+    public LoanUserApplyLog log(Long userId, int projectId) {
         LoanUserApplyLog userApplyLog = new LoanUserApplyLog();
         userApplyLog.setProjectId(projectId);
         userApplyLog.setUserId(userId);

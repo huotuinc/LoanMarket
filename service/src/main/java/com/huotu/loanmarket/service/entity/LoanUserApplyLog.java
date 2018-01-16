@@ -18,12 +18,12 @@ public class LoanUserApplyLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id")
-    private Integer id;
+    private Long id;
     /**
      * 用户编号
      */
     @Column(name = "User_Id")
-    private Integer userId;
+    private Long userId;
     /**
      * 产品编号
      */

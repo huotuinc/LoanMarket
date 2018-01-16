@@ -31,31 +31,4 @@ public class UserServiceImpl extends AbstractCrudService<LoanUser, Integer> impl
         loanUserRepository = repository;
     }
 
-    @Override
-    public LoanUser checkLogin(String mobile) {
-
-        // TODO: 2017-10-26 验证码待测
-        LoanUser user = loanUserRepository.findByAccount(mobile);
-        if (user == null) {
-            user = new LoanUser();
-            user.setAccount(mobile);
-            user.setCreateTime(new Date());
-            this.repository.save(user);
-        }
-        return user;
-    }
-
-    @Override
-    public String checkLogin() {
-        /**从cookie中获取用户信息*/
-        String mobile = null;
-        try {
-            String cartsStr = CookieHelper.getCookieVal(request, "user");
-            if (!StringUtils.isEmpty(cartsStr)) {
-                mobile = URLDecoder.decode(cartsStr, "utf-8");
-            }
-        } catch (UnsupportedEncodingException e) {
-        }
-        return mobile;
-    }
 }

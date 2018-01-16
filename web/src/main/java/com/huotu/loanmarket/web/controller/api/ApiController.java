@@ -17,21 +17,6 @@ import java.io.IOException;
 public interface ApiController {
 
     /**
-     * 初始化：设备信息，用户登录返回用户信息
-     *
-     * @param userId
-     * @param appVersion
-     * @param osType
-     * @param osVersion
-     * @return
-     */
-    @RequestMapping("/user/init")
-    @ResponseBody
-    ApiResult userDetail(int userId, String appVersion,
-                         String osVersion,
-                         String osType);
-
-    /**
      * 分组按条件搜索产品列表
      *
      * @param pageIndex              页码，索引从1开始
@@ -67,17 +52,6 @@ public interface ApiController {
     );
 
     /**
-     * 登录
-     *
-     * @param mobile     手机号
-     * @param verifyCode 验证码
-     * @return
-     */
-    @RequestMapping("/user/login")
-    @ResponseBody
-    ApiResult login(String mobile, String verifyCode);
-
-    /**
      * 记录申请量
      *
      * @param userId    用户id
@@ -86,7 +60,7 @@ public interface ApiController {
      */
     @RequestMapping("/project/applyLog")
     @ResponseBody
-    ApiResult applyLog(int userId, int projectId);
+    ApiResult applyLog(Long userId, int projectId);
 
     /**
      * 获取首页数据（返回最新和最热的产品数据，没有分页）
@@ -96,24 +70,5 @@ public interface ApiController {
     @RequestMapping("/project/index")
     @ResponseBody
     ApiResult projectIndex();
-
-    /**
-     * 发送验证码
-     *
-     * @param mobile
-     * @return
-     * @throws IOException
-     */
-    @RequestMapping("/sendVerifyCode")
-    @ResponseBody
-    ApiResult sendVerifyCode(String mobile) throws IOException;
-
-    /**
-     * 检测app的版本信息
-     * @return
-     */
-    @RequestMapping("/app/checkAppVersion")
-    @ResponseBody
-    ApiResult checkAppVersion(int appVersionCode );
 
 }

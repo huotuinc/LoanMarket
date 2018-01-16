@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * 进行签名校验，/rest/api/**的需要拦截
+ * 只需验证heard中是否有userId，并判断是否存在
  *
  * @author allan
  * @date 26/10/2017
@@ -14,7 +15,10 @@ import javax.servlet.http.HttpServletResponse;
 public class ApiInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        // TODO: 26/10/2017
-        return super.preHandle(request, response, handler);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("utf-8");
+        long userId = request.getIntHeader("userId");
+
+        return true;
     }
 }
