@@ -1,6 +1,7 @@
 package com.huotu.loanmarket.web.config;
 
 import com.huotu.loanmarket.common.utils.StringUtilsExt;
+import com.huotu.loanmarket.web.interceptor.ApiInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -13,6 +14,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -46,6 +48,8 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
 
     @Autowired
     private ApplicationContext applicationContext;
+    @Autowired
+    private ApiInterceptor apiInterceptor;
 
     /**
      * 静态资源设置
@@ -63,6 +67,12 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
     @Override
     public void configureViewResolvers(ViewResolverRegistry registry) {
         registry.viewResolver(backendTemplateResolver());
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        super.addInterceptors(registry);
+        registry.addInterceptor(apiInterceptor).addPathPatterns("/forend/project/**");
     }
 
     /**
@@ -92,34 +102,6 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
         return viewResolver;
     }
 
-//    /**
-//     * html解析器
-//     *
-//     * @return
-//     */
-//    private ViewResolver forendTemplateResolver() {
-//        SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver();
-//        resolver.setPrefix("/templates/forend/");
-//        resolver.setSuffix(".html");
-//        resolver.setApplicationContext(applicationContext);
-//        resolver.setCharacterEncoding(StringUtilsExt.ENCODING_UTF8);
-//        //设置缓存
-//        if (environment.acceptsProfiles("development")) {
-//            resolver.setCacheable(false);
-//        }
-//        resolver.setOrder(2);
-//
-//        SpringTemplateEngine engine = new SpringTemplateEngine();
-//        engine.setTemplateResolver(resolver);
-//
-//        ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
-//        viewResolver.setTemplateEngine(engine);
-//        viewResolver.setOrder(2);
-//        viewResolver.setContentType("text/html;charset=utf-8");
-//        viewResolver.setCharacterEncoding(StringUtilsExt.ENCODING_UTF8);
-//
-//        return viewResolver;
-//    }
 
     /**
      * for upload

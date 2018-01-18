@@ -48,4 +48,8 @@
             </map>
         </property>
     </bean>
+    <!--事务管理器配置 -->
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </bean>
 </beans>

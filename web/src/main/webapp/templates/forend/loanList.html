@@ -14,15 +14,17 @@
     <link rel="stylesheet" href="../../resource/css/forend/main.css">
 </head>
 <body>
-<h2  th:unless="${not #lists.isEmpty(projectList)}">没有产品</h2>
+<h2 th:unless="${not #lists.isEmpty(projectList)}">没有产品</h2>
 <div class="goods-list loan-list">
-    <a th:each="project:${projectList}" th:class="'loans '+${project.isHot>0?'loans-recommend ':''}+${project.isNew>0?'loans-new':''}"
+    <a th:each="project:${projectList}"
+       th:class="'loans '+${project.isHot>0?'loans-recommend ':''}+${project.isNew>0?'loans-new':''}"
        class="loans loans-recommend" onclick="loanHandle.getProjectDetail(this)"
        th:attr="projectId=${project.loanId}">
         <!--/*@thymesVar id="project" type="com.huotu.loanmarket.service.entity.LoanProject"*/-->
         <div class="loans-flex">
             <div class="loans-hd">
-                <img th:if="not ${#lists.isEmpty(project.logo)}" th:src="${project.logo}" src="../../resource/img/forend/logo@3x.png">
+                <img th:if="not ${#lists.isEmpty(project.logo)}" th:src="${project.logo}"
+                     src="../../resource/img/forend/logo@3x.png">
                 <img th:if="${#lists.isEmpty(project.logo)}" src="../../resource/img/forend/logo@3x.png">
             </div>
             <div class="loans-bd">
@@ -34,9 +36,6 @@
                 </p>
             </div>
         </div>
-        <div class="loans-ft">
-            <span th:each="tag:${#strings.arraySplit(project.tag,',')}" th:text="${tag}" style="margin-right: 5px;">最快3分钟下单</span>
-        </div>
     </a>
 </div>
 </body>
@@ -46,4 +45,13 @@
 <script src="../../resource/js/forend/template-web.js"></script>
 <script src="../../resource/js/mock/mock-min.js" th:remove="all"></script>
 <script src="../../resource/js/mock/api.js" th:remove="all"></script>
+<script type="text/javascript">
+    var userId = [[${userId}]];
+    var loanHandle = {
+        getProjectDetail: function (obj) {
+            var projectId = $(obj).attr("projectId");
+            window.location.href = "/forend/project/getDetail?projectId=" + projectId + "&userId=" + userId;
+        }
+    }
+</script>
 </html>

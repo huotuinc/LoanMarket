@@ -45,18 +45,22 @@
             <div class="weui-cell weui-cell_access" id="J_line"
                  data-line="1000,5000"
                  th:data-line="${loanProject.enableMoney}"
-                 >
+            >
                 <div class="weui-cell__bd">贷款金额 <span class="text-small"
-                                                      th:text="${loanProject.minMoney+'~'+loanProject.maxMoney+'元'}">1000~5000元</span></div>
+                                                      th:text="${loanProject.minMoney+'~'+loanProject.maxMoney+'元'}">1000~5000元</span>
+                </div>
                 <div class="weui-cell__ft" th:text="${loanProject.minMoney+'元'}">1000元</div>
             </div>
             <div class="weui-cell weui-cell_access" id="J_deadline"
                  data-deadline="1,2,3"
                  th:data-deadline="${loanProject.deadline}"
                  th:data-unit="${loanProject.deadlineUnit==0?'日':'月'}">
-                <div class="weui-cell__bd">分期期限 <span class="text-small" th:text="${loanProject.minDeadline+'~'}+${loanProject.maxDeadline}">1~3</span><span class="text-small" th:text="${loanProject.deadlineUnit==0?'日':'月'}">日</span>
+                <div class="weui-cell__bd">分期期限 <span class="text-small"
+                                                      th:text="${loanProject.minDeadline+'~'}+${loanProject.maxDeadline}">1~3</span><span
+                        class="text-small" th:text="${loanProject.deadlineUnit==0?'日':'月'}">日</span>
                 </div>
-                <div class="weui-cell__ft"><span th:text="${loanProject.minDeadline}"></span><span th:text="${loanProject.deadlineUnit==0 ? '日':'月'}"></span></div>
+                <div class="weui-cell__ft"><span th:text="${loanProject.minDeadline}"></span><span
+                        th:text="${loanProject.deadlineUnit==0 ? '日':'月'}"></span></div>
             </div>
         </div>
         <div class="weui-flex loan-calc-info">
@@ -86,7 +90,7 @@
     </div>
 </div>
 <div class="footer">
-    <a href="javascript:;" class="apply-btn js-apply">立即申请</a>
+    <a class="apply-btn" th:attr="url=${loanProject.applyUrl}" onclick="loanDetail.getUrl(this)">立即申请</a>
 </div>
 </body>
 <script src="http://resali.huobanplus.com/cdn/jquery/3.2.1/jquery.min.js"></script>
@@ -96,4 +100,13 @@
 <script src="../../resource/js/mock/api.js" th:remove="all"></script>
 <script src="../../resource/js/forend/loanApply.js"></script>
 <script src="../../resource/js/forend/loanDetail.js"></script>
+<script type="text/javascript">
+    var loanDetail = {
+        getUrl:function (obj) {
+            var url = $(obj).attr("url");
+            console.log(url)
+            window.location.href = url;
+        }
+    }
+</script>
 </html>

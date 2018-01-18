@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
+@Cacheable(false)
 @Table(name = "sl_users")
 public class LoanUser {
     /**
