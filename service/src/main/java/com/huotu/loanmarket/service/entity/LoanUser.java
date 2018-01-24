@@ -83,16 +83,6 @@ public class LoanUser {
     @Column(name = "reg_ip", length = 16)
     private String regIp;
     /**
-     * 注册时间
-     */
-    @Column(name = "reg_time", columnDefinition = "timestamp")
-    private LocalDateTime regTime;
-    /**
-     * 最后登录时间
-     */
-    @Column(name = "last_logintime", columnDefinition = "timestamp")
-    private LocalDateTime lastLoginTime;
-    /**
      * 最后登录ip
      */
     @Column(name = "last_loginip", length = 16)
