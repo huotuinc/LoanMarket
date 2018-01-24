@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * 进行签名校验，/rest/api/**的需要拦截
- * 只需验证heard中是否有userId，并判断是否存在
+ * 进行校验，/forend/project/**的需要拦截
+ *
  *
  * @author allan
  * @date 26/10/2017
