@@ -7,7 +7,7 @@
  * 2013-2016. All rights reserved.
  */
 
-package com.huotu.loanmarket.common.ienum;
+package com.huotu.loanmarket.common.enums;
 
 import org.springframework.util.StringUtils;
 

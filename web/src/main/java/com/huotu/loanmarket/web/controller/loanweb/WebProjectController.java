@@ -1,7 +1,7 @@
 package com.huotu.loanmarket.web.controller.loanweb;
 
-import com.huotu.loanmarket.common.ienum.ApplicationMaterialEnum;
-import com.huotu.loanmarket.common.ienum.EnumHelper;
+import com.huotu.loanmarket.common.enums.ApplicationMaterialEnum;
+import com.huotu.loanmarket.common.enums.EnumHelper;
 import com.huotu.loanmarket.service.entity.LoanProject;
 import com.huotu.loanmarket.service.service.ProjectService;
 import com.huotu.loanmarket.web.base.ApiResult;

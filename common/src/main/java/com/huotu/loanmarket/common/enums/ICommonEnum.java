@@ -7,7 +7,7 @@
  * 2013-2015. All rights reserved.
  */
 
-package com.huotu.loanmarket.common.ienum;
+package com.huotu.loanmarket.common.enums;
 
 /**
  * @author liual

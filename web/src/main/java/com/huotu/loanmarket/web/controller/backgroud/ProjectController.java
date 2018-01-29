@@ -10,7 +10,7 @@
 package com.huotu.loanmarket.web.controller.backgroud;
 
 import com.huotu.loanmarket.common.SysConstant;
-import com.huotu.loanmarket.common.ienum.ApplicationMaterialEnum;
+import com.huotu.loanmarket.common.enums.ApplicationMaterialEnum;
 import com.huotu.loanmarket.service.entity.LoanCategory;
 import com.huotu.loanmarket.service.entity.LoanProject;
 import com.huotu.loanmarket.service.searchable.ProjectSearchCondition;

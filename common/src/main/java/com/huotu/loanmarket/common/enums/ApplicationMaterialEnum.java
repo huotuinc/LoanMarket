@@ -1,4 +1,4 @@
-package com.huotu.loanmarket.common.ienum;
+package com.huotu.loanmarket.common.enums;
 
 /**
  * @author allan
