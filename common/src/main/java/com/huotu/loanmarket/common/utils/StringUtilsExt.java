@@ -12,12 +12,14 @@ package com.huotu.loanmarket.common.utils;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * @author allan
@@ -677,4 +679,101 @@ public class StringUtilsExt {
         }
         return date;
     }
+
+    /**
+     * 获取当前网络ip
+     *
+     * @param request
+     * @return
+     */
+    public static String getClientIp(HttpServletRequest request) {
+        String ipAddress = request.getHeader("X-Real-IP");
+        if (ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
+            ipAddress = request.getHeader("Proxy-Client-IP");
+        }
+        if (ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
+            ipAddress = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if (ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
+            ipAddress = request.getRemoteAddr();
+        }
+        //对于通过多个代理的情况，第一个IP为客户端真实IP,多个IP按照','分割
+        if (ipAddress != null && ipAddress.length() > 15) {
+            //"***.***.***.***".length() = 15
+            if (ipAddress.indexOf(",") > 0) {
+                ipAddress = ipAddress.substring(0, ipAddress.indexOf(","));
+            }
+        }
+        return ipAddress;
+    }
+
+    /**
+     * 获取上传待图片地址
+     * @param prefix
+     * @return
+     */
+    public static String getUploadPath(String prefix) {
+        Date now = new Date();
+        return "loanmarket/" + StringUtilsExt.dateFormat(now, "yyyyMMdd") + "/"
+                + StringUtilsExt.dateFormat(now, "yyyyMMddHHmmSS") + "." + prefix;
+    }
+
+    /**
+     * 验证是否是手机号
+     * @param s
+     * @return
+     */
+    public static  boolean validateIsMobile(String s) {
+        return !StringUtils.isEmpty(s) && Pattern.matches("^[1][3,4,5,7,8][0-9]{9}$", s);
+    }
+
+    /**
+     * 安全得到map的值
+     * @param key
+     * @param map
+     * @return
+     */
+    public static String safeGetMapValue(String key, Map<String, String> map) {
+        return safeGetMapValue(key,map,"");
+    }
+
+    /**
+     * 安全得到map的值
+     * @param key
+     * @param map
+     * @param defaultStr
+     * @return
+     */
+    public static String safeGetMapValue(String key, Map<String, String> map,String defaultStr) {
+        if (map.containsKey(key)) {
+            return map.get(key);
+        }
+        return defaultStr;
+    }
+
+    /**
+     * 获取安全手机，手机中间4位打*
+     * @param var
+     * @return
+     */
+    public static  String safeGetMobile(String var){
+        if (RegexUtils.checkMobile(var)){
+            String phoneNumber = var.replaceAll("(\\d{3})\\d{4}(\\d{4})","$1****$2");
+            return phoneNumber;
+        }
+        return var;
+    }
+
+    /**
+     * 获取安全姓名
+     * @param var
+     * @return
+     */
+    public static String safeGetRealName(String var){
+        if (!StringUtils.isEmpty(var)) {
+            return var.substring(0, 1) + "**";
+        }
+        return var;
+    }
+
 }

@@ -10,19 +10,11 @@
 package com.huotu.loanmarket.service.entity.user;
 
 
+import com.huotu.loanmarket.service.enums.UserAuthorizedStatusEnums;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 
@@ -177,6 +169,21 @@ public class User {
      */
     @Column(name = "user_token", length = 64)
     private String userToken;
+
+    /**
+     * 邀请者(即上线)
+     */
+    @Column(name = "inviter_id")
+    private Long inviterId;
+
+
+
+    /**
+     * 认证状态
+     */
+    @Column(name = "auth_status", columnDefinition = "tinyint")
+    private UserAuthorizedStatusEnums authStatus = UserAuthorizedStatusEnums.AUTH_NOT;
+
 
     /**
      * 用户是否是可用状态：

@@ -1,6 +1,9 @@
 package com.huotu.loanmarket.service.service.user;
 
+import com.huotu.loanmarket.service.aop.BusinessSafe;
 import com.huotu.loanmarket.service.entity.user.User;
+import com.huotu.loanmarket.service.exceptions.ErrorMessageException;
+import org.springframework.transaction.annotation.Transactional;
 
 
 /**
@@ -16,4 +19,17 @@ public interface UserService {
      * @return
      */
     User findByMerchantIdAndUserId(Integer merchantId, Long userId);
+
+
+    /**
+     * 用户注册
+     *
+     * @param user
+     * @param verifyCode
+     * @return
+     * @throws ErrorMessageException
+     */
+    @BusinessSafe
+    @Transactional(rollbackFor = Exception.class)
+    User register(User user, String verifyCode) throws ErrorMessageException;
 }
