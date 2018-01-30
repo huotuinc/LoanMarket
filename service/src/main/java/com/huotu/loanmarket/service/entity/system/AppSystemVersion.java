@@ -88,4 +88,10 @@ public class AppSystemVersion {
      */
     @Column(name = "device_type",columnDefinition = "tinyint")
     private DeviceTypeEnum deviceType;
+
+    /**
+     * 包类型，0=变包，1=正常包
+     */
+    @Column(name = "package_type",columnDefinition = "tinyint")
+    private byte packageType=0;
 }
