@@ -677,4 +677,30 @@ public class StringUtilsExt {
         }
         return date;
     }
+
+    /**
+     * 安全得到map的值
+     *
+     * @param key
+     * @param map
+     * @return
+     */
+    public static String safeGetMapValue(String key, Map<String, String> map) {
+        return safeGetMapValue(key, map, "");
+    }
+
+    /**
+     * 安全得到map的值
+     *
+     * @param key
+     * @param map
+     * @param defaultStr
+     * @return
+     */
+    public static String safeGetMapValue(String key, Map<String, String> map, String defaultStr) {
+        if (map.containsKey(key)) {
+            return map.get(key);
+        }
+        return defaultStr;
+    }
 }
