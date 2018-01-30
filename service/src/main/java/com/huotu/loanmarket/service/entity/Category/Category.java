@@ -1,4 +1,4 @@
-package com.huotu.loanmarket.service.entity.Category;
+package com.huotu.loanmarket.service.entity.category;
 
 import lombok.Getter;
 import lombok.Setter;

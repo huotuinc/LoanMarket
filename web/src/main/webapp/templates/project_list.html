@@ -39,7 +39,7 @@
 <body class="gray-bg">
 <div class="wrapper wrapper-content animated fadeInRight tooltip-demo">
     <!--search-->
-    <!--/*@thymesVar id="searchCondition" type="com.huotu.loanmarket.service.searchable.ProjectSearchCondition"*/-->
+    <!--/*@thymesVar id="searchCondition" type="com.huotu.loanmarket.service.model.projectsearch.ProjectSearchCondition"*/-->
     <form role="form" id="searchForm" class="search-panel" th:action="@{/project/list}" method="get" th:object="${searchCondition}">
         <input type="hidden" name="pageIndex" th:value="${pageIndex}"/>
         <div class="row">
@@ -55,7 +55,7 @@
                                 <label class="control-label" for="categoryId">产品分类：</label>
                                 <select class="form-control input-sm" name="categoryId" id="categoryId">
                                     <option th:selected="*{categoryId==0}" value="0">--请选择--</option>
-                                    <!--/*@thymesVar id="categories" type="java.util.List<com.huotu.loanmarket.service.entity.Category.Category>"*/-->
+                                    <!--/*@thymesVar id="categories" type="java.util.List<com.huotu.loanmarket.service.entity.category.Category>"*/-->
                                     <option th:each="category:${categories}" th:value="${category.categoryId}" th:text="${category.name}"
                                             th:selected="${category.categoryId}==*{categoryId}"></option>
                                 </select>

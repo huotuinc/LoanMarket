@@ -1,6 +1,6 @@
 package com.huotu.loanmarket.web;
 
-import com.huotu.loanmarket.service.entity.Category.Category;
+import com.huotu.loanmarket.service.entity.category.Category;
 import com.huotu.loanmarket.service.repository.category.CategoryRepository;
 import com.huotu.loanmarket.web.config.MvcConfig;
 import com.huotu.loanmarket.web.config.SecurityConfig;

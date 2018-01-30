@@ -88,7 +88,7 @@
                                         <div class="col-sm-10" id="cate_div">
                                             <select class="form-control input-sm" id="categoryId">
                                                 <option value="0">请选择</option>
-                                                <!--/*@thymesVar id="categories" type="java.util.List<com.huotu.loanmarket.service.entity.Category.Category>"*/-->
+                                                <!--/*@thymesVar id="categories" type="java.util.List<com.huotu.loanmarket.service.entity.category.Category>"*/-->
                                                 <option th:each="category:${categories}"
                                                         th:value="${category.categoryId}"
                                                         th:text="${category.name}"></option>
