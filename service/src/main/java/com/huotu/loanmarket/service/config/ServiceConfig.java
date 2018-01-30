@@ -16,6 +16,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableJpaRepositories(
         basePackages = "com.huotu.loanmarket.service.repository"
 )
-@ImportResource({"classpath:service_config_prod.xml", "classpath:service_config_dev.xml"})
+@ImportResource({"classpath:spring-jpa.xml"})
 public class ServiceConfig {
 }
