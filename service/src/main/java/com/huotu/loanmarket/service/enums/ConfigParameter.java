@@ -1,4 +1,4 @@
-package com.huotu.loanmarket.service.entity.merchant;
+package com.huotu.loanmarket.service.enums;
 
 import com.huotu.loanmarket.common.enums.IMerchantParameterEnum;
 import com.huotu.loanmarket.service.config.MerchantConfigType;
@@ -18,9 +18,9 @@ public interface ConfigParameter {
     @AllArgsConstructor
     @MerchantConfigType(type = MerchantConfigEnum.SESAME)
     enum SesameParameter implements IMerchantParameterEnum {
-        APP_ID("zhima_app_id", "芝麻应用标识"),
-        PRIVATE_KEY("zhima_private_key", "商家私钥"),
-        PUBLIC_KEY("zhima_public_key", "芝麻公钥");
+        API_ID("api_id", "API账号"),
+        API_SECRET("api_secret", "API密钥"),
+        NAME_AND_IDCARDNUM_URL("name_and_idcardnum_url", "身份证号和姓名比对接口");
         private String key;
         private String message;
 
