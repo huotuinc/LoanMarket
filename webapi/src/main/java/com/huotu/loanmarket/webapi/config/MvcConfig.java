@@ -7,7 +7,9 @@
 
 package com.huotu.loanmarket.webapi.config;
 
+import com.huotu.loanmarket.common.utils.ViewResolverUtils;
 import com.huotu.loanmarket.webapi.interceptor.AppInterceptor;
+import com.huotu.loanmarket.webapi.interceptor.AppLoginInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -18,10 +20,8 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.*;
+import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 
 import java.util.Arrays;
 import java.util.List;
@@ -83,17 +83,103 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
         converters.add(converter);
     }
 
+    /**
+     * 默认拦截器
+     *
+     * @return
+     */
     @Bean
     public AppInterceptor appInterceptor() {
         return new AppInterceptor();
     }
 
-
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(appInterceptor())
-                .addPathPatterns("/api/**");
+    /**
+     * 登录拦截器
+     *
+     * @return
+     */
+    @Bean
+    public AppLoginInterceptor appLoginInterceptor() {
+        return new AppLoginInterceptor();
     }
 
 
+    /**
+     * 判断拦截器
+     *
+     * @param registry
+     */
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        //登录拦截
+        this.addLoginAuthInterceptor(registry);
+
+        //签名授权拦截
+        this.addSignatureInterceptor(registry);
+
+    }
+
+    /**
+     * 登录拦截器
+     *
+     * @param registry
+     */
+    private void addLoginAuthInterceptor(InterceptorRegistry registry) {
+        InterceptorRegistration registration = registry.addInterceptor(appLoginInterceptor());
+
+        /**
+         * 以下规则接口，必须进行登录验证
+         */
+        registration.addPathPatterns("/api/user/**");
+
+
+        /**
+         * 以下规则接口，不需要进行登录验证
+         */
+        registration.excludePathPatterns("/api/user/sendVerifyCode")
+                .excludePathPatterns("/api/user/login")
+                .excludePathPatterns("/api/user/register")
+                .excludePathPatterns("/api/user/updatePassword");
+    }
+
+    /**
+     * 签名授权拦截
+     *
+     * @param registry
+     */
+    private void addSignatureInterceptor(InterceptorRegistry registry) {
+        InterceptorRegistration registration = registry.addInterceptor(appLoginInterceptor());
+        /**
+         * 以下规则接口，必须进行签名验证
+         */
+        registration.addPathPatterns("/api/**");
+
+        /**
+         * 以下规则接口，不进行签名验证
+         */
+        registration.excludePathPatterns("/api/sys/test");
+
+    }
+
+
+    /**
+     * 视图显示Resolver
+     *
+     * @param registry
+     */
+    @Override
+    public void configureViewResolvers(ViewResolverRegistry registry) {
+        super.configureViewResolvers(registry);
+        registry.viewResolver(viewResolver());
+    }
+
+    /**
+     * thymeleaf解析
+     *
+     * @return
+     */
+    @Bean
+    public ThymeleafViewResolver viewResolver() {
+        return new ViewResolverUtils().getThymeleafViewResolver(webApplicationContext.getServletContext(), "/views/", environment);
+    }
 }

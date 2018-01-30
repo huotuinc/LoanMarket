@@ -12,6 +12,8 @@ package com.huotu.loanmarket.service.service.system.impl;
 import com.huotu.loanmarket.service.entity.system.AppSystemVersion;
 import com.huotu.loanmarket.service.enums.DeviceTypeEnum;
 import com.huotu.loanmarket.service.service.system.SystemService;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Service;
 
 /**
@@ -19,9 +21,24 @@ import org.springframework.stereotype.Service;
  * @date 29/01/2018
  */
 @Service
-public class SystemSevierImpl implements SystemService {
+public class SystemServiceImpl implements SystemService {
+    private static final Log log = LogFactory.getLog(SystemServiceImpl.class);
     @Override
     public AppSystemVersion checkUpdate(String appVersion, DeviceTypeEnum deviceType) {
+        try {
+//            AppSystemVersion apiVersionVo = appVersionService.findLastOne(deviceType);
+//            if (apiVersionVo == null) {
+//                return null;
+//            }
+//            String newVersion = apiVersionVo.getVersion();
+//            Long nvs = Long.valueOf(newVersion.replace(".", ""));
+//            Long ovs = Long.valueOf(appVersion.replace(".", ""));
+//            if (nvs > ovs) {
+//                return apiVersionVo;
+//            }
+        } catch (Exception ex) {
+            log.error(ex);
+        }
         return null;
     }
 }

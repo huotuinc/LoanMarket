@@ -110,6 +110,11 @@ public class Constant {
     public static final String APP_CHANNELID_KEY = "channelId";
 
     /**
+     *  商户ID
+     */
+    public static final Integer MERCHANT_ID =1;
+
+    /**
      * 默认代理
      */
     public static final String DefaultAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36";
