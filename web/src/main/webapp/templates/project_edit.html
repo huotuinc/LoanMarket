@@ -77,7 +77,7 @@
                     <div class="tabs-container">
                         <div class="tab-content">
                             <div id="tab-1" class="tab-pane active">
-                                <!--/*@thymesVar id="project" type="com.huotu.loanmarket.service.entity.LoanProject"*/-->
+                                <!--/*@thymesVar id="project" type="com.huotu.loanmarket.service.entity.project.Project"*/-->
                                 <div class="panel-body good-edit-failure form-horizontal" th:object="${project}">
                                     <input type="hidden" id="project_id" th:value="*{loanId}"/>
                                     <input type="hidden" id="isNew" th:value="*{isNew}">
@@ -88,7 +88,7 @@
                                         <div class="col-sm-10" id="cate_div">
                                             <select class="form-control input-sm" id="categoryId">
                                                 <option value="0">请选择</option>
-                                                <!--/*@thymesVar id="categories" type="java.util.List<com.huotu.loanmarket.service.entity.LoanCategory>"*/-->
+                                                <!--/*@thymesVar id="categories" type="java.util.List<com.huotu.loanmarket.service.entity.Category.Category>"*/-->
                                                 <option th:each="category:${categories}"
                                                         th:value="${category.categoryId}"
                                                         th:text="${category.name}"></option>

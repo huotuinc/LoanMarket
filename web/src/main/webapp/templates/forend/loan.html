@@ -18,7 +18,7 @@
     <div class="goods-list tag-list">
         <div class="bd clearfix">
             <a th:each="categroy:${categoryList}" class="tags" onclick="loanHandle.getCategory(this)" th:attr="categoryId=${categroy.categoryId}">
-                <!--/*@thymesVar id="categroy" type="com.huotu.loanmarket.service.entity.LoanCategory"*/-->
+                <!--/*@thymesVar id="categroy" type="com.huotu.loanmarket.service.entity.Category.Category"*/-->
                 <div class="tags-hd">
                     <img th:src="${categroy.icon}" src="http://iph.href.lu/40x40">
                 </div>
@@ -32,7 +32,7 @@
         <a th:each="project:${projectList}" th:class="'loans '+${project.isHot>0?'loans-recommend ':''}+${project.isNew>0?'loans-new':''}"
            class="loans loans-recommend" onclick="loanHandle.getProjectDetail(this)"
            th:attr="projectId=${project.loanId}">
-            <!--/*@thymesVar id="project" type="com.huotu.loanmarket.service.entity.LoanProject"*/-->
+            <!--/*@thymesVar id="project" type="com.huotu.loanmarket.service.entity.project.Project"*/-->
             <div class="loans-flex">
                 <div class="loans-hd">
                     <img th:if="not ${#lists.isEmpty(project.logo)}" th:src="${project.logo}" src="../../resource/img/forend/logo@3x.png">

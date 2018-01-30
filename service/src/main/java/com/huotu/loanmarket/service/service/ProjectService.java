@@ -1,7 +1,7 @@
 package com.huotu.loanmarket.service.service;
 
 import com.huotu.loanmarket.service.base.CrudService;
-import com.huotu.loanmarket.service.entity.LoanProject;
+import com.huotu.loanmarket.service.entity.project.Project;
 import com.huotu.loanmarket.service.searchable.ProjectSearchCondition;
 import org.springframework.data.domain.Page;
 
@@ -11,7 +11,7 @@ import java.util.List;
  * @author allan
  * @date 23/10/2017
  */
-public interface ProjectService extends CrudService<LoanProject, Integer> {
+public interface ProjectService extends CrudService<Project, Integer> {
     /**
      * 按条件分组查询
      *
@@ -20,7 +20,7 @@ public interface ProjectService extends CrudService<LoanProject, Integer> {
      * @param searchCondition {@link ProjectSearchCondition}
      * @return
      */
-    Page<LoanProject> findAll(int pageIndex, int pageSize, ProjectSearchCondition searchCondition);
+    Page<Project> findAll(int pageIndex, int pageSize, ProjectSearchCondition searchCondition);
 
     /**
      * 按条件查询
@@ -30,28 +30,28 @@ public interface ProjectService extends CrudService<LoanProject, Integer> {
      * @param deadline
      * @return
      */
-    List<LoanProject> findAll(int categoryId, double amount, int deadline);
+    List<Project> findAll(int categoryId, double amount, int deadline);
 
     /**
      * 查询所有
      *
      * @return
      */
-    List<LoanProject> findAll();
+    List<Project> findAll();
 
     /**
      * 获得最热数据
      *
      * @return
      */
-    List<LoanProject> getHotProject();
+    List<Project> getHotProject();
 
     /**
      * 获得最新数据
      *
      * @return
      */
-    List<LoanProject> getNewProject();
+    List<Project> getNewProject();
 
     /**
      * 设置热卖属性
@@ -75,5 +75,5 @@ public interface ProjectService extends CrudService<LoanProject, Integer> {
      * @param tag 类目编号
      * @return
      */
-    List<LoanProject> findByTag(int tag);
+    List<Project> findByTag(int tag);
 }

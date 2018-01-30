@@ -1,8 +1,8 @@
 package com.huotu.loanmarket.service.service.impl;
 
 import com.huotu.loanmarket.service.base.AbstractCrudService;
-import com.huotu.loanmarket.service.entity.LoanProject;
-import com.huotu.loanmarket.service.repository.LoanProjectRepository;
+import com.huotu.loanmarket.service.entity.project.Project;
+import com.huotu.loanmarket.service.repository.Project.ProjectRepository;
 import com.huotu.loanmarket.service.searchable.ProjectSearchCondition;
 import com.huotu.loanmarket.service.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,19 +24,19 @@ import java.util.List;
  * @date 23/10/2017
  */
 @Service
-public class ProjectServiceImpl extends AbstractCrudService<LoanProject, Integer> implements ProjectService {
+public class ProjectServiceImpl extends AbstractCrudService<Project, Integer> implements ProjectService {
 
-    private final LoanProjectRepository projectRepository;
+    private final ProjectRepository projectRepository;
 
     @Autowired
-    public ProjectServiceImpl(LoanProjectRepository repository) {
+    public ProjectServiceImpl(ProjectRepository repository) {
         super(repository);
         projectRepository = repository;
     }
 
     @Override
-    public Page<LoanProject> findAll(int pageIndex, int pageSize, ProjectSearchCondition searchCondition) {
-        Specification<LoanProject> specification = (root, query, cb) -> {
+    public Page<Project> findAll(int pageIndex, int pageSize, ProjectSearchCondition searchCondition) {
+        Specification<Project> specification = (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
             predicates.add(cb.equal(root.get("isDelete").as(Integer.class), 0));
             if (searchCondition.getIsHot() != -1) {
@@ -70,8 +70,8 @@ public class ProjectServiceImpl extends AbstractCrudService<LoanProject, Integer
     }
 
     @Override
-    public List<LoanProject> findAll(int categoryId, double amount, int deadline) {
-        Specification<LoanProject> specification = (root, query, cb) -> {
+    public List<Project> findAll(int categoryId, double amount, int deadline) {
+        Specification<Project> specification = (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
             predicates.add(cb.equal(root.get("isDelete").as(Integer.class), 0));
             String categoryStr = "," + categoryId + ",";
@@ -85,10 +85,10 @@ public class ProjectServiceImpl extends AbstractCrudService<LoanProject, Integer
     }
 
     @Override
-    public List<LoanProject> findAll() {
+    public List<Project> findAll() {
         List<Predicate> predicates = new ArrayList<>();
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
-        Specification<LoanProject> specification = (root, criteriaQuery, criteriaBuilder) -> {
+        Specification<Project> specification = (root, criteriaQuery, criteriaBuilder) -> {
             predicates.add(criteriaBuilder.equal(root.get("isDelete").as(Integer.class), 0));
             return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
         };
@@ -97,9 +97,9 @@ public class ProjectServiceImpl extends AbstractCrudService<LoanProject, Integer
 
 
     @Override
-    public List<LoanProject> getHotProject() {
+    public List<Project> getHotProject() {
         List<Predicate> predicates = new ArrayList<>();
-        Specification<LoanProject> specification = (root, criteriaQuery, criteriaBuilder) -> {
+        Specification<Project> specification = (root, criteriaQuery, criteriaBuilder) -> {
             predicates.add(criteriaBuilder.equal(root.get("isDelete").as(Integer.class), 0));
             predicates.add(criteriaBuilder.equal(root.get("isHot").as(Integer.class), 1));
             return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
@@ -107,14 +107,14 @@ public class ProjectServiceImpl extends AbstractCrudService<LoanProject, Integer
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
         Pageable pageable=new PageRequest( 0 , 4 , sort);
 
-        Page<LoanProject> list = projectRepository.findAll(specification , pageable );
+        Page<Project> list = projectRepository.findAll(specification , pageable );
         return list.getContent();
     }
 
     @Override
-    public List<LoanProject> getNewProject() {
+    public List<Project> getNewProject() {
         List<Predicate> predicates = new ArrayList<>();
-        Specification<LoanProject> specification = (root, criteriaQuery, criteriaBuilder) -> {
+        Specification<Project> specification = (root, criteriaQuery, criteriaBuilder) -> {
             predicates.add(criteriaBuilder.equal(root.get("isDelete").as(Integer.class), 0));
             predicates.add(criteriaBuilder.equal(root.get("isNew").as(Integer.class), 1));
             return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
@@ -122,7 +122,7 @@ public class ProjectServiceImpl extends AbstractCrudService<LoanProject, Integer
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
         Pageable pageable=new PageRequest( 0 , 16 , sort);
 
-        Page<LoanProject> list = projectRepository.findAll(specification , pageable );
+        Page<Project> list = projectRepository.findAll(specification , pageable );
         return list.getContent();
     }
 
@@ -141,8 +141,8 @@ public class ProjectServiceImpl extends AbstractCrudService<LoanProject, Integer
     }
 
     @Override
-    public List<LoanProject> findByTag(int tag) {
-        Specification<LoanProject> specification = (root, query, cb) -> {
+    public List<Project> findByTag(int tag) {
+        Specification<Project> specification = (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
             predicates.add(cb.equal(root.get("isDelete").as(Integer.class), 0));
             String categoryStr = "," + tag + ",";

@@ -42,7 +42,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <!--/*@thymesVar id="items" type="java.util.List<com.huotu.loanmarket.service.entity.LoanCategory>"*/-->
+                            <!--/*@thymesVar id="items" type="java.util.List<com.huotu.loanmarket.service.entity.Category.Category>"*/-->
                             <tr th:each="item:${items}">
                                 <td th:text="${item.name}"></td>
                                 <td><img src="" th:src="${@resourceService.get(item.icon).toString()}" width="80" height="80"/></td>

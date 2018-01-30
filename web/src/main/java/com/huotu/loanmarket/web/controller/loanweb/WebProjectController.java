@@ -2,7 +2,7 @@ package com.huotu.loanmarket.web.controller.loanweb;
 
 import com.huotu.loanmarket.common.enums.ApplicationMaterialEnum;
 import com.huotu.loanmarket.common.enums.EnumHelper;
-import com.huotu.loanmarket.service.entity.LoanProject;
+import com.huotu.loanmarket.service.entity.project.Project;
 import com.huotu.loanmarket.service.service.ProjectService;
 import com.huotu.loanmarket.web.base.ApiResult;
 import com.huotu.loanmarket.web.base.ResultCodeEnum;
@@ -38,7 +38,7 @@ public class WebProjectController {
 
     @RequestMapping("/list")
     public String getProjectList(int tag, Model model) {
-        List<LoanProject> LoanProjectList = projectService.findByTag(tag);
+        List<Project> LoanProjectList = projectService.findByTag(tag);
         LoanProjectList.forEach(p->{
             if(!StringUtils.isEmpty(p.getLogo())){
                 try {
@@ -53,7 +53,7 @@ public class WebProjectController {
 
     @RequestMapping("/getDetail")
     public String getProjectDetail(int projectId, Model model) {
-        LoanProject loanProject = projectService.findOne(projectId);
+        Project loanProject = projectService.findOne(projectId);
         if(!StringUtils.isEmpty(loanProject.getDeadline())){
             String[] deadline = loanProject.getDeadline().split(",");
             loanProject.setMinDeadline(Integer.parseInt(deadline[0]));
@@ -90,7 +90,7 @@ public class WebProjectController {
 
     @RequestMapping("/loanProcess")
     public String loanProcess(Model model) {
-        List<LoanProject> hotProject = projectService.getHotProject();
+        List<Project> hotProject = projectService.getHotProject();
         hotProject.forEach(p -> {
             if (!StringUtils.isEmpty(p.getLogo())) {
                 try {

@@ -1,7 +1,7 @@
 package com.huotu.loanmarket.web.controller.loanweb;
 
-import com.huotu.loanmarket.service.entity.LoanCategory;
-import com.huotu.loanmarket.service.entity.LoanProject;
+import com.huotu.loanmarket.service.entity.Category.Category;
+import com.huotu.loanmarket.service.entity.project.Project;
 import com.huotu.loanmarket.service.service.CategoryService;
 import com.huotu.loanmarket.service.service.ProjectService;
 import com.huotu.loanmarket.web.service.StaticResourceService;
@@ -30,8 +30,8 @@ public class WebCategoryController {
 
     @RequestMapping("/list")
     public String getCategoryList(Model model) {
-        List<LoanCategory> categoryList = categoryService.findAll();
-        List<LoanProject> projectList = projectService.findAll();
+        List<Category> categoryList = categoryService.findAll();
+        List<Project> projectList = projectService.findAll();
         categoryList.forEach(p -> {
             if (!StringUtils.isEmpty(p.getIcon())) {
                 try {

@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-@Table(name = "sl_app_version")
+@Table(name = "zx_app_version")
 public class AppSystemVersion {
     /**
      * 主键

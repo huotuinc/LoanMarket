@@ -1,6 +1,6 @@
 package com.huotu.loanmarket.web.viewmodel;
 
-import com.huotu.loanmarket.service.entity.LoanProject;
+import com.huotu.loanmarket.service.entity.project.Project;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,9 +20,9 @@ public class ProjectListViewModel {
     private int pageIndex;
     private int totalPage;
     private int pageSize;
-    private List<LoanProject> list;
+    private List<Project> list;
 
-    public void toApiProjectList(Page<LoanProject> projects) {
+    public void toApiProjectList(Page<Project> projects) {
         this.totalRecord = projects.getTotalElements();
         this.pageIndex = projects.getNumber() + 1;
         this.pageSize = projects.getSize();

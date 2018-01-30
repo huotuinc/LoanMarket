@@ -7,7 +7,7 @@
  *   ~ 2017-2020. All rights reserved.
  */
 
-package com.huotu.loanmarket.service.entity;
+package com.huotu.loanmarket.service.entity.project;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -21,9 +21,9 @@ import java.util.Date;
  */
 @Setter
 @Getter
-@Table(name = "Loan_Project")
+@Table(name = "zx_loan_project")
 @Entity
-public class LoanProject {
+public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id")

@@ -1,8 +1,8 @@
 package com.huotu.loanmarket.service.service.impl;
 
 import com.huotu.loanmarket.service.base.AbstractCrudService;
-import com.huotu.loanmarket.service.entity.LoanUserViewLog;
-import com.huotu.loanmarket.service.repository.LoanUserViewLogRepository;
+import com.huotu.loanmarket.service.entity.project.ProjectViewLog;
+import com.huotu.loanmarket.service.repository.Project.ProjectViewLogRepository;
 import com.huotu.loanmarket.service.service.ViewLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,16 +14,16 @@ import java.util.Date;
  * @date 2017-10-27
  */
 @Service
-public class ViewLogServiceImpl extends AbstractCrudService<LoanUserViewLog, Integer> implements ViewLogService {
+public class ViewLogServiceImpl extends AbstractCrudService<ProjectViewLog, Integer> implements ViewLogService {
     
     @Autowired
-    public ViewLogServiceImpl(LoanUserViewLogRepository repository) {
+    public ViewLogServiceImpl(ProjectViewLogRepository repository) {
         super(repository);
     }
 
     @Override
-    public LoanUserViewLog log(int userId, int projectId) {
-        LoanUserViewLog userViewLog = new LoanUserViewLog();
+    public ProjectViewLog log(int userId, int projectId) {
+        ProjectViewLog userViewLog = new ProjectViewLog();
         userViewLog.setProjectId(projectId);
         userViewLog.setUserId(userId);
         userViewLog.setViewTime(new Date());

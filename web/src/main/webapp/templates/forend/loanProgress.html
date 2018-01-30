@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="../../resource/css/forend/main.css">
 </head>
 <body>
-<!--/*@thymesVar id="project" type="com.huotu.loanmarket.service.entity.LoanProject"*/-->
+<!--/*@thymesVar id="project" type="com.huotu.loanmarket.service.entity.project.Project"*/-->
 <div class="content">
     <div class="weui-cells entry progress">
         <a th:each="project:${hotProject}" class="weui-cell weui-cell_access"  th:href="${'tel:'+ project.phone}">

@@ -1,4 +1,4 @@
-package com.huotu.loanmarket.service.entity;
+package com.huotu.loanmarket.service.entity.Category;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -13,8 +13,8 @@ import javax.persistence.*;
 @Setter
 @Getter
 @Entity
-@Table(name = "Loan_Category")
-public class LoanCategory {
+@Table(name = "zx_loan_category")
+public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

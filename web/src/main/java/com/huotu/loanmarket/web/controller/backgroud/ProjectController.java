@@ -11,8 +11,8 @@ package com.huotu.loanmarket.web.controller.backgroud;
 
 import com.huotu.loanmarket.common.SysConstant;
 import com.huotu.loanmarket.common.enums.ApplicationMaterialEnum;
-import com.huotu.loanmarket.service.entity.LoanCategory;
-import com.huotu.loanmarket.service.entity.LoanProject;
+import com.huotu.loanmarket.service.entity.Category.Category;
+import com.huotu.loanmarket.service.entity.project.Project;
 import com.huotu.loanmarket.service.searchable.ProjectSearchCondition;
 import com.huotu.loanmarket.service.service.CategoryService;
 import com.huotu.loanmarket.service.service.ProjectService;
@@ -46,15 +46,15 @@ public class ProjectController {
             Model model
     ) {
         //分类
-        List<LoanCategory> categories = categoryService.findAll();
+        List<Category> categories = categoryService.findAll();
         //申请材料
         ApplicationMaterialEnum[] applicationMaterials = ApplicationMaterialEnum.values();
 
         model.addAttribute("categories", categories);
         model.addAttribute("applicationMaterials", applicationMaterials);
-        LoanProject project = projectService.findOne(projectId);
+        Project project = projectService.findOne(projectId);
         if (project == null) {
-            project = new LoanProject();
+            project = new Project();
         }
         model.addAttribute("project", project);
         return "project_edit";
@@ -66,8 +66,8 @@ public class ProjectController {
             @ModelAttribute(value = "searchCondition") ProjectSearchCondition searchCondition,
             Model model
     ) {
-        List<LoanCategory> categories = categoryService.findAll();
-        Page<LoanProject> projectPage = projectService.findAll(pageIndex, SysConstant.BACKEND_DEFALUT_PAGE_SIZE, searchCondition);
+        List<Category> categories = categoryService.findAll();
+        Page<Project> projectPage = projectService.findAll(pageIndex, SysConstant.BACKEND_DEFALUT_PAGE_SIZE, searchCondition);
 
         projectPage.getContent().forEach(project -> {
             if(!StringUtils.isEmpty(project.getDeadline())){
@@ -103,7 +103,7 @@ public class ProjectController {
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ResponseBody
-    public ApiResult edit(LoanProject project) {
+    public ApiResult edit(Project project) {
         if (project.getLoanId() == null || project.getLoanId() == 0) {
             project.setCreateTime(new Date());
         }
@@ -125,7 +125,7 @@ public class ProjectController {
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
     public ApiResult delete(int projectId) {
-        LoanProject project = projectService.findOne(projectId);
+        Project project = projectService.findOne(projectId);
         project.setIsDelete(1);
         projectService.save(project);
 

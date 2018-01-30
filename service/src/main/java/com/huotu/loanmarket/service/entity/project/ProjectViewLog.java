@@ -1,4 +1,4 @@
-package com.huotu.loanmarket.service.entity;
+package com.huotu.loanmarket.service.entity.project;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,29 +7,24 @@ import javax.persistence.*;
 import java.util.Date;
 
 /**
+ * 产品浏览记录表
+ *
  * @author hxh
  * @date 2017-10-26
  */
 @Getter
 @Setter
 @Entity
-@Table(name = "Loan_User_Apply_Log")
-public class LoanUserApplyLog {
+@Table(name = "zx_project_view_log")
+public class ProjectViewLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id")
-    private Integer id;
-    /**
-     * 用户编号
-     */
+    private Long id;
     @Column(name = "User_Id")
-    private Integer userId;
-    /**
-     * 产品编号
-     */
+    private int userId;
     @Column(name = "Project_Id")
     private int projectId;
-
-    @Column(name = "Apply_Time")
-    private Date applyTime;
+    @Column(name = "View_Time")
+    private Date viewTime;
 }

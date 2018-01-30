@@ -1,13 +1,13 @@
 package com.huotu.loanmarket.service.service;
 
 import com.huotu.loanmarket.service.base.CrudService;
-import com.huotu.loanmarket.service.entity.LoanCategory;
+import com.huotu.loanmarket.service.entity.Category.Category;
 
 import java.util.List;
 
-public interface CategoryService extends CrudService<LoanCategory,Integer>{
+public interface CategoryService extends CrudService<Category,Integer>{
 
 
-    List<LoanCategory> findAll();
+    List<Category> findAll();
 
 }
