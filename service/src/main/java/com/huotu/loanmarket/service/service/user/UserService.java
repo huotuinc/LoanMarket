@@ -2,7 +2,6 @@ package com.huotu.loanmarket.service.service.user;
 
 import com.huotu.loanmarket.service.entity.user.User;
 
-import java.time.LocalDate;
 
 /**
  * @Author hxh
