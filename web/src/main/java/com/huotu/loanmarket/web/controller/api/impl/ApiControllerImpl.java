@@ -1,8 +1,8 @@
 package com.huotu.loanmarket.web.controller.api.impl;
 
 import com.huotu.loanmarket.service.entity.AppVersion;
-import com.huotu.loanmarket.service.entity.LoanCategory;
-import com.huotu.loanmarket.service.entity.LoanProject;
+import com.huotu.loanmarket.service.entity.Category.Category;
+import com.huotu.loanmarket.service.entity.project.Project;
 import com.huotu.loanmarket.service.entity.LoanUser;
 import com.huotu.loanmarket.service.searchable.ProjectSearchCondition;
 import com.huotu.loanmarket.service.service.*;
@@ -76,7 +76,7 @@ public class ApiControllerImpl implements ApiController {
             @RequestParam(required = false, defaultValue = "10") int pageSize,
             ProjectSearchCondition projectSearchCondition
     ) {
-        Page<LoanProject> projectPage = projectService.findAll(pageIndex, pageSize, projectSearchCondition);
+        Page<Project> projectPage = projectService.findAll(pageIndex, pageSize, projectSearchCondition);
 
         ProjectListViewModel projectListViewModel = new ProjectListViewModel();
         projectListViewModel.toApiProjectList(projectPage);
@@ -100,7 +100,7 @@ public class ApiControllerImpl implements ApiController {
     @RequestMapping("/project/categories")
     @ResponseBody
     public ApiResult projectCategory() {
-        List<LoanCategory> categoryList = categoryService.findAll();
+        List<Category> categoryList = categoryService.findAll();
         categoryList.forEach(p -> {
             if (!StringUtils.isEmpty(p.getIcon())) {
                 try {
@@ -120,7 +120,7 @@ public class ApiControllerImpl implements ApiController {
             @RequestParam(required = false, defaultValue = "0") int userId
     ) {
         //获取project
-        LoanProject project = projectService.findOne(projectId);
+        Project project = projectService.findOne(projectId);
         if (!StringUtils.isEmpty(project.getLogo())) {
             try {
                 project.setLogo(staticResourceService.get(project.getLogo()).toString());
@@ -167,8 +167,8 @@ public class ApiControllerImpl implements ApiController {
     @ResponseBody
     public ApiResult projectIndex() {
         ProjectIndexViewModel model = new ProjectIndexViewModel();
-        List<LoanProject> hotList = projectService.getHotProject();
-        List<LoanProject> newList = projectService.getNewProject();
+        List<Project> hotList = projectService.getHotProject();
+        List<Project> newList = projectService.getNewProject();
         hotList.forEach(p -> {
             if (!StringUtils.isEmpty(p.getLogo())) {
                 try {

@@ -1,6 +1,6 @@
 package com.huotu.loanmarket.web.viewmodel;
 
-import com.huotu.loanmarket.service.entity.LoanProject;
+import com.huotu.loanmarket.service.entity.project.Project;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,22 +11,22 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProjectIndexViewModel {
-    List<LoanProject> hotProjectList;
-    List<LoanProject> newProjectList;
+    List<Project> hotProjectList;
+    List<Project> newProjectList;
 
-    public List<LoanProject> getHotProjectList() {
+    public List<Project> getHotProjectList() {
         return hotProjectList;
     }
 
-    public void setHotProjectList(List<LoanProject> hotProjectList) {
+    public void setHotProjectList(List<Project> hotProjectList) {
         this.hotProjectList = hotProjectList;
     }
 
-    public List<LoanProject> getNewProjectList() {
+    public List<Project> getNewProjectList() {
         return newProjectList;
     }
 
-    public void setNewProjectList(List<LoanProject> newProjectList) {
+    public void setNewProjectList(List<Project> newProjectList) {
         this.newProjectList = newProjectList;
     }
 }

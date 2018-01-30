@@ -9,8 +9,8 @@
 
 package com.huotu.loanmarket.web.controller.backgroud;
 
-import com.huotu.loanmarket.service.entity.LoanCategory;
-import com.huotu.loanmarket.service.entity.LoanProject;
+import com.huotu.loanmarket.service.entity.Category.Category;
+import com.huotu.loanmarket.service.entity.project.Project;
 import com.huotu.loanmarket.service.service.CategoryService;
 import com.huotu.loanmarket.service.service.ProjectService;
 import com.huotu.loanmarket.web.base.ApiResult;
@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -40,7 +39,7 @@ public class CategoryController {
 
     @RequestMapping("/list")
     public String list(Model model) {
-        List<LoanCategory> items = categoryService.findAll();
+        List<Category> items = categoryService.findAll();
         model.addAttribute("items", items);
         return "category_list";
     }
@@ -59,15 +58,15 @@ public class CategoryController {
             Model model
     ) {
 
-        LoanCategory category;
+        Category category;
         if (categoryId == 0) {
-            category = new LoanCategory();
+            category = new Category();
         } else {
             category = categoryService.findOne(categoryId);
         }
         model.addAttribute("category", category);
 
-        List<LoanCategory> items = categoryService.findAll();
+        List<Category> items = categoryService.findAll();
 
         items.removeIf(item -> item.getCategoryId().equals(categoryId));
 
@@ -94,12 +93,12 @@ public class CategoryController {
                           @RequestParam(required = false, defaultValue = "0") String categoryParentId
     ) {
 
-        LoanCategory category;
+        Category category;
 
         if (categoryId > 0) {
             category = categoryService.findOne(categoryId);
         } else {
-            category = new LoanCategory();
+            category = new Category();
         }
         category.setName(categoryName);
         category.setIcon(categoryIcon);
@@ -118,11 +117,11 @@ public class CategoryController {
     @ResponseBody
     public ApiResult delete(@RequestParam Integer categoryId) {
 
-        List<LoanProject> projectList = projectService.findAll();
+        List<Project> projectList = projectService.findAll();
 
         boolean flag = false;
 
-        for (LoanProject p :
+        for (Project p :
                 projectList) {
             flag = p.getCategories().contains("," + categoryId + ",");
             if (flag) {

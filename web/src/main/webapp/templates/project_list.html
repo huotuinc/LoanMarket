@@ -55,7 +55,7 @@
                                 <label class="control-label" for="categoryId">产品分类：</label>
                                 <select class="form-control input-sm" name="categoryId" id="categoryId">
                                     <option th:selected="*{categoryId==0}" value="0">--请选择--</option>
-                                    <!--/*@thymesVar id="categories" type="java.util.List<com.huotu.loanmarket.service.entity.LoanCategory>"*/-->
+                                    <!--/*@thymesVar id="categories" type="java.util.List<com.huotu.loanmarket.service.entity.Category.Category>"*/-->
                                     <option th:each="category:${categories}" th:value="${category.categoryId}" th:text="${category.name}"
                                             th:selected="${category.categoryId}==*{categoryId}"></option>
                                 </select>
@@ -104,7 +104,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <!--/*@thymesVar id="projects" type="java.util.List<com.huotu.loanmarket.service.entity.LoanProject>"*/-->
+                            <!--/*@thymesVar id="projects" type="java.util.List<com.huotu.loanmarket.service.entity.project.Project>"*/-->
                             <tr th:each="project:${projects}">
                                 <td>
                                     <div class="checkbox checkbox-primary m-b-none m-t-none">

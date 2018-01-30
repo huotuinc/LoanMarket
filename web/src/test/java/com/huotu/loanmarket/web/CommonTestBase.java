@@ -1,7 +1,7 @@
 package com.huotu.loanmarket.web;
 
-import com.huotu.loanmarket.service.entity.LoanCategory;
-import com.huotu.loanmarket.service.repository.LoanCategoryRepository;
+import com.huotu.loanmarket.service.entity.Category.Category;
+import com.huotu.loanmarket.service.repository.category.CategoryRepository;
 import com.huotu.loanmarket.web.config.MvcConfig;
 import com.huotu.loanmarket.web.config.SecurityConfig;
 import org.junit.runner.RunWith;
@@ -22,10 +22,10 @@ import java.util.UUID;
 @ContextConfiguration(classes = {MvcConfig.class, SecurityConfig.class})
 public class CommonTestBase extends SpringWebTest {
     @Autowired
-    private LoanCategoryRepository loanCategoryRepository;
+    private CategoryRepository loanCategoryRepository;
 
-    protected LoanCategory mockLoanCategory() {
-        LoanCategory loanCategory = new LoanCategory();
+    protected Category mockLoanCategory() {
+        Category loanCategory = new Category();
         loanCategory.setName(UUID.randomUUID().toString());
         loanCategory.setIcon(UUID.randomUUID().toString());
         return loanCategoryRepository.saveAndFlush(loanCategory);

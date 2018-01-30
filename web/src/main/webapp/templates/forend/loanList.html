@@ -19,7 +19,7 @@
     <a th:each="project:${projectList}" th:class="'loans '+${project.isHot>0?'loans-recommend ':''}+${project.isNew>0?'loans-new':''}"
        class="loans loans-recommend" onclick="loanHandle.getProjectDetail(this)"
        th:attr="projectId=${project.loanId}">
-        <!--/*@thymesVar id="project" type="com.huotu.loanmarket.service.entity.LoanProject"*/-->
+        <!--/*@thymesVar id="project" type="com.huotu.loanmarket.service.entity.project.Project"*/-->
         <div class="loans-flex">
             <div class="loans-hd">
                 <img th:if="not ${#lists.isEmpty(project.logo)}" th:src="${project.logo}" src="../../resource/img/forend/logo@3x.png">

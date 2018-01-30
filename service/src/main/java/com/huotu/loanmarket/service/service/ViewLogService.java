@@ -1,13 +1,13 @@
 package com.huotu.loanmarket.service.service;
 
 import com.huotu.loanmarket.service.base.CrudService;
-import com.huotu.loanmarket.service.entity.LoanUserViewLog;
+import com.huotu.loanmarket.service.entity.project.ProjectViewLog;
 
 /**
  * @author hxh
  * @date 2017-10-27
  */
-public interface ViewLogService extends CrudService<LoanUserViewLog, Integer> {
+public interface ViewLogService extends CrudService<ProjectViewLog, Integer> {
     /**
      * 记录一条浏览日志
      *
@@ -15,5 +15,5 @@ public interface ViewLogService extends CrudService<LoanUserViewLog, Integer> {
      * @param projectId 产品id
      * @return
      */
-    LoanUserViewLog log(int userId, int projectId);
+    ProjectViewLog log(int userId, int projectId);
 }

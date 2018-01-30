@@ -1,22 +1,14 @@
 package com.huotu.loanmarket.service.service.impl;
 
 import com.huotu.loanmarket.service.base.AbstractCrudService;
-import com.huotu.loanmarket.service.base.JpaCrudRepository;
 import com.huotu.loanmarket.service.entity.AppVersion;
-import com.huotu.loanmarket.service.entity.LoanCategory;
 import com.huotu.loanmarket.service.repository.AppVersionRepository;
 import com.huotu.loanmarket.service.service.AppVersionService;
-import org.eclipse.persistence.jpa.jpql.parser.TrimExpression;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

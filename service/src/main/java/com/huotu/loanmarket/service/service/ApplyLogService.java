@@ -1,13 +1,13 @@
 package com.huotu.loanmarket.service.service;
 
 import com.huotu.loanmarket.service.base.CrudService;
-import com.huotu.loanmarket.service.entity.LoanUserApplyLog;
+import com.huotu.loanmarket.service.entity.project.ProjectApplyLog;
 
 /**
  * @author hxh
  * @date 2017-10-27
  */
-public interface ApplyLogService extends CrudService<LoanUserApplyLog, Integer> {
+public interface ApplyLogService extends CrudService<ProjectApplyLog, Integer> {
     /**
      * 记录申请量
      *
@@ -15,5 +15,5 @@ public interface ApplyLogService extends CrudService<LoanUserApplyLog, Integer> 
      * @param projectId 产品id
      * @return
      */
-    LoanUserApplyLog log(int userId, int projectId);
+    ProjectApplyLog log(int userId, int projectId);
 }

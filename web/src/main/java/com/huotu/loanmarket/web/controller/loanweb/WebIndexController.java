@@ -2,7 +2,7 @@ package com.huotu.loanmarket.web.controller.loanweb;
 
 import com.huotu.loanmarket.common.SysConstant;
 import com.huotu.loanmarket.common.utils.CookieHelper;
-import com.huotu.loanmarket.service.entity.LoanProject;
+import com.huotu.loanmarket.service.entity.project.Project;
 import com.huotu.loanmarket.service.service.ProjectService;
 import com.huotu.loanmarket.service.service.UserService;
 import com.huotu.loanmarket.service.service.VerifyCodeService;
@@ -39,9 +39,9 @@ public class WebIndexController {
 
     @RequestMapping("/index")
     public String index(Model model) {
-        List<LoanProject> hotProject = projectService.getHotProject();
-        List<LoanProject> newProject = projectService.getNewProject();
-        List<LoanProject> hotModel = new ArrayList<>();
+        List<Project> hotProject = projectService.getHotProject();
+        List<Project> newProject = projectService.getNewProject();
+        List<Project> hotModel = new ArrayList<>();
         hotProject.forEach(p -> {
             if (!StringUtils.isEmpty(p.getLogo())) {
                 try {
