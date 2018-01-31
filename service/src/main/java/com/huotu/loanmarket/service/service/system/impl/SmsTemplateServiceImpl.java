@@ -9,11 +9,14 @@
 
 package com.huotu.loanmarket.service.service.system.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.huotu.loanmarket.common.Constant;
 import com.huotu.loanmarket.common.enums.EnumHelper;
 import com.huotu.loanmarket.common.utils.CompareUtils;
+import com.huotu.loanmarket.common.utils.HttpSender;
 import com.huotu.loanmarket.service.entity.system.SmsTemple;
 import com.huotu.loanmarket.service.entity.user.VerifyCode;
+import com.huotu.loanmarket.service.enums.ConfigParameter;
 import com.huotu.loanmarket.service.enums.SmsTemplateSceneTypeEnum;
 import com.huotu.loanmarket.service.enums.UserResultCode;
 import com.huotu.loanmarket.service.exceptions.ErrorMessageException;
@@ -21,7 +24,7 @@ import com.huotu.loanmarket.service.model.PageListView;
 import com.huotu.loanmarket.service.model.system.SmsTemplateVo;
 import com.huotu.loanmarket.service.repository.system.SmsTemplateRepository;
 import com.huotu.loanmarket.service.repository.system.VerifyCodeRepository;
-import com.huotu.loanmarket.service.repository.user.UserRepository;
+import com.huotu.loanmarket.service.service.merchant.MerchantCfgService;
 import com.huotu.loanmarket.service.service.system.SmsTemplateService;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.logging.Log;
@@ -36,10 +39,12 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.Predicate;
+import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author guomw
@@ -52,13 +57,10 @@ public class SmsTemplateServiceImpl implements SmsTemplateService {
 
     @Autowired
     private VerifyCodeRepository verifyCodeRepository;
-//    @Autowired
-//    private MerchantCfgService merchantCfgService;
+    @Autowired
+    private MerchantCfgService merchantCfgService;
     @Autowired
     private SmsTemplateRepository templateRepository;
-    @Autowired
-    private UserRepository userRepository;
-
     @Autowired
     private Environment env;
 
@@ -113,7 +115,7 @@ public class SmsTemplateServiceImpl implements SmsTemplateService {
      */
     @Override
     public SmsTemple findByMerchantIdAndSceneType(Integer merchantId, SmsTemplateSceneTypeEnum sceneType) {
-        return templateRepository.findByMerchantIdAndSceneType(merchantId, sceneType.getCode());
+        return templateRepository.findBySceneType(sceneType.getCode());
     }
 
     /**
@@ -192,9 +194,9 @@ public class SmsTemplateServiceImpl implements SmsTemplateService {
     /**
      * 发送短信验证码
      *
-     * @param merchantId   商户编号
-     * @param mobile       手机号
-     * @param safecode     安全码
+     * @param merchantId 商户编号
+     * @param mobile     手机号
+     * @param safecode   安全码
      * @return
      * @throws ErrorMessageException
      */
@@ -213,7 +215,7 @@ public class SmsTemplateServiceImpl implements SmsTemplateService {
         String code = RandomStringUtils.randomNumeric(Constant.VERIFY_CODE_LENGTH);
         String message = content.replace("{code}", code).replace("{time}", String.valueOf(Constant.VERIFY_CODE_TIME_LENGTH));
         try {
-            VerifyCode verifyCode = verifyCodeRepository.findByMobileAndMerchantId(mobile, merchantId);
+            VerifyCode verifyCode = verifyCodeRepository.findByMobileAndMerchantId(mobile);
             if (verifyCode != null) {
                 //判断每个手机的发送间隔时间不能低于1分钟
                 if (CompareUtils.compareToDate(verifyCode.getCreateTime(), 60)) {
@@ -243,14 +245,13 @@ public class SmsTemplateServiceImpl implements SmsTemplateService {
     /**
      * 校验短信验证码
      *
-     * @param merchantId 商家编号
      * @param mobile     用户手机号
      * @param verifyCode 验证码
      * @return
      */
     @Override
-    public boolean checkVerifyCode(int merchantId, String mobile, String verifyCode) {
-        VerifyCode code = verifyCodeRepository.findByMobileAndMerchantId(mobile, merchantId);
+    public boolean checkVerifyCode(String mobile, String verifyCode) {
+        VerifyCode code = verifyCodeRepository.findByMobileAndMerchantId(mobile);
         return code != null && !code.isUseStatus() && CompareUtils.compareToDate(code.getCreateTime(), 60 * Constant.VERIFY_CODE_TIME_LENGTH) && code.getVerifyCode().equals(verifyCode);
     }
 
@@ -269,16 +270,16 @@ public class SmsTemplateServiceImpl implements SmsTemplateService {
         }
         try {
             //获取短信接口参数
-//            Map<String, String> configItem = merchantCfgService.getConfigItem(merchantId);
-//            String response = HttpSender.batchSend(configItem.get(ConfigParameter.MessageParameter.URL.getKey()),
-//                    configItem.get(ConfigParameter.MessageParameter.ACCOUNT.getKey()),
-//                    configItem.get(ConfigParameter.MessageParameter.PASSWORD.getKey()), mobile, message);
-//
-//            JSONObject jsonObject = JSONObject.parseObject(response);
-//            boolean result = jsonObject.getBigInteger("code").intValue() == 0;
-//            String msg = MessageFormat.format("手机号码：{0}，结果：{1},发送内容：{2},errorMsg：{3}", mobile, (result ? "发送成功" : "发送失败"),message, jsonObject.getString("errorMsg"));
-//            log.info(msg);
-//            return result;
+            Map<String, String> configItem = merchantCfgService.getConfigItem(merchantId);
+            String response = HttpSender.batchSend(configItem.get(ConfigParameter.MessageParameter.URL.getKey()),
+                    configItem.get(ConfigParameter.MessageParameter.ACCOUNT.getKey()),
+                    configItem.get(ConfigParameter.MessageParameter.PASSWORD.getKey()), mobile, message);
+
+            JSONObject jsonObject = JSONObject.parseObject(response);
+            boolean result = jsonObject.getBigInteger("code").intValue() == 0;
+            String msg = MessageFormat.format("手机号码：{0}，结果：{1},发送内容：{2},errorMsg：{3}", mobile, (result ? "发送成功" : "发送失败"), message, jsonObject.getString("errorMsg"));
+            log.info(msg);
+            return result;
         } catch (Exception e) {
             log.error(mobile + "发送信息失败---" + e.getMessage());
         }

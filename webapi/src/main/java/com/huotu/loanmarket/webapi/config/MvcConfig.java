@@ -34,7 +34,8 @@ import java.util.List;
 @EnableWebMvc
 @ComponentScan({
         "com.huotu.loanmarket.webapi.controller",
-        "com.huotu.loanmarket.service.service"
+        "com.huotu.loanmarket.service.service",
+        "com.huotu.loanmarket.webapi.service"
 })
 public class MvcConfig extends WebMvcConfigurerAdapter {
 

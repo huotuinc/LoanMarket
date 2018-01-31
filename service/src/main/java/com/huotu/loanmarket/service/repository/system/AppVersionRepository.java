@@ -9,28 +9,26 @@
 
 package com.huotu.loanmarket.service.repository.system;
 
-import com.huotu.loanmarket.service.entity.system.SmsTemple;
+import com.huotu.loanmarket.service.entity.system.AppSystemVersion;
+import com.huotu.loanmarket.service.enums.DeviceTypeEnum;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 /**
- *
  * @author guomw
- * @date 2017/12/15
+ * @date 29/11/2017
  */
 @Repository
-public interface SmsTemplateRepository extends JpaRepository<SmsTemple,Integer>,JpaSpecificationExecutor<SmsTemple> {
+public interface AppVersionRepository extends JpaRepository<AppSystemVersion, Long>,JpaSpecificationExecutor<AppSystemVersion> {
 
     /**
-     * 获取短信模板
-     * @param sceneType
+     * 根据版本号，获取数据
+     * @param deviceTypeEnum
+     * @param version
      * @return
      */
-    @Query("select temp from SmsTemple temp where  temp.sceneType=?1")
-    SmsTemple findBySceneType(Integer sceneType);
-
-
-
+    @Query("select v from AppSystemVersion v where v.deviceType=?1 and v.version=?2")
+    AppSystemVersion findByVersion(DeviceTypeEnum deviceTypeEnum,String version);
 }

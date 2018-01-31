@@ -130,14 +130,14 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void setHot(int isHot, String projectIdsStr) {
         List<Integer> projectIds = projectIds(projectIdsStr);
         projectRepository.setHot(isHot, projectIds);
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void setNew(int isNew, String projectIdsStr) {
         List<Integer> projectIds = projectIds(projectIdsStr);
         projectRepository.setNew(isNew, projectIds);
