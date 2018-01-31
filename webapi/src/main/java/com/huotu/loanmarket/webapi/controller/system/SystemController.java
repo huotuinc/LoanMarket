@@ -95,10 +95,10 @@ public class SystemController {
         }
         //包类型
         map.put("packageType", packageTypeEnum.getCode());
-        if (userId != null && userId > 0 && userToken != null && !StringUtils.isEmpty(userToken)) {
+        if (userService.checkLoginToken(Constant.MERCHANT_ID,userId,userToken)) {
             try {
                 User user = userService.findByMerchantIdAndUserId(Constant.MERCHANT_ID, userId);
-                if (user != null && user.getUserToken().equalsIgnoreCase(userToken)) {
+                if (user != null) {
                     UserInfoVo userInfoVo = new UserInfoVo();
                     userInfoVo.setUserId(user.getUserId());
                     userInfoVo.setUserName(user.getUserName());

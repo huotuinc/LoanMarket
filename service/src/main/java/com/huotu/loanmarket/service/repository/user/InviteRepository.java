@@ -31,4 +31,7 @@ public interface InviteRepository extends JpaRepository<Invite,Long>,JpaSpecific
 
     @Query("select i from Invite  i where i.userId=?1")
     Invite findByUserId(Long userId);
+
+
+
 }

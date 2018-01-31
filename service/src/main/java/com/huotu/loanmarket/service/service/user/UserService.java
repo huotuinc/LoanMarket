@@ -1,8 +1,11 @@
 package com.huotu.loanmarket.service.service.user;
 
 import com.huotu.loanmarket.service.aop.BusinessSafe;
+import com.huotu.loanmarket.service.entity.user.Invite;
 import com.huotu.loanmarket.service.entity.user.User;
 import com.huotu.loanmarket.service.exceptions.ErrorMessageException;
+import com.huotu.loanmarket.service.model.PageListView;
+import com.huotu.loanmarket.service.model.user.UserInviteVo;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -68,4 +71,31 @@ public interface UserService {
     @Transactional(rollbackFor = Exception.class)
     boolean updatePassword(String username, String newPassword, String verifyCode) throws ErrorMessageException;
 
+    /**
+     * 检查用户token
+     *
+     * @param merchantId
+     * @param userId
+     * @param userToken
+     * @return
+     */
+    boolean checkLoginToken(int merchantId, long userId, String userToken);
+
+    /**
+     * 获取邀请数
+     * @param userId 用户ID
+     * @param isAuthSuccess 认证是否成功
+     * @return
+     */
+    Long countByMyInvite(Long userId,boolean isAuthSuccess);
+
+    /**
+     * 获取我的邀请列表
+     * @param userId
+     * @param isAuthSuccess
+     * @param pageIndex
+     * @param pageSize
+     * @return
+     */
+    PageListView<UserInviteVo> getMyInviteList(Long userId, boolean isAuthSuccess,int pageIndex,int pageSize);
 }

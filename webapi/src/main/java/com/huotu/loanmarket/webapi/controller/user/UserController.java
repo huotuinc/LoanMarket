@@ -18,8 +18,12 @@ import com.huotu.loanmarket.service.entity.user.User;
 import com.huotu.loanmarket.service.enums.AppCode;
 import com.huotu.loanmarket.service.enums.UserResultCode;
 import com.huotu.loanmarket.service.exceptions.ErrorMessageException;
+import com.huotu.loanmarket.service.model.PageListView;
 import com.huotu.loanmarket.service.model.user.UserInfoVo;
+import com.huotu.loanmarket.service.model.user.UserInviteVo;
 import com.huotu.loanmarket.service.service.user.UserService;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -27,6 +31,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * @author guomw
@@ -36,6 +43,8 @@ import java.time.LocalDateTime;
 @RequestMapping(value = "/api/user", method = RequestMethod.POST)
 public class UserController {
 
+    private static final Log log = LogFactory.getLog(UserController.class);
+
     @Autowired
     private UserService userService;
 
@@ -43,9 +52,9 @@ public class UserController {
      * 根据手机号、密码实现用户登录
      * 密码跟短信验证码二选一 必填
      *
-     * @param username   用户名
-     * @param input      密码(md5)或验证码
-     * @param loginType  登录方式[0:密码登录 1:验证码登录]
+     * @param username  用户名
+     * @param input     密码(md5)或验证码
+     * @param loginType 登录方式[0:密码登录 1:验证码登录]
      * @param request
      * @return
      */
@@ -162,7 +171,7 @@ public class UserController {
     @RequestMapping("/updatePassword")
     @ResponseBody
     public ApiResult updatePassword(String username,
-            String newPassword, String verifyCode) {
+                                    String newPassword, String verifyCode) {
 
         if (!RegexUtils.checkMobile(username)) {
             return ApiResult.resultWith(UserResultCode.CODE1);
@@ -184,9 +193,54 @@ public class UserController {
         }
     }
 
+    /**
+     * 用户中心 (可不登录调用)
+     *
+     * @param userId    用户ID
+     * @param userToken 用户token
+     * @return
+     */
     @RequestMapping("/center")
     @ResponseBody
-    public ApiResult UserCenter(){
-        return  ApiResult.resultWith(AppCode.SUCCESS);
+    public ApiResult userCenter(@RequestHeader(value = Constant.APP_USER_ID_KEY, required = false, defaultValue = "0") Long userId,
+                                @RequestHeader(value = Constant.APP_USER_TOKEN_KEY, required = false, defaultValue = "") String userToken) {
+
+        Long certifiedCount = 0L, unverifiedCount = 0L;
+        if (userService.checkLoginToken(Constant.MERCHANT_ID, userId, userToken)) {
+            try {
+                certifiedCount = userService.countByMyInvite(userId, true);
+                unverifiedCount = userService.countByMyInvite(userId, false);
+            } catch (Exception e) {
+                log.error(e);
+            }
+        }
+        LinkedHashMap<String, Object> map = new LinkedHashMap<>();
+        map.put("certifiedCount", certifiedCount);
+        map.put("unverifiedCount", unverifiedCount);
+        return ApiResult.resultWith(AppCode.SUCCESS, map);
+    }
+
+    /**
+     * 我的邀请列表
+     *
+     * @param userId
+     * @param pageIndex
+     * @param pageSize
+     * @return
+     */
+    @RequestMapping("/myInviteList")
+    @ResponseBody
+    public ApiResult myInviteList(@RequestHeader(Constant.APP_USER_ID_KEY) Long userId,
+                                  @RequestParam(required = false, defaultValue = "1") int authType,
+                                  @RequestParam(required = false, defaultValue = "1") int pageIndex,
+                                  @RequestParam(required = false, defaultValue = Constant.PAGE_SIZE_STR) int pageSize
+    ) {
+        pageIndex = pageIndex <= 0 ? 1 : pageIndex;
+
+
+        PageListView<UserInviteVo> result = userService.getMyInviteList(userId, authType == 1, pageIndex, pageSize);
+        LinkedHashMap<String, Object> map = new LinkedHashMap<>();
+        map.put("list", result.getList());
+        return ApiResult.resultWith(AppCode.SUCCESS, map);
     }
 }

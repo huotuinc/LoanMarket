@@ -14,6 +14,7 @@ import com.huotu.loanmarket.common.Constant;
 import com.huotu.loanmarket.common.utils.ApiResult;
 import com.huotu.loanmarket.common.utils.RequestUtils;
 import com.huotu.loanmarket.service.enums.AppCode;
+import com.huotu.loanmarket.service.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -30,8 +31,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class AppLoginInterceptor extends HandlerInterceptorAdapter {
 
-//    @Autowired
-//    private UserService userService;
+    @Autowired
+    private UserService userService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
@@ -41,17 +42,17 @@ public class AppLoginInterceptor extends HandlerInterceptorAdapter {
         String token = RequestUtils.getHeader(request, Constant.APP_USER_TOKEN_KEY);
         long userId = RequestUtils.getIntHeader(request, Constant.APP_USER_ID_KEY);
         /**
-         * 如果token和userid都不为空，则去判断登录状态
+         * 如果token和userId都不为空，则去判断登录状态
          */
-//        if (!userService.checkLoginToken(merchantId, userId, token)) {
-//            if (userId > 0 || !StringUtils.isEmpty(token)) {
-//                response.getWriter().write(JSON.toJSONString(ApiResult.resultWith(AppCode.TOKEN_ERROR,"你的账号已在另一台设备登录。如非本人操作，则密码可能已泄露，建议修改密码。")));
-//            }
-//            else {
-//                response.getWriter().write(JSON.toJSONString(ApiResult.resultWith(AppCode.TOKEN_ERROR)));
-//            }
-//            return false;
-//        }
+        if (!userService.checkLoginToken(merchantId, userId, token)) {
+            if (userId > 0 || !StringUtils.isEmpty(token)) {
+                response.getWriter().write(JSON.toJSONString(ApiResult.resultWith(AppCode.TOKEN_ERROR,"你的账号已在另一台设备登录。如非本人操作，则密码可能已泄露，建议修改密码。")));
+            }
+            else {
+                response.getWriter().write(JSON.toJSONString(ApiResult.resultWith(AppCode.TOKEN_ERROR)));
+            }
+            return false;
+        }
         return true;
     }
 

@@ -4,11 +4,15 @@ import com.huotu.loanmarket.common.Constant;
 import com.huotu.loanmarket.common.utils.RandomUtils;
 import com.huotu.loanmarket.common.utils.RequestUtils;
 import com.huotu.loanmarket.common.utils.StringUtilsExt;
+import com.huotu.loanmarket.service.entity.system.SmsTemple;
 import com.huotu.loanmarket.service.entity.user.Invite;
 import com.huotu.loanmarket.service.entity.user.User;
 import com.huotu.loanmarket.service.entity.user.VerifyCode;
+import com.huotu.loanmarket.service.enums.UserAuthorizedStatusEnums;
 import com.huotu.loanmarket.service.enums.UserResultCode;
 import com.huotu.loanmarket.service.exceptions.ErrorMessageException;
+import com.huotu.loanmarket.service.model.PageListView;
+import com.huotu.loanmarket.service.model.user.UserInviteVo;
 import com.huotu.loanmarket.service.repository.system.VerifyCodeRepository;
 import com.huotu.loanmarket.service.repository.user.InviteRepository;
 import com.huotu.loanmarket.service.repository.user.UserRepository;
@@ -17,14 +21,23 @@ import com.huotu.loanmarket.service.service.user.UserService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.persistence.criteria.Predicate;
 import javax.servlet.http.HttpServletRequest;
 import java.text.MessageFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author hxh
@@ -196,6 +209,100 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * 检查用户token是否有效
+     * 无效判断：
+     * 1、用户是否存在
+     * 2、是否删除 是否锁定
+     * 3、userToken是否匹配
+     *
+     * @param merchantId
+     * @param userId
+     * @param userToken
+     * @return
+     */
+    @Override
+    public boolean checkLoginToken(int merchantId, long userId, String userToken) {
+        User myUser = userRepository.findByMerchantIdAndUserId(merchantId, userId);
+        if (myUser == null) {
+            return false;
+        }
+        //是否删除 是否锁定
+        if (myUser.isDisabled() || myUser.isLocked()) {
+            return false;
+        }
+
+        if (myUser.getUserToken().equals(userToken)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 获取邀请数
+     * @param userId 用户ID
+     * @param isAuthSuccess 认证是否成功
+     * @return
+     */
+    @Override
+    public Long countByMyInvite(Long userId, boolean isAuthSuccess) {
+       return inviteRepository.count(getInviteSpecification(userId,isAuthSuccess));
+    }
+
+    /**
+     * 获取我的邀请列表
+     * @param userId
+     * @param isAuthSuccess
+     * @param pageIndex
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public PageListView<UserInviteVo> getMyInviteList(Long userId, boolean isAuthSuccess,int pageIndex,int pageSize) {
+        PageListView<UserInviteVo> result=new PageListView<>();
+        Pageable pageable = new PageRequest(pageIndex - 1, pageSize, new Sort(Sort.Direction.ASC, "id"));
+
+        Specification<Invite> specification= getInviteSpecification(userId,isAuthSuccess);
+        Page<Invite> page= inviteRepository.findAll(specification,pageable);
+        result.setTotalCount(page.getTotalElements());
+        result.setPageCount(page.getTotalPages());
+        List<UserInviteVo> list=new ArrayList<>();
+        for (Invite it:page.getContent()
+             ) {
+            UserInviteVo userInviteVo=new UserInviteVo();
+            userInviteVo.setInviteTime(it.getTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            userInviteVo.setName(it.getRealName());
+            userInviteVo.setStatus(it.getAuthStatus().getCode());
+            userInviteVo.setStatusName(it.getAuthStatus().getName());
+            userInviteVo.setUserId(it.getUserId());
+            userInviteVo.setUserName(StringUtilsExt.safeGetMobile(it.getUserName()));
+            list.add(userInviteVo);
+        }
+        result.setList(list);
+        return result;
+    }
+
+    /**
+     * 获取邀请筛选添加
+     * @param userId
+     * @param isAuthSuccess
+     * @return
+     */
+    private Specification<Invite> getInviteSpecification(Long userId, boolean isAuthSuccess){
+        Specification<Invite> specification = (root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            predicates.add(criteriaBuilder.equal(root.get("inviterId").as(Long.class),userId));
+            if (isAuthSuccess) {
+                predicates.add(criteriaBuilder.equal(root.get("authStatus").as(UserAuthorizedStatusEnums.class), UserAuthorizedStatusEnums.AUTH_SUCCESS));
+            } else {
+                predicates.add(criteriaBuilder.equal(root.get("authStatus").as(UserAuthorizedStatusEnums.class), UserAuthorizedStatusEnums.AUTH_NOT));
+            }
+
+            return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
+        };
+        return specification;
+    }
+
+    /**
      * 添加邀请日志
      *
      * @param userId        用户ID
@@ -214,7 +321,7 @@ public class UserServiceImpl implements UserService {
             invite.setInviterId(inviterUserId);
             invite.setTime(LocalDateTime.now());
             if (inviterName != null && !StringUtils.isEmpty(inviterName)) {
-                invite.setInviter(inviterName);
+                invite.setInviterName(inviterName);
                 inviteRepository.save(invite);
             }
         } catch (Exception ex) {
