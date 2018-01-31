@@ -1,4 +1,4 @@
-package com.huotu.loanmarket.service.model;
+package com.huotu.loanmarket.service.model.project;
 
 import com.huotu.loanmarket.service.entity.project.Project;
 import lombok.AllArgsConstructor;

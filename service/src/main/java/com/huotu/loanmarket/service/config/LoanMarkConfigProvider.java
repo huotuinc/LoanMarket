@@ -2,7 +2,7 @@ package com.huotu.loanmarket.service.config;
 
 import com.huotu.loanmarket.common.utils.StringUtilsExt;
 import com.huotu.loanmarket.service.enums.ConfigParameter;
-import com.huotu.loanmarket.service.model.SesameConfig;
+import com.huotu.loanmarket.service.model.sesame.SesameConfig;
 import com.huotu.loanmarket.service.service.merchant.MerchantCfgService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -36,6 +36,9 @@ public class LoanMarkConfigProvider {
         sesameConfig.setApiId(StringUtilsExt.safeGetMapValue(ConfigParameter.SesameParameter.API_ID.getKey(), map));
         sesameConfig.setApiSecret(StringUtilsExt.safeGetMapValue(ConfigParameter.SesameParameter.API_SECRET.getKey(), map));
         sesameConfig.setVerifyIdAndNameUrl(StringUtilsExt.safeGetMapValue(ConfigParameter.SesameParameter.NAME_AND_IDCARDNUM_URL.getKey(), map));
+        sesameConfig.setAppId(StringUtilsExt.safeGetMapValue(ConfigParameter.SesameParameter.APP_ID.getKey(), map));
+        sesameConfig.setPublicKey(StringUtilsExt.safeGetMapValue(ConfigParameter.SesameParameter.PUBLIC_KEY.getKey(), map));
+        sesameConfig.setPrivateKey(StringUtilsExt.safeGetMapValue(ConfigParameter.SesameParameter.PRIVATE_KEY.getKey(), map));
         return sesameConfig;
     }
 

@@ -29,6 +29,20 @@
             <artifactId>javax.servlet-api</artifactId>
             <version>4.0.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.32</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!--zhima-->
+        <dependency>
+            <groupId>com.huotu.com3rd.zmxy</groupId>
+            <artifactId>zmxy-sdk</artifactId>
+            <version>20171122003901</version>
+        </dependency>
     </dependencies>
 
 

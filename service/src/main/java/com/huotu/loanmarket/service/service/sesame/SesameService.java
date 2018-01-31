@@ -8,9 +8,10 @@ public interface SesameService {
     /**
      * 判断身份证号和姓名一致
      *
+     * @param merchantId
      * @param name
      * @param idCardNum
      * @return
      */
-    boolean checkNameAndIdCardNum(String name, String idCardNum);
+    boolean checkNameAndIdCardNum(Integer merchantId, String name, String idCardNum);
 }

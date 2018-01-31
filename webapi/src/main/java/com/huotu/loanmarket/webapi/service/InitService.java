@@ -87,10 +87,12 @@ public class InitService {
     @Transactional(rollbackFor = RuntimeException.class)
     public void initsesame() {
         Map<String, String> map = new HashMap<>();
-        map.put("zhima_app_id", "300001534");
-        map.put("zhima_private_key", "MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAJAyFvR1aHAvMzrZLwdU2o4ypVto5iEg0XU+i7GcH+ifz0VCFfYzlgm0SzKdVTMQZTAu/yu3vU0zq6XYhDw8zDFfOydh6jwg4Z5Op0yp/GOCYUeQ8RXh/CLeqWZ6U445JF1aLRq9WWSJMrHd/SUS/H6ZCd395FM1/ALRv2MgwasdAgMBAAECgYB1e5ogSphw7sP6qoEapBP9z13SgEEftLFzqSX/64hD7BDgCNwD4DvaZD7wWifUlwMaou/cGrPtdq/fS+1RdueWBxBXek7E2Mr8XoXdg1hYU/cwAwW/d+yDNzIQAi5YToXLdWoRAFIPLXItR0eqgVas2myBIBghrHnCn/RpTzkasQJBANg7jC0GUfCCibZPns5ztplzIhcf5o+J+ZTQafLvlb9gnKWfk/aFA85tmGP/0z9lqP+CvhyoB0fuObuCS8WaDOMCQQCqtvgSA8+cb+6PFpc0AoLtzbyQg8q1hE6qsAveov65LKnF1/Y5g+5H4/FoZjY5rzLMA/29tnyoLIMZnlWH+uf/AkEAyEzA2KRWGtiRAJRYox2FNDf2iD1Asg45Z6R3wFY2/QRdlv5vbZhhokLbOyarZLqjBazytlDgDb2bNRrJXc4JyQJAbu2Pil0xlWxiLlY2kBQlsZJjOeB5YrODToQwYk21iOvNsYIgO8VPmyUxo23vRFJkho79XT3sCHdMBOSOnVpbTwJAKcLR+l4/vUYOCL/tuIDco0NT0PpdDnX5cwWFQmemk3LxXOnsV6wYJd849eK7d7M+hpibHMTnWUQw8Vm3F6N4WQ==");
-        map.put("zhima_public_key", "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCAyIKQG7rZ5k4XSHtf9XrykSR8kj24E534fjd67hyGiGX4xgqw4X7pEyPwuaADbimA6fM3bk2Sl5+Z9VhgCZMfyPYbR/oI/DP3d9/1lIJm4p8t97kiJ2732V//IKzwxcWetrwiw6p4tkEf4KWkJRHskmRvnCOPFTbSf0EFLNLrDQIDAQAB");
-
+        map.put("zhima_api_id", "6eadbeb657ab4128b2c0298c49f07157");
+        map.put("zhima_api_secret", "8f385900e02440228734ef6ce471c61c");
+        map.put("zhima_name_and_idcardnum_url", "https://cloudapi.linkface.cn/data/verify_id_name");
+        map.put("zhima_app_id", "300001906");
+        map.put("zhima_public_key", "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCQl/xB4ZcyV5Yn4Lz1DetwIeh/V3aP1Y30XRWE9VZJO6sWMjHF03RllZC9HQX54jsQ24lrk2zdytSDuEbkyYB8r/HRtRmF2qzCFfFGhvLGWAXIL/s7YxKtDw12zJtdSpgI0/+UKjKYlH3KjOdv0tr1NQbqA6xLTM8+8w9I8tWc/QIDAQAB");
+        map.put("zhima_private_key", "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBALUEqZqAL/q/zi2Jja6qgn7vV1DHBOv7HDkuIHfdyeT0QUZM4ZcWIUYFqCs7g17M7GsH4BEegJMb0wMyh1lWuOXV3xv7Y/ACiQjVVxbrBb8+CdoVQUbcqOv3RkOfULhWh2U8+YmkKwpweQ4qt2pJqAihiReLdDNYRPqsDLcm2pSVAgMBAAECgYBwkYSzOrIbmfmqYdcE3q4mJ8rBxfHumgr0GBZC1F7ADZEmGZtULIPmmo/4ypqocoE3Ef+qRbCpSu1PGLYIvaBe6Ws3elSNbTqtQpMmHECtHRjM36tM6I1c8FlFQ7MzQ8OOWaa7GcDRsixfvtDmFc7TCjF1WQIEIjUSBhjoVIwQgQJBAN0EPKYbSch1sJv8FUjVJ0alMYCt25VCvoehAw8HxyzXIF1PES11VbSYkv9Khrc6KmImC8+AiDG0EFBw+uwNVjUCQQDRq6lo61vjLXDgiigmGFa0I20MWWZrAcP/aeuQObjrSJl26oe8tFCiCNvVXzPLSHT1QatODkg5Dq5TORn4lJDhAkEA1Eg0hIrjRGId/sSSIQFylv0l3eWfae7Ql+7DxFUBLoV2NYkzA4mWhz6gugn3+NcqTFkksOpQZgUAQnMx3zY0HQJATvr5+tLFr0LbxUllrEv4xSyfFErM4Lwuh5TvrkmAFekoHfpknTnTMeZiYPLWwNmPbR+KlwGcRRn5otHcrZ3RIQJBAIZ9UaQKsdV30wxnWI576Ewg6uzbQVjLXmFh9Z+wU1j9WofBQA2aKgQtmfNd1lIOLOzuJ6mu3ftGr09Fak7Epds=");
         initMerchantConfigItem(map, MerchantConfigEnum.SESAME);
     }
 

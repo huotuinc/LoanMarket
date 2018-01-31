@@ -1,4 +1,4 @@
-package com.huotu.loanmarket.webapi.service;
+package com.huotu.loanmarket.service.service.upload;
 
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemException;
@@ -6,11 +6,11 @@ import org.apache.commons.vfs2.FileSystemException;
 import java.util.Objects;
 
 /**
- * @author allan
- * @date 26/10/2017
+ * @author CJ
  */
 @FunctionalInterface
 public interface FileObjectConsumer {
+
     /**
      * Performs this operation on the given argument.
      *
@@ -32,10 +32,7 @@ public interface FileObjectConsumer {
      */
     default FileObjectConsumer andThen(FileObjectConsumer after) {
         Objects.requireNonNull(after);
-        return t -> {
-            accept(t);
-            after.accept(t);
-        };
+        return t -> { accept(t); after.accept(t); };
     }
 
 }

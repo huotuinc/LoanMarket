@@ -135,12 +135,12 @@ public class User {
     /**
      * 注册时间
      */
-    @Column(name = "reg_time", columnDefinition = "timestamp")
+    @Column(name = "reg_time", columnDefinition = "datetime")
     private LocalDateTime regTime;
     /**
      * 最后登录时间
      */
-    @Column(name = "last_logintime", columnDefinition = "timestamp")
+    @Column(name = "last_logintime", columnDefinition = "datetime")
     private LocalDateTime lastLoginTime;
     /**
      * 最后登录ip

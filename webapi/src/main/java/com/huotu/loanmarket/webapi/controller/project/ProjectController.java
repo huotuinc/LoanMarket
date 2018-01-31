@@ -5,13 +5,11 @@ import com.huotu.loanmarket.common.utils.ApiResult;
 import com.huotu.loanmarket.service.entity.category.Category;
 import com.huotu.loanmarket.service.entity.project.Project;
 import com.huotu.loanmarket.service.enums.AppCode;
-import com.huotu.loanmarket.service.model.ProjectIndexViewModel;
-import com.huotu.loanmarket.service.model.ProjectListViewModel;
 import com.huotu.loanmarket.service.model.project.ProjectVo;
 import com.huotu.loanmarket.service.model.projectsearch.ProjectSearchCondition;
 import com.huotu.loanmarket.service.service.category.CategoryService;
 import com.huotu.loanmarket.service.service.project.ProjectService;
-import com.huotu.loanmarket.webapi.service.StaticResourceService;
+import com.huotu.loanmarket.service.service.upload.StaticResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -57,7 +55,7 @@ public class ProjectController {
         Project project = projectService.findOne(projectId);
         if (!StringUtils.isEmpty(project.getLogo())) {
             try {
-                project.setLogo(staticResourceService.get(project.getLogo()).toString());
+                project.setLogo(staticResourceService.getResource(project.getLogo()).toString());
             } catch (URISyntaxException e) {
             }
         }
@@ -86,7 +84,7 @@ public class ProjectController {
         categoryList.forEach(p -> {
             if (!StringUtils.isEmpty(p.getIcon())) {
                 try {
-                    p.setIcon(staticResourceService.get(p.getIcon()).toString());
+                    p.setIcon(staticResourceService.getResource(p.getIcon()).toString());
                 } catch (URISyntaxException e) {
                 }
             }
@@ -133,7 +131,7 @@ public class ProjectController {
 
             if (!StringUtils.isEmpty(p.getLogo())) {
                 try {
-                    projectVo.setLogo(staticResourceService.get(p.getLogo()).toString());
+                    projectVo.setLogo(staticResourceService.getResource(p.getLogo()).toString());
                 } catch (URISyntaxException e) {
                 }
             }
@@ -185,7 +183,8 @@ public class ProjectController {
 
             if (!StringUtils.isEmpty(p.getLogo())) {
                 try {
-                    projectVo.setLogo(staticResourceService.get(p.getLogo()).toString());
+                    p.setLogo(staticResourceService.getResource(p.getLogo()).toString());
+                    projectVo.setLogo(staticResourceService.getResource(p.getLogo()).toString());
                 } catch (URISyntaxException e) {
                 }
             }
@@ -210,7 +209,7 @@ public class ProjectController {
             projectVo.setName(p.getName());
             if (!StringUtils.isEmpty(p.getLogo())) {
                 try {
-                    projectVo.setLogo(staticResourceService.get(p.getLogo()).toString());
+                    projectVo.setLogo(staticResourceService.getResource(p.getLogo()).toString());
                 } catch (URISyntaxException e) {
                 }
             }
