@@ -9,6 +9,7 @@
 
 package com.huotu.loanmarket.service.entity.user;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.huotu.loanmarket.service.enums.UserAuthorizedStatusEnums;
 import lombok.Getter;
 import lombok.Setter;
@@ -63,13 +64,14 @@ public class Invite {
     /**
      * 邀请者
       */
-    @Column(name = "inviter", length = 20)
-    private String inviter;
+    @Column(name = "inviter_name", length = 20)
+    private String inviterName;
 
     /**
      * 邀请时间
      */
     @Column(name = "invite_time", columnDefinition = "timestamp")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime time;
 
 
@@ -90,6 +92,7 @@ public class Invite {
      * 认证奖励时间
      */
     @Column(name = "auth_rewarded_time")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime authRewardedTime;
 
 

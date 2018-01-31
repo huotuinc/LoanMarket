@@ -1,5 +1,8 @@
 package com.huotu.loanmarket.common.utils;
 
+import org.apache.http.client.utils.DateUtils;
+
+import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
 
@@ -59,4 +62,33 @@ public class RandomUtils {
     public static String randomString() {
         return UUID.randomUUID().toString();
     }
+
+    public static String getTransactionId() {
+        Date now = new Date();
+        String time = DateUtils.formatDate(now, "yyyyMMddhhmmssSSS");
+        String str = getString(13);
+        return time + str;
+    }
+
+    /**
+     * 随机生成指定位数的字符串（去掉0开头）
+     *
+     * @param length
+     * @return
+     */
+    public static String getString(int length) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < length; i++) {
+            // 产生0-10之间的随机小数，强制转换成正数
+            int num = (int) (Math.random() * 10);
+            if (i == 0) {
+                if (num == 0) {
+                    num = num + 1;
+                }
+            }
+            stringBuilder.append(num);
+        }
+        return stringBuilder.toString();
+    }
+
 }

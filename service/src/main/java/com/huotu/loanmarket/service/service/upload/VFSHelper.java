@@ -1,4 +1,5 @@
-package com.huotu.loanmarket.web.service;
+package com.huotu.loanmarket.service.service.upload;
+
 
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemException;
@@ -10,12 +11,11 @@ import org.apache.commons.vfs2.provider.sftp.SftpFileSystemConfigBuilder;
 import org.springframework.stereotype.Service;
 
 /**
- *
- * @author allan
- * @date 26/10/2017
+ * @author CJ
  */
 @Service
 public class VFSHelper {
+
     private final FileSystemOptions options = new FileSystemOptions();
     private boolean passive;
 

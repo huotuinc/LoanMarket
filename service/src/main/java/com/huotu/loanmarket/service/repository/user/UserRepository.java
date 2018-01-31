@@ -1,7 +1,6 @@
 package com.huotu.loanmarket.service.repository.user;
 
 import com.huotu.loanmarket.service.entity.user.User;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
