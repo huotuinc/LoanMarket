@@ -46,7 +46,7 @@ public class InitService {
     private SmsTemplateRepository smsTemplateRepository;
     @Autowired
     private MerchantConfigItemRepository merchantConfigItemRepository;
-    @Autowired
+
     private List<MerchantConfigItem> merchantConfigItems = new ArrayList<>();
 
 

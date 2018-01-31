@@ -13,16 +13,22 @@ import com.huotu.loanmarket.common.enums.ICommonEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+/**
+ * @author guomw
+ */
+
 @Getter
 @AllArgsConstructor
 public enum PackageTypeEnum implements ICommonEnum {
 
     /**
-     *
+     *Simple
      */
-    SIMPLIFY(0, "简化"),
-
-    NORMAL(1, "正常"),;
+    Simple(0, "简单"),
+    /**
+     * Normal
+     */
+    Normal(1, "正常"),;
 
     private int code;
     private String name;

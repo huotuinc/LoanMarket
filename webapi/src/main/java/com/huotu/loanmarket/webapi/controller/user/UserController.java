@@ -183,4 +183,10 @@ public class UserController {
             return ApiResult.resultWith(e.code, e.getMessage());
         }
     }
+
+    @RequestMapping("/center")
+    @ResponseBody
+    public ApiResult UserCenter(){
+        return  ApiResult.resultWith(AppCode.SUCCESS);
+    }
 }

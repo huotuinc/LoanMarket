@@ -78,7 +78,7 @@ public class SystemController {
     ) throws URISyntaxException {
         LinkedHashMap<String, Object> map = new LinkedHashMap<>();
 
-        PackageTypeEnum packageTypeEnum = PackageTypeEnum.SIMPLIFY;
+        PackageTypeEnum packageTypeEnum = PackageTypeEnum.Simple;
 
         DeviceTypeEnum deviceTypeEnum = DeviceTypeEnum.H5;
         if (DeviceTypeEnum.Android.getName().equalsIgnoreCase(osType)) {

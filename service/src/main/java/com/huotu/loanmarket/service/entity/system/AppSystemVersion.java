@@ -94,5 +94,5 @@ public class AppSystemVersion {
      * 包类型，0=变包，1=正常包
      */
     @Column(name = "package_type",columnDefinition = "tinyint")
-    private PackageTypeEnum packageType=PackageTypeEnum.SIMPLIFY;
+    private PackageTypeEnum packageType=PackageTypeEnum.Simple;
 }

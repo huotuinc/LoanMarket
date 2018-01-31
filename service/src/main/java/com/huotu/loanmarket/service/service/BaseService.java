@@ -7,16 +7,13 @@
  * 2016-2018. All rights reserved.
  */
 
-package com.huotu.loanmarket.service.service.dbversion;
+package com.huotu.loanmarket.service.service;
 
-import com.huotu.loanmarket.service.entity.SystemConfig;
-import com.huotu.loanmarket.service.repository.SystemConfigRepository;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author helloztt
