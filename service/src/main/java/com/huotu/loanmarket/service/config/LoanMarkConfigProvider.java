@@ -3,7 +3,6 @@ package com.huotu.loanmarket.service.config;
 import com.huotu.loanmarket.common.utils.StringUtilsExt;
 import com.huotu.loanmarket.service.enums.ConfigParameter;
 import com.huotu.loanmarket.service.model.CarrierConfig;
-import com.huotu.loanmarket.service.model.SesameConfig;
 import com.huotu.loanmarket.service.model.sesame.SesameConfig;
 import com.huotu.loanmarket.service.service.merchant.MerchantCfgService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -158,10 +158,10 @@ public class UserCarrierServiceImpl implements UserCarrierService {
             }
             int resultCode;
             if (flag) {
-                order.setFlgCarrier(UserAuthorizedStatusEnums.AUTH_SUCCESS.getCode());
+                order.setFlgCarrier(UserAuthorizedStatusEnums.AUTH_SUCCESS);
                 resultCode = AppCode.SUCCESS.getCode();
             } else {
-                order.setFlgCarrier(UserAuthorizedStatusEnums.AUTH_ERROR.getCode());
+                order.setFlgCarrier(UserAuthorizedStatusEnums.AUTH_ERROR);
                 resultCode = AppCode.ERROR.getCode();
             }
             orderRepository.saveAndFlush(order);
