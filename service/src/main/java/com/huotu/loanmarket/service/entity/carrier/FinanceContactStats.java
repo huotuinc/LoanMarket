@@ -27,7 +27,7 @@ public class FinanceContactStats {
 
     /** order_id */
     @Column(name = "order_id")
-    private Long orderId;
+    private String orderId;
 
     /**
      * 机构分类
@@ -39,18 +39,18 @@ public class FinanceContactStats {
      * 近6月通话号码数量
      */
     @Column(name = "contact_count_six")
-    private String contactCountSix;
+    private int contactCountSix;
 
     /**
      * 近6月通话次数
      */
     @Column(name = "call_count_six")
-    private String callCountSix;
+    private int callCountSix;
 
     /**
      * 近6月通话时长
      */
     @Column(name = "call_time_six")
-    private String callTimeSix;
+    private int callTimeSix;
 
 }

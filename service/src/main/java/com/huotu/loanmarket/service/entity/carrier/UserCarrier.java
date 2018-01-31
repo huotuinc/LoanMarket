@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -30,11 +31,11 @@ public class UserCarrier {
      * 商户id
      */
     @Column(name = "merchant_id")
-    private Integer merchant;
+    private Integer merchantId;
 
     /** order_id */
     @Column(name = "order_id")
-    private Long orderId;
+    private String orderId;
 
     /** 爬取结果 */
     @Column(name = "info",columnDefinition = "longtext")
@@ -56,7 +57,7 @@ public class UserCarrier {
      * 入网时间
      */
     @Column(name = "net_time")
-    private int netTime;
+    private String netTime;
     /**
      * 手机号
      */
@@ -66,26 +67,26 @@ public class UserCarrier {
     /**
      * 号码归属地
      */
-    @Column(name = "mobile_addr",length = 50)
+    @Column(name = "mobile_addr")
     private String mobileAddr;
 
     /**
      * 状态
      */
-    @Column(name = "status",length = 20)
+    @Column(name = "status")
     private String status;
 
     /**
      * 账户余额
      */
-    @Column(name="remain",length = 20)
-    private String remain;
+    @Column(name="account_balance")
+    private BigDecimal accountBalance;
 
     /**
      * 近6个月互通号码数量
      */
     @Column(name = "mutual_number")
-    private int mutualNumber;
+    private String mutualNumber;
 
     /**
      * 前10联系人黑名单人数占比
@@ -103,13 +104,13 @@ public class UserCarrier {
      * 前10联系人近3月平均申请平台数
      */
     @Column(name = "apply_count")
-    private int applyCount;
+    private String applyCount;
 
     /**
      * 前10联系人近3月申请2个及以上平台的人数
      */
     @Column(name = "apply_count_over_two")
-    private int applyCountOverTwo;
+    private String applyCountOverTwo;
 
     /**
      * 任务id

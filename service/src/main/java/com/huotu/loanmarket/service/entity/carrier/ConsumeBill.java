@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.math.BigDecimal;
 
 /**
  * 每月消费统计
@@ -17,8 +18,8 @@ import javax.persistence.Table;
 @Getter
 @Setter
 @Entity
-@Table(name = "zx_consumption_stats_per_month")
-public class ConsumptionStatsPerMonth {
+@Table(name = "zx_consume_bill")
+public class ConsumeBill {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +28,7 @@ public class ConsumptionStatsPerMonth {
 
     /** order_id */
     @Column(name = "order_id")
-    private Long orderId;
+    private String orderId;
     /**
      * 月份
      */
@@ -38,12 +39,12 @@ public class ConsumptionStatsPerMonth {
      * 月消费金额
      */
     @Column(name = "consume_amount")
-    private String consumeAmount;
+    private BigDecimal consumeAmount;
 
     /**
      * 月充值金额
      */
     @Column(name = "recharge_amount")
-    private String rechargeAmount;
+    private BigDecimal rechargeAmount;
 
 }

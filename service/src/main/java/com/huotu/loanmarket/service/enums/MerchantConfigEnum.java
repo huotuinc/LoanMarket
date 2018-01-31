@@ -16,8 +16,8 @@ public enum MerchantConfigEnum implements ICommonEnum {
      * 第三方参数类型
      */
     SESAME(0, "芝麻信用接口"),
-
     MESSAGE(1, "短信接口参数"),
+    CARRIER(2, "运营商接口参数")
 
     ;
 

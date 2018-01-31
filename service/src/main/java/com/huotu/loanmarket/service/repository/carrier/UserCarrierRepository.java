@@ -7,4 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author luyuanyuan on 2018/1/30.
  */
 public interface UserCarrierRepository extends JpaRepository<UserCarrier, Integer> {
+    UserCarrier findByOrderIdAndMerchantId(String orderId, Integer merchantId);
 }

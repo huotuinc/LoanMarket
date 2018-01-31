@@ -27,24 +27,24 @@ public class ActiveSilenceStats {
 
     /** order_id */
     @Column(name = "order_id")
-    private Long orderId;
+    private String orderId;
 
     /**
      * 近3月通话活跃天数
      */
     @Column(name = "active_day_call_three")
-    private String activeDayCallThree;
+    private int activeDayCallThree;
 
     /**
      * 近3月无通话静默天数
      */
     @Column(name = "silence_day_call_three")
-    private String silenceDayCallThree;
+    private int silenceDayCallThree;
 
     /**
      * 近3月连续无通话静默>=3天的次数
      */
     @Column(name = "continue_silence_day_over_three")
-    private String continueSilenceDayOverThree;
+    private int continueSilenceDayOverThree;
 
 }

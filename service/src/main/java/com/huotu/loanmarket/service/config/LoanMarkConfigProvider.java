@@ -2,6 +2,7 @@ package com.huotu.loanmarket.service.config;
 
 import com.huotu.loanmarket.common.utils.StringUtilsExt;
 import com.huotu.loanmarket.service.enums.ConfigParameter;
+import com.huotu.loanmarket.service.model.CarrierConfig;
 import com.huotu.loanmarket.service.model.SesameConfig;
 import com.huotu.loanmarket.service.service.merchant.MerchantCfgService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,13 @@ public class LoanMarkConfigProvider {
         return sesameConfig;
     }
 
+    public CarrierConfig getCarrierConfig(Integer merchantId) {
+        Map<String, String> map = this.getMerchantConfigParameters(merchantId);
+        CarrierConfig carrierConfig = new CarrierConfig();
+        carrierConfig.setPartnerCode(StringUtilsExt.safeGetMapValue(ConfigParameter.CarrierParameter.PARTNER_CODE.getKey(), map, "guohaiyx_mohe"));
+        carrierConfig.setPartnerKey(StringUtilsExt.safeGetMapValue(ConfigParameter.CarrierParameter.PARTNER_KEY.getKey(), map, "f00229ea8eb349e68db729db6e757c65"));
+        return carrierConfig;
+    }
 
     private Pattern rechargeRangePattern = Pattern.compile("\\[([^\\-]+)-([^\\]]+)\\]\\s*=\\s*([^;]+);");
 

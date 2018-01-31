@@ -2,7 +2,6 @@ package com.huotu.loanmarket.service.enums;
 
 import com.huotu.loanmarket.common.enums.IMerchantParameterEnum;
 import com.huotu.loanmarket.service.config.MerchantConfigType;
-import com.huotu.loanmarket.service.enums.MerchantConfigEnum;
 import lombok.AllArgsConstructor;
 
 /**
@@ -21,6 +20,29 @@ public interface ConfigParameter {
         API_ID("api_id", "API账号"),
         API_SECRET("api_secret", "API密钥"),
         NAME_AND_IDCARDNUM_URL("name_and_idcardnum_url", "身份证号和姓名比对接口");
+        private String key;
+        private String message;
+
+        @Override
+        public String getKey() {
+            return key;
+        }
+
+        @Override
+        public String getMessage() {
+            return message;
+        }
+    }
+
+    /**
+     * 运营商接口参数
+     */
+    @AllArgsConstructor
+    @MerchantConfigType(type = MerchantConfigEnum.CARRIER)
+    enum CarrierParameter implements IMerchantParameterEnum {
+        PARTNER_CODE("carrier_partner_code", "合作方标识"),
+        PARTNER_KEY("carrier_partner_key", "合作方密钥");
+
         private String key;
         private String message;
 

@@ -4,10 +4,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.huotu.loanmarket.common.utils.ApiResult;
 import com.huotu.loanmarket.service.entity.carrier.AsyncTask;
-import com.huotu.loanmarket.service.entity.user.User;
+import com.huotu.loanmarket.service.entity.order.Order;
 import com.huotu.loanmarket.service.enums.AppCode;
+import com.huotu.loanmarket.service.enums.UserAuthorizedStatusEnums;
 import com.huotu.loanmarket.service.repository.carrier.AsyncTaskRepository;
-import com.huotu.loanmarket.service.repository.user.UserRepository;
+import com.huotu.loanmarket.service.repository.order.OrderRepository;
 import com.huotu.loanmarket.service.service.carrier.UserCarrierService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -39,7 +40,7 @@ public class CarrierController {
     @Autowired
     private AsyncTaskRepository asyncTaskRepository;
     @Autowired
-    private UserRepository userRepository;
+    private OrderRepository orderRepository;
 
     @RequestMapping("/magicCallback")
     @ResponseBody
@@ -50,41 +51,44 @@ public class CarrierController {
         //回调参数
         String passbackParams = request.getParameter("passback_params");
         String[] split = passbackParams.split(",");
-        String userId = split[0];
+        String orderId = split[0];
         String merchantId = split[1];
+        String type = split[2];
         String notifyData = request.getParameter("notify_data");
-        log.info(MessageFormat.format("【数据魔盒】回调开始，用户ID：{0}，回调参数：{1}",userId,notifyData));
+        log.info(MessageFormat.format("【数据魔盒】回调开始，订单ID：{0}，回调参数：{1}",orderId,notifyData));
         Map<String,Object> map = new HashMap<>(2);
         map.put("code",0);
-        User user = userRepository.findOne(Long.valueOf(userId));
-        if (user == null) {
-            log.info(MessageFormat.format("用户不存在，用户id：{0}", userId));
+        Order order = orderRepository.findOne(orderId);
+        if (order == null) {
+            log.info(MessageFormat.format("订单不存在，订单id：{0}", orderId));
             map.put("message","用户不存在，回调忽略");
             return map;
         }
-//        if (UserAuthorizedStatusEnums.AUTH_SUCCESS.equals(user.getFlgCarrier())) {
-//            log.info(MessageFormat.format("【数据魔盒】重复调用，用户id：{0}",userId));
-//            map.put("message","重复调用");
-//            return map;
-//        }
+        if (("DS".equals(type) && UserAuthorizedStatusEnums.AUTH_SUCCESS.equals(order.getFlgDs()))
+                || ("YYS".equals(type) && UserAuthorizedStatusEnums.AUTH_SUCCESS.equals(order.getFlgCarrier()))) {
+            log.info(MessageFormat.format("【数据魔盒】重复调用，订单id：{0}",orderId));
+            map.put("message","重复调用");
+            return map;
+        }
         JsonObject jsonObject = new JsonParser().parse(notifyData).getAsJsonObject();
         response.setStatus(HttpStatus.OK.value());
         if("SUCCESS".equals(notifyEvent)){
             String taskId = jsonObject.get("task_id").getAsString();
             log.info("task_id:" + taskId);
             //回调成功,保存用户id和用户任务
-            AsyncTask asyncTask = asyncTaskRepository.findOne(Long.valueOf(userId));
+            AsyncTask asyncTask = asyncTaskRepository.findByOrderIdAndType(orderId,type);
             if(asyncTask != null){
                 asyncTask.setTaskId(taskId);
             }else{
                  asyncTask = new AsyncTask();
                  asyncTask.setMerchantId( Long.valueOf(merchantId));
-                 asyncTask.setUserId(Long.valueOf(userId));
+                 asyncTask.setOrderId(orderId);
                  asyncTask.setTaskId(taskId);
+                 asyncTask.setType(type);
             }
             asyncTaskRepository.saveAndFlush(asyncTask);
         }else{
-            log.error(MessageFormat.format("运营商数据查询回调事件错误，回调通知事件:{0}",notifyEvent));
+            log.error(MessageFormat.format("【数据魔盒】回调失败，回调通知事件:{0}",notifyEvent));
         }
         map.put("message","success");
         return map;
@@ -94,15 +98,15 @@ public class CarrierController {
      * 查询结果
      * @param taskId
      * @param merchantId
-     * @param userId
+     * @param orderId
      * @return
      */
     @RequestMapping("/queryResult")
     @ResponseBody
-    public ApiResult queryResult(String taskId, @RequestHeader("merchantId") Long merchantId, @RequestHeader("userId") Long userId){
+    public ApiResult queryResult(String taskId, @RequestHeader("merchantId") Long merchantId, String orderId){
         ApiResult apiResult;
         try {
-            apiResult = userCarrierService.queryResult(taskId, userId,merchantId);
+            apiResult = userCarrierService.queryResult(taskId, orderId,merchantId.intValue());
         } catch (Exception e) {
             log.error("未知错误",e);
             return ApiResult.resultWith(AppCode.ERROR.getCode(),"未知错误");

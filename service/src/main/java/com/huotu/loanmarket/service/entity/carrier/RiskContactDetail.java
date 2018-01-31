@@ -27,7 +27,7 @@ public class RiskContactDetail {
 
     /** order_id */
     @Column(name = "order_id")
-    private Long orderId;
+    private String orderId;
 
     /**
      * 风险联系人号码

@@ -5,6 +5,8 @@ import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -18,12 +20,16 @@ import javax.persistence.Table;
 @Table(name = "zx_async_task")
 public class AsyncTask {
 
-    /**
-     * 用户id
-     */
     @Id
-    @Column(name = "user_id")
-    private Long userId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
+
+    /**
+     * 订单id
+     */
+    @Column(name = "order_id")
+    private String orderId;
 
     /**
      * 任务id
@@ -39,4 +45,10 @@ public class AsyncTask {
      */
     @Column(name="failure")
     private boolean failure;
+
+    /**
+     * 任务类型 DS-电商，YYS-运营商
+     */
+    @Column(name = "type")
+    private String type;
 }

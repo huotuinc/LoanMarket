@@ -27,7 +27,7 @@ public class FinanceContactDetail {
 
     /** order_id */
     @Column(name = "order_id")
-    private Long orderId;
+    private String orderId;
 
     /**
      * 联系人号码

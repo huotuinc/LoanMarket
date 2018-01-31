@@ -27,4 +27,6 @@ public interface AsyncTaskRepository extends JpaRepository<AsyncTask, Long> {
     @Modifying(clearAutomatically = true)
     @Query("update AsyncTask b set b.failure = 0 where b.failure = 1")
     void updateBatch();
+
+    AsyncTask findByOrderIdAndType(String orderId, String type);
 }
