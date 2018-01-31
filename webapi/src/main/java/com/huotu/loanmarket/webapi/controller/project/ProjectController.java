@@ -23,7 +23,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 /**
- * @Author hxh
+ * @author hxh
  * @Date 2018/1/30 14:41
  */
 @Controller
@@ -78,7 +78,7 @@ public class ProjectController {
         return ApiResult.resultWith(AppCode.SUCCESS, categoryList);
     }
 
-    @RequestMapping(value = "/project/list", method = RequestMethod.POST)
+    @RequestMapping(value = "/list", method = RequestMethod.POST)
     @ResponseBody
     public ApiResult projectList(
             @RequestParam(required = false, defaultValue = "1") int pageIndex,
@@ -112,7 +112,11 @@ public class ProjectController {
         return ApiResult.resultWith(AppCode.SUCCESS);
     }
 
-    @RequestMapping("/project/index")
+    /**
+     * 首页接口
+     * @return
+     */
+    @RequestMapping("/index")
     @ResponseBody
     public ApiResult projectIndex() {
         ProjectIndexViewModel model = new ProjectIndexViewModel();
@@ -127,10 +131,10 @@ public class ProjectController {
             }
             if (!StringUtils.isEmpty(p.getTag()) && p.getTag().split(",").length > 3) {
                 String[] tags = p.getTag().split(",");
-                String tag = tags[0] + "," + tags[1] + "," + tags[2];
-                p.setTag(tag);
+                p.setTag(tags[0] + "," + tags[1] + "," + tags[2]);
             }
         });
+        //
         newList.forEach(project -> {
             if (!StringUtils.isEmpty(project.getLogo())) {
                 try {
@@ -139,13 +143,20 @@ public class ProjectController {
                 }
             }
             if (!StringUtils.isEmpty(project.getTag()) && project.getTag().split(",").length > 3) {
-                String[] tags = project.getTag().split(",");
-                String tag = tags[0] + "," + tags[1] + "," + tags[2];
-                project.setTag(tag);
+                project.setTag(getTag(project));
             }
         });
         model.setHotProjectList(hotList);
         model.setNewProjectList(newList);
         return ApiResult.resultWith(AppCode.SUCCESS, model);
     }
+
+    private String getTag(Project project){
+        if(project.getTag().split(",").length > 3) {
+            String[] tags = project.getTag().split(",");
+            return tags[0] + "," + tags[1] + "," + tags[2];
+        }
+        return "";
+    }
+
 }

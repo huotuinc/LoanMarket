@@ -7,26 +7,13 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/**
+ * @author hxh
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProjectIndexViewModel {
     List<Project> hotProjectList;
     List<Project> newProjectList;
-
-    public List<Project> getHotProjectList() {
-        return hotProjectList;
-    }
-
-    public void setHotProjectList(List<Project> hotProjectList) {
-        this.hotProjectList = hotProjectList;
-    }
-
-    public List<Project> getNewProjectList() {
-        return newProjectList;
-    }
-
-    public void setNewProjectList(List<Project> newProjectList) {
-        this.newProjectList = newProjectList;
-    }
 }
