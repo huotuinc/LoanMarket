@@ -24,8 +24,11 @@ import com.huotu.loanmarket.service.service.system.AppVersionService;
 import com.huotu.loanmarket.service.service.system.SmsTemplateService;
 import com.huotu.loanmarket.service.service.system.SystemService;
 import com.huotu.loanmarket.service.service.user.UserService;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URISyntaxException;
@@ -38,6 +41,8 @@ import java.util.LinkedHashMap;
 @Controller
 @RequestMapping(value = "/api/sys", method = RequestMethod.POST)
 public class SystemController {
+
+    private static final Log log = LogFactory.getLog(SystemController.class);
 
     @Autowired
     private SystemService systemService;
@@ -66,8 +71,8 @@ public class SystemController {
      */
     @RequestMapping("/init")
     @ResponseBody
-    public ApiResult init(@RequestHeader(value = Constant.APP_USER_ID_KEY, required = false,defaultValue = "0") Long userId,
-                          @RequestHeader(value = Constant.APP_USER_TOKEN_KEY,required = false,defaultValue = "") String userToken,
+    public ApiResult init(@RequestHeader(value = Constant.APP_USER_ID_KEY, required = false, defaultValue = "0") Long userId,
+                          @RequestHeader(value = Constant.APP_USER_TOKEN_KEY, required = false, defaultValue = "") String userToken,
                           @RequestHeader(value = Constant.APP_VERSION_KEY, defaultValue = "1.0") String appVersion,
                           @RequestHeader(value = Constant.APP_SYSTEM_TYPE_KEY, defaultValue = "android") String osType
     ) throws URISyntaxException {
@@ -90,10 +95,10 @@ public class SystemController {
         }
         //包类型
         map.put("packageType", packageTypeEnum.getCode());
-        if (userId != null && userId > 0) {
+        if (userId != null && userId > 0 && userToken != null && !StringUtils.isEmpty(userToken)) {
             try {
                 User user = userService.findByMerchantIdAndUserId(Constant.MERCHANT_ID, userId);
-                if (user != null&&user.getUserToken().equalsIgnoreCase(userToken)) {
+                if (user != null && user.getUserToken().equalsIgnoreCase(userToken)) {
                     UserInfoVo userInfoVo = new UserInfoVo();
                     userInfoVo.setUserId(user.getUserId());
                     userInfoVo.setUserName(user.getUserName());
@@ -104,7 +109,7 @@ public class SystemController {
                     map.put("userInfo", userInfoVo);
                 }
             } catch (ErrorMessageException e) {
-
+                log.error(e);
             }
         }
 
@@ -148,8 +153,8 @@ public class SystemController {
     /**
      * 发送验证码接口
      *
-     * @param mobile     手机号
-     * @param safeCode   安全码
+     * @param mobile   手机号
+     * @param safeCode 安全码
      * @return
      */
     @RequestMapping("/sendVerifyCode")
