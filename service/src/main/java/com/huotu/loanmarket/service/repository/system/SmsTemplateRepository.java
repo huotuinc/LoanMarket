@@ -25,12 +25,11 @@ public interface SmsTemplateRepository extends JpaRepository<SmsTemple,Integer>,
 
     /**
      * 获取短信模板
-     * @param merchantId
      * @param sceneType
      * @return
      */
-    @Query("select temp from SmsTemple temp where temp.merchant.merchantId=?1 and temp.sceneType=?2")
-    SmsTemple findByMerchantIdAndSceneType(Integer merchantId, Integer sceneType);
+    @Query("select temp from SmsTemple temp where  temp.sceneType=?1")
+    SmsTemple findBySceneType(Integer sceneType);
 
 
 

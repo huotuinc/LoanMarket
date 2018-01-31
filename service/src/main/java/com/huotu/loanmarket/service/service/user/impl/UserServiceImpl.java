@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
         /**
          * 验证验证码是否有效
          */
-        if (verifyCodeService.checkVerifyCode(user.getMerchantId(), user.getUserName(), verifyCode)) {
+        if (verifyCodeService.checkVerifyCode(user.getUserName(), verifyCode)) {
 
             //先看看用户是否已经存在
             if (userRepository.countByUserName(user.getUserName()) > 0) {
@@ -81,7 +81,7 @@ public class UserServiceImpl implements UserService {
             /**
              * 设置验证码使用状态
              */
-            VerifyCode code = verifyCodeRepository.findByMobileAndMerchantId(user.getUserName(), Constant.MERCHANT_ID);
+            VerifyCode code = verifyCodeRepository.findByMobileAndMerchantId(user.getUserName());
             code.setUseStatus(true);
 
             return user;

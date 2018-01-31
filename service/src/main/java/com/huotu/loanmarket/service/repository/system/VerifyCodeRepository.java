@@ -25,9 +25,8 @@ public interface VerifyCodeRepository extends JpaRepository<VerifyCode, Integer>
      * 根据手机号查询验证码
      *
      * @param mobile     手机号
-     * @param merchantId 商家编号
      * @return
      */
-    @Query("select  v from  VerifyCode  v where v.mobile=?1 and v.merchant.merchantId=?2")
-    VerifyCode findByMobileAndMerchantId(String mobile, int merchantId);
+    @Query("select  v from  VerifyCode  v where v.mobile=?1")
+    VerifyCode findByMobileAndMerchantId(String mobile);
 }

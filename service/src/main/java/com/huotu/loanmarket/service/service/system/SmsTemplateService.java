@@ -89,12 +89,11 @@ public interface SmsTemplateService {
     /**
      * 检查验证码
      *
-     * @param merchantId 商家编号
      * @param mobile     用户手机号
      * @param verifyCode 验证码
      * @return
      */
-    boolean checkVerifyCode(int merchantId, String mobile, String verifyCode);
+    boolean checkVerifyCode(String mobile, String verifyCode);
 
 
 }

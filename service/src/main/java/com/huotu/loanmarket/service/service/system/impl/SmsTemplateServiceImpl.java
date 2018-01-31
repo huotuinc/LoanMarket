@@ -24,7 +24,6 @@ import com.huotu.loanmarket.service.model.PageListView;
 import com.huotu.loanmarket.service.model.system.SmsTemplateVo;
 import com.huotu.loanmarket.service.repository.system.SmsTemplateRepository;
 import com.huotu.loanmarket.service.repository.system.VerifyCodeRepository;
-import com.huotu.loanmarket.service.repository.user.UserRepository;
 import com.huotu.loanmarket.service.service.merchant.MerchantCfgService;
 import com.huotu.loanmarket.service.service.system.SmsTemplateService;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -62,9 +61,6 @@ public class SmsTemplateServiceImpl implements SmsTemplateService {
     private MerchantCfgService merchantCfgService;
     @Autowired
     private SmsTemplateRepository templateRepository;
-    @Autowired
-    private UserRepository userRepository;
-
     @Autowired
     private Environment env;
 
@@ -119,7 +115,7 @@ public class SmsTemplateServiceImpl implements SmsTemplateService {
      */
     @Override
     public SmsTemple findByMerchantIdAndSceneType(Integer merchantId, SmsTemplateSceneTypeEnum sceneType) {
-        return templateRepository.findByMerchantIdAndSceneType(merchantId, sceneType.getCode());
+        return templateRepository.findBySceneType(sceneType.getCode());
     }
 
     /**
@@ -219,7 +215,7 @@ public class SmsTemplateServiceImpl implements SmsTemplateService {
         String code = RandomStringUtils.randomNumeric(Constant.VERIFY_CODE_LENGTH);
         String message = content.replace("{code}", code).replace("{time}", String.valueOf(Constant.VERIFY_CODE_TIME_LENGTH));
         try {
-            VerifyCode verifyCode = verifyCodeRepository.findByMobileAndMerchantId(mobile, merchantId);
+            VerifyCode verifyCode = verifyCodeRepository.findByMobileAndMerchantId(mobile);
             if (verifyCode != null) {
                 //判断每个手机的发送间隔时间不能低于1分钟
                 if (CompareUtils.compareToDate(verifyCode.getCreateTime(), 60)) {
@@ -249,14 +245,13 @@ public class SmsTemplateServiceImpl implements SmsTemplateService {
     /**
      * 校验短信验证码
      *
-     * @param merchantId 商家编号
      * @param mobile     用户手机号
      * @param verifyCode 验证码
      * @return
      */
     @Override
-    public boolean checkVerifyCode(int merchantId, String mobile, String verifyCode) {
-        VerifyCode code = verifyCodeRepository.findByMobileAndMerchantId(mobile, merchantId);
+    public boolean checkVerifyCode(String mobile, String verifyCode) {
+        VerifyCode code = verifyCodeRepository.findByMobileAndMerchantId(mobile);
         return code != null && !code.isUseStatus() && CompareUtils.compareToDate(code.getCreateTime(), 60 * Constant.VERIFY_CODE_TIME_LENGTH) && code.getVerifyCode().equals(verifyCode);
     }
 
@@ -274,7 +269,7 @@ public class SmsTemplateServiceImpl implements SmsTemplateService {
             return true;
         }
         try {
-//            获取短信接口参数
+            //获取短信接口参数
             Map<String, String> configItem = merchantCfgService.getConfigItem(merchantId);
             String response = HttpSender.batchSend(configItem.get(ConfigParameter.MessageParameter.URL.getKey()),
                     configItem.get(ConfigParameter.MessageParameter.ACCOUNT.getKey()),

@@ -27,6 +27,7 @@ public interface UserRepository extends JpaRepository<User, Long> , JpaSpecifica
      * @param userName
      * @return
      */
+    @Query("select count(u) from User u where u.userName=?1")
     long countByUserName(String userName);
 
     /**
