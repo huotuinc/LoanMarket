@@ -11,6 +11,7 @@ package com.huotu.loanmarket.service.entity.system;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.huotu.loanmarket.service.enums.DeviceTypeEnum;
+import com.huotu.loanmarket.service.enums.PackageTypeEnum;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -33,7 +34,7 @@ public class AppSystemVersion {
     @Id
     @Column(name = "version_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer vid;
+    private Long vid;
 
     /**
      * 内部版本号
@@ -87,11 +88,11 @@ public class AppSystemVersion {
      * 设备类型
      */
     @Column(name = "device_type",columnDefinition = "tinyint")
-    private DeviceTypeEnum deviceType;
+    private DeviceTypeEnum deviceType=DeviceTypeEnum.Android;
 
     /**
      * 包类型，0=变包，1=正常包
      */
     @Column(name = "package_type",columnDefinition = "tinyint")
-    private byte packageType=0;
+    private PackageTypeEnum packageType=PackageTypeEnum.SIMPLIFY;
 }

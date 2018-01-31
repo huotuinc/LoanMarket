@@ -11,9 +11,11 @@ package com.huotu.loanmarket.service.service.system.impl;
 
 import com.huotu.loanmarket.service.entity.system.AppSystemVersion;
 import com.huotu.loanmarket.service.enums.DeviceTypeEnum;
+import com.huotu.loanmarket.service.service.system.AppVersionService;
 import com.huotu.loanmarket.service.service.system.SystemService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -23,19 +25,21 @@ import org.springframework.stereotype.Service;
 @Service
 public class SystemServiceImpl implements SystemService {
     private static final Log log = LogFactory.getLog(SystemServiceImpl.class);
+    @Autowired
+    private AppVersionService appVersionService;
     @Override
     public AppSystemVersion checkUpdate(String appVersion, DeviceTypeEnum deviceType) {
         try {
-//            AppSystemVersion apiVersionVo = appVersionService.findLastOne(deviceType);
-//            if (apiVersionVo == null) {
-//                return null;
-//            }
-//            String newVersion = apiVersionVo.getVersion();
-//            Long nvs = Long.valueOf(newVersion.replace(".", ""));
-//            Long ovs = Long.valueOf(appVersion.replace(".", ""));
-//            if (nvs > ovs) {
-//                return apiVersionVo;
-//            }
+            AppSystemVersion apiVersionVo = appVersionService.findLastOne(deviceType);
+            if (apiVersionVo == null) {
+                return null;
+            }
+            String newVersion = apiVersionVo.getVersion();
+            Long nvs = Long.valueOf(newVersion.replace(".", ""));
+            Long ovs = Long.valueOf(appVersion.replace(".", ""));
+            if (nvs > ovs) {
+                return apiVersionVo;
+            }
         } catch (Exception ex) {
             log.error(ex);
         }

@@ -4,7 +4,11 @@ import com.huotu.loanmarket.service.entity.user.User;
 import com.sun.tools.corba.se.idl.StringGen;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 /**
  * @author guomw
@@ -38,5 +42,24 @@ public interface UserRepository extends JpaRepository<User, Long> , JpaSpecifica
      */
     @Query("select u.userName from User u where u.userId=?1")
     String findUserNameByUserId(Long userId);
+
+    /**
+     * 根据用户名获取数据
+     * @param userName
+     * @return
+     */
+    User findByUserName(String userName);
+
+    /**
+     * 更新用户的最近登录时间
+     *
+     * @param userId    用户编号
+     * @param loginTime
+     * @return
+     */
+    @Query("update User u set u.lastLoginTime = ?2 where u.userId = ?1")
+    @Modifying(clearAutomatically = true)
+    @Transactional(rollbackFor = RuntimeException.class)
+    int updateLastLoginTime(long userId, LocalDateTime loginTime);
 
 }

@@ -18,6 +18,7 @@ import com.huotu.loanmarket.service.entity.user.User;
 import com.huotu.loanmarket.service.enums.AppCode;
 import com.huotu.loanmarket.service.enums.UserResultCode;
 import com.huotu.loanmarket.service.exceptions.ErrorMessageException;
+import com.huotu.loanmarket.service.model.user.UserInfoVo;
 import com.huotu.loanmarket.service.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,6 +38,53 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    /**
+     * 根据手机号、密码实现用户登录
+     * 密码跟短信验证码二选一 必填
+     *
+     * @param username   用户名
+     * @param input      密码(md5)或验证码
+     * @param loginType  登录方式[0:密码登录 1:验证码登录]
+     * @param request
+     * @return
+     */
+    @RequestMapping("/login")
+    @ResponseBody
+    public ApiResult login(@RequestParam String username,
+                           @RequestParam String input,
+                           @RequestParam(required = false, defaultValue = "0") int loginType,
+                           HttpServletRequest request) {
+
+        if (!RegexUtils.checkMobile(username)) {
+            return ApiResult.resultWith(UserResultCode.CODE1);
+        }
+        User user;
+        //0:密码登录
+        if (loginType == 0) {
+            if (StringUtils.isEmpty(input) || input.length() != Constant.PASS_WORD_LENGTH) {
+                return ApiResult.resultWith(UserResultCode.CODE2);
+            }
+        } else {
+            if (StringUtils.isEmpty(input) || input.length() != Constant.VERIFY_CODE_LENGTH) {
+                return ApiResult.resultWith(UserResultCode.CODE9);
+            }
+        }
+
+        try {
+            user = userService.login(username, input, loginType, request);
+        } catch (ErrorMessageException e) {
+            return ApiResult.resultWith(e.code, e.getMessage());
+        }
+        UserInfoVo userInfoVo = new UserInfoVo();
+        userInfoVo.setUserId(user.getUserId());
+        userInfoVo.setUserName(user.getUserName());
+        userInfoVo.setUserToken(user.getUserToken());
+        userInfoVo.setHeadimg(user.getHeadimg());
+        userInfoVo.setAuthStatus(user.getAuthStatus().getCode());
+        return ApiResult.resultWith(AppCode.SUCCESS, userInfoVo);
+
+    }
 
 
     /**
@@ -86,6 +134,7 @@ public class UserController {
 
 
     }
+
     /**
      * 设置用户header数据
      *
@@ -102,5 +151,36 @@ public class UserController {
         return user;
     }
 
+    /**
+     * 用户修改（忘记）密码接口
+     *
+     * @param username
+     * @param newPassword
+     * @param verifyCode
+     * @return
+     */
+    @RequestMapping("/updatePassword")
+    @ResponseBody
+    public ApiResult updatePassword(String username,
+            String newPassword, String verifyCode) {
 
+        if (!RegexUtils.checkMobile(username)) {
+            return ApiResult.resultWith(UserResultCode.CODE1);
+        }
+
+        //判断密码长度
+        if (StringUtils.isEmpty(newPassword) || newPassword.length() != Constant.PASS_WORD_LENGTH) {
+            return ApiResult.resultWith(UserResultCode.CODE2);
+        }
+        //判断验证码长度
+        if (StringUtils.isEmpty(verifyCode) || verifyCode.length() != Constant.VERIFY_CODE_LENGTH) {
+            return ApiResult.resultWith(UserResultCode.CODE9);
+        }
+        try {
+            userService.updatePassword(username, newPassword, verifyCode);
+            return ApiResult.resultWith(AppCode.SUCCESS);
+        } catch (ErrorMessageException e) {
+            return ApiResult.resultWith(e.code, e.getMessage());
+        }
+    }
 }
