@@ -1,6 +1,7 @@
 package com.huotu.loanmarket.common.utils;
 
 import java.util.Random;
+import java.util.UUID;
 
 /**
  * @author allan
@@ -49,5 +50,13 @@ public class RandomUtils {
         //还有5位 而且必须保证5位
         String p2 = String.format("%05d", random.nextInt(100000));
         return p1 + p2;
+    }
+
+    /**
+     * @return 尽可能唯一的随机字符串
+     * @since 2.2
+     */
+    public static String randomString() {
+        return UUID.randomUUID().toString();
     }
 }
