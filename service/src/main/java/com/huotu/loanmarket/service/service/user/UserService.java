@@ -26,7 +26,6 @@ public interface UserService {
      */
     User findByMerchantIdAndUserId(Integer merchantId, Long userId);
 
-
     /**
      * 用户注册
      *
@@ -44,13 +43,15 @@ public interface UserService {
      *
      * @param loginName
      * @param loginPassword 密码(md5)或验证码
-     * @param loginType 登录方式[0:密码登录 1:验证码登录]
+     * @param loginType     登录方式[0:密码登录 1:验证码登录]
      * @param request
      * @return
-     * @throws  ErrorMessageException
+     * @throws ErrorMessageException
      */
     @Transactional(rollbackFor = Exception.class)
-    User login(String loginName, String loginPassword,@RequestParam(required = false,defaultValue = "0") int loginType, @RequestParam(required = false) HttpServletRequest request) throws ErrorMessageException;;
+    User login(String loginName, String loginPassword, @RequestParam(required = false, defaultValue = "0") int loginType, @RequestParam(required = false) HttpServletRequest request) throws ErrorMessageException;
+
+    ;
 
     /**
      * 修改最后登录时间
@@ -83,19 +84,21 @@ public interface UserService {
 
     /**
      * 获取邀请数
-     * @param userId 用户ID
+     *
+     * @param userId        用户ID
      * @param isAuthSuccess 认证是否成功
      * @return
      */
-    Long countByMyInvite(Long userId,boolean isAuthSuccess);
+    Long countByMyInvite(Long userId, boolean isAuthSuccess);
 
     /**
      * 获取我的邀请列表
+     *
      * @param userId
      * @param isAuthSuccess
      * @param pageIndex
      * @param pageSize
      * @return
      */
-    PageListView<UserInviteVo> getMyInviteList(Long userId, boolean isAuthSuccess,int pageIndex,int pageSize);
+    PageListView<UserInviteVo> getMyInviteList(Long userId, boolean isAuthSuccess, int pageIndex, int pageSize);
 }

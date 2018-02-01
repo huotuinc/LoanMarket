@@ -13,6 +13,7 @@
         <module>service</module>
         <module>common</module>
         <module>webapi</module>
+        <module>webschedule</module>
     </modules>
 
     <properties>
@@ -195,7 +196,13 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
+    <repositories>
+        <repository>
+            <id>repo-huotu</id>
+            <name>Hot Repository</name>
+            <url>http://repo.51flashmall.com:8081/nexus/content/groups/public/</url>
+        </repository>
+    </repositories>
     <build>
         <plugins>
             <plugin>

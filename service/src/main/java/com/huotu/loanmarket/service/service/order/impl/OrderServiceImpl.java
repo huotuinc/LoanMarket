@@ -182,4 +182,9 @@ public class OrderServiceImpl implements OrderService {
     public void updateOrderAuthCount(String orderId) {
 
     }
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Order save(Order order) {
+        return orderRepository.save(order);
+    }
 }

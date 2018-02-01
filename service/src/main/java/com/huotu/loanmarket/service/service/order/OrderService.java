@@ -39,7 +39,8 @@ public interface OrderService {
     Order create(Long userId, OrderEnum.OrderType orderType);
 
     /**
-     * 根据订单号，获取订单详情
+     * 查询
+     *
      * @param orderId
      * @return
      */
@@ -73,4 +74,12 @@ public interface OrderService {
      */
     void updateOrderAuthCount(String orderId);
 
+    /**
+     * 保存
+     *
+     * @param order
+     * @return
+     */
+    @Transactional(rollbackFor = Exception.class)
+    Order save(Order order);
 }

@@ -19,10 +19,12 @@ public interface ConfigParameter {
     enum SesameParameter implements IMerchantParameterEnum {
         API_ID("zhima_api_id", "API账号"),
         API_SECRET("zhima_api_secret", "API密钥"),
-        NAME_AND_IDCARDNUM_URL("zhima_name_and_idcardnum_url", "身份证号和姓名比对接口"),
-        APP_ID("zhima_app_id","应用标识"),
-        PUBLIC_KEY("zhima_public_key","芝麻公钥"),
-        PRIVATE_KEY("zhima_private_key","私钥");
+        APP_ID("zhima_app_id","行业黑名单应用标识"),
+        PUBLIC_KEY("zhima_public_key","行业黑名单芝麻公钥"),
+        PRIVATE_KEY("zhima_private_key","行业黑名单私钥"),
+        CHEAT_APP_ID("zhima_cheat_app_id","欺诈信息应用标识"),
+        CHEAT_PUBLIC_KEY("zhima_cheat_public_key","欺诈信息公钥"),
+        CHEAT_PRIVATE_KEY("zhima_cheat_private_key","欺诈信息私钥");
         private String key;
         private String message;
 
