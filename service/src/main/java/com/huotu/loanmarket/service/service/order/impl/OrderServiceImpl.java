@@ -164,24 +164,31 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void updateOrderPayStatus(String orderId, OrderEnum.PayType payType) {
-
+    @Transactional(rollbackFor = Exception.class)
+    public void updateOrderPayStatus(String orderId, OrderEnum.PayStatus payStatus) {
+        orderRepository.updateOrderPayStatusByOrderId(orderId, payStatus);
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void updateOrderStatus(String orderId, OrderEnum.OrderStatus orderStatus) {
-
+        orderRepository.updateOrderStatusByOrderId(orderId, orderStatus);
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void updateOrderAuthStatus(String orderId, UserAuthorizedStatusEnums authStatus) {
+        orderRepository.updateOrderAuthStatusByOrderId(orderId, authStatus);
 
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void updateOrderAuthCount(String orderId) {
+        orderRepository.updateOrderAuthCountByOrderId(orderId);
 
     }
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Order save(Order order) {

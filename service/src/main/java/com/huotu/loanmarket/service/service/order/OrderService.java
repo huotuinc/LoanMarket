@@ -56,15 +56,17 @@ public interface OrderService {
     /**
      * 更新订单支付状态
      * @param orderId
-     * @param payType
+     * @param payStatus
      */
-    void updateOrderPayStatus(String orderId,OrderEnum.PayType payType);
+    @Transactional(rollbackFor = Exception.class)
+    void updateOrderPayStatus(String orderId,OrderEnum.PayStatus payStatus);
 
     /**
      * 更新订单状态
      * @param orderId
      * @param orderStatus
      */
+    @Transactional(rollbackFor = Exception.class)
     void updateOrderStatus(String orderId,OrderEnum.OrderStatus orderStatus);
 
     /**
@@ -72,12 +74,14 @@ public interface OrderService {
      * @param orderId
      * @param authStatus
      */
+    @Transactional(rollbackFor = Exception.class)
     void updateOrderAuthStatus(String orderId, UserAuthorizedStatusEnums authStatus);
 
     /**
      * 更新订单认证次数
      * @param orderId
      */
+    @Transactional(rollbackFor = Exception.class)
     void updateOrderAuthCount(String orderId);
 
     /**

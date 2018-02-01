@@ -74,6 +74,30 @@ public interface OrderEnum {
         }
     }
 
+    @AllArgsConstructor
+    enum PayStatus implements  ICommonEnum{
+        /**
+         * 支付宝
+         */
+        NOT_PAY(0, "未支付"),
+        PAY_SUCCESS(1, "已支付"),;
+
+
+        private int code;
+
+        private String name;
+
+        @Override
+        public int getCode() {
+            return code;
+        }
+
+        @Override
+        public String getName() {
+            return name;
+        }
+    }
+
     /***
      * 支付类型
      */

@@ -33,7 +33,7 @@ public class OrderLog {
     @Id
     @Column(name = "log_id", unique = true, nullable = false, length = 10)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long logId;
+    private Long logId;
     /**
      * 商户id
      */
