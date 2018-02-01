@@ -10,7 +10,6 @@
 package com.huotu.loanmarket.service.service.order.impl;
 
 import com.huotu.loanmarket.common.Constant;
-import com.huotu.loanmarket.common.Constant;
 import com.huotu.loanmarket.common.utils.RandomUtils;
 import com.huotu.loanmarket.service.aop.BusinessSafe;
 import com.huotu.loanmarket.service.entity.order.Order;
@@ -20,6 +19,7 @@ import com.huotu.loanmarket.service.enums.ConfigParameter;
 import com.huotu.loanmarket.service.enums.MerchantConfigEnum;
 import com.huotu.loanmarket.service.enums.OrderEnum;
 import com.huotu.loanmarket.service.enums.UserAuthorizedStatusEnums;
+import com.huotu.loanmarket.service.model.order.PayReturnVo;
 import com.huotu.loanmarket.service.model.order.SubmitOrderInfo;
 import com.huotu.loanmarket.service.repository.order.OrderLogRepository;
 import com.huotu.loanmarket.service.repository.order.OrderRepository;
@@ -34,6 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
+import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.util.Map;
 
@@ -67,12 +68,13 @@ public class OrderServiceImpl implements OrderService {
     @Transactional(rollbackFor = Exception.class)
     @BusinessSafe
     @Override
-    public Order create(Long userId, String mobile, String name, String idCardNo, OrderEnum.OrderType orderType) {
+    public Order create(Long userId, String mobile, String name, String idCardNo,String redirectUrl, OrderEnum.OrderType orderType) {
         SubmitOrderInfo submitOrderInfo = new SubmitOrderInfo();
         submitOrderInfo.setUserId(userId);
         submitOrderInfo.setOrderType(orderType);
         submitOrderInfo.setName(name);
         submitOrderInfo.setIdCardNo(idCardNo);
+        submitOrderInfo.setRedirectUrl(redirectUrl);
         return submitOrder(submitOrderInfo);
     }
 
@@ -86,11 +88,26 @@ public class OrderServiceImpl implements OrderService {
     @Transactional(rollbackFor = Exception.class)
     @BusinessSafe
     @Override
-    public Order create(Long userId, OrderEnum.OrderType orderType) {
+    public Order create(Long userId,String redirectUrl, OrderEnum.OrderType orderType) {
         SubmitOrderInfo submitOrderInfo = new SubmitOrderInfo();
         submitOrderInfo.setUserId(userId);
         submitOrderInfo.setOrderType(orderType);
+        submitOrderInfo.setRedirectUrl(redirectUrl);
         return submitOrder(submitOrderInfo);
+    }
+
+    @Override
+    public PayReturnVo getPayReturnInfo(String orderNo) {
+        Order unifiedOrder = this.findByOrderId(orderNo);
+        if (unifiedOrder == null) {
+            return null;
+        }
+        PayReturnVo payReturnVo = new PayReturnVo();
+        payReturnVo.setRedirectText("返回");
+        payReturnVo.setRedirectUrl(unifiedOrder.getRedirectUrl());
+        payReturnVo.setUserId(unifiedOrder.getUser().getUserId().intValue());
+        payReturnVo.setUnifiedOrderNo(orderNo);
+        return payReturnVo;
     }
 
     /**
@@ -105,7 +122,7 @@ public class OrderServiceImpl implements OrderService {
 
         Order order = new Order();
         order.setOrderId(RandomUtils.randomDateTimeString());
-        order.setUserId(user);
+        order.setUser(user);
         order.setMobile(submitOrderInfo.getMobile());
         order.setRealName(submitOrderInfo.getName());
         order.setIdCardNo(submitOrderInfo.getIdCardNo());
@@ -141,6 +158,7 @@ public class OrderServiceImpl implements OrderService {
             money = "10";
         }
         order.setPayAmount(BigDecimal.valueOf(Long.parseLong(money)));
+        //设置第三方授权页面地址
         order.setThirdAuthUrl(authenticationUrl(order));
         order = orderRepository.save(order);
 
@@ -154,7 +172,6 @@ public class OrderServiceImpl implements OrderService {
         log.setResult(1);
         log.setActTime(LocalDateTime.now());
         orderLogRepository.save(log);
-
         return order;
     }
 
@@ -217,5 +234,27 @@ public class OrderServiceImpl implements OrderService {
         }
 
         return url;
+    }
+
+    /**
+     * 完成支付
+     * @param unifiedOrder
+     * @param user
+     */
+    @Override
+    public void paid(Order unifiedOrder, User user) {
+        //0、检查支付金额是不是足额
+        if (unifiedOrder.getOnlineAmount().compareTo(unifiedOrder.getPayAmount()) == -1) {
+            log.error(MessageFormat.format("统一支付订单异常：需付：{0}，实付：{1}，单号：{2}，交易号：{3}",
+                    unifiedOrder.getPayAmount(), unifiedOrder.getOnlineAmount(), unifiedOrder.getOrderId(), unifiedOrder.getTradeNo()));
+            return;
+        }
+        //1、更改订单状态
+        unifiedOrder.setPayTime(LocalDateTime.now());
+        unifiedOrder.setPayStatus(OrderEnum.PayStatus.PAY_SUCCESS);
+        unifiedOrder.setAuthStatus(UserAuthorizedStatusEnums.AUTH_ING);
+        //TODO:系统配置读取
+        unifiedOrder.setAuthCount(3);
+        orderRepository.save(unifiedOrder);
     }
 }

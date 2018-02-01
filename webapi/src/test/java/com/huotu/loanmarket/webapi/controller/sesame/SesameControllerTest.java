@@ -4,6 +4,7 @@ import com.huotu.loanmarket.common.Constant;
 import com.huotu.loanmarket.service.entity.user.User;
 import com.huotu.loanmarket.service.enums.AppCode;
 import com.huotu.loanmarket.webapi.controller.base.BaseTest;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.UnsupportedEncodingException;
@@ -21,6 +22,7 @@ public class SesameControllerTest extends BaseTest {
     private static final String BASE_URL = "http://localhost:8080/api/sesame";
 
     @Test
+    @Ignore
     public void sesameTest() throws Exception {
         User user = mockUser();
         mockMvc.perform(post(BASE_URL + "/verifyIdAndName")
@@ -34,6 +36,7 @@ public class SesameControllerTest extends BaseTest {
     }
 
     @Test
+    @Ignore
     public void getAuthenticationUrlTest() throws Exception {
         User user = mockUser();
         mockMvc.perform(post(BASE_URL + "/getSesameUrl")
@@ -45,6 +48,7 @@ public class SesameControllerTest extends BaseTest {
     }
 
     @Test
+    @Ignore
     public void authorizationTest() throws Exception {
         // TODO: 2017-12-13 涉及透传参数和sign秘钥解析有待线上测试
         mockMvc.perform(post(BASE_URL + "/rollBack/" + 1)

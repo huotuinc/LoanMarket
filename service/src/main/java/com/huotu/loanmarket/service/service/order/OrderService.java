@@ -11,8 +11,11 @@ package com.huotu.loanmarket.service.service.order;
 
 import com.huotu.loanmarket.service.aop.BusinessSafe;
 import com.huotu.loanmarket.service.entity.order.Order;
+import com.huotu.loanmarket.service.entity.user.User;
 import com.huotu.loanmarket.service.enums.OrderEnum;
 import com.huotu.loanmarket.service.enums.UserAuthorizedStatusEnums;
+import com.huotu.loanmarket.service.model.order.ApiOrderCreateResultVo;
+import com.huotu.loanmarket.service.model.order.PayReturnVo;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -27,22 +30,31 @@ public interface OrderService {
      * @param mobile
      * @param name
      * @param idCardNo
+     * @param redirectUrl
      * @param orderType
      * @return
      */
     @Transactional(rollbackFor = Exception.class)
     @BusinessSafe
-    Order create(Long userId,String mobile,String name,String idCardNo, OrderEnum.OrderType orderType);
+    Order create(Long userId,String mobile,String name,String idCardNo,String redirectUrl, OrderEnum.OrderType orderType);
 
     /**
      * 创建订单
      * @param userId
+     * @param redirectUrl
      * @param orderType
      * @return
      */
     @Transactional(rollbackFor = Exception.class)
     @BusinessSafe
-    Order create(Long userId, OrderEnum.OrderType orderType);
+    Order create(Long userId, String redirectUrl,OrderEnum.OrderType orderType);
+
+    /**
+     * 得到支付返回页面上的实体
+     * @param orderNo
+     * @return
+     */
+    PayReturnVo getPayReturnInfo(String orderNo);
 
     /**
      * 查询
@@ -99,4 +111,12 @@ public interface OrderService {
      * @return
      */
     String authenticationUrl(Order order);
+
+
+    /**
+     * 完成支付
+     * @param order
+     * @param user
+     */
+    void paid(Order order, User user);
 }

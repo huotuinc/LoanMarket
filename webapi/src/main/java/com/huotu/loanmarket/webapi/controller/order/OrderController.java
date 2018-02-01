@@ -16,7 +16,10 @@ import com.huotu.loanmarket.service.entity.order.Order;
 import com.huotu.loanmarket.service.enums.AppCode;
 import com.huotu.loanmarket.service.enums.OrderEnum;
 import com.huotu.loanmarket.service.enums.UserResultCode;
+import com.huotu.loanmarket.service.model.order.ApiOrderCreateResultVo;
+import com.huotu.loanmarket.service.model.payconfig.PaymentBizParametersVo;
 import com.huotu.loanmarket.service.service.order.OrderService;
+import com.huotu.loanmarket.service.service.thirdpay.QuickPaymentContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +32,7 @@ import org.springframework.web.bind.annotation.*;
  * @date 01/02/2018
  */
 @Controller
-@RequestMapping(value = "/api/order",method = RequestMethod.POST)
+@RequestMapping(value = "/api/order", method = RequestMethod.POST)
 public class OrderController {
 
     private static final Log log = LogFactory.getLog(OrderController.class);
@@ -41,23 +44,31 @@ public class OrderController {
     @RequestMapping("/create")
     @ResponseBody
     public ApiResult create(@RequestHeader(value = Constant.APP_USER_ID_KEY, required = false, defaultValue = "0") Long userId,
-                             @RequestParam(required = false, defaultValue = "") String mobile,
-                             @RequestParam(required = false, defaultValue = "") String name,
-                             @RequestParam(required = false, defaultValue = "") String idCardNo,
-                             OrderEnum.OrderType orderType) {
-        if (!orderType.equals(OrderEnum.OrderType.JINGDONG) && !orderType.equals(OrderEnum.OrderType.TAOBAO)) {
-            if (StringUtils.isEmpty(mobile) || !RegexUtils.checkMobile(mobile)) {
-                return ApiResult.resultWith(UserResultCode.CODE1);
-            }
-            if (StringUtils.isEmpty(idCardNo)) {
-                return ApiResult.resultWith(AppCode.PARAMETER_ERROR,"身份证号码不能为空");
-            }
+                            @RequestParam(required = false, defaultValue = "") String mobile,
+                            @RequestParam(required = false, defaultValue = "") String name,
+                            @RequestParam(required = false, defaultValue = "") String idCardNo,
+                            @RequestParam String redirectUrl,
+                            OrderEnum.OrderType orderType) {
+        try {
+            if (!orderType.equals(OrderEnum.OrderType.JINGDONG) && !orderType.equals(OrderEnum.OrderType.TAOBAO)) {
+                if (StringUtils.isEmpty(mobile) || !RegexUtils.checkMobile(mobile)) {
+                    return ApiResult.resultWith(UserResultCode.CODE1);
+                }
+                if (StringUtils.isEmpty(idCardNo)) {
+                    return ApiResult.resultWith(AppCode.PARAMETER_ERROR, "身份证号码不能为空");
+                }
 
-            if (StringUtils.isEmpty(name)){
-                return ApiResult.resultWith(AppCode.PARAMETER_ERROR,"姓名不能为空");
+                if (StringUtils.isEmpty(name)) {
+                    return ApiResult.resultWith(AppCode.PARAMETER_ERROR, "姓名不能为空");
+                }
             }
+            Order order = orderService.create(userId, mobile, name, idCardNo,redirectUrl, orderType);
+            return ApiResult.resultWith(AppCode.SUCCESS, order);
+        } catch (Exception ex) {
+            log.error("create发生异常：" + ex.getMessage(), ex);
+            return ApiResult.resultWith(AppCode.ERROR, "创建订单失败");
         }
-        Order order = orderService.create(userId, mobile, name, idCardNo, orderType);
-        return ApiResult.resultWith(AppCode.SUCCESS, order);
     }
+
+
 }
