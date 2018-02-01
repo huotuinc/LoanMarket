@@ -80,7 +80,7 @@ public class SesameController {
         }
         User user = userService.findByMerchantIdAndUserId(merchantId, userId);
         if (user == null) {
-            return ApiResult.resultWith(SesameResultCode.USER_EMPTY);
+            return ApiResult.resultWith(UserResultCode.CODE5);
         }
         log.info("用户欺诈信息开始芝麻授权userId：" + userId);
         ZhimaCreditAntifraudVerifyRequest req = new ZhimaCreditAntifraudVerifyRequest();
@@ -127,7 +127,7 @@ public class SesameController {
         }
         User user = userService.findByMerchantIdAndUserId(merchantId, userId);
         if (user == null) {
-            return ApiResult.resultWith(SesameResultCode.USER_EMPTY);
+            return ApiResult.resultWith(UserResultCode.CODE5);
         }
         log.info("用户行业黑名单开始芝麻授权userId：" + userId);
         ZhimaAuthInfoAuthorizeRequest req = new ZhimaAuthInfoAuthorizeRequest();
