@@ -82,6 +82,7 @@ public class SesameController {
         if (user == null) {
             return ApiResult.resultWith(SesameResultCode.USER_EMPTY);
         }
+        log.info("用户欺诈信息开始芝麻授权userId：" + userId);
         ZhimaCreditAntifraudVerifyRequest req = new ZhimaCreditAntifraudVerifyRequest();
         req.setChannel("apppc");
         req.setPlatform("zmop");
@@ -128,7 +129,7 @@ public class SesameController {
         if (user == null) {
             return ApiResult.resultWith(SesameResultCode.USER_EMPTY);
         }
-        log.info("用户开始芝麻授权userId：" + userId);
+        log.info("用户行业黑名单开始芝麻授权userId：" + userId);
         ZhimaAuthInfoAuthorizeRequest req = new ZhimaAuthInfoAuthorizeRequest();
         // 必要参数
         req.setChannel("apppc");
