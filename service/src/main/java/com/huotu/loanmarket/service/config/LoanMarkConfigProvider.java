@@ -36,10 +36,12 @@ public class LoanMarkConfigProvider {
         SesameConfig sesameConfig = new SesameConfig();
         sesameConfig.setApiId(StringUtilsExt.safeGetMapValue(ConfigParameter.SesameParameter.API_ID.getKey(), map));
         sesameConfig.setApiSecret(StringUtilsExt.safeGetMapValue(ConfigParameter.SesameParameter.API_SECRET.getKey(), map));
-        sesameConfig.setVerifyIdAndNameUrl(StringUtilsExt.safeGetMapValue(ConfigParameter.SesameParameter.NAME_AND_IDCARDNUM_URL.getKey(), map));
         sesameConfig.setAppId(StringUtilsExt.safeGetMapValue(ConfigParameter.SesameParameter.APP_ID.getKey(), map));
         sesameConfig.setPublicKey(StringUtilsExt.safeGetMapValue(ConfigParameter.SesameParameter.PUBLIC_KEY.getKey(), map));
         sesameConfig.setPrivateKey(StringUtilsExt.safeGetMapValue(ConfigParameter.SesameParameter.PRIVATE_KEY.getKey(), map));
+        sesameConfig.setAppCheatId(StringUtilsExt.safeGetMapValue(ConfigParameter.SesameParameter.CHEAT_APP_ID.getKey(), map));
+        sesameConfig.setPublicCheatKey(StringUtilsExt.safeGetMapValue(ConfigParameter.SesameParameter.CHEAT_PUBLIC_KEY.getKey(), map));
+        sesameConfig.setPrivateCheatKey(StringUtilsExt.safeGetMapValue(ConfigParameter.SesameParameter.CHEAT_PRIVATE_KEY.getKey(), map));
         return sesameConfig;
     }
 

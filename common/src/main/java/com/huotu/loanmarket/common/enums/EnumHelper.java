@@ -43,12 +43,12 @@ public class EnumHelper {
         return null;
     }
 
-    public static <T extends ICommonEnum> T getEnumType(Class<T> cls, String name) {
+    public static <T extends IMerchantParameterEnum> T getEnumType(Class<T> cls, String name) {
         if (StringUtils.isEmpty(name)) {
             return null;
         }
         for (T item : cls.getEnumConstants()) {
-            if (item.getName().equals(name)) {
+            if (item.getKey().equals(name)) {
                 return item;
             }
         }

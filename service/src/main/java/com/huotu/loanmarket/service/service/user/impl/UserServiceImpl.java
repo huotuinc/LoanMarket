@@ -31,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.persistence.Id;
 import javax.persistence.criteria.Predicate;
 import javax.servlet.http.HttpServletRequest;
 import java.text.MessageFormat;
@@ -239,17 +240,19 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 获取邀请数
-     * @param userId 用户ID
+     *
+     * @param userId        用户ID
      * @param isAuthSuccess 认证是否成功
      * @return
      */
     @Override
     public Long countByMyInvite(Long userId, boolean isAuthSuccess) {
-       return inviteRepository.count(getInviteSpecification(userId,isAuthSuccess));
+        return inviteRepository.count(getInviteSpecification(userId, isAuthSuccess));
     }
 
     /**
      * 获取我的邀请列表
+     *
      * @param userId
      * @param isAuthSuccess
      * @param pageIndex
@@ -257,18 +260,18 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public PageListView<UserInviteVo> getMyInviteList(Long userId, boolean isAuthSuccess,int pageIndex,int pageSize) {
-        PageListView<UserInviteVo> result=new PageListView<>();
+    public PageListView<UserInviteVo> getMyInviteList(Long userId, boolean isAuthSuccess, int pageIndex, int pageSize) {
+        PageListView<UserInviteVo> result = new PageListView<>();
         Pageable pageable = new PageRequest(pageIndex - 1, pageSize, new Sort(Sort.Direction.ASC, "id"));
 
-        Specification<Invite> specification= getInviteSpecification(userId,isAuthSuccess);
-        Page<Invite> page= inviteRepository.findAll(specification,pageable);
+        Specification<Invite> specification = getInviteSpecification(userId, isAuthSuccess);
+        Page<Invite> page = inviteRepository.findAll(specification, pageable);
         result.setTotalCount(page.getTotalElements());
         result.setPageCount(page.getTotalPages());
-        List<UserInviteVo> list=new ArrayList<>();
-        for (Invite it:page.getContent()
-             ) {
-            UserInviteVo userInviteVo=new UserInviteVo();
+        List<UserInviteVo> list = new ArrayList<>();
+        for (Invite it : page.getContent()
+                ) {
+            UserInviteVo userInviteVo = new UserInviteVo();
             userInviteVo.setInviteTime(it.getTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
             userInviteVo.setName(it.getRealName());
             userInviteVo.setStatus(it.getAuthStatus().getCode());
@@ -283,14 +286,15 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 获取邀请筛选添加
+     *
      * @param userId
      * @param isAuthSuccess
      * @return
      */
-    private Specification<Invite> getInviteSpecification(Long userId, boolean isAuthSuccess){
+    private Specification<Invite> getInviteSpecification(Long userId, boolean isAuthSuccess) {
         Specification<Invite> specification = (root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
-            predicates.add(criteriaBuilder.equal(root.get("inviterId").as(Long.class),userId));
+            predicates.add(criteriaBuilder.equal(root.get("inviterId").as(Long.class), userId));
             if (isAuthSuccess) {
                 predicates.add(criteriaBuilder.equal(root.get("authStatus").as(UserAuthorizedStatusEnums.class), UserAuthorizedStatusEnums.AUTH_SUCCESS));
             } else {

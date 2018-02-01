@@ -27,8 +27,7 @@ public class SesameControllerTest extends BaseTest {
                 .param("idCardNum", "330724199409192914")
                 .header(Constant.APP_USER_ID_KEY, user.getUserId())
                 .header(Constant.APP_MERCHANT_ID_KEY, Constant.MERCHANT_ID))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.resultCode").value(AppCode.SUCCESS.getCode()));
+                .andExpect(status().isOk());
     }
 
     @Test
