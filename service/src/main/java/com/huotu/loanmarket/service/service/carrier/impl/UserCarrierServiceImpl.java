@@ -158,10 +158,10 @@ public class UserCarrierServiceImpl implements UserCarrierService {
             }
             int resultCode;
             if (flag) {
-                order.setFlgCarrier(UserAuthorizedStatusEnums.AUTH_SUCCESS);
+                order.setAuthStatus(UserAuthorizedStatusEnums.AUTH_SUCCESS);
                 resultCode = AppCode.SUCCESS.getCode();
             } else {
-                order.setFlgCarrier(UserAuthorizedStatusEnums.AUTH_ERROR);
+                order.setAuthStatus(UserAuthorizedStatusEnums.AUTH_ERROR);
                 resultCode = AppCode.ERROR.getCode();
             }
             orderRepository.saveAndFlush(order);
@@ -176,19 +176,19 @@ public class UserCarrierServiceImpl implements UserCarrierService {
         saveRiskContactStats(orderId, data1);
         log.info("保存风险联系人数据");
         //保存风险联系人详情
-        saveRiskContactDetail(orderId,data1);
+        saveRiskContactDetail(orderId, data1);
         log.info("保存风险联系人详情数据");
         //运营商每月账单
         saveConsumeBill(orderId, data1);
         log.info("运营商每月账单");
         //保存金融联系人
-        saveFinanceContactStats(orderId,data1);
+        saveFinanceContactStats(orderId, data1);
         log.info("保存金融联系人");
         //保存金融联系人明细
-        saveFinanceContactDetail(orderId,data1);
+        saveFinanceContactDetail(orderId, data1);
         log.info("保存金融联系人明细");
         //保存静默活跃统计
-        saveActiveSilenceStats(orderId,data1);
+        saveActiveSilenceStats(orderId, data1);
         log.info("保存静默活跃统计");
 
         //入网时间
@@ -215,22 +215,22 @@ public class UserCarrierServiceImpl implements UserCarrierService {
         //账户余额
         BigDecimal accountBalance = !mobileInfo.get("account_balance").isJsonNull() ?
                 mobileInfo.get("account_balance").getAsBigDecimal()
-                        .divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP) : null;
+                        .divide(new BigDecimal("100"), 2, BigDecimal.ROUND_HALF_UP) : null;
         //近6个月互通号码数量
         JsonObject behaviorAnalysis = data1.getAsJsonObject("behavior_analysis");
-        String mutualNumber =  !behaviorAnalysis.get("mutual_number_analysis_6month").isJsonNull() ?
+        String mutualNumber = !behaviorAnalysis.get("mutual_number_analysis_6month").isJsonNull() ?
                 behaviorAnalysis.get("mutual_number_analysis_6month").getAsString() : null;
         // 前10联系人黑名单人数占比
         JsonObject blacklistAnalysis = data1.getAsJsonObject("contact_blacklist_analysis");
-        Double blackRadio =  !blacklistAnalysis.get("black_top10_contact_total_count_ratio").isJsonNull() ?
+        Double blackRadio = !blacklistAnalysis.get("black_top10_contact_total_count_ratio").isJsonNull() ?
                 blacklistAnalysis.get("black_top10_contact_total_count_ratio").getAsDouble() : null;
         // 前10联系人信贷逾期名单人数占比
-        Double blackCreditRadio =  !blacklistAnalysis.get("black_top10_contact_creditcrack_count_ratio").isJsonNull() ?
+        Double blackCreditRadio = !blacklistAnalysis.get("black_top10_contact_creditcrack_count_ratio").isJsonNull() ?
                 blacklistAnalysis.get("black_top10_contact_creditcrack_count_ratio").getAsDouble() : null;
 
         // 前10联系人近3月平均申请平台数
         JsonObject manyheadsAnalysis = data1.getAsJsonObject("contact_manyheads_analysis");
-        String applyCount =  !manyheadsAnalysis.get("manyheads_top10_contact_recent3month_partnercode_count_avg").isJsonNull() ?
+        String applyCount = !manyheadsAnalysis.get("manyheads_top10_contact_recent3month_partnercode_count_avg").isJsonNull() ?
                 manyheadsAnalysis.get("manyheads_top10_contact_recent3month_partnercode_count_avg").getAsString() : null;
         //前10联系人近3月申请2个及以上平台的人数
         String applyCountOverTwo = !manyheadsAnalysis.get("manyheads_top10_contact_recent3month_partnercode_count_over2").isJsonNull() ?
@@ -260,13 +260,13 @@ public class UserCarrierServiceImpl implements UserCarrierService {
         JsonObject jsonObject = data1.getAsJsonObject("active_silence_stats");
         ActiveSilenceStats activeSilenceStats = new ActiveSilenceStats();
         activeSilenceStats.setOrderId(orderId);
-        if(jsonObject != null) {
+        if (jsonObject != null) {
             int activeDayCallThree = jsonObject.get("active_day_1call_3month")
-                    .isJsonNull()?jsonObject.get("active_day_1call_3month").getAsInt():0;
+                    .isJsonNull() ? jsonObject.get("active_day_1call_3month").getAsInt() : 0;
             int silenceDayCallThree = jsonObject.get("silence_day_0call_3month")
-                    .isJsonNull()?jsonObject.get("silence_day_0call_3month").getAsInt():0;
+                    .isJsonNull() ? jsonObject.get("silence_day_0call_3month").getAsInt() : 0;
             int continueSilenceDayOverThree = jsonObject.get("continue_silence_day_over3_0call_3month")
-                    .isJsonNull()?jsonObject.get("continue_silence_day_over3_0call_3month").getAsInt():0;
+                    .isJsonNull() ? jsonObject.get("continue_silence_day_over3_0call_3month").getAsInt() : 0;
             activeSilenceStats.setActiveDayCallThree(activeDayCallThree);
             activeSilenceStats.setSilenceDayCallThree(silenceDayCallThree);
             activeSilenceStats.setContinueSilenceDayOverThree(continueSilenceDayOverThree);
@@ -280,8 +280,8 @@ public class UserCarrierServiceImpl implements UserCarrierService {
         List<FinanceContactDetail> list = Lists.newArrayList();
         for (JsonElement jsonElement : asJsonArray) {
             JsonObject asJsonObject = jsonElement.getAsJsonObject();
-            String contactNumber = !asJsonObject.get("contact_number").isJsonNull()?asJsonObject.get("contact_number").getAsString():null;
-            String contactName = !asJsonObject.get("contact_name").isJsonNull()?asJsonObject.get("contact_name").getAsString():null;
+            String contactNumber = !asJsonObject.get("contact_number").isJsonNull() ? asJsonObject.get("contact_number").getAsString() : null;
+            String contactName = !asJsonObject.get("contact_name").isJsonNull() ? asJsonObject.get("contact_name").getAsString() : null;
             FinanceContactDetail financeContactDetail = new FinanceContactDetail();
             financeContactDetail.setOrderId(orderId);
             financeContactDetail.setContactNumber(contactNumber);
@@ -296,10 +296,10 @@ public class UserCarrierServiceImpl implements UserCarrierService {
         List<FinanceContactStats> list = Lists.newArrayList();
         for (JsonElement jsonElement : asJsonArray) {
             JsonObject asJsonObject = jsonElement.getAsJsonObject();
-            String contactType = !asJsonObject.get("contact_type").isJsonNull()?asJsonObject.get("contact_type").getAsString():null;
-            int contactCount = !asJsonObject.get("contact_count_6month").isJsonNull()?asJsonObject.get("contact_count_6month").getAsInt():0;
-            int callCount = !asJsonObject.get("call_count_6month").isJsonNull()?asJsonObject.get("call_count_6month").getAsInt():0;
-            int callTime = !asJsonObject.get("call_time_6month").isJsonNull()?asJsonObject.get("call_time_6month").getAsInt():0;
+            String contactType = !asJsonObject.get("contact_type").isJsonNull() ? asJsonObject.get("contact_type").getAsString() : null;
+            int contactCount = !asJsonObject.get("contact_count_6month").isJsonNull() ? asJsonObject.get("contact_count_6month").getAsInt() : 0;
+            int callCount = !asJsonObject.get("call_count_6month").isJsonNull() ? asJsonObject.get("call_count_6month").getAsInt() : 0;
+            int callTime = !asJsonObject.get("call_time_6month").isJsonNull() ? asJsonObject.get("call_time_6month").getAsInt() : 0;
             FinanceContactStats financeContactStats = new FinanceContactStats();
             financeContactStats.setOrderId(orderId);
             financeContactStats.setContactType(contactType);
@@ -316,8 +316,8 @@ public class UserCarrierServiceImpl implements UserCarrierService {
         List<RiskContactDetail> list = Lists.newArrayList();
         for (JsonElement jsonElement : asJsonArray) {
             JsonObject asJsonObject = jsonElement.getAsJsonObject();
-            String contactNumber = !asJsonObject.get("contact_number").isJsonNull()?asJsonObject.get("contact_number").getAsString():null;
-            String contactName = !asJsonObject.get("contact_name").isJsonNull()?asJsonObject.get("contact_name").getAsString():null;
+            String contactNumber = !asJsonObject.get("contact_number").isJsonNull() ? asJsonObject.get("contact_number").getAsString() : null;
+            String contactName = !asJsonObject.get("contact_name").isJsonNull() ? asJsonObject.get("contact_name").getAsString() : null;
             RiskContactDetail riskContactDetail = new RiskContactDetail();
             riskContactDetail.setOrderId(orderId);
             riskContactDetail.setContactNumber(contactNumber);

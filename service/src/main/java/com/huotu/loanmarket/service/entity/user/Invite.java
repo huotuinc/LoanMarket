@@ -91,7 +91,7 @@ public class Invite {
     /**
      * 认证奖励时间
      */
-    @Column(name = "auth_rewarded_time")
+    @Column(name = "auth_rewarded_time", columnDefinition = "timestamp")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime authRewardedTime;
 

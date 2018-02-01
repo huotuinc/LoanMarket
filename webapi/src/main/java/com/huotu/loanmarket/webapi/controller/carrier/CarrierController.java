@@ -64,8 +64,8 @@ public class CarrierController {
             map.put("message","用户不存在，回调忽略");
             return map;
         }
-        if (("DS".equals(type) && UserAuthorizedStatusEnums.AUTH_SUCCESS.equals(order.getFlgDs()))
-                || ("YYS".equals(type) && UserAuthorizedStatusEnums.AUTH_SUCCESS.equals(order.getFlgCarrier()))) {
+        if (("DS".equals(type) && UserAuthorizedStatusEnums.AUTH_SUCCESS.equals(order.getAuthStatus()))
+                || ("YYS".equals(type) && UserAuthorizedStatusEnums.AUTH_SUCCESS.equals(order.getAuthStatus()))) {
             log.info(MessageFormat.format("【数据魔盒】重复调用，订单id：{0}",orderId));
             map.put("message","重复调用");
             return map;
