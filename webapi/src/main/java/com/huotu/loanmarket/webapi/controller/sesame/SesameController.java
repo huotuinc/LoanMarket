@@ -94,9 +94,6 @@ public class SesameController {
         DefaultZhimaClient client = new DefaultZhimaClient(SesameSysConfig.SESAME_CREDIT_URL, sesameConfig.getAppCheatId(), sesameConfig.getPrivateCheatKey(), sesameConfig.getPublicCheatKey());
         try {
             ZhimaCreditAntifraudVerifyResponse response = client.execute(req);
-            System.out.println("kjdlas" + response.isSuccess());
-            System.out.println(response.getErrorCode());
-            System.out.println(response.getErrorMessage());
             if (response.isSuccess()) {
                 return ApiResult.resultWith(AppCode.SUCCESS);
             } else {

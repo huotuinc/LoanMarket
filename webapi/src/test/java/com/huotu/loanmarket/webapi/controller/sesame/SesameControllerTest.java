@@ -9,6 +9,7 @@ import org.junit.Test;
 import java.io.UnsupportedEncodingException;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -27,7 +28,9 @@ public class SesameControllerTest extends BaseTest {
                 .param("idCardNum", "330724199409192914")
                 .header(Constant.APP_USER_ID_KEY, user.getUserId())
                 .header(Constant.APP_MERCHANT_ID_KEY, Constant.MERCHANT_ID))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(jsonPath("$.resultCode").value(AppCode.SUCCESS.getCode()));
     }
 
     @Test

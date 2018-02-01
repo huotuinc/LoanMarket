@@ -19,10 +19,6 @@ public class SesameConfig {
      */
     private String apiSecret;
     /**
-     * 比对身份证号和姓名是否一致
-     */
-    private String verifyIdAndNameUrl;
-    /**
      * 芝麻应用标识（行业黑名单）
      */
     private String appId;

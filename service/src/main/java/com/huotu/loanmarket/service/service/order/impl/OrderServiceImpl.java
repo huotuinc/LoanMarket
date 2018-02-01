@@ -28,6 +28,7 @@ import com.huotu.loanmarket.service.service.user.UserService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
@@ -39,6 +40,7 @@ import java.util.Map;
  * @author guomw
  * @date 01/02/2018
  */
+@Service
 public class OrderServiceImpl implements OrderService {
 
     private static final Log log = LogFactory.getLog(OrderServiceImpl.class);
@@ -68,7 +70,6 @@ public class OrderServiceImpl implements OrderService {
         SubmitOrderInfo submitOrderInfo = new SubmitOrderInfo();
         submitOrderInfo.setUserId(userId);
         submitOrderInfo.setOrderType(orderType);
-        submitOrderInfo.setMobile(mobile);
         submitOrderInfo.setName(name);
         submitOrderInfo.setIdCardNo(idCardNo);
         return submitOrder(submitOrderInfo);
