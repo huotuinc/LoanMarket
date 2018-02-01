@@ -23,15 +23,28 @@ public class SesameConfig {
      */
     private String verifyIdAndNameUrl;
     /**
-     * 芝麻应用标识
+     * 芝麻应用标识（行业黑名单）
      */
     private String appId;
     /**
-     * 商家私钥
+     * 商家私钥（行业黑名单）
      */
     private String privateKey;
     /**
-     * 芝麻公钥
+     * 芝麻公钥（行业黑名单）
      */
     private String publicKey;
+    /**
+     * 芝麻应用标识（欺诈信息验证）
+     */
+    private String appCheatId;
+    /**
+     * 芝麻公钥（欺诈信息验证）
+     */
+    private String privateCheatKey;
+    /**
+     * 芝麻私钥（欺诈信息验证）
+     */
+    private String publicCheatKey;
+
 }

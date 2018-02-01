@@ -1,17 +1,18 @@
 package com.huotu.loanmarket.service.service.sesame;
 
+import com.huotu.loanmarket.service.entity.sesame.Industry;
+
 /**
  * @Author hxh
  * @Date 2018/1/30 16:17
  */
 public interface SesameService {
+
     /**
-     * 判断身份证号和姓名一致
+     * 保存
      *
-     * @param merchantId
-     * @param name
-     * @param idCardNum
+     * @param industry
      * @return
      */
-    boolean checkNameAndIdCardNum(Integer merchantId, String name, String idCardNum);
+    Industry save(Industry industry);
 }

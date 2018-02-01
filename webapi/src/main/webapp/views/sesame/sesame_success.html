@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width,minimum-scale=1,user-scalable=no,maximum-scale=1,initial-scale=1" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="description" content="" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>支付成功</title>
+    <style>
+        body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td {
+            margin: 0;
+            padding: 0;
+        }
+        a, img, button, input, select {
+            -webkit-tap-highlight-color: transparent;
+            outline: 0;
+            /**/
+        }
+        img {
+            border: 0 none;
+        }
+        i, em { font-style: normal }
+
+        ul {
+            list-style-type: none;
+            display: block;
+            -webkit-margin-before: 0em;
+            -webkit-margin-after: 0em;
+            -webkit-margin-start: 0px;
+            -webkit-margin-end: 0px;
+        }
+        body{ margin: 0px; padding: 0px; background-color: #fff; min-width: 320px;font-family: Helvetica, STHeiti STXihei,  Microsoft YaHei, Arial; }
+        .lk{margin: 0 auto;text-align: center; width:30%; margin-top: 20px;}
+        .lk a{ text-decoration:none; height: 38px; line-height: 38px; display: block;color: #111; background-color: #fff; border: 1px  solid #ccc; border-radius: 6px; }
+        .btt{ color: #000; font-size: 20px; padding: 4px 0px;}
+        .bts{ color: #999; font-size: 14px; }
+    </style>
+</head>
+<!--/*@thymesVar id="returnInfo" type="com.huotu.superloan.service.model.unifiedorder.PayReturnVo"*/-->
+<body style="background-color: #f2f2f2; overflow: hidden" th:object="${returnInfo}">
+<div style="text-align: center;">
+    <p style=" padding-top:20%; padding-bottom:2%">
+        <img src="../../resource/image/cg.png" th:src="@{/resource/image/cg.png}" style="width:24%;">
+    </p>
+    <p class="btt">授权成功</p>
+    <p class="bts">点击继续下一步操作</p>
+    <p class="lk">
+        <a href="">返回</a>
+    </p>
+</div>
+</body>
+</html>

@@ -16,6 +16,11 @@ public class SesameSysConfig {
      */
     public static final String PRODUCT_CODE_SCORE = "w1010100100000000022";
     /**
+     * 芝麻信用欺诈信息产品编号
+     */
+    public static final String PRODUCT_CODE_CHEAT = "w1010100000000002859";
+
+    /**
      * 芝麻信用授权方式：h5
      */
     public static final String SESAME_CREDIT_TYPE = "M_H5";
