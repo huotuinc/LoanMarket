@@ -1,8 +1,6 @@
 package com.huotu.loanmarket.service.service.carrier.impl;
 
 import com.google.common.collect.Lists;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -80,14 +78,13 @@ public class UserCarrierServiceImpl implements UserCarrierService {
     private ActiveSilenceStatsRepository activeSilenceStatsRepository;
 
     private HttpClientBuilder httpClientBuilder;
-    private RequestConfig requestConfig;
-    private Gson gson = new GsonBuilder().serializeNulls().create();
+    //    private Gson gson = new GsonBuilder().serializeNulls().create();
     //数据魔盒报告生成中状态
     private static final int MAGIC_CREATE_REPORT = 40001;
 
     @PostConstruct
     public void init() {
-        requestConfig = RequestConfig.custom()
+        RequestConfig requestConfig = RequestConfig.custom()
                 .setConnectTimeout(30000).setConnectionRequestTimeout(5000)
                 .setSocketTimeout(30000).build();
         httpClientBuilder = HttpClientBuilder.create();
@@ -99,7 +96,7 @@ public class UserCarrierServiceImpl implements UserCarrierService {
     @Transactional
     public ApiResult queryResult(String taskId, String orderId, Integer merchantId) throws IOException {
         //获取运营商系统参数
-        CarrierConfig carrierConfig = loanMarkConfigProvider.getCarrierConfig(merchantId.intValue());
+        CarrierConfig carrierConfig = loanMarkConfigProvider.getCarrierConfig(merchantId);
         String code = carrierConfig.getPartnerCode();
         String key = carrierConfig.getPartnerKey();
         String url = "https://api.shujumohe.com/octopus/task.unify.query/v3?partner_code=" + code + "&partner_key=" + key;
@@ -121,6 +118,7 @@ public class UserCarrierServiceImpl implements UserCarrierService {
             String message = operatorMessage;
             String resultStr = "";
             Order order = orderRepository.findOne(orderId);
+            order.setTaskId(taskId);
             if (operatorCode == 0) {
                 //身份证号码。真实姓名
                 //处理运营商数据，保存原始运营商数据一份
@@ -131,7 +129,6 @@ public class UserCarrierServiceImpl implements UserCarrierService {
                     userCarrier.setFirstUpdatetime(LocalDateTime.now());
                 }
                 userCarrier.setOrderId(orderId);
-                userCarrier.setTaskId(taskId);
                 //不能直接data.getAsString 会报错
 //                resultStr = gson.toJson(data);
 //                userCarrier.setInfo(resultStr);
@@ -171,7 +168,6 @@ public class UserCarrierServiceImpl implements UserCarrierService {
 
     private void assembleReportData(String orderId, JsonObject jsonObject1, UserCarrier userCarrier) {
         JsonObject data1 = jsonObject1.getAsJsonObject("data");
-        String reportData = gson.toJson(data1);
         //保存风险联系人数据
         saveRiskContactStats(orderId, data1);
         log.info("保存风险联系人数据");

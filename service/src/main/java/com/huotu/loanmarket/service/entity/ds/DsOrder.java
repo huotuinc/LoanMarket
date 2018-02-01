@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.math.BigDecimal;
 
 /**
  * 电商订单
@@ -39,7 +40,7 @@ public class DsOrder {
      * 订单金额
      */
     @Column(name = "orderAmount")
-    private String orderAmount;
+    private BigDecimal orderAmount;
 
     /**
      * 订单类型

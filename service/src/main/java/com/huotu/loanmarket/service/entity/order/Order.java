@@ -102,4 +102,10 @@ public class Order {
     @Column(name = "auth_status", columnDefinition = "tinyint default 0")
     private UserAuthorizedStatusEnums authStatus = UserAuthorizedStatusEnums.AUTH_NOT;
 
+    /**
+     * 任务id
+     */
+    @Column(name = "task_id")
+    private String taskId;
+
 }

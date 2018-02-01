@@ -23,6 +23,7 @@
         <seleniumhq.varsion>2.48.2</seleniumhq.varsion>
         <thymeleaf.version>3.0.6.RELEASE</thymeleaf.version>
         <service.version>1.0-SNAPSHOT</service.version>
+        <loanmarket.version>1.0-SNAPSHOT</loanmarket.version>
     </properties>
 
     <dependencyManagement>

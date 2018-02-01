@@ -61,11 +61,10 @@ public class CarrierController {
         Order order = orderRepository.findOne(orderId);
         if (order == null) {
             log.info(MessageFormat.format("订单不存在，订单id：{0}", orderId));
-            map.put("message","用户不存在，回调忽略");
+            map.put("message","订单不存在，回调忽略");
             return map;
         }
-        if (("DS".equals(type) && UserAuthorizedStatusEnums.AUTH_SUCCESS.equals(order.getAuthStatus()))
-                || ("YYS".equals(type) && UserAuthorizedStatusEnums.AUTH_SUCCESS.equals(order.getAuthStatus()))) {
+        if (UserAuthorizedStatusEnums.AUTH_SUCCESS.equals(order.getAuthStatus())) {
             log.info(MessageFormat.format("【数据魔盒】重复调用，订单id：{0}",orderId));
             map.put("message","重复调用");
             return map;
@@ -81,7 +80,7 @@ public class CarrierController {
                 asyncTask.setTaskId(taskId);
             }else{
                  asyncTask = new AsyncTask();
-                 asyncTask.setMerchantId( Long.valueOf(merchantId));
+                 asyncTask.setMerchantId(Integer.valueOf(merchantId));
                  asyncTask.setOrderId(orderId);
                  asyncTask.setTaskId(taskId);
                  asyncTask.setType(type);

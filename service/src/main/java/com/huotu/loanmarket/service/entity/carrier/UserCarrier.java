@@ -112,12 +112,6 @@ public class UserCarrier {
     @Column(name = "apply_count_over_two")
     private String applyCountOverTwo;
 
-    /**
-     * 任务id
-     */
-    @Column(name = "task_id")
-    private String taskId;
-
     /** 第一次更新时间 */
     @Column(name = "first_updatetime",columnDefinition = "timestamp")
     private LocalDateTime firstUpdatetime;

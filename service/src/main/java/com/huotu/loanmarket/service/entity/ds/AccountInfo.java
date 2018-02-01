@@ -52,11 +52,11 @@ public class AccountInfo {
      * 信用额度
      */
     @Column(name = "credit_quota")
-    private String creditQuota;
+    private BigDecimal creditQuota;
 
     /**
      * 消费额度（白条欠款）
      */
     @Column(name = "consume_quota")
-    private String consumeQuota;
+    private BigDecimal consumeQuota;
 }

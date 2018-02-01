@@ -38,7 +38,7 @@ public class AsyncTask {
     private String taskId;
 
     @Column(name = "merchant_id")
-    private Long merchantId;
+    private Integer merchantId;
 
     /**
      * 是否失败
