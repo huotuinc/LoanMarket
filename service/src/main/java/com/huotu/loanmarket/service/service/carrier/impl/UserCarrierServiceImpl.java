@@ -114,7 +114,7 @@ public class UserCarrierServiceImpl implements UserCarrierService {
                             .build()
             );
 
-            com.google.gson.JsonObject jsonObject = httpClient.execute(httpPost, new JsonResponseHandler());
+            JsonObject jsonObject = httpClient.execute(httpPost, new JsonResponseHandler());
             String operatorMessage = jsonObject.get("message").getAsString();
             int operatorCode = jsonObject.get("code").getAsInt();
             boolean flag = false;
@@ -124,7 +124,7 @@ public class UserCarrierServiceImpl implements UserCarrierService {
             if (operatorCode == 0) {
                 //身份证号码。真实姓名
                 //处理运营商数据，保存原始运营商数据一份
-                com.google.gson.JsonObject data = jsonObject.getAsJsonObject("data");
+                JsonObject data = jsonObject.getAsJsonObject("data");
                 UserCarrier userCarrier = userCarrierRepository.findByOrderIdAndMerchantId(orderId, merchantId);
                 if (userCarrier == null) {
                     userCarrier = new UserCarrier();
@@ -137,7 +137,7 @@ public class UserCarrierServiceImpl implements UserCarrierService {
 //                userCarrier.setInfo(resultStr);
                 userCarrier.setLastUpdatetime(LocalDateTime.now());
                 userCarrier.setMerchantId(merchantId);
-                com.google.gson.JsonObject magicJsonObject = null;
+                JsonObject magicJsonObject = null;
                 String magicMessage = null;
                 int magicCode = -1;
                 magicJsonObject = magicReport(taskId, merchantId);
