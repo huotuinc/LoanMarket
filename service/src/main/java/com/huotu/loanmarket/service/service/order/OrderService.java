@@ -92,4 +92,11 @@ public interface OrderService {
      */
     @Transactional(rollbackFor = Exception.class)
     Order save(Order order);
+
+    /**
+     * 根据订单返回第三方认证链接,不满足条件返回null
+     * @param order
+     * @return
+     */
+    String authenticationUrl(Order order);
 }

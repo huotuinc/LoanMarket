@@ -127,4 +127,10 @@ public class Order {
     @Column(name = "third_auth_url", length = 200)
     private String thirdAuthUrl;
 
+    /**
+     * 任务id
+     */
+    @Column(name = "task_id")
+    private String taskId;
+
 }

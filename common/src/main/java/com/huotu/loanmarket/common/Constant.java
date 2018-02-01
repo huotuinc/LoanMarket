@@ -142,4 +142,16 @@ public class Constant {
      * 渠道管理后台登录session_Login_Name
      */
     public static final String CHANNEL_ADMIN_SESSION_LOGIN_NAME = "__channelLoginName";
+
+
+    /**
+     * 运营商
+     */
+    public static final String YYS = "yys";
+    /**
+     * 电商
+     */
+    public static final String DS = "ds";
+
+
 }
