@@ -82,6 +82,7 @@ public class SesameController {
         if (user == null) {
             return ApiResult.resultWith(SesameResultCode.USER_EMPTY);
         }
+        log.info("用户欺诈信息开始芝麻授权userId：" + userId);
         ZhimaCreditAntifraudVerifyRequest req = new ZhimaCreditAntifraudVerifyRequest();
         req.setChannel("apppc");
         req.setPlatform("zmop");
@@ -94,9 +95,6 @@ public class SesameController {
         DefaultZhimaClient client = new DefaultZhimaClient(SesameSysConfig.SESAME_CREDIT_URL, sesameConfig.getAppCheatId(), sesameConfig.getPrivateCheatKey(), sesameConfig.getPublicCheatKey());
         try {
             ZhimaCreditAntifraudVerifyResponse response = client.execute(req);
-            System.out.println("kjdlas" + response.isSuccess());
-            System.out.println(response.getErrorCode());
-            System.out.println(response.getErrorMessage());
             if (response.isSuccess()) {
                 return ApiResult.resultWith(AppCode.SUCCESS);
             } else {
@@ -131,7 +129,7 @@ public class SesameController {
         if (user == null) {
             return ApiResult.resultWith(SesameResultCode.USER_EMPTY);
         }
-        log.info("用户开始芝麻授权userId：" + userId);
+        log.info("用户行业黑名单开始芝麻授权userId：" + userId);
         ZhimaAuthInfoAuthorizeRequest req = new ZhimaAuthInfoAuthorizeRequest();
         // 必要参数
         req.setChannel("apppc");

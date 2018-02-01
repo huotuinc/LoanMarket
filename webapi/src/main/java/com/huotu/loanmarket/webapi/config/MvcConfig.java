@@ -149,7 +149,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
      * @param registry
      */
     private void addSignatureInterceptor(InterceptorRegistry registry) {
-        InterceptorRegistration registration = registry.addInterceptor(appLoginInterceptor());
+        InterceptorRegistration registration = registry.addInterceptor(appInterceptor());
         /**
          * 以下规则接口，必须进行签名验证
          */

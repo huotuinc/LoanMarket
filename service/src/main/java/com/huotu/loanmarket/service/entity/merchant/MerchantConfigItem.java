@@ -46,7 +46,7 @@ public class MerchantConfigItem {
     /**
      * 参数类型
      */
-    @Column(name = "item_type")
+    @Column(name = "item_type",columnDefinition = "tinyint")
     private MerchantConfigEnum type;
     /**
      * 排序

@@ -9,6 +9,7 @@
 
 package com.huotu.loanmarket.service.entity.order;
 
+import com.huotu.loanmarket.common.Constant;
 import com.huotu.loanmarket.service.entity.user.User;
 import com.huotu.loanmarket.service.enums.OrderEnum;
 import com.huotu.loanmarket.service.enums.UserAuthorizedStatusEnums;
@@ -16,6 +17,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -34,6 +36,11 @@ public class Order {
     private String orderId;
 
     /**
+     * 商户id
+     */
+    @Column(name = "merchant_id")
+    private Integer merchant = Constant.MERCHANT_ID;
+    /**
      * 用户id
      */
     @JoinColumn(name = "user_id")
@@ -43,51 +50,63 @@ public class Order {
     /**
      * 姓名
      */
-    @Column(name = "real_name",length = 20)
+    @Column(name = "real_name", length = 20)
     private String realName;
 
     /**
      * 手机
      */
-    @Column(name = "mobile",length = 15)
+    @Column(name = "mobile", length = 15)
     private String mobile;
 
     /**
      * 身份证
      */
-    @Column(name = "id_card_no",length = 20)
+    @Column(name = "id_card_no", length = 20)
     private String idCardNo;
 
     /**
      * 账户
      */
-    @Column(name = "account_no",length = 50)
+    @Column(name = "account_no", length = 50)
     private String accountNo;
 
 
     /**
      * 订单类型
      */
-    @Column(name = "order_type")
-    private OrderEnum.OrderType orderType=OrderEnum.OrderType.BACKLIST_BUS;
+    @Column(name = "order_type", columnDefinition = "tinyint")
+    private OrderEnum.OrderType orderType = OrderEnum.OrderType.BACKLIST_BUS;
 
     /**
      * 支付类型
      */
-    @Column(name = "pay_type")
-    private OrderEnum.PayType payType= OrderEnum.PayType.OTHER;
+    @Column(name = "pay_type", columnDefinition = "tinyint")
+    private OrderEnum.PayType payType = OrderEnum.PayType.ALIPAY;
 
     /**
      * 支付状态 0 未支付  1 已支付
      */
-    @Column(name = "pay_status")
-    private int payStatus=0;
+    @Column(name = "pay_status", columnDefinition = "tinyint")
+    private OrderEnum.PayStatus payStatus = OrderEnum.PayStatus.NOT_PAY;
+
+    /**
+     * 订单金额
+     */
+    @Column(name = "pay_amount", scale = 2, precision = 9)
+    private BigDecimal payAmount = BigDecimal.valueOf(10);
+
+    /**
+     * 认证次数
+     */
+    @Column(name = "auth_count")
+    private Integer authCount;
 
     /**
      * 订单状态
      */
-    @Column(name = "order_status")
-    private OrderEnum.OrderStatus orderStatus=OrderEnum.OrderStatus.Normal;
+    @Column(name = "order_status", columnDefinition = "tinyint")
+    private OrderEnum.OrderStatus orderStatus = OrderEnum.OrderStatus.Normal;
 
     /**
      * 创建时间
@@ -101,6 +120,12 @@ public class Order {
      */
     @Column(name = "auth_status", columnDefinition = "tinyint default 0")
     private UserAuthorizedStatusEnums authStatus = UserAuthorizedStatusEnums.AUTH_NOT;
+
+    /**
+     * 第三方认证连接
+     */
+    @Column(name = "third_auth_url", length = 200)
+    private String thirdAuthUrl;
 
     /**
      * 任务id

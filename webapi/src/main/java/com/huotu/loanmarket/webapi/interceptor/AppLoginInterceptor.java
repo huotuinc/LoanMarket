@@ -16,6 +16,7 @@ import com.huotu.loanmarket.common.utils.RequestUtils;
 import com.huotu.loanmarket.service.enums.AppCode;
 import com.huotu.loanmarket.service.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -26,6 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * 登录校验拦截器
+ *
  * @author guomw
  * @date 2017/12/28
  */
@@ -33,6 +35,8 @@ public class AppLoginInterceptor extends HandlerInterceptorAdapter {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private Environment env;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
@@ -46,9 +50,8 @@ public class AppLoginInterceptor extends HandlerInterceptorAdapter {
          */
         if (!userService.checkLoginToken(merchantId, userId, token)) {
             if (userId > 0 || !StringUtils.isEmpty(token)) {
-                response.getWriter().write(JSON.toJSONString(ApiResult.resultWith(AppCode.TOKEN_ERROR,"你的账号已在另一台设备登录。如非本人操作，则密码可能已泄露，建议修改密码。")));
-            }
-            else {
+                response.getWriter().write(JSON.toJSONString(ApiResult.resultWith(AppCode.TOKEN_ERROR, "你的账号已在另一台设备登录。如非本人操作，则密码可能已泄露，建议修改密码。")));
+            } else {
                 response.getWriter().write(JSON.toJSONString(ApiResult.resultWith(AppCode.TOKEN_ERROR)));
             }
             return false;
