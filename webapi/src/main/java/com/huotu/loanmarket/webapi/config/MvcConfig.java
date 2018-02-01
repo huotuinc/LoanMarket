@@ -135,7 +135,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
 
 
         /**
-         * 以下规则接口，不需要进行登录验证
+         * 基于上面规则接口，不需要进行登录验证的接口配置
          */
         registration.excludePathPatterns("/api/user/sendVerifyCode")
                 .excludePathPatterns("/api/user/login")
