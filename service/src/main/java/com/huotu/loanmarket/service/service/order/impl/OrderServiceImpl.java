@@ -61,7 +61,7 @@ public class OrderServiceImpl implements OrderService {
      * @param orderType
      * @return
      */
-    @Transactional(rollbackFor = RuntimeException.class)
+    @Transactional(rollbackFor = Exception.class)
     @BusinessSafe
     @Override
     public Order create(Long userId, String mobile, String name, String idCardNo, OrderEnum.OrderType orderType) {
@@ -81,7 +81,7 @@ public class OrderServiceImpl implements OrderService {
      * @param orderType
      * @return
      */
-    @Transactional(rollbackFor = RuntimeException.class)
+    @Transactional(rollbackFor = Exception.class)
     @BusinessSafe
     @Override
     public Order create(Long userId, OrderEnum.OrderType orderType) {

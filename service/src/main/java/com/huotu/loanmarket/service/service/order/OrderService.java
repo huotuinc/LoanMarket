@@ -9,9 +9,11 @@
 
 package com.huotu.loanmarket.service.service.order;
 
+import com.huotu.loanmarket.service.aop.BusinessSafe;
 import com.huotu.loanmarket.service.entity.order.Order;
 import com.huotu.loanmarket.service.enums.OrderEnum;
 import com.huotu.loanmarket.service.enums.UserAuthorizedStatusEnums;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author guomw
@@ -28,6 +30,8 @@ public interface OrderService {
      * @param orderType
      * @return
      */
+    @Transactional(rollbackFor = Exception.class)
+    @BusinessSafe
     Order create(Long userId,String mobile,String name,String idCardNo, OrderEnum.OrderType orderType);
 
     /**
@@ -36,6 +40,8 @@ public interface OrderService {
      * @param orderType
      * @return
      */
+    @Transactional(rollbackFor = Exception.class)
+    @BusinessSafe
     Order create(Long userId, OrderEnum.OrderType orderType);
 
     /**
