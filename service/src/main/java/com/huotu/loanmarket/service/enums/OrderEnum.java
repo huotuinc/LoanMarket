@@ -26,9 +26,7 @@ public interface OrderEnum {
     enum OrderStatus implements ICommonEnum {
 
         CANCEL(0, "已取消"),
-        Normal(1,"活动"),
-
-        ;
+        Normal(1, "活动"),;
 
 
         private int code;
@@ -95,6 +93,39 @@ public interface OrderEnum {
         @Override
         public int getCode() {
             return code;
+        }
+
+        @Override
+        public String getName() {
+            return name;
+        }
+    }
+
+    /**
+     * 订单日志类型
+     */
+    @AllArgsConstructor
+    enum LogType implements ICommonEnum {
+        CREATE_ORDER(0, "创建"),
+        COMPLETED_ORDER(1, "完成"),
+        DELETE_ORDER(2, "删除"),;
+
+        private int code;
+
+        private String name;
+
+
+        @Override
+        public int getCode() {
+            return code;
+        }
+
+        public void setCode(int code) {
+            this.code = code;
+        }
+
+        public void setName(String name) {
+            this.name = name;
         }
 
         @Override

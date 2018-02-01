@@ -57,6 +57,7 @@ public class InitService {
         initTemp();
         initSmsMessage();
         initsesame();
+        initAuthFee();
     }
 
 
@@ -111,6 +112,22 @@ public class InitService {
         map.put("message_channelNo", "");
         map.put("message_passageway", "");
         initMerchantConfigItem(map, MerchantConfigEnum.MESSAGE);
+    }
+
+    /**
+     * 初始化短认证费参数数据
+     *
+     * @author guomw
+     */
+    @Transactional(rollbackFor = RuntimeException.class)
+    public void initAuthFee() {
+        Map<String, String> map = new HashMap<>();
+        map.put("backlist_bus_fee", "4");
+        map.put("backlist_finance_fee", "10");
+        map.put("carrier_fee", "5");
+        map.put("taobao_fee", "5");
+        map.put("jingdong_fee", "5");
+        initMerchantConfigItem(map, MerchantConfigEnum.AUTH_FEE);
     }
 
 

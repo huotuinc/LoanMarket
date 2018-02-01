@@ -9,6 +9,7 @@
 
 package com.huotu.loanmarket.service.entity.order;
 
+import com.huotu.loanmarket.common.Constant;
 import com.huotu.loanmarket.service.entity.user.User;
 import com.huotu.loanmarket.service.enums.OrderEnum;
 import com.huotu.loanmarket.service.enums.UserAuthorizedStatusEnums;
@@ -16,6 +17,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -33,6 +35,11 @@ public class Order {
     @Column(name = "order_id", unique = true, nullable = false, length = 40)
     private String orderId;
 
+    /**
+     * 商户id
+     */
+    @Column(name = "merchant_id")
+    private Integer merchant= Constant.MERCHANT_ID;
     /**
      * 用户id
      */
@@ -75,13 +82,25 @@ public class Order {
      * 支付类型
      */
     @Column(name = "pay_type")
-    private OrderEnum.PayType payType= OrderEnum.PayType.OTHER;
+    private OrderEnum.PayType payType= OrderEnum.PayType.ALIPAY;
 
     /**
      * 支付状态 0 未支付  1 已支付
      */
     @Column(name = "pay_status")
     private int payStatus=0;
+
+    /**
+     * 订单金额
+     */
+    @Column(name = "pay_amount",scale = 2,precision = 9)
+    private BigDecimal payAmount;
+
+    /**
+     * 认证次数
+     */
+    @Column(name = "auth_count")
+    private Integer authCount;
 
     /**
      * 订单状态
@@ -101,5 +120,11 @@ public class Order {
      */
     @Column(name = "auth_status", columnDefinition = "tinyint default 0")
     private UserAuthorizedStatusEnums authStatus = UserAuthorizedStatusEnums.AUTH_NOT;
+
+    /**
+     * 第三方认证连接
+     */
+    @Column(name = "third_auth_url",length = 200)
+    private String thirdAuthUrl;
 
 }

@@ -1,6 +1,7 @@
 package com.huotu.loanmarket.service.service.merchant.impl;
 
 import com.huotu.loanmarket.service.entity.merchant.MerchantConfigItem;
+import com.huotu.loanmarket.service.enums.MerchantConfigEnum;
 import com.huotu.loanmarket.service.repository.merchant.MerchantConfigItemRepository;
 import com.huotu.loanmarket.service.service.merchant.MerchantCfgService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,4 +28,15 @@ public class MerchantCfgServiceImpl implements MerchantCfgService{
         });
         return map;
     }
+
+    @Override
+    public Map<String, String> getConfigItem(Integer merchantId, MerchantConfigEnum configEnum) {
+        List<MerchantConfigItem> configItemList = merchantConfigItemRepository.findByMerchantIdAndType(merchantId, configEnum);
+        Map<String, String> map = new HashMap<>(configItemList.size());
+        configItemList.forEach(p -> {
+            map.put(p.getCode(), p.getValue());
+        });
+        return map;
+    }
+
 }
