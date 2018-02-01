@@ -10,11 +10,13 @@
 package com.huotu.loanmarket.service.entity.order;
 
 import com.huotu.loanmarket.service.entity.user.User;
+import com.huotu.loanmarket.service.enums.OrderEnum;
 import com.huotu.loanmarket.service.enums.UserAuthorizedStatusEnums;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 /**
  * @author luyuanyuan on 2018/1/31.
@@ -39,16 +41,65 @@ public class Order {
     private User userId;
 
     /**
-     * 运营商认证状态
-     * 1：未认证 2：认证失败 3: 已认证 4：过期
+     * 姓名
      */
-    @Column(name = "flg_carrier", columnDefinition = "tinyint default 0")
-    private UserAuthorizedStatusEnums flgCarrier = UserAuthorizedStatusEnums.AUTH_NOT;
+    @Column(name = "real_name",length = 20)
+    private String realName;
 
     /**
-     * 电商认证状态
+     * 手机
+     */
+    @Column(name = "mobile",length = 15)
+    private String mobile;
+
+    /**
+     * 身份证
+     */
+    @Column(name = "id_card_no",length = 20)
+    private String idCardNo;
+
+    /**
+     * 账户
+     */
+    @Column(name = "account_no",length = 50)
+    private String accountNo;
+
+
+    /**
+     * 订单类型
+     */
+    @Column(name = "order_type")
+    private OrderEnum.OrderType orderType=OrderEnum.OrderType.BACKLIST_BUS;
+
+    /**
+     * 支付类型
+     */
+    @Column(name = "pay_type")
+    private OrderEnum.PayType payType= OrderEnum.PayType.OTHER;
+
+    /**
+     * 支付状态 0 未支付  1 已支付
+     */
+    @Column(name = "pay_status")
+    private int payStatus=0;
+
+    /**
+     * 订单状态
+     */
+    @Column(name = "order_status")
+    private OrderEnum.OrderStatus orderStatus=OrderEnum.OrderStatus.Normal;
+
+    /**
+     * 创建时间
+     */
+    @Column(name = "createTime", columnDefinition = "timestamp")
+    private LocalDateTime createTime;
+
+    /**
+     * 认证状态
      * 1：未认证 2：认证失败 3: 已认证 4：过期
      */
-    @Column(name = "flg_ds", columnDefinition = "tinyint default 0")
-    private UserAuthorizedStatusEnums flgDs = UserAuthorizedStatusEnums.AUTH_NOT;
+    @Column(name = "auth_status", columnDefinition = "tinyint default 0")
+    private UserAuthorizedStatusEnums authStatus = UserAuthorizedStatusEnums.AUTH_NOT;
+
 }
