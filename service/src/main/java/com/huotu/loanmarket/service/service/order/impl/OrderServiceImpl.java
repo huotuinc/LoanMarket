@@ -140,9 +140,8 @@ public class OrderServiceImpl implements OrderService {
         if (money == null || StringUtils.isEmpty(money)) {
             money = "10";
         }
-        order.setThirdAuthUrl("");
         order.setPayAmount(BigDecimal.valueOf(Long.parseLong(money)));
-
+        order.setThirdAuthUrl(authenticationUrl(order));
         order = orderRepository.save(order);
 
         OrderLog log = new OrderLog();
@@ -197,17 +196,26 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.save(order);
     }
 
+
     @Override
     public String authenticationUrl(Order order) {
-        switch (order.getOrderType().getCode()) {
-            case 2:
-                return String.format("https://open.shujumohe.com/box/yys?box_token=3A05206C0D654CABB59E567FCFC2791F&real_name=%s&identity_code=%s&user_mobile=%s&passback_params=%s", order.getRealName(), order.getIdCardNo(), order.getMobile(), order.getOrderId() + ",1,"+ Constant.YYS);
-            case 3:
-                return String.format("https://open.shujumohe.com/box/yys?box_token=3A05206C0D654CABB59E567FCFC2791F&real_name=%s&identity_code=%s&user_mobile=%s&passback_params=%s", order.getRealName(), order.getIdCardNo(), order.getMobile(), order.getOrderId() + ",1,"+ Constant.DS);
-            case 4:
-                return String.format("https://open.shujumohe.com/box/yys?box_token=3A05206C0D654CABB59E567FCFC2791F&real_name=%s&identity_code=%s&user_mobile=%s&passback_params=%s", order.getRealName(), order.getIdCardNo(), order.getMobile(), order.getOrderId() + ",1,"+ Constant.DS);
+        String url="";
+        switch (order.getOrderType()) {
+            case BACKLIST_FINANCE:
+                url=String.format("https://open.shujumohe.com/box/yys?box_token=3A05206C0D654CABB59E567FCFC2791F&real_name=%s&identity_code=%s&user_mobile=%s&passback_params=%s", order.getRealName(), order.getIdCardNo(), order.getMobile(), order.getOrderId() + ",1,"+ Constant.YYS);
+                break;
+            case CARRIER:
+                break;
+            case JINGDONG:
+                break;
+            case TAOBAO:
+                break;
+            case BACKLIST_BUS:
+                break;
             default:
-                return null;
+                break;
         }
+
+        return url;
     }
 }

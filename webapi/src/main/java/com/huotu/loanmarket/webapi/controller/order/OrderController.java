@@ -22,16 +22,14 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author guomw
  * @date 01/02/2018
  */
 @Controller
-@RequestMapping("/api/order")
+@RequestMapping(value = "/api/order",method = RequestMethod.POST)
 public class OrderController {
 
     private static final Log log = LogFactory.getLog(OrderController.class);
@@ -41,7 +39,8 @@ public class OrderController {
 
 
     @RequestMapping("/create")
-    private ApiResult create(@RequestHeader(value = Constant.APP_USER_ID_KEY, required = false, defaultValue = "0") Long userId,
+    @ResponseBody
+    public ApiResult create(@RequestHeader(value = Constant.APP_USER_ID_KEY, required = false, defaultValue = "0") Long userId,
                              @RequestParam(required = false, defaultValue = "") String mobile,
                              @RequestParam(required = false, defaultValue = "") String name,
                              @RequestParam(required = false, defaultValue = "") String idCardNo,
@@ -51,16 +50,14 @@ public class OrderController {
                 return ApiResult.resultWith(UserResultCode.CODE1);
             }
             if (StringUtils.isEmpty(idCardNo)) {
-                return ApiResult.resultWith(UserResultCode.CODE1);
+                return ApiResult.resultWith(AppCode.PARAMETER_ERROR,"身份证号码不能为空");
             }
 
             if (StringUtils.isEmpty(name)){
-                return ApiResult.resultWith(UserResultCode.CODE1,"");
+                return ApiResult.resultWith(AppCode.PARAMETER_ERROR,"姓名不能为空");
             }
         }
-
         Order order = orderService.create(userId, mobile, name, idCardNo, orderType);
-
         return ApiResult.resultWith(AppCode.SUCCESS, order);
     }
 }
