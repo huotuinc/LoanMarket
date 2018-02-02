@@ -101,18 +101,13 @@ public class SesameController {
                 return ApiResult.resultWith(SesameResultCode.NAME_AND_NUM_NOT_AGREEMENT);
             }
         } catch (ZhimaApiException e) {
-            e.printStackTrace();
+            log.error("芝麻欺诈信息验证异常：" + e);
         }
-//        //判断name和idCardNum是否匹配
-//        boolean result = sesameService.checkNameAndIdCardNum(merchantId, name, idCardNum);
-//        if (result) {
-//            return ApiResult.resultWith(AppCode.SUCCESS);
-//        }
         return ApiResult.resultWith(SesameResultCode.NAME_AND_NUM_NOT_AGREEMENT);
     }
 
     /**
-     * 获取授权地址
+     * 获取授权地址（已修改，仅供测试）
      *
      * @param merchantId 商户编号
      * @param userId     用户编号
@@ -152,21 +147,6 @@ public class SesameController {
             return ApiResult.resultWith(AppCode.SUCCESS.getCode(), "芝麻信用授权成功", url);
         } catch (ZhimaApiException e) {
             return null;
-//            StringWriter sw = new StringWriter();
-//            PrintWriter pw = new PrintWriter(sw);
-//            e.printStackTrace(pw);
-//            //发送邮件
-//            HybridPageConfig hybridPageConfig = superloanConfigProvider.getHybridPageConfig(merchantId);
-//            String emails = hybridPageConfig.getReceiveEmailUserName().trim();
-//            try {
-//                emailService.send(merchantId, emails, "报警信息-芝麻信用获取授权地址"
-//                        , MessageFormat.format("获取芝麻授权路径时发生错误，userId：{0}，异常信息：{1}"
-//                                , userId, sw.toString()));
-//            } catch (Exception e1) {
-//                log.error("发送报警邮件发生错误:" + e1);
-//            }
-//            log.error("芝麻信用获取授权路径异常：" + e);
-//            throw new ErrorMessageException(AuthenticationResultCode.SESAME_AUTHENTICATION_ERROR);
         }
     }
 
@@ -212,8 +192,8 @@ public class SesameController {
             req.setOpenId(map.get("open_id"));
             ZhimaCreditWatchlistiiGetResponse response = client.execute(req);
             Order order = orderService.findByOrderId(orderId);
+            //1.修改订单状态 2.保存行业名单信息 3.保存日志
             if (response.isSuccess()) {
-                //1.修改订单状态 2.保存行业名单信息
                 order.setAuthStatus(UserAuthorizedStatusEnums.AUTH_SUCCESS);
                 List<ZmWatchListDetail> details = response.getDetails();
                 details.forEach(detail -> {
