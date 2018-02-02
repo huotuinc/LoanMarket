@@ -102,7 +102,7 @@ public class DsServiceImpl implements DsService {
             int resultCode;
             if (operatorCode == 0) {
                 //返回任务信息和原始数据
-                JsonObject data = jsonObject.getAsJsonObject("data");
+                JsonObject data = jsonObject.getAsJsonObject("data").getAsJsonObject("task_data");
 //                String channelCode = data.get("channel_code").getAsString();
                 assembleData(data,orderId);
                 order.setAuthStatus(UserAuthorizedStatusEnums.AUTH_SUCCESS);

@@ -10,7 +10,6 @@
 package com.huotu.loanmarket.service.service.order.impl;
 
 import com.huotu.loanmarket.common.Constant;
-import com.huotu.loanmarket.common.Constant;
 import com.huotu.loanmarket.common.utils.RandomUtils;
 import com.huotu.loanmarket.service.aop.BusinessSafe;
 import com.huotu.loanmarket.service.entity.order.Order;
@@ -199,13 +198,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public String authenticationUrl(Order order) {
+        // h5方式只支持运营商和京东对接，淘宝改用sdk对接
         switch (order.getOrderType().getCode()) {
             case 2:
                 return String.format("https://open.shujumohe.com/box/yys?box_token=3A05206C0D654CABB59E567FCFC2791F&real_name=%s&identity_code=%s&user_mobile=%s&passback_params=%s", order.getRealName(), order.getIdCardNo(), order.getMobile(), order.getOrderId() + ",1,"+ Constant.YYS);
-            case 3:
-                return String.format("https://open.shujumohe.com/box/yys?box_token=3A05206C0D654CABB59E567FCFC2791F&real_name=%s&identity_code=%s&user_mobile=%s&passback_params=%s", order.getRealName(), order.getIdCardNo(), order.getMobile(), order.getOrderId() + ",1,"+ Constant.DS);
             case 4:
-                return String.format("https://open.shujumohe.com/box/yys?box_token=3A05206C0D654CABB59E567FCFC2791F&real_name=%s&identity_code=%s&user_mobile=%s&passback_params=%s", order.getRealName(), order.getIdCardNo(), order.getMobile(), order.getOrderId() + ",1,"+ Constant.DS);
+                return String.format("https://open.shujumohe.com/box/jd?box_token=5884F7B994A7445E9B6C89CA2D2942AA&passback_params=%s", order.getOrderId() + ",1,"+ Constant.DS);
             default:
                 return null;
         }
