@@ -284,6 +284,12 @@ public class UserServiceImpl implements UserService {
         return result;
     }
 
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public User save(User user) {
+        return userRepository.save(user);
+    }
+
     /**
      * 获取邀请筛选添加
      *

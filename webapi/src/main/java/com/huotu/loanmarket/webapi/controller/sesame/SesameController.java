@@ -5,10 +5,8 @@ import com.antgroup.zmxy.openplatform.api.ZhimaApiException;
 import com.antgroup.zmxy.openplatform.api.domain.ZmWatchListDetail;
 import com.antgroup.zmxy.openplatform.api.request.ZhimaAuthInfoAuthorizeRequest;
 import com.antgroup.zmxy.openplatform.api.request.ZhimaCreditAntifraudVerifyRequest;
-import com.antgroup.zmxy.openplatform.api.request.ZhimaCreditScoreGetRequest;
 import com.antgroup.zmxy.openplatform.api.request.ZhimaCreditWatchlistiiGetRequest;
 import com.antgroup.zmxy.openplatform.api.response.ZhimaCreditAntifraudVerifyResponse;
-import com.antgroup.zmxy.openplatform.api.response.ZhimaCreditScoreGetResponse;
 import com.antgroup.zmxy.openplatform.api.response.ZhimaCreditWatchlistiiGetResponse;
 import com.huotu.loanmarket.common.Constant;
 import com.huotu.loanmarket.common.enums.EnumHelper;
@@ -116,7 +114,7 @@ public class SesameController {
     @RequestMapping(value = "/getSesameUrl", method = RequestMethod.POST)
     @ResponseBody
     public ApiResult getAuthenticationUrl(@RequestHeader(Constant.APP_USER_ID_KEY) Long userId
-            , @RequestHeader(Constant.APP_MERCHANT_ID_KEY) int merchantId, String name, String orderId, String idCardNum) throws ErrorMessageException {
+            , @RequestHeader(Constant.APP_MERCHANT_ID_KEY) Integer merchantId, String name, String orderId, String idCardNum) throws ErrorMessageException {
         if (userId == null || userId == 0) {
             return ApiResult.resultWith(SesameResultCode.USERID_EMPTY);
         }
@@ -192,8 +190,10 @@ public class SesameController {
             req.setOpenId(map.get("open_id"));
             ZhimaCreditWatchlistiiGetResponse response = client.execute(req);
             Order order = orderService.findByOrderId(orderId);
-            //1.修改订单状态 2.保存行业名单信息 3.保存日志
+            User user = userService.findByMerchantIdAndUserId(Constant.MERCHANT_ID, userId);
+            //1.修改订单状态 2.保存行业名单信息 3.更新用户认账状态
             if (response.isSuccess()) {
+                user.setAuthStatus(UserAuthorizedStatusEnums.AUTH_SUCCESS);
                 order.setAuthStatus(UserAuthorizedStatusEnums.AUTH_SUCCESS);
                 List<ZmWatchListDetail> details = response.getDetails();
                 details.forEach(detail -> {
@@ -209,9 +209,11 @@ public class SesameController {
                     sesameService.save(industry);
                 });
             } else {
+                user.setAuthStatus(UserAuthorizedStatusEnums.AUTH_ERROR);
                 order.setAuthStatus(UserAuthorizedStatusEnums.AUTH_ERROR);
             }
             orderService.save(order);
+            userService.save(user);
             if (response.isSuccess()) {
                 return "sesame/sesame_success";
             } else {
@@ -236,5 +238,20 @@ public class SesameController {
 //            log.error("芝麻认证(回调)异常：" + e);
 //            throw new ErrorMessageException(AuthenticationResultCode.SESAME_AUTHENTICATION_ERROR.getValue(), e.getMessage());
         }
+    }
+
+    @RequestMapping("/getSesameReport")
+    public ApiResult getSesameReport(@RequestHeader(Constant.APP_USER_ID_KEY) Long userId
+            , @RequestHeader(Constant.APP_MERCHANT_ID_KEY) Integer merchantId, String orderId) {
+        if (userId == null || userId == 0) {
+            return ApiResult.resultWith(SesameResultCode.USERID_EMPTY);
+        }
+        User user = userService.findByMerchantIdAndUserId(merchantId, userId);
+        if (user == null) {
+            return ApiResult.resultWith(UserResultCode.CODE5);
+        }
+        List<Industry> industryList = sesameService.findByUserIdAndOrderId(userId, orderId);
+        // TODO: 2018/2/2  
+        return null;
     }
 }
