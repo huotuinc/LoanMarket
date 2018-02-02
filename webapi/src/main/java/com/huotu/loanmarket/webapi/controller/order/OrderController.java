@@ -15,8 +15,10 @@ import com.huotu.loanmarket.common.utils.ApiResult;
 import com.huotu.loanmarket.common.utils.ApiResultException;
 import com.huotu.loanmarket.common.utils.RegexUtils;
 import com.huotu.loanmarket.service.entity.order.Order;
+import com.huotu.loanmarket.service.entity.user.User;
 import com.huotu.loanmarket.service.enums.AppCode;
 import com.huotu.loanmarket.service.enums.OrderEnum;
+import com.huotu.loanmarket.service.enums.UserAuthorizedStatusEnums;
 import com.huotu.loanmarket.service.enums.UserResultCode;
 import com.huotu.loanmarket.service.model.order.ApiCheckoutResultVo;
 import com.huotu.loanmarket.service.model.order.ApiOrderCreateResultVo;
@@ -25,6 +27,7 @@ import com.huotu.loanmarket.service.model.order.SubmitOrderInfo;
 import com.huotu.loanmarket.service.model.payconfig.PaymentBizParametersVo;
 import com.huotu.loanmarket.service.service.order.OrderService;
 import com.huotu.loanmarket.service.service.thirdpay.QuickPaymentContext;
+import com.huotu.loanmarket.service.service.user.UserService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +54,8 @@ public class OrderController {
     private OrderService orderService;
     @Autowired
     private QuickPaymentContext quickPaymentContext;
+    @Autowired
+    private UserService userService;
 
     /**
      * 创建订单
@@ -211,17 +216,29 @@ public class OrderController {
      * @param userId
      * @param pageIndex
      * @param pageSize
+     * @param inviteeId
      * @return
      */
     @RequestMapping("/list")
     @ResponseBody
     public ApiResult list(@RequestHeader(value = Constant.APP_USER_ID_KEY, required = false, defaultValue = "0") Long userId,
                           @RequestParam(required = false, defaultValue = "1") int pageIndex,
-                          @RequestParam(required = false, defaultValue = Constant.PAGE_SIZE_STR) int pageSize) {
+                          @RequestParam(required = false, defaultValue = Constant.PAGE_SIZE_STR) int pageSize,
+                          @RequestParam(required = false, defaultValue = "0") Long inviteeId) {
 
-        pageIndex = pageIndex <= 0 ? 1 : pageIndex;
         LinkedHashMap<String, Object> map = new LinkedHashMap<>();
-        map.put("list", orderService.getList(userId, pageIndex, pageSize));
+        UserAuthorizedStatusEnums authStatus=null;
+        if (inviteeId != null && inviteeId > 0) {
+            User user = userService.findByMerchantIdAndUserId(Constant.MERCHANT_ID, inviteeId);
+            if (user == null || !user.getInviterId().equals(userId)) {
+                map.put("list", null);
+                return ApiResult.resultWith(AppCode.SUCCESS, map);
+            }
+            userId = inviteeId;
+            authStatus=UserAuthorizedStatusEnums.AUTH_SUCCESS;
+        }
+        pageIndex = pageIndex <= 0 ? 1 : pageIndex;
+        map.put("list", orderService.getList(userId, pageIndex, pageSize,authStatus));
         return ApiResult.resultWith(AppCode.SUCCESS, map);
     }
 

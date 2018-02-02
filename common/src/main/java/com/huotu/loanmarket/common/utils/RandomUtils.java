@@ -1,5 +1,6 @@
 package com.huotu.loanmarket.common.utils;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.http.client.utils.DateUtils;
 
 import java.text.SimpleDateFormat;
@@ -14,6 +15,22 @@ import java.util.UUID;
  * @date 01/11/2017
  */
 public class RandomUtils {
+
+
+    /**
+     * <p>位数不足无法保证其唯一性,需要客户端代码自行校验唯一性.</p>
+     * <p>具体的区间是10000000000-19999999999</p>
+     * 采用/^1(3|4|5|7|8)\d{9} 结构
+     *
+     * @return 获取一个随机的手机号码
+     */
+    public static String randomAllMobile() {
+        String[] p2 = new String[]{
+                "3", "4", "5", "7", "8"
+        };
+        return "1" + p2[new Random().nextInt(p2.length)] + RandomStringUtils.randomNumeric(9);
+    }
+
     /**
      * 产生在区间内的随机正整数，[min,max]
      *

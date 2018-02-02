@@ -10,6 +10,7 @@
 package com.huotu.loanmarket.service.entity.user;
 
 
+import com.huotu.loanmarket.common.Constant;
 import com.huotu.loanmarket.service.enums.UserAuthorizedStatusEnums;
 import lombok.Getter;
 import lombok.Setter;
@@ -38,7 +39,7 @@ public class User {
      * 商户id
      */
     @Column(name = "merchant_id")
-    private Integer merchantId;
+    private Integer merchantId= Constant.MERCHANT_ID;
 
     /**
      * 用户名
@@ -60,7 +61,7 @@ public class User {
     /**
      * 真实姓名
      */
-    @Column(name = "realname", length = 50)
+    @Column(name = "real_name", length = 50)
     private String realName;
     /**
      * QQ
@@ -115,7 +116,7 @@ public class User {
     /**
      * 渠道编号
      */
-    @Column(name = "ttid", length = 30)
+    @Column(name = "channel_id", length = 30)
     private String channelId;
     /**
      * 删除标志位

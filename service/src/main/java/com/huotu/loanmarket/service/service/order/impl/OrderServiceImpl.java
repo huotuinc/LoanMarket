@@ -51,6 +51,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.persistence.criteria.Predicate;
 import java.math.BigDecimal;
@@ -216,43 +217,44 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 获取订单列表
+     *
      * @param userId
      * @param pageIndex
      * @param pageSize
+     * @param authStatus
      * @return
      */
     @Override
-    public List<ApiOrderInfoVo> getList(Long userId, int pageIndex, int pageSize) {
-        List<ApiOrderInfoVo> result=new ArrayList<>();
+    public List<ApiOrderInfoVo> getList(Long userId, int pageIndex, int pageSize, @RequestParam(required = false) UserAuthorizedStatusEnums authStatus) {
+        List<ApiOrderInfoVo> result = new ArrayList<>();
         Pageable pageable = new PageRequest(pageIndex - 1, pageSize, new Sort(Sort.Direction.DESC, "createTime"));
-        Page<Order> page = orderRepository.findAll(getOrderSpecification(userId), pageable);
+        Page<Order> page = orderRepository.findAll(getOrderSpecification(userId, authStatus), pageable);
 
         page.getContent().forEach(order -> {
-            ApiOrderInfoVo apiOrderInfoVo=new ApiOrderInfoVo();
+            ApiOrderInfoVo apiOrderInfoVo = new ApiOrderInfoVo();
             apiOrderInfoVo.setCreateTime(order.getCreateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
             apiOrderInfoVo.setOrderId(order.getOrderId());
-            apiOrderInfoVo.setOrderName(order.getOrderType().getName()+"风险检测");
+            apiOrderInfoVo.setOrderName(order.getOrderType().getName() + "风险检测");
 
-            OrderEnum.ApiOrderStatus status=getApiOrderStatus(order);
+            OrderEnum.ApiOrderStatus status = getApiOrderStatus(order);
             apiOrderInfoVo.setStatus(status.getCode());
             apiOrderInfoVo.setStatusName(status.getName());
-            if (status.equals(OrderEnum.ApiOrderStatus.AUTH_ING)){
+            if (status.equals(OrderEnum.ApiOrderStatus.AUTH_ING)) {
                 apiOrderInfoVo.setThirdAuthUrl(order.getThirdAuthUrl());
             }
-            String desc="";
-            switch (order.getOrderType()){
+            String desc = "";
+            switch (order.getOrderType()) {
                 case BACKLIST_BUS:
                 case BACKLIST_FINANCE:
-                    desc=MessageFormat.format("{0}({1})",order.getRealName(),StringUtilsExt.safeGetIdCardNo(order.getIdCardNo()));
+                    desc = MessageFormat.format("{0}({1})", order.getRealName(), StringUtilsExt.safeGetIdCardNo(order.getIdCardNo()));
                     break;
                 case CARRIER:
-                    desc=MessageFormat.format("({0})",StringUtilsExt.safeGetMobile(order.getMobile()));
+                    desc = MessageFormat.format("({0})", StringUtilsExt.safeGetMobile(order.getMobile()));
                     break;
                 case TAOBAO:
                 case JINGDONG:
-                    if (order.getAuthStatus().equals(UserAuthorizedStatusEnums.AUTH_SUCCESS))
-                    {
-                        desc=MessageFormat.format("账户:{0}",order.getAccountNo());
+                    if (order.getAuthStatus().equals(UserAuthorizedStatusEnums.AUTH_SUCCESS)) {
+                        desc = MessageFormat.format("账户:{0}", order.getAccountNo());
                     }
                     break;
                 default:
@@ -267,37 +269,52 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 获取订单状态
+     *
      * @param order
      * @return
      */
-    private OrderEnum.ApiOrderStatus getApiOrderStatus(Order order){
-        OrderEnum.ApiOrderStatus status= OrderEnum.ApiOrderStatus.CANCEL;
+    private OrderEnum.ApiOrderStatus getApiOrderStatus(Order order) {
+        OrderEnum.ApiOrderStatus status = OrderEnum.ApiOrderStatus.CANCEL;
 
-        if (order.getOrderStatus().equals(OrderEnum.OrderStatus.CANCEL))
-        {
+        if (order.getOrderStatus().equals(OrderEnum.OrderStatus.CANCEL)) {
             return OrderEnum.ApiOrderStatus.CANCEL;
         }
-        if (order.getPayStatus().equals(OrderEnum.PayStatus.NOT_PAY)){
-            return  OrderEnum.ApiOrderStatus.NOT_PAY;
+        if (order.getPayStatus().equals(OrderEnum.PayStatus.NOT_PAY)) {
+            return OrderEnum.ApiOrderStatus.NOT_PAY;
         }
-        if (order.getPayStatus().equals(OrderEnum.PayStatus.PAY_SUCCESS))
-        {
-            if(order.getAuthStatus().equals(UserAuthorizedStatusEnums.AUTH_ING)) {
+        if (order.getPayStatus().equals(OrderEnum.PayStatus.PAY_SUCCESS)) {
+            if (order.getAuthStatus().equals(UserAuthorizedStatusEnums.AUTH_ING)) {
                 return OrderEnum.ApiOrderStatus.AUTH_ING;
             }
-            if(order.getAuthStatus().equals(UserAuthorizedStatusEnums.AUTH_SUCCESS)) {
+            if (order.getAuthStatus().equals(UserAuthorizedStatusEnums.AUTH_SUCCESS)) {
                 return OrderEnum.ApiOrderStatus.AUTH_SUCCESS;
             }
-            if(order.getAuthStatus().equals(UserAuthorizedStatusEnums.AUTH_ERROR)) {
+            if (order.getAuthStatus().equals(UserAuthorizedStatusEnums.AUTH_ERROR)) {
                 return OrderEnum.ApiOrderStatus.AUTH_ERROR;
             }
         }
         return status;
     }
 
-
+    /**
+     * 获取筛选条件
+     *
+     * @param userId
+     * @return
+     */
     private Specification<Order> getOrderSpecification(Long userId) {
         return getOrderSpecification(userId, null, null, null, null);
+    }
+
+    /**
+     * 获取筛选条件
+     *
+     * @param userId
+     * @param authorizedStatusEnums
+     * @return
+     */
+    private Specification<Order> getOrderSpecification(Long userId, UserAuthorizedStatusEnums authorizedStatusEnums) {
+        return getOrderSpecification(userId, null, null, null, authorizedStatusEnums);
     }
 
     /**

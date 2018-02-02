@@ -17,6 +17,7 @@ import com.huotu.loanmarket.service.enums.UserAuthorizedStatusEnums;
 import com.huotu.loanmarket.service.model.PageListView;
 import com.huotu.loanmarket.service.model.order.*;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -61,9 +62,10 @@ public interface OrderService {
      * @param userId
      * @param pageIndex
      * @param pageSize
+     * @param authStatus
      * @return
      */
-    List<ApiOrderInfoVo> getList(Long userId, int pageIndex, int pageSize);
+    List<ApiOrderInfoVo> getList(Long userId, int pageIndex, int pageSize,@RequestParam(required = false) UserAuthorizedStatusEnums authStatus);
 
 
     /**
