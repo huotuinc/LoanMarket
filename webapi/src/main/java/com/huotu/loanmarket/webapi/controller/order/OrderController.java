@@ -35,6 +35,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.interceptor.ExcludeDefaultInterceptors;
 import java.text.MessageFormat;
+import java.util.LinkedHashMap;
 
 /**
  * @author guomw
@@ -54,13 +55,13 @@ public class OrderController {
     /**
      * 创建订单
      *
-     * @param userId 用户id
-     * @param mobile 手机号码 选填
-     * @param name 姓名，选填
-     * @param idCardNo 身份证，选填
+     * @param userId      用户id
+     * @param mobile      手机号码 选填
+     * @param name        姓名，选填
+     * @param idCardNo    身份证，选填
      * @param redirectUrl 回调地址，客户端自己定义
-     * @param tradeType 订单交易类型
-     * @param payType 支付方式
+     * @param tradeType   订单交易类型
+     * @param payType     支付方式
      * @return
      */
     @RequestMapping("/create")
@@ -204,5 +205,24 @@ public class OrderController {
         return null;
     }
 
+    /**
+     * 获取订单列表
+     *
+     * @param userId
+     * @param pageIndex
+     * @param pageSize
+     * @return
+     */
+    @RequestMapping("/list")
+    @ResponseBody
+    public ApiResult list(@RequestHeader(value = Constant.APP_USER_ID_KEY, required = false, defaultValue = "0") Long userId,
+                          @RequestParam(required = false, defaultValue = "1") int pageIndex,
+                          @RequestParam(required = false, defaultValue = Constant.PAGE_SIZE_STR) int pageSize) {
+
+        pageIndex = pageIndex <= 0 ? 1 : pageIndex;
+        LinkedHashMap<String, Object> map = new LinkedHashMap<>();
+        map.put("list", orderService.getList(userId, pageIndex, pageSize));
+        return ApiResult.resultWith(AppCode.SUCCESS, map);
+    }
 
 }

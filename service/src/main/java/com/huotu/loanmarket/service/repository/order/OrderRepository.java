@@ -4,6 +4,7 @@ import com.huotu.loanmarket.service.entity.order.Order;
 import com.huotu.loanmarket.service.enums.OrderEnum;
 import com.huotu.loanmarket.service.enums.UserAuthorizedStatusEnums;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -13,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author luyuanyuan on 2018/1/31.
  */
 @Repository
-public interface OrderRepository extends JpaRepository<Order, String> {
+public interface OrderRepository extends JpaRepository<Order, String> ,JpaSpecificationExecutor<Order> {
 
     /**
      * 修改认证状态

@@ -14,17 +14,21 @@ import com.antgroup.zmxy.openplatform.api.ZhimaApiException;
 import com.antgroup.zmxy.openplatform.api.request.ZhimaAuthInfoAuthorizeRequest;
 import com.huotu.loanmarket.common.Constant;
 import com.huotu.loanmarket.common.utils.RandomUtils;
+import com.huotu.loanmarket.common.utils.StringUtilsExt;
 import com.huotu.loanmarket.service.aop.BusinessSafe;
 import com.huotu.loanmarket.service.config.LoanMarkConfigProvider;
 import com.huotu.loanmarket.service.config.SesameSysConfig;
 import com.huotu.loanmarket.service.entity.order.Order;
 import com.huotu.loanmarket.service.entity.order.OrderLog;
+import com.huotu.loanmarket.service.entity.user.Invite;
 import com.huotu.loanmarket.service.entity.user.User;
 import com.huotu.loanmarket.service.enums.ConfigParameter;
 import com.huotu.loanmarket.service.enums.MerchantConfigEnum;
 import com.huotu.loanmarket.service.enums.OrderEnum;
 import com.huotu.loanmarket.service.enums.UserAuthorizedStatusEnums;
+import com.huotu.loanmarket.service.model.PageListView;
 import com.huotu.loanmarket.service.model.order.ApiCheckoutResultVo;
+import com.huotu.loanmarket.service.model.order.ApiOrderInfoVo;
 import com.huotu.loanmarket.service.model.order.PayReturnVo;
 import com.huotu.loanmarket.service.model.order.SubmitOrderInfo;
 import com.huotu.loanmarket.service.model.payconfig.ApiPaymentVo;
@@ -39,13 +43,20 @@ import com.huotu.loanmarket.service.service.user.UserService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import javax.persistence.criteria.Predicate;
 import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -133,7 +144,7 @@ public class OrderServiceImpl implements OrderService {
         User user = userService.findByMerchantIdAndUserId(Constant.MERCHANT_ID, submitOrderInfo.getUserId());
         Order order = getTradeOrder(submitOrderInfo);
         order.setUser(user);
-        order.setOrderId(RandomUtils.randomDateTimeString());
+        order.setOrderId(RandomUtils.randomDateTimeString(6));
         order.setPayType(submitOrderInfo.getPayType());
         //设置第三方授权页面地址
         order.setThirdAuthUrl(authenticationUrl(order));
@@ -202,6 +213,129 @@ public class OrderServiceImpl implements OrderService {
     public Order findByOrderId(String orderId) {
         return orderRepository.findOne(orderId);
     }
+
+    /**
+     * 获取订单列表
+     * @param userId
+     * @param pageIndex
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public List<ApiOrderInfoVo> getList(Long userId, int pageIndex, int pageSize) {
+        List<ApiOrderInfoVo> result=new ArrayList<>();
+        Pageable pageable = new PageRequest(pageIndex - 1, pageSize, new Sort(Sort.Direction.DESC, "createTime"));
+        Page<Order> page = orderRepository.findAll(getOrderSpecification(userId), pageable);
+
+        page.getContent().forEach(order -> {
+            ApiOrderInfoVo apiOrderInfoVo=new ApiOrderInfoVo();
+            apiOrderInfoVo.setCreateTime(order.getCreateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            apiOrderInfoVo.setOrderId(order.getOrderId());
+            apiOrderInfoVo.setOrderName(order.getOrderType().getName()+"风险检测");
+
+            OrderEnum.ApiOrderStatus status=getApiOrderStatus(order);
+            apiOrderInfoVo.setStatus(status.getCode());
+            apiOrderInfoVo.setStatusName(status.getName());
+            if (status.equals(OrderEnum.ApiOrderStatus.AUTH_ING)){
+                apiOrderInfoVo.setThirdAuthUrl(order.getThirdAuthUrl());
+            }
+            String desc="";
+            switch (order.getOrderType()){
+                case BACKLIST_BUS:
+                case BACKLIST_FINANCE:
+                    desc=MessageFormat.format("{0}({1})",order.getRealName(),StringUtilsExt.safeGetIdCardNo(order.getIdCardNo()));
+                    break;
+                case CARRIER:
+                    desc=MessageFormat.format("({0})",StringUtilsExt.safeGetMobile(order.getMobile()));
+                    break;
+                case TAOBAO:
+                case JINGDONG:
+                    if (order.getAuthStatus().equals(UserAuthorizedStatusEnums.AUTH_SUCCESS))
+                    {
+                        desc=MessageFormat.format("账户:{0}",order.getAccountNo());
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            apiOrderInfoVo.setDesc(desc);
+            result.add(apiOrderInfoVo);
+        });
+        return result;
+    }
+
+    /**
+     * 获取订单状态
+     * @param order
+     * @return
+     */
+    private OrderEnum.ApiOrderStatus getApiOrderStatus(Order order){
+        OrderEnum.ApiOrderStatus status= OrderEnum.ApiOrderStatus.CANCEL;
+
+        if (order.getOrderStatus().equals(OrderEnum.OrderStatus.CANCEL))
+        {
+            return OrderEnum.ApiOrderStatus.CANCEL;
+        }
+        if (order.getPayStatus().equals(OrderEnum.PayStatus.NOT_PAY)){
+            return  OrderEnum.ApiOrderStatus.NOT_PAY;
+        }
+        if (order.getPayStatus().equals(OrderEnum.PayStatus.PAY_SUCCESS))
+        {
+            if(order.getAuthStatus().equals(UserAuthorizedStatusEnums.AUTH_ING)) {
+                return OrderEnum.ApiOrderStatus.AUTH_ING;
+            }
+            if(order.getAuthStatus().equals(UserAuthorizedStatusEnums.AUTH_SUCCESS)) {
+                return OrderEnum.ApiOrderStatus.AUTH_SUCCESS;
+            }
+            if(order.getAuthStatus().equals(UserAuthorizedStatusEnums.AUTH_ERROR)) {
+                return OrderEnum.ApiOrderStatus.AUTH_ERROR;
+            }
+        }
+        return status;
+    }
+
+
+    private Specification<Order> getOrderSpecification(Long userId) {
+        return getOrderSpecification(userId, null, null, null, null);
+    }
+
+    /**
+     * 获取筛选条件
+     *
+     * @param userId
+     * @param payStatus
+     * @param orderType
+     * @param orderStatus
+     * @param authStatus
+     * @return
+     */
+    private Specification<Order> getOrderSpecification(Long userId,
+                                                       OrderEnum.PayStatus payStatus,
+                                                       OrderEnum.OrderType orderType,
+                                                       OrderEnum.OrderStatus orderStatus,
+                                                       UserAuthorizedStatusEnums authStatus) {
+        Specification<Order> specification = (root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            predicates.add(criteriaBuilder.equal(root.get("user").get("userId").as(Long.class), userId));
+            //认证状态
+            if (authStatus != null) {
+                predicates.add(criteriaBuilder.equal(root.get("authStatus").as(UserAuthorizedStatusEnums.class), authStatus));
+            }
+            if (payStatus != null) {
+                predicates.add(criteriaBuilder.equal(root.get("payStatus").as(OrderEnum.PayStatus.class), payStatus));
+            }
+            if (orderType != null) {
+                predicates.add(criteriaBuilder.equal(root.get("orderType").as(OrderEnum.OrderType.class), orderType));
+            }
+            if (orderStatus != null) {
+                predicates.add(criteriaBuilder.equal(root.get("orderStatus").as(OrderEnum.OrderStatus.class), orderStatus));
+            }
+            return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
+        };
+        return specification;
+    }
+
 
     @Override
     @Transactional(rollbackFor = Exception.class)

@@ -14,11 +14,11 @@ import com.huotu.loanmarket.service.entity.order.Order;
 import com.huotu.loanmarket.service.entity.user.User;
 import com.huotu.loanmarket.service.enums.OrderEnum;
 import com.huotu.loanmarket.service.enums.UserAuthorizedStatusEnums;
-import com.huotu.loanmarket.service.model.order.ApiCheckoutResultVo;
-import com.huotu.loanmarket.service.model.order.ApiOrderCreateResultVo;
-import com.huotu.loanmarket.service.model.order.PayReturnVo;
-import com.huotu.loanmarket.service.model.order.SubmitOrderInfo;
+import com.huotu.loanmarket.service.model.PageListView;
+import com.huotu.loanmarket.service.model.order.*;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * @author guomw
@@ -55,6 +55,15 @@ public interface OrderService {
      * @return
      */
     Order findByOrderId(String orderId);
+
+    /**
+     * 获取订单列表
+     * @param userId
+     * @param pageIndex
+     * @param pageSize
+     * @return
+     */
+    List<ApiOrderInfoVo> getList(Long userId, int pageIndex, int pageSize);
 
 
     /**

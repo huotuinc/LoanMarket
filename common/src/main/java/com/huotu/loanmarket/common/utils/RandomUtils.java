@@ -3,6 +3,8 @@ package com.huotu.loanmarket.common.utils;
 import org.apache.http.client.utils.DateUtils;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
@@ -93,13 +95,24 @@ public class RandomUtils {
     }
 
     /**
-     * 生成借款单号(时间yyyyMMddHHmmss+13位随机数)
+     * 时间yyyyMMddHHmmss+19位随机数
      * 例如：20171117155412
      **/
     public static String randomDateTimeString() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         Date date = new Date();
         return sdf.format(date) + getString(19);
+    }
+
+    /**
+     * 时间yyyyMMddHHmmss+n位随机数
+     *
+     * @param length
+     * @return
+     */
+    public static String randomDateTimeString(int length) {
+        String str = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+        return str + getString(length);
     }
 
 }

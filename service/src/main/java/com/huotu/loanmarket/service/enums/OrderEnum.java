@@ -26,7 +26,8 @@ public interface OrderEnum {
     enum OrderStatus implements ICommonEnum {
 
         CANCEL(0, "已取消"),
-        Normal(1, "活动"),;
+        Normal(1, "活动"),
+        DELETE(2, "删除"),;
 
 
         private int code;
@@ -158,4 +159,37 @@ public interface OrderEnum {
         }
     }
 
+    /**
+     * api 前端订单状态
+     */
+    @AllArgsConstructor
+    enum ApiOrderStatus implements ICommonEnum{
+        //状态0已取消 1待支付 2认证中 3认证成功 4认证失败
+        CANCEL(0, "取消"),
+        NOT_PAY(1,"待支付"),
+        AUTH_ING(2,"认证中"),
+        AUTH_SUCCESS(3,"认证成功"),
+        AUTH_ERROR(4,"认证失败")
+
+        ;
+        private int code;
+        private String name;
+        @Override
+        public int getCode() {
+            return code;
+        }
+
+        public void setCode(int code) {
+            this.code = code;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String getName() {
+            return name;
+        }
+    }
 }
