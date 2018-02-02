@@ -2,6 +2,7 @@ package com.huotu.loanmarket.service.service.carrier;
 
 import com.google.gson.JsonObject;
 import com.huotu.loanmarket.common.utils.ApiResult;
+import com.huotu.loanmarket.service.model.carrier.UserCarrierVo;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
@@ -27,4 +28,5 @@ public interface UserCarrierService {
     JsonObject magicReport(String taskId, Integer merchantId) throws IOException;
 
 
+    UserCarrierVo carrierShow(String orderId);
 }

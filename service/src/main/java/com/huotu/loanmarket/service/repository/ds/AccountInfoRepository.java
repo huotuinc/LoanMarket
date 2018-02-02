@@ -7,4 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author luyuanyuan on 2018/2/1.
  */
 public interface AccountInfoRepository extends JpaRepository<AccountInfo, Long> {
+    AccountInfo findByOrderId(String orderId);
 }

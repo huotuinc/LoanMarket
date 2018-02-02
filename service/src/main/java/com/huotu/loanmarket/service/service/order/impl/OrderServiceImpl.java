@@ -438,4 +438,9 @@ public class OrderServiceImpl implements OrderService {
         unifiedOrder.setAuthCount(3);
         orderRepository.save(unifiedOrder);
     }
+
+    @Override
+    public Order findByUserIdAndOrderId(Long userId, String orderId) {
+        return orderRepository.findByOrderIdAndUser_userId(orderId,userId);
+    }
 }

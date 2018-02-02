@@ -16,6 +16,7 @@ import com.huotu.loanmarket.service.enums.AppCode;
 import com.huotu.loanmarket.service.enums.UserAuthorizedStatusEnums;
 import com.huotu.loanmarket.service.handler.JsonResponseHandler;
 import com.huotu.loanmarket.service.model.CarrierConfig;
+import com.huotu.loanmarket.service.model.ds.DsVo;
 import com.huotu.loanmarket.service.repository.ds.AccountInfoRepository;
 import com.huotu.loanmarket.service.repository.ds.BaseInfoRepository;
 import com.huotu.loanmarket.service.repository.ds.DsOrderRepository;
@@ -31,6 +32,7 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -185,7 +187,7 @@ public class DsServiceImpl implements DsService {
                 .isJsonNull()?accountInfoData.get("financial_account_balance")
                 .getAsBigDecimal().divide(new BigDecimal("100"), 2, BigDecimal.ROUND_HALF_UP):null;
 
-        String creditPoint = !accountInfoData.get("credit_point").isJsonNull()?accountInfoData.get("credit_point").getAsString():null;
+        String creditPoint = !accountInfoData.get("credit_point").isJsonNull()?accountInfoData.get("credit_point").getAsString():"未知";
         BigDecimal creditQuota = !accountInfoData.get("credit_quota").isJsonNull()?accountInfoData.get("credit_quota")
                 .getAsBigDecimal().divide(new BigDecimal("100"), 2, BigDecimal.ROUND_HALF_UP):null;
         BigDecimal consumeQuota = !accountInfoData.get("consume_quota").isJsonNull()?accountInfoData.get("consume_quota")
@@ -225,5 +227,16 @@ public class DsServiceImpl implements DsService {
         baseInfo.setUserLevel(userLevel);
         baseInfo.setUserName(userName);
         baseInfoRepository.save(baseInfo);
+    }
+
+    @Override
+    public DsVo dsShow(String orderId) {
+        BaseInfo baseInfo = baseInfoRepository.findByOrderId(orderId);
+        AccountInfo accountInfo = accountInfoRepository.findByOrderId(orderId);
+
+        DsVo dsVo = new DsVo();
+        BeanUtils.copyProperties(baseInfo,dsVo);
+        BeanUtils.copyProperties(accountInfo,dsVo);
+        return dsVo;
     }
 }

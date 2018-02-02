@@ -21,6 +21,7 @@ import com.huotu.loanmarket.service.enums.AppCode;
 import com.huotu.loanmarket.service.enums.UserAuthorizedStatusEnums;
 import com.huotu.loanmarket.service.handler.JsonResponseHandler;
 import com.huotu.loanmarket.service.model.CarrierConfig;
+import com.huotu.loanmarket.service.model.carrier.UserCarrierVo;
 import com.huotu.loanmarket.service.repository.carrier.ActiveSilenceStatsRepository;
 import com.huotu.loanmarket.service.repository.carrier.ConsumeBillRepository;
 import com.huotu.loanmarket.service.repository.carrier.FinanceContactDetailRepository;
@@ -40,6 +41,7 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -79,8 +81,7 @@ public class UserCarrierServiceImpl implements UserCarrierService {
 
     private HttpClientBuilder httpClientBuilder;
     //    private Gson gson = new GsonBuilder().serializeNulls().create();
-    //数据魔盒报告生成中状态
-    private static final int MAGIC_CREATE_REPORT = 40001;
+
 
     @PostConstruct
     public void init() {
@@ -389,5 +390,18 @@ public class UserCarrierServiceImpl implements UserCarrierService {
             return jsonObject;
         }
     }
+
+    @Override
+    public UserCarrierVo carrierShow(String orderId) {
+        UserCarrier userCarrier1 = userCarrierRepository.findByOrderId(orderId);
+        ActiveSilenceStats activeSilenceStats1 = activeSilenceStatsRepository.findByOrderId(orderId);
+
+        UserCarrierVo userCarrierVo = new UserCarrierVo();
+        BeanUtils.copyProperties(userCarrier1,userCarrierVo);
+        BeanUtils.copyProperties(activeSilenceStats1,userCarrierVo);
+        return userCarrierVo;
+    }
+
+
 
 }
