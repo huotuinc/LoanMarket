@@ -219,13 +219,15 @@ public class OrderServiceImpl implements OrderService {
         String url = "";
         switch (order.getOrderType()) {
             case BACKLIST_FINANCE:
-                url = String.format("https://open.shujumohe.com/box/yys?box_token=3A05206C0D654CABB59E567FCFC2791F&real_name=%s&identity_code=%s&user_mobile=%s&passback_params=%s", order.getRealName(), order.getIdCardNo(), order.getMobile(), order.getOrderId() + ",1," + Constant.YYS);
                 break;
             case CARRIER:
+                url = String.format("https://open.shujumohe.com/box/yys?box_token=5884F7B994A7445E9B6C89CA2D2942AA&real_name=%s&identity_code=%s&user_mobile=%s&passback_params=%s", order.getRealName(), order.getIdCardNo(), order.getMobile(), order.getOrderId() + ",1," + Constant.YYS);
                 break;
             case JINGDONG:
+                url = String.format("https://open.shujumohe.com/box/jd?box_token=5884F7B994A7445E9B6C89CA2D2942AA&passback_params=%s", order.getOrderId() + ",1," + Constant.DS);
                 break;
             case TAOBAO:
+                // 淘宝不支持h5对接。
                 break;
             case BACKLIST_BUS:
                 ZhimaAuthInfoAuthorizeRequest req = new ZhimaAuthInfoAuthorizeRequest();
