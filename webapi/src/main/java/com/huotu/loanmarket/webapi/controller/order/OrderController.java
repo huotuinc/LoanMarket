@@ -12,12 +12,15 @@ package com.huotu.loanmarket.webapi.controller.order;
 import com.huotu.loanmarket.common.Constant;
 import com.huotu.loanmarket.common.enums.EnumHelper;
 import com.huotu.loanmarket.common.utils.ApiResult;
+import com.huotu.loanmarket.common.utils.ApiResultException;
 import com.huotu.loanmarket.common.utils.RegexUtils;
 import com.huotu.loanmarket.service.entity.order.Order;
 import com.huotu.loanmarket.service.enums.AppCode;
 import com.huotu.loanmarket.service.enums.OrderEnum;
 import com.huotu.loanmarket.service.enums.UserResultCode;
+import com.huotu.loanmarket.service.model.order.ApiCheckoutResultVo;
 import com.huotu.loanmarket.service.model.order.ApiOrderCreateResultVo;
+import com.huotu.loanmarket.service.model.order.PayReturnVo;
 import com.huotu.loanmarket.service.model.order.SubmitOrderInfo;
 import com.huotu.loanmarket.service.model.payconfig.PaymentBizParametersVo;
 import com.huotu.loanmarket.service.service.order.OrderService;
@@ -26,8 +29,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+
+import javax.interceptor.ExcludeDefaultInterceptors;
+import java.text.MessageFormat;
 
 /**
  * @author guomw
@@ -46,12 +53,14 @@ public class OrderController {
 
     /**
      * 创建订单
-     * @param userId
-     * @param mobile
-     * @param name
-     * @param idCardNo
-     * @param redirectUrl
-     * @param orderType
+     *
+     * @param userId 用户id
+     * @param mobile 手机号码 选填
+     * @param name 姓名，选填
+     * @param idCardNo 身份证，选填
+     * @param redirectUrl 回调地址，客户端自己定义
+     * @param tradeType 订单交易类型
+     * @param payType 支付方式
      * @return
      */
     @RequestMapping("/create")
@@ -61,26 +70,25 @@ public class OrderController {
                             @RequestParam(required = false, defaultValue = "") String name,
                             @RequestParam(required = false, defaultValue = "") String idCardNo,
                             @RequestParam String redirectUrl,
-                            Integer orderType) {
+                            Integer tradeType,
+                            @RequestParam(required = false, defaultValue = "1") Integer payType
+
+    ) {
         try {
-            OrderEnum.OrderType tradeTypeEnum = EnumHelper.getEnumType(OrderEnum.OrderType.class, orderType);
-            if (tradeTypeEnum == null) {
-                return ApiResult.resultWith(AppCode.ERROR, "不支持的交易类型");
+            OrderEnum.OrderType tradeTypeEnum = EnumHelper.getEnumType(OrderEnum.OrderType.class, tradeType);
+
+            ApiResult result = checkParam(tradeTypeEnum, mobile, idCardNo, name);
+            if (result != null) {
+                return result;
             }
 
-            if (!tradeTypeEnum.equals(OrderEnum.OrderType.JINGDONG) && !tradeTypeEnum.equals(OrderEnum.OrderType.TAOBAO)) {
-                if (StringUtils.isEmpty(mobile) || !RegexUtils.checkMobile(mobile)) {
-                    return ApiResult.resultWith(UserResultCode.CODE1);
-                }
-                if (StringUtils.isEmpty(idCardNo)) {
-                    return ApiResult.resultWith(AppCode.PARAMETER_ERROR, "身份证号码不能为空");
-                }
-
-                if (StringUtils.isEmpty(name)) {
-                    return ApiResult.resultWith(AppCode.PARAMETER_ERROR, "姓名不能为空");
-                }
+            OrderEnum.PayType payTypeEnum = EnumHelper.getEnumType(OrderEnum.PayType.class, payType);
+            if (payTypeEnum == null) {
+                return ApiResult.resultWith(AppCode.ERROR, "不支持的支付类型");
             }
+
             SubmitOrderInfo submitOrderInfo = new SubmitOrderInfo();
+            submitOrderInfo.setPayType(payTypeEnum);
             submitOrderInfo.setUserId(userId);
             submitOrderInfo.setOrderType(tradeTypeEnum);
             submitOrderInfo.setName(name);
@@ -110,34 +118,38 @@ public class OrderController {
 
     /**
      * 订单确认提交接口
+     *
      * @param userId
      * @param mobile
      * @param name
      * @param idCardNo
-     * @param orderType
+     * @param tradeType
      * @return
      */
     @RequestMapping(value = "/checkout")
     @ResponseBody
-    public ApiResult checkout(@RequestHeader(value = "userId") long userId,
+    public ApiResult checkout(@RequestHeader(value = "userId") Long userId,
                               @RequestParam(required = false, defaultValue = "") String mobile,
                               @RequestParam(required = false, defaultValue = "") String name,
                               @RequestParam(required = false, defaultValue = "") String idCardNo,
-                              Integer orderType) {
+                              Integer tradeType) {
         try {
-            OrderEnum.OrderType tradeTypeEnum = EnumHelper.getEnumType(OrderEnum.OrderType.class, orderType);
-            if (tradeTypeEnum == null) {
-                return ApiResult.resultWith(AppCode.ERROR, "不支持的交易类型");
+            OrderEnum.OrderType tradeTypeEnum = EnumHelper.getEnumType(OrderEnum.OrderType.class, tradeType);
+
+            ApiResult result = checkParam(tradeTypeEnum, mobile, idCardNo, name);
+            if (result != null) {
+                return result;
             }
+
             SubmitOrderInfo submitOrderInfo = new SubmitOrderInfo();
             submitOrderInfo.setUserId(userId);
             submitOrderInfo.setOrderType(tradeTypeEnum);
             submitOrderInfo.setName(name);
             submitOrderInfo.setMobile(mobile);
             submitOrderInfo.setIdCardNo(idCardNo);
-            Order order= orderService.checkout(submitOrderInfo);
+            ApiCheckoutResultVo apiCheckoutResultVo = orderService.checkout(submitOrderInfo);
 
-            return ApiResult.resultWith(AppCode.SUCCESS, order);
+            return ApiResult.resultWith(AppCode.SUCCESS, apiCheckoutResultVo);
 
         } catch (Exception ex) {
             log.error("checkout发生异常：" + ex.getMessage(), ex);
@@ -145,6 +157,52 @@ public class OrderController {
         }
     }
 
+    /**
+     * 支付宝支付完成
+     *
+     * @param orderId
+     * @return
+     */
+    @RequestMapping(value = "/return/order-{orderId}", method = RequestMethod.GET)
+    @ExcludeDefaultInterceptors
+    public String payReturn(@PathVariable(value = "orderId") String orderId, Model model) {
+        PayReturnVo payReturnVo = orderService.getPayReturnInfo(orderId);
+        if (payReturnVo == null) {
+            throw new ApiResultException(ApiResult.resultWith(AppCode.ERROR, MessageFormat.format("订单:{0}不存在", orderId)));
+        }
+        model.addAttribute("returnInfo", payReturnVo);
+        return "order/return";
+    }
+
+    /**
+     * 检查参数
+     *
+     * @param tradeTypeEnum
+     * @param mobile
+     * @param idCardNo
+     * @param name
+     * @return
+     */
+    private ApiResult checkParam(OrderEnum.OrderType tradeTypeEnum, String mobile, String idCardNo, String name) {
+        if (tradeTypeEnum == null) {
+            return ApiResult.resultWith(AppCode.ERROR, "不支持的交易类型");
+        }
+
+        if (!tradeTypeEnum.equals(OrderEnum.OrderType.JINGDONG) &&
+                !tradeTypeEnum.equals(OrderEnum.OrderType.TAOBAO)) {
+            if (StringUtils.isEmpty(mobile) || !RegexUtils.checkMobile(mobile)) {
+                return ApiResult.resultWith(UserResultCode.CODE1);
+            }
+            if (StringUtils.isEmpty(idCardNo)) {
+                return ApiResult.resultWith(AppCode.PARAMETER_ERROR, "身份证号码不能为空");
+            }
+
+            if (StringUtils.isEmpty(name)) {
+                return ApiResult.resultWith(AppCode.PARAMETER_ERROR, "姓名不能为空");
+            }
+        }
+        return null;
+    }
 
 
 }

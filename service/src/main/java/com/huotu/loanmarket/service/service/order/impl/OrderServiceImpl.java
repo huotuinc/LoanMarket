@@ -19,8 +19,10 @@ import com.huotu.loanmarket.service.enums.ConfigParameter;
 import com.huotu.loanmarket.service.enums.MerchantConfigEnum;
 import com.huotu.loanmarket.service.enums.OrderEnum;
 import com.huotu.loanmarket.service.enums.UserAuthorizedStatusEnums;
+import com.huotu.loanmarket.service.model.order.ApiCheckoutResultVo;
 import com.huotu.loanmarket.service.model.order.PayReturnVo;
 import com.huotu.loanmarket.service.model.order.SubmitOrderInfo;
+import com.huotu.loanmarket.service.model.payconfig.ApiPaymentVo;
 import com.huotu.loanmarket.service.repository.order.OrderLogRepository;
 import com.huotu.loanmarket.service.repository.order.OrderRepository;
 import com.huotu.loanmarket.service.service.merchant.MerchantCfgService;
@@ -36,6 +38,8 @@ import org.springframework.util.StringUtils;
 import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -70,12 +74,29 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 确认订单
+     *
      * @param submitOrderInfo
      * @return
      */
     @Override
-    public Order checkout(SubmitOrderInfo submitOrderInfo) {
-        return getTradeOrder(submitOrderInfo);
+    public ApiCheckoutResultVo checkout(SubmitOrderInfo submitOrderInfo) {
+        Order order = getTradeOrder(submitOrderInfo);
+
+        ApiCheckoutResultVo checkoutResultVo = new ApiCheckoutResultVo();
+
+        checkoutResultVo.setUserId(submitOrderInfo.getUserId());
+        checkoutResultVo.setFinalAmount(order.getPayAmount());
+        checkoutResultVo.setTradeName(submitOrderInfo.getOrderType().getName());
+
+        // TODO: 02/02/2018 目前只一种支付方式
+        List<ApiPaymentVo> availablePaymentList = new ArrayList<>();
+        ApiPaymentVo apiPaymentVo = new ApiPaymentVo();
+        apiPaymentVo.setName(OrderEnum.PayType.ALIPAY.getName());
+        apiPaymentVo.setPayType(OrderEnum.PayType.ALIPAY.getCode());
+        apiPaymentVo.setRemark("");
+        availablePaymentList.add(apiPaymentVo);
+        checkoutResultVo.setPayments(availablePaymentList);
+        return checkoutResultVo;
     }
 
     @Override
@@ -100,9 +121,10 @@ public class OrderServiceImpl implements OrderService {
      */
     private Order submitOrder(SubmitOrderInfo submitOrderInfo) {
         User user = userService.findByMerchantIdAndUserId(Constant.MERCHANT_ID, submitOrderInfo.getUserId());
-        Order order=getTradeOrder(submitOrderInfo);
+        Order order = getTradeOrder(submitOrderInfo);
         order.setUser(user);
         order.setOrderId(RandomUtils.randomDateTimeString());
+        order.setPayType(submitOrderInfo.getPayType());
         //设置第三方授权页面地址
         order.setThirdAuthUrl(authenticationUrl(order));
         order = orderRepository.save(order);
@@ -125,7 +147,7 @@ public class OrderServiceImpl implements OrderService {
      * @param submitOrderInfo
      * @return
      */
-    private Order getTradeOrder(SubmitOrderInfo submitOrderInfo){
+    private Order getTradeOrder(SubmitOrderInfo submitOrderInfo) {
         Order order = new Order();
         order.setMobile(submitOrderInfo.getMobile());
         order.setRealName(submitOrderInfo.getName());
@@ -206,10 +228,10 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public String authenticationUrl(Order order) {
-        String url="";
+        String url = "";
         switch (order.getOrderType()) {
             case BACKLIST_FINANCE:
-                url=String.format("https://open.shujumohe.com/box/yys?box_token=3A05206C0D654CABB59E567FCFC2791F&real_name=%s&identity_code=%s&user_mobile=%s&passback_params=%s", order.getRealName(), order.getIdCardNo(), order.getMobile(), order.getOrderId() + ",1,"+ Constant.YYS);
+                url = String.format("https://open.shujumohe.com/box/yys?box_token=3A05206C0D654CABB59E567FCFC2791F&real_name=%s&identity_code=%s&user_mobile=%s&passback_params=%s", order.getRealName(), order.getIdCardNo(), order.getMobile(), order.getOrderId() + ",1," + Constant.YYS);
                 break;
             case CARRIER:
                 break;
@@ -228,6 +250,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 完成支付
+     *
      * @param unifiedOrder
      * @param user
      */

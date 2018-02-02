@@ -14,6 +14,7 @@ import com.huotu.loanmarket.service.entity.order.Order;
 import com.huotu.loanmarket.service.entity.user.User;
 import com.huotu.loanmarket.service.enums.OrderEnum;
 import com.huotu.loanmarket.service.enums.UserAuthorizedStatusEnums;
+import com.huotu.loanmarket.service.model.order.ApiCheckoutResultVo;
 import com.huotu.loanmarket.service.model.order.ApiOrderCreateResultVo;
 import com.huotu.loanmarket.service.model.order.PayReturnVo;
 import com.huotu.loanmarket.service.model.order.SubmitOrderInfo;
@@ -39,7 +40,7 @@ public interface OrderService {
      * @param submitOrderInfo
      * @return
      */
-    Order checkout(SubmitOrderInfo submitOrderInfo);
+    ApiCheckoutResultVo checkout(SubmitOrderInfo submitOrderInfo);
     /**
      * 得到支付返回页面上的实体
      * @param orderNo
