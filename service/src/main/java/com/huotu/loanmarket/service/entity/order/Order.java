@@ -45,7 +45,7 @@ public class Order {
      */
     @JoinColumn(name = "user_id")
     @ManyToOne(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
-    private User userId;
+    private User user;
 
     /**
      * 姓名
@@ -71,6 +71,11 @@ public class Order {
     @Column(name = "account_no", length = 50)
     private String accountNo;
 
+    /**
+     * 第三方交易号
+     */
+    @Column(name = "trade_no", length = 50)
+    private String tradeNo;
 
     /**
      * 订单类型
@@ -94,7 +99,20 @@ public class Order {
      * 订单金额
      */
     @Column(name = "pay_amount", scale = 2, precision = 9)
-    private BigDecimal payAmount = BigDecimal.valueOf(10);
+    private BigDecimal payAmount =BigDecimal.ZERO;
+
+    /**
+     * 在线支付金额
+     */
+    @Column(name = "online_amount", precision = 9, scale = 2)
+    private BigDecimal onlineAmount = BigDecimal.ZERO;
+
+
+    /**
+     * 支付时间
+     */
+    @Column(name = "pay_time", columnDefinition = "datetime")
+    private LocalDateTime payTime;
 
     /**
      * 认证次数
@@ -112,11 +130,11 @@ public class Order {
      * 创建时间
      */
     @Column(name = "createTime", columnDefinition = "timestamp")
-    private LocalDateTime createTime;
+    private LocalDateTime createTime=LocalDateTime.now();
 
     /**
      * 认证状态
-     * 1：未认证 2：认证失败 3: 已认证 4：过期
+     * 0：未认证 1：认证失败 2: 已认证 4：过期 5:认证中
      */
     @Column(name = "auth_status", columnDefinition = "tinyint default 0")
     private UserAuthorizedStatusEnums authStatus = UserAuthorizedStatusEnums.AUTH_NOT;
@@ -126,6 +144,13 @@ public class Order {
      */
     @Column(name = "third_auth_url", length = 200)
     private String thirdAuthUrl;
+
+    /**
+     * 支付完成后要去的页面
+     * 各客户端有自己要去的地址，让他们自己决定
+     */
+    @Column(name = "redirect_url")
+    private String redirectUrl;
 
     /**
      * 任务id

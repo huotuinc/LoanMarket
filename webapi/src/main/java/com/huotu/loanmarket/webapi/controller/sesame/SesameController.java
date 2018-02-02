@@ -80,7 +80,7 @@ public class SesameController {
         }
         User user = userService.findByMerchantIdAndUserId(merchantId, userId);
         if (user == null) {
-            return ApiResult.resultWith(SesameResultCode.USER_EMPTY);
+            return ApiResult.resultWith(UserResultCode.CODE5);
         }
         log.info("用户欺诈信息开始芝麻授权userId：" + userId);
         ZhimaCreditAntifraudVerifyRequest req = new ZhimaCreditAntifraudVerifyRequest();
@@ -122,52 +122,10 @@ public class SesameController {
     @ResponseBody
     public ApiResult getAuthenticationUrl(@RequestHeader(Constant.APP_USER_ID_KEY) Long userId
             , @RequestHeader(Constant.APP_MERCHANT_ID_KEY) int merchantId, String name, String orderId, String idCardNum) throws ErrorMessageException {
-        if (userId == null || userId == 0) {
-            return ApiResult.resultWith(SesameResultCode.USERID_EMPTY);
-        }
-        User user = userService.findByMerchantIdAndUserId(merchantId, userId);
-        if (user == null) {
-            return ApiResult.resultWith(SesameResultCode.USER_EMPTY);
-        }
         log.info("用户行业黑名单开始芝麻授权userId：" + userId);
-        ZhimaAuthInfoAuthorizeRequest req = new ZhimaAuthInfoAuthorizeRequest();
-        // 必要参数
-        req.setChannel("apppc");
-        req.setPlatform("zmop");
-        req.setIdentityType("2");
-        IdentityParam identityParam = new IdentityParam();
-        identityParam.setCertNo(idCardNum);
-        identityParam.setName(name);
-        req.setIdentityParam(identityParam.toString());
-        BizParams bizParams = new BizParams();
-        bizParams.setState(userId + "," + orderId);
-        req.setBizParams(bizParams.toString());
-        //读取系统参数
-        SesameConfig sesameConfig = loanMarkConfigProvider.getSesameConfig(merchantId);
-        DefaultZhimaClient client = new DefaultZhimaClient(SesameSysConfig.SESAME_CREDIT_URL, sesameConfig.getAppId(),
-                sesameConfig.getPrivateKey().trim(),
-                sesameConfig.getPublicKey().trim());
-        try {
-            String url = client.generatePageRedirectInvokeUrl(req);
-            return ApiResult.resultWith(AppCode.SUCCESS.getCode(), "芝麻信用授权成功", url);
-        } catch (ZhimaApiException e) {
-            return null;
-//            StringWriter sw = new StringWriter();
-//            PrintWriter pw = new PrintWriter(sw);
-//            e.printStackTrace(pw);
-//            //发送邮件
-//            HybridPageConfig hybridPageConfig = superloanConfigProvider.getHybridPageConfig(merchantId);
-//            String emails = hybridPageConfig.getReceiveEmailUserName().trim();
-//            try {
-//                emailService.send(merchantId, emails, "报警信息-芝麻信用获取授权地址"
-//                        , MessageFormat.format("获取芝麻授权路径时发生错误，userId：{0}，异常信息：{1}"
-//                                , userId, sw.toString()));
-//            } catch (Exception e1) {
-//                log.error("发送报警邮件发生错误:" + e1);
-//            }
-//            log.error("芝麻信用获取授权路径异常：" + e);
-//            throw new ErrorMessageException(AuthenticationResultCode.SESAME_AUTHENTICATION_ERROR);
-        }
+        Order order = orderService.findByOrderId(orderId);
+        String url = orderService.authenticationUrl(order);
+        return ApiResult.resultWith(AppCode.SUCCESS.getCode(), url);
     }
 
     /**
@@ -212,8 +170,8 @@ public class SesameController {
             req.setOpenId(map.get("open_id"));
             ZhimaCreditWatchlistiiGetResponse response = client.execute(req);
             Order order = orderService.findByOrderId(orderId);
+            //1.修改订单状态 2.保存行业名单信息 3.保存日志
             if (response.isSuccess()) {
-                //1.修改订单状态 2.保存行业名单信息
                 order.setAuthStatus(UserAuthorizedStatusEnums.AUTH_SUCCESS);
                 List<ZmWatchListDetail> details = response.getDetails();
                 details.forEach(detail -> {

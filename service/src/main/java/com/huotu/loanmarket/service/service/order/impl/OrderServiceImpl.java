@@ -9,9 +9,14 @@
 
 package com.huotu.loanmarket.service.service.order.impl;
 
+import com.antgroup.zmxy.openplatform.api.DefaultZhimaClient;
+import com.antgroup.zmxy.openplatform.api.ZhimaApiException;
+import com.antgroup.zmxy.openplatform.api.request.ZhimaAuthInfoAuthorizeRequest;
 import com.huotu.loanmarket.common.Constant;
 import com.huotu.loanmarket.common.utils.RandomUtils;
 import com.huotu.loanmarket.service.aop.BusinessSafe;
+import com.huotu.loanmarket.service.config.LoanMarkConfigProvider;
+import com.huotu.loanmarket.service.config.SesameSysConfig;
 import com.huotu.loanmarket.service.entity.order.Order;
 import com.huotu.loanmarket.service.entity.order.OrderLog;
 import com.huotu.loanmarket.service.entity.user.User;
@@ -19,7 +24,11 @@ import com.huotu.loanmarket.service.enums.ConfigParameter;
 import com.huotu.loanmarket.service.enums.MerchantConfigEnum;
 import com.huotu.loanmarket.service.enums.OrderEnum;
 import com.huotu.loanmarket.service.enums.UserAuthorizedStatusEnums;
+import com.huotu.loanmarket.service.model.order.PayReturnVo;
 import com.huotu.loanmarket.service.model.order.SubmitOrderInfo;
+import com.huotu.loanmarket.service.model.sesame.BizParams;
+import com.huotu.loanmarket.service.model.sesame.IdentityParam;
+import com.huotu.loanmarket.service.model.sesame.SesameConfig;
 import com.huotu.loanmarket.service.repository.order.OrderLogRepository;
 import com.huotu.loanmarket.service.repository.order.OrderRepository;
 import com.huotu.loanmarket.service.service.merchant.MerchantCfgService;
@@ -33,6 +42,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
+import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.util.Map;
 
@@ -52,44 +62,44 @@ public class OrderServiceImpl implements OrderService {
     private OrderLogRepository orderLogRepository;
     @Autowired
     private OrderRepository orderRepository;
+    @Autowired
+    private LoanMarkConfigProvider loanMarkConfigProvider;
 
     /**
      * 创建订单
      *
-     * @param userId
-     * @param mobile
-     * @param name
-     * @param idCardNo
-     * @param orderType
+     * @param submitOrderInfo
      * @return
      */
     @Transactional(rollbackFor = Exception.class)
     @BusinessSafe
     @Override
-    public Order create(Long userId, String mobile, String name, String idCardNo, OrderEnum.OrderType orderType) {
-        SubmitOrderInfo submitOrderInfo = new SubmitOrderInfo();
-        submitOrderInfo.setUserId(userId);
-        submitOrderInfo.setOrderType(orderType);
-        submitOrderInfo.setName(name);
-        submitOrderInfo.setIdCardNo(idCardNo);
+    public Order create(SubmitOrderInfo submitOrderInfo) {
         return submitOrder(submitOrderInfo);
     }
 
     /**
-     * 创建订单
-     *
-     * @param userId
-     * @param orderType
+     * 确认订单
+     * @param submitOrderInfo
      * @return
      */
-    @Transactional(rollbackFor = Exception.class)
-    @BusinessSafe
     @Override
-    public Order create(Long userId, OrderEnum.OrderType orderType) {
-        SubmitOrderInfo submitOrderInfo = new SubmitOrderInfo();
-        submitOrderInfo.setUserId(userId);
-        submitOrderInfo.setOrderType(orderType);
-        return submitOrder(submitOrderInfo);
+    public Order checkout(SubmitOrderInfo submitOrderInfo) {
+        return getTradeOrder(submitOrderInfo);
+    }
+
+    @Override
+    public PayReturnVo getPayReturnInfo(String orderNo) {
+        Order unifiedOrder = this.findByOrderId(orderNo);
+        if (unifiedOrder == null) {
+            return null;
+        }
+        PayReturnVo payReturnVo = new PayReturnVo();
+        payReturnVo.setRedirectText("返回");
+        payReturnVo.setRedirectUrl(unifiedOrder.getRedirectUrl());
+        payReturnVo.setUserId(unifiedOrder.getUser().getUserId().intValue());
+        payReturnVo.setUnifiedOrderNo(orderNo);
+        return payReturnVo;
     }
 
     /**
@@ -99,12 +109,34 @@ public class OrderServiceImpl implements OrderService {
      * @return
      */
     private Order submitOrder(SubmitOrderInfo submitOrderInfo) {
-
         User user = userService.findByMerchantIdAndUserId(Constant.MERCHANT_ID, submitOrderInfo.getUserId());
-
-        Order order = new Order();
+        Order order=getTradeOrder(submitOrderInfo);
+        order.setUser(user);
         order.setOrderId(RandomUtils.randomDateTimeString());
-        order.setUserId(user);
+        //设置第三方授权页面地址
+        order.setThirdAuthUrl(authenticationUrl(order));
+        order = orderRepository.save(order);
+
+        OrderLog log = new OrderLog();
+        log.setLogType(OrderEnum.LogType.CREATE_ORDER);
+        log.setLogText("创建订单");
+        log.setMerchant(order.getMerchant());
+        log.setOpName(order.getUser().getUserName());
+        log.setOrderId(order.getOrderId());
+        log.setUserId(submitOrderInfo.getUserId());
+        log.setResult(1);
+        log.setActTime(LocalDateTime.now());
+        orderLogRepository.save(log);
+        return order;
+    }
+
+    /***
+     * 封装交易订单信息
+     * @param submitOrderInfo
+     * @return
+     */
+    private Order getTradeOrder(SubmitOrderInfo submitOrderInfo){
+        Order order = new Order();
         order.setMobile(submitOrderInfo.getMobile());
         order.setRealName(submitOrderInfo.getName());
         order.setIdCardNo(submitOrderInfo.getIdCardNo());
@@ -139,29 +171,14 @@ public class OrderServiceImpl implements OrderService {
         if (money == null || StringUtils.isEmpty(money)) {
             money = "10";
         }
-        order.setThirdAuthUrl("");
         order.setPayAmount(BigDecimal.valueOf(Long.parseLong(money)));
-
-        order = orderRepository.save(order);
-
-        OrderLog log = new OrderLog();
-        log.setLogType(OrderEnum.LogType.CREATE_ORDER);
-        log.setLogText("创建订单");
-        log.setMerchant(order.getMerchant());
-        log.setOpName(user.getUserName());
-        log.setOrderId(order.getOrderId());
-        log.setUserId(submitOrderInfo.getUserId());
-        log.setResult(1);
-        log.setActTime(LocalDateTime.now());
-        orderLogRepository.save(log);
-
         return order;
     }
 
 
     @Override
     public Order findByOrderId(String orderId) {
-        return null;
+        return orderRepository.findOne(orderId);
     }
 
     @Override
@@ -196,16 +213,70 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.save(order);
     }
 
+
     @Override
     public String authenticationUrl(Order order) {
-        // h5方式只支持运营商和京东对接，淘宝改用sdk对接
-        switch (order.getOrderType().getCode()) {
-            case 2:
-                return String.format("https://open.shujumohe.com/box/yys?box_token=3A05206C0D654CABB59E567FCFC2791F&real_name=%s&identity_code=%s&user_mobile=%s&passback_params=%s", order.getRealName(), order.getIdCardNo(), order.getMobile(), order.getOrderId() + ",1,"+ Constant.YYS);
-            case 4:
-                return String.format("https://open.shujumohe.com/box/jd?box_token=5884F7B994A7445E9B6C89CA2D2942AA&passback_params=%s", order.getOrderId() + ",1,"+ Constant.DS);
+        String url = "";
+        switch (order.getOrderType()) {
+            case BACKLIST_FINANCE:
+                url = String.format("https://open.shujumohe.com/box/yys?box_token=3A05206C0D654CABB59E567FCFC2791F&real_name=%s&identity_code=%s&user_mobile=%s&passback_params=%s", order.getRealName(), order.getIdCardNo(), order.getMobile(), order.getOrderId() + ",1," + Constant.YYS);
+                break;
+            case CARRIER:
+                break;
+            case JINGDONG:
+                break;
+            case TAOBAO:
+                break;
+            case BACKLIST_BUS:
+                ZhimaAuthInfoAuthorizeRequest req = new ZhimaAuthInfoAuthorizeRequest();
+                // 必要参数
+                req.setChannel("apppc");
+                req.setPlatform("zmop");
+                req.setIdentityType("2");
+                IdentityParam identityParam = new IdentityParam();
+                identityParam.setCertNo(order.getIdCardNo());
+                identityParam.setName(order.getRealName());
+                req.setIdentityParam(identityParam.toString());
+                BizParams bizParams = new BizParams();
+                bizParams.setState(order.getUser().getUserId() + "," + order.getOrderId());
+                req.setBizParams(bizParams.toString());
+                //读取系统参数
+                SesameConfig sesameConfig = loanMarkConfigProvider.getSesameConfig(order.getMerchant());
+                DefaultZhimaClient client = new DefaultZhimaClient(SesameSysConfig.SESAME_CREDIT_URL, sesameConfig.getAppId(),
+                        sesameConfig.getPrivateKey().trim(),
+                        sesameConfig.getPublicKey().trim());
+                try {
+                    url = client.generatePageRedirectInvokeUrl(req);
+                } catch (ZhimaApiException e) {
+                    log.info("芝麻行业黑名单授权异常" + e);
+                }
+                break;
             default:
-                return null;
+                break;
         }
+
+        return url;
+    }
+
+    /**
+     * 完成支付
+     * @param unifiedOrder
+     * @param user
+     */
+    @Override
+    public void paid(Order unifiedOrder, User user) {
+        //0、检查支付金额是不是足额
+        if (unifiedOrder.getOnlineAmount().compareTo(unifiedOrder.getPayAmount()) == -1) {
+            log.error(MessageFormat.format("统一支付订单异常：需付：{0}，实付：{1}，单号：{2}，交易号：{3}",
+                    unifiedOrder.getPayAmount(), unifiedOrder.getOnlineAmount(), unifiedOrder.getOrderId(), unifiedOrder.getTradeNo()));
+            return;
+        }
+        //1、更改订单状态
+        unifiedOrder.setPayTime(LocalDateTime.now());
+        unifiedOrder.setPayStatus(OrderEnum.PayStatus.PAY_SUCCESS);
+        unifiedOrder.setAuthStatus(UserAuthorizedStatusEnums.AUTH_ING);
+        //TODO:系统配置读取
+        unifiedOrder.setAuthCount(3);
+        orderRepository.save(unifiedOrder);
     }
 }

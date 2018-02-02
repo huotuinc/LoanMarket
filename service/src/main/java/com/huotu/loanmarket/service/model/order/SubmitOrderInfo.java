@@ -40,5 +40,9 @@ public class SubmitOrderInfo {
      * 身份证号码
      */
     private String idCardNo;
+    /**
+     * 回调连接，客户端自己定义
+     */
+    private  String redirectUrl;
 
 }

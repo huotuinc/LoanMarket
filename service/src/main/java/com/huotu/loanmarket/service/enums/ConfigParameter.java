@@ -115,4 +115,28 @@ public interface ConfigParameter {
         }
     }
 
+    /**
+     * 支付宝移动网站支付配置参数
+     */
+    @AllArgsConstructor
+    @MerchantConfigType(type = MerchantConfigEnum.ALIPAY)
+    enum AlipayParameter implements IMerchantParameterEnum {
+        ALIPAY_APPID("alipay_app_id", "支付宝应用id"),
+        ALIPAY_PUBLIC_KEY("alipay_public_key", "支付宝公钥，验签等使用"),
+        ALIPAY_RSA_PUBLIC_KEY("alipay_rsa_public_key", "暂无用，用于生成alipayPublicKey备份"),
+        ALIPAY_RSA_PRIVAT_EKEY("alipay_rsa_private_key", " 支付宝私钥");
+        private String key;
+        private String message;
+
+        @Override
+        public String getKey() {
+            return key;
+        }
+
+        @Override
+        public String getMessage() {
+            return message;
+        }
+    }
+
 }

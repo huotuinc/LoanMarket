@@ -43,6 +43,11 @@
             <artifactId>zmxy-sdk</artifactId>
             <version>20171122003901</version>
         </dependency>
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-web-api</artifactId>
+            <version>8.0</version>
+        </dependency>
     </dependencies>
 
 
