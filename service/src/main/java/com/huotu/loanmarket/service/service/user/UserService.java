@@ -101,4 +101,12 @@ public interface UserService {
      * @return
      */
     PageListView<UserInviteVo> getMyInviteList(Long userId, boolean isAuthSuccess, int pageIndex, int pageSize);
+
+    /**
+     * 保存
+     * @param user
+     * @return
+     */
+    @Transactional(rollbackFor = Exception.class)
+    User save(User user);
 }

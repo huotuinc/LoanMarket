@@ -29,6 +29,10 @@
             <map>
 
                 <!--108是电信网络下的ip，移动网络下是105，请根据自己的网络情况来设置-->
+                <!--<entry key="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/loanmarket_dev?useUnicode=true&amp;characterEncoding=UTF8"/>-->
+                <!--<entry key="javax.persistence.jdbc.user" value="root"/>-->
+                <!--<entry key="javax.persistence.jdbc.password" value="root"/>-->
+
                 <entry key="javax.persistence.jdbc.url" value="jdbc:mysql://106.75.213.181:3306/loanmarket_dev?useUnicode=true&amp;characterEncoding=UTF8"/>
                 <entry key="javax.persistence.jdbc.user" value="dbuser"/>
                 <entry key="javax.persistence.jdbc.password" value="ddbbuusseerr"/>

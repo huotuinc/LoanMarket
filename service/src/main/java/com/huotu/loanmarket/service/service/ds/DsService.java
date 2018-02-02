@@ -1,6 +1,7 @@
 package com.huotu.loanmarket.service.service.ds;
 
 import com.huotu.loanmarket.common.utils.ApiResult;
+import com.huotu.loanmarket.service.model.ds.DsVo;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
@@ -20,4 +21,6 @@ public interface DsService {
      */
     @Transactional
     ApiResult queryResult(String taskId, String orderId, Integer merchantId) throws IOException;
+
+    DsVo dsShow(String orderId);
 }

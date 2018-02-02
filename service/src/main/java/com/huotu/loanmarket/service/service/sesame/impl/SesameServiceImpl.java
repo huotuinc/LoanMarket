@@ -6,6 +6,8 @@ import com.huotu.loanmarket.service.service.sesame.SesameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 /**
  * @Author hxh
@@ -20,5 +22,10 @@ public class SesameServiceImpl implements SesameService {
     @Override
     public Industry save(Industry industry) {
         return industryRepository.save(industry);
+    }
+
+    @Override
+    public List<Industry> findByUserIdAndOrderId(Long userId, String orderId) {
+        return industryRepository.findByUserIdAndOrderId(userId, orderId);
     }
 }
