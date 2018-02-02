@@ -11,13 +11,12 @@ package com.huotu.loanmarket.webapi.controller.alipay;
 
 import com.huotu.loanmarket.common.Constant;
 import com.huotu.loanmarket.common.utils.ApiResult;
+import com.huotu.loanmarket.common.utils.ApiResultException;
 import com.huotu.loanmarket.service.entity.order.Order;
 import com.huotu.loanmarket.service.entity.user.User;
 import com.huotu.loanmarket.service.enums.AppCode;
 import com.huotu.loanmarket.service.enums.OrderEnum;
-import com.huotu.loanmarket.service.model.order.ApiOrderCreateResultVo;
 import com.huotu.loanmarket.service.model.order.PayReturnVo;
-import com.huotu.loanmarket.service.model.payconfig.PaymentBizParametersVo;
 import com.huotu.loanmarket.service.service.order.OrderService;
 import com.huotu.loanmarket.service.service.thirdpay.QuickPaymentContext;
 import com.huotu.loanmarket.thirdpay.alipay.model.AlipayConfig;
@@ -33,7 +32,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.interceptor.ExcludeDefaultInterceptors;
 import javax.servlet.http.HttpServletRequest;
@@ -127,32 +125,6 @@ public class AlipayController {
     }
 
 
-
-    /**
-     * 获取支付配置
-     * @param orderId
-     * @return
-     */
-    @RequestMapping("/payConfig")
-    @ResponseBody
-    public ApiResult getPayConfig(String orderId) {
-        Order order = orderService.findByOrderId(orderId);
-        if (order != null && order.getPayStatus().equals(OrderEnum.PayStatus.NOT_PAY)) {
-            ApiOrderCreateResultVo orderCreateResultVo = new ApiOrderCreateResultVo();
-            orderCreateResultVo.setOrderNo(order.getOrderId());
-            orderCreateResultVo.setPayType(order.getPayType().getCode());
-            orderCreateResultVo.setTradeType(order.getOrderType().getCode());
-            orderCreateResultVo.setSurplusAmount(order.getPayAmount());
-            //--下面是各支付方式提供发起支付需要用到的东东
-            PaymentBizParametersVo bizParameters = quickPaymentContext.getCurrent(order.getPayType()).getBizParameters(order);
-            orderCreateResultVo.setBizParameters(bizParameters);
-            return ApiResult.resultWith(AppCode.SUCCESS, orderCreateResultVo);
-        } else {
-            return ApiResult.resultWith(AppCode.ERROR, "订单无效");
-        }
-    }
-
-
     /**
      * 支付宝支付完成
      *
@@ -164,10 +136,10 @@ public class AlipayController {
     public String payReturn(@PathVariable(value = "orderId") String orderId, Model model) {
         PayReturnVo payReturnVo = orderService.getPayReturnInfo(orderId);
         if (payReturnVo == null) {
-           // throw new ApiResultException(ApiResult.resultWith(AppCode.ERROR, MessageFormat.format("订单:{0}不存在", unifiedOrderNo)));
+            throw new ApiResultException(ApiResult.resultWith(AppCode.ERROR, MessageFormat.format("订单:{0}不存在", orderId)));
         }
         model.addAttribute("returnInfo", payReturnVo);
-        return "unifiedorder/return";
+        return "order/return";
     }
 
     private void outputResult(boolean flag, String logContent, HttpServletResponse response) {

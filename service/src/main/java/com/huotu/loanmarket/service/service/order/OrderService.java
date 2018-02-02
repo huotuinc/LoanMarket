@@ -16,6 +16,7 @@ import com.huotu.loanmarket.service.enums.OrderEnum;
 import com.huotu.loanmarket.service.enums.UserAuthorizedStatusEnums;
 import com.huotu.loanmarket.service.model.order.ApiOrderCreateResultVo;
 import com.huotu.loanmarket.service.model.order.PayReturnVo;
+import com.huotu.loanmarket.service.model.order.SubmitOrderInfo;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -26,29 +27,19 @@ public interface OrderService {
 
     /**
      * 创建订单
-     * @param userId
-     * @param mobile
-     * @param name
-     * @param idCardNo
-     * @param redirectUrl
-     * @param orderType
+     * @param submitOrderInfo
      * @return
      */
     @Transactional(rollbackFor = Exception.class)
     @BusinessSafe
-    Order create(Long userId,String mobile,String name,String idCardNo,String redirectUrl, OrderEnum.OrderType orderType);
+    Order create(SubmitOrderInfo submitOrderInfo);
 
     /**
-     * 创建订单
-     * @param userId
-     * @param redirectUrl
-     * @param orderType
+     * 确认订单
+     * @param submitOrderInfo
      * @return
      */
-    @Transactional(rollbackFor = Exception.class)
-    @BusinessSafe
-    Order create(Long userId, String redirectUrl,OrderEnum.OrderType orderType);
-
+    Order checkout(SubmitOrderInfo submitOrderInfo);
     /**
      * 得到支付返回页面上的实体
      * @param orderNo

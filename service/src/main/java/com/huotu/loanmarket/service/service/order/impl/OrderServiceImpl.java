@@ -58,42 +58,24 @@ public class OrderServiceImpl implements OrderService {
     /**
      * 创建订单
      *
-     * @param userId
-     * @param mobile
-     * @param name
-     * @param idCardNo
-     * @param orderType
+     * @param submitOrderInfo
      * @return
      */
     @Transactional(rollbackFor = Exception.class)
     @BusinessSafe
     @Override
-    public Order create(Long userId, String mobile, String name, String idCardNo,String redirectUrl, OrderEnum.OrderType orderType) {
-        SubmitOrderInfo submitOrderInfo = new SubmitOrderInfo();
-        submitOrderInfo.setUserId(userId);
-        submitOrderInfo.setOrderType(orderType);
-        submitOrderInfo.setName(name);
-        submitOrderInfo.setIdCardNo(idCardNo);
-        submitOrderInfo.setRedirectUrl(redirectUrl);
+    public Order create(SubmitOrderInfo submitOrderInfo) {
         return submitOrder(submitOrderInfo);
     }
 
     /**
-     * 创建订单
-     *
-     * @param userId
-     * @param orderType
+     * 确认订单
+     * @param submitOrderInfo
      * @return
      */
-    @Transactional(rollbackFor = Exception.class)
-    @BusinessSafe
     @Override
-    public Order create(Long userId,String redirectUrl, OrderEnum.OrderType orderType) {
-        SubmitOrderInfo submitOrderInfo = new SubmitOrderInfo();
-        submitOrderInfo.setUserId(userId);
-        submitOrderInfo.setOrderType(orderType);
-        submitOrderInfo.setRedirectUrl(redirectUrl);
-        return submitOrder(submitOrderInfo);
+    public Order checkout(SubmitOrderInfo submitOrderInfo) {
+        return getTradeOrder(submitOrderInfo);
     }
 
     @Override
@@ -117,12 +99,34 @@ public class OrderServiceImpl implements OrderService {
      * @return
      */
     private Order submitOrder(SubmitOrderInfo submitOrderInfo) {
-
         User user = userService.findByMerchantIdAndUserId(Constant.MERCHANT_ID, submitOrderInfo.getUserId());
-
-        Order order = new Order();
-        order.setOrderId(RandomUtils.randomDateTimeString());
+        Order order=getTradeOrder(submitOrderInfo);
         order.setUser(user);
+        order.setOrderId(RandomUtils.randomDateTimeString());
+        //设置第三方授权页面地址
+        order.setThirdAuthUrl(authenticationUrl(order));
+        order = orderRepository.save(order);
+
+        OrderLog log = new OrderLog();
+        log.setLogType(OrderEnum.LogType.CREATE_ORDER);
+        log.setLogText("创建订单");
+        log.setMerchant(order.getMerchant());
+        log.setOpName(order.getUser().getUserName());
+        log.setOrderId(order.getOrderId());
+        log.setUserId(submitOrderInfo.getUserId());
+        log.setResult(1);
+        log.setActTime(LocalDateTime.now());
+        orderLogRepository.save(log);
+        return order;
+    }
+
+    /***
+     * 封装交易订单信息
+     * @param submitOrderInfo
+     * @return
+     */
+    private Order getTradeOrder(SubmitOrderInfo submitOrderInfo){
+        Order order = new Order();
         order.setMobile(submitOrderInfo.getMobile());
         order.setRealName(submitOrderInfo.getName());
         order.setIdCardNo(submitOrderInfo.getIdCardNo());
@@ -158,27 +162,13 @@ public class OrderServiceImpl implements OrderService {
             money = "10";
         }
         order.setPayAmount(BigDecimal.valueOf(Long.parseLong(money)));
-        //设置第三方授权页面地址
-        order.setThirdAuthUrl(authenticationUrl(order));
-        order = orderRepository.save(order);
-
-        OrderLog log = new OrderLog();
-        log.setLogType(OrderEnum.LogType.CREATE_ORDER);
-        log.setLogText("创建订单");
-        log.setMerchant(order.getMerchant());
-        log.setOpName(user.getUserName());
-        log.setOrderId(order.getOrderId());
-        log.setUserId(submitOrderInfo.getUserId());
-        log.setResult(1);
-        log.setActTime(LocalDateTime.now());
-        orderLogRepository.save(log);
         return order;
     }
 
 
     @Override
     public Order findByOrderId(String orderId) {
-        return null;
+        return orderRepository.findOne(orderId);
     }
 
     @Override
