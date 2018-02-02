@@ -112,7 +112,7 @@ public class SesameController {
     }
 
     /**
-     * 获取授权地址
+     * 获取授权地址（已修改，仅供测试）
      *
      * @param merchantId 商户编号
      * @param userId     用户编号
@@ -212,8 +212,8 @@ public class SesameController {
             req.setOpenId(map.get("open_id"));
             ZhimaCreditWatchlistiiGetResponse response = client.execute(req);
             Order order = orderService.findByOrderId(orderId);
+            //1.修改订单状态 2.保存行业名单信息 3.保存日志
             if (response.isSuccess()) {
-                //1.修改订单状态 2.保存行业名单信息
                 order.setAuthStatus(UserAuthorizedStatusEnums.AUTH_SUCCESS);
                 List<ZmWatchListDetail> details = response.getDetails();
                 details.forEach(detail -> {

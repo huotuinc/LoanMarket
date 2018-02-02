@@ -9,9 +9,14 @@
 
 package com.huotu.loanmarket.service.service.order.impl;
 
+import com.antgroup.zmxy.openplatform.api.DefaultZhimaClient;
+import com.antgroup.zmxy.openplatform.api.ZhimaApiException;
+import com.antgroup.zmxy.openplatform.api.request.ZhimaAuthInfoAuthorizeRequest;
 import com.huotu.loanmarket.common.Constant;
 import com.huotu.loanmarket.common.utils.RandomUtils;
 import com.huotu.loanmarket.service.aop.BusinessSafe;
+import com.huotu.loanmarket.service.config.LoanMarkConfigProvider;
+import com.huotu.loanmarket.service.config.SesameSysConfig;
 import com.huotu.loanmarket.service.entity.order.Order;
 import com.huotu.loanmarket.service.entity.order.OrderLog;
 import com.huotu.loanmarket.service.entity.user.User;
@@ -21,6 +26,9 @@ import com.huotu.loanmarket.service.enums.OrderEnum;
 import com.huotu.loanmarket.service.enums.UserAuthorizedStatusEnums;
 import com.huotu.loanmarket.service.model.order.PayReturnVo;
 import com.huotu.loanmarket.service.model.order.SubmitOrderInfo;
+import com.huotu.loanmarket.service.model.sesame.BizParams;
+import com.huotu.loanmarket.service.model.sesame.IdentityParam;
+import com.huotu.loanmarket.service.model.sesame.SesameConfig;
 import com.huotu.loanmarket.service.repository.order.OrderLogRepository;
 import com.huotu.loanmarket.service.repository.order.OrderRepository;
 import com.huotu.loanmarket.service.service.merchant.MerchantCfgService;
@@ -54,6 +62,8 @@ public class OrderServiceImpl implements OrderService {
     private OrderLogRepository orderLogRepository;
     @Autowired
     private OrderRepository orderRepository;
+    @Autowired
+    private LoanMarkConfigProvider loanMarkConfigProvider;
 
     /**
      * 创建订单
@@ -206,10 +216,10 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public String authenticationUrl(Order order) {
-        String url="";
+        String url = "";
         switch (order.getOrderType()) {
             case BACKLIST_FINANCE:
-                url=String.format("https://open.shujumohe.com/box/yys?box_token=3A05206C0D654CABB59E567FCFC2791F&real_name=%s&identity_code=%s&user_mobile=%s&passback_params=%s", order.getRealName(), order.getIdCardNo(), order.getMobile(), order.getOrderId() + ",1,"+ Constant.YYS);
+                url = String.format("https://open.shujumohe.com/box/yys?box_token=3A05206C0D654CABB59E567FCFC2791F&real_name=%s&identity_code=%s&user_mobile=%s&passback_params=%s", order.getRealName(), order.getIdCardNo(), order.getMobile(), order.getOrderId() + ",1," + Constant.YYS);
                 break;
             case CARRIER:
                 break;
@@ -218,6 +228,28 @@ public class OrderServiceImpl implements OrderService {
             case TAOBAO:
                 break;
             case BACKLIST_BUS:
+                ZhimaAuthInfoAuthorizeRequest req = new ZhimaAuthInfoAuthorizeRequest();
+                // 必要参数
+                req.setChannel("apppc");
+                req.setPlatform("zmop");
+                req.setIdentityType("2");
+                IdentityParam identityParam = new IdentityParam();
+                identityParam.setCertNo(order.getIdCardNo());
+                identityParam.setName(order.getRealName());
+                req.setIdentityParam(identityParam.toString());
+                BizParams bizParams = new BizParams();
+                bizParams.setState(order.getUser().getUserId() + "," + order.getOrderId());
+                req.setBizParams(bizParams.toString());
+                //读取系统参数
+                SesameConfig sesameConfig = loanMarkConfigProvider.getSesameConfig(order.getMerchant());
+                DefaultZhimaClient client = new DefaultZhimaClient(SesameSysConfig.SESAME_CREDIT_URL, sesameConfig.getAppId(),
+                        sesameConfig.getPrivateKey().trim(),
+                        sesameConfig.getPublicKey().trim());
+                try {
+                    url = client.generatePageRedirectInvokeUrl(req);
+                } catch (ZhimaApiException e) {
+                    log.info("芝麻行业黑名单授权异常" + e);
+                }
                 break;
             default:
                 break;
