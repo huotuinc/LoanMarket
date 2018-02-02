@@ -1,15 +1,12 @@
-package com.huotu.loanmarket.service.repository.Project;
+package com.huotu.loanmarket.service.repository.project;
 
-import com.huotu.loanmarket.service.entity.category.Category;
 import com.huotu.loanmarket.service.entity.project.Project;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.awt.print.Pageable;
 import java.util.List;
 
 /**

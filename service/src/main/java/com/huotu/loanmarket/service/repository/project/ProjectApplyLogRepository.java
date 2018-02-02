@@ -1,4 +1,4 @@
-package com.huotu.loanmarket.service.repository.Project;
+package com.huotu.loanmarket.service.repository.project;
 
 import com.huotu.loanmarket.service.entity.project.ProjectApplyLog;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -29,6 +29,11 @@ public class SubmitOrderInfo {
      */
     private OrderEnum.OrderType orderType;
     /**
+     *  支付类型
+     */
+    private OrderEnum.PayType payType;
+
+    /**
      * 姓名
      */
     private String name;

@@ -776,4 +776,21 @@ public class StringUtilsExt {
         return var;
     }
 
+    /**
+     * 获取安全身份证号码
+     * @param var
+     * @return
+     */
+    public static String safeGetIdCardNo(String var){
+        if (!StringUtils.isEmpty(var)){
+            if (var.length()==18){
+                return var.replaceAll("(\\d{3})\\d{11}(\\d{4})","$1****$2");
+            }
+            if (var.length()==18){
+                return var.replaceAll("(\\d{3})\\d{8}(\\d{4})","$1****$2");
+            }
+        }
+        return var;
+    }
+
 }
