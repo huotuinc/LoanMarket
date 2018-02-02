@@ -56,4 +56,6 @@ public interface OrderRepository extends JpaRepository<Order, String> {
     @Modifying(clearAutomatically = true)
     @Transactional(rollbackFor = RuntimeException.class)
     void updateOrderAuthCountByOrderId(String orderId);
+
+    Order findByOrderIdAndUser_userId(String orderId, Long userId);
 }
