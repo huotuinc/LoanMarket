@@ -30,7 +30,7 @@ import java.net.URISyntaxException;
  * @author guomw
  * @date 16/11/2017
  */
-@Service
+@Service("resourceService")
 public abstract class AbstractStaticResourceService implements StaticResourceService {
 
     private static final Log log = LogFactory.getLog(AbstractStaticResourceService.class);

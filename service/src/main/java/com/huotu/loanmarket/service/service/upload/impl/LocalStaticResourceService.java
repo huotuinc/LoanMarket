@@ -16,7 +16,7 @@ import java.net.URISyntaxException;
  *
  * @author CJ
  */
-@Service
+@Service("resourceService")
 @Profile("!container")
 public class LocalStaticResourceService extends AbstractStaticResourceService {
 

@@ -125,7 +125,7 @@
                                             <ul class="list-inline">
                                                 <li>
                                                     <img src="../resource/img/logo.png"
-                                                         th:src="${@resourceService.get(project.logo).toString()}"
+                                                         th:src="${@resourceService.getResource(project.logo).toString()}"
                                                          id="J_imgLogo"
                                                          class="img-rounded" width="92" height="92"/>
                                                     <div id="J_uploadFile"

@@ -21,9 +21,10 @@ import java.net.URISyntaxException;
  * <p>比如<code>ftp://userName:password@ftpHost</code></p>
  * <code>huobanmall.resourceUrl</code>
  * <p>比如<code>http://huobanmall.com/</code></p>
+ *
  * @author CJ
  */
-@Service
+@Service("resourceService")
 @Profile("container")
 public class DynamicStaticResourceService extends AbstractStaticResourceService {
 
