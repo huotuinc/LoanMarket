@@ -136,7 +136,14 @@ public class UserController {
         user.setChannelId(RequestUtils.getHeader(request, Constant.APP_CHANNELID_KEY, "default"));
         user.setInviterId(inviter);
         try {
-            return ApiResult.resultWith(AppCode.SUCCESS, userService.register(user, verifyCode));
+            user= userService.register(user, verifyCode);
+            UserInfoVo userInfoVo = new UserInfoVo();
+            userInfoVo.setUserId(user.getUserId());
+            userInfoVo.setUserName(user.getUserName());
+            userInfoVo.setUserToken(user.getUserToken());
+            userInfoVo.setHeadimg(user.getHeadimg());
+            userInfoVo.setAuthStatus(user.getAuthStatus().getCode());
+            return ApiResult.resultWith(AppCode.SUCCESS, user);
         } catch (ErrorMessageException e) {
             return ApiResult.resultWith(e.code, e.getMessage(), null);
         }

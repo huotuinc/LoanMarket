@@ -14,10 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -47,9 +44,8 @@ public class ProjectController {
      */
     @RequestMapping("/detail")
     @ResponseBody
-    public ApiResult projectDetail(
-            int projectId,
-            @RequestParam(required = false, defaultValue = "0") int userId
+    public ApiResult projectDetail(@RequestHeader(value = Constant.APP_USER_ID_KEY,required = false,defaultValue = "0") int userId,
+            int projectId
     ) {
         //获取project
         Project project = projectService.findOne(projectId);
@@ -147,9 +143,16 @@ public class ProjectController {
         return ApiResult.resultWith(AppCode.SUCCESS, map);
     }
 
+    /**
+     * 贷款申请记录接口
+     * @param userId
+     * @param projectId
+     * @return
+     */
     @RequestMapping("/applyLog")
     @ResponseBody
-    public ApiResult applyLog(int userId, int projectId) {
+    public ApiResult applyLog(@RequestHeader(value = Constant.APP_USER_ID_KEY,required = false,defaultValue = "0") int userId,
+                              int projectId) {
         projectService.logApply(userId, projectId);
         return ApiResult.resultWith(AppCode.SUCCESS);
     }
