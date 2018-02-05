@@ -475,6 +475,7 @@
         });
     });
     uploader.on('uploadSuccess', function (file, response) {
+        console.log(response)
         $("#logo").val(response.data.filePath);
         hot.tip.success("上传成功");
         uploader.reset();
