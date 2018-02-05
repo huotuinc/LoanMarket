@@ -74,7 +74,7 @@ public class AuthenticationSchedule {
                 asyncTaskRepository.delete(task);
             }
             log.info(MessageFormat.format("【定时任务】结束处理数据魔盒回调任务，处理结果：{0}", result.getResultMsg()));
-        } catch (Exception e) {
+        } catch (Throwable e) {
             //发生异常的任务失败状态置为true，不再加入轮询
             log.error(MessageFormat.format("【定时任务】处理任务时发生错误，任务id：{0}", task.getTaskId()), e);
             task.setFailure(true);

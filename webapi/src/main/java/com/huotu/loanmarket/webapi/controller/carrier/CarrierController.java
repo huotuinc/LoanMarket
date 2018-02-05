@@ -2,6 +2,7 @@ package com.huotu.loanmarket.webapi.controller.carrier;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.huotu.loanmarket.common.Constant;
 import com.huotu.loanmarket.common.utils.ApiResult;
 import com.huotu.loanmarket.service.entity.carrier.AsyncTask;
 import com.huotu.loanmarket.service.entity.carrier.ConsumeBill;
@@ -18,11 +19,13 @@ import com.huotu.loanmarket.service.repository.carrier.RiskContactStatsRepositor
 import com.huotu.loanmarket.service.repository.order.OrderRepository;
 import com.huotu.loanmarket.service.service.carrier.UserCarrierService;
 import com.huotu.loanmarket.service.service.order.OrderService;
+import com.huotu.loanmarket.webapi.controller.exception.OrderNotFoundException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -31,6 +34,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -140,14 +144,16 @@ public class CarrierController {
      * @throws InterruptedException
      */
     @RequestMapping("/carrierShow")
-    @ResponseBody
-    public ApiResult carrierShow(@RequestHeader(value = "userId") Long userId,String orderId) throws ExecutionException, InterruptedException {
-        Order order = orderService.findByUserIdAndOrderId(userId,orderId);
-        if(order == null) {
-            return ApiResult.resultWith(AppCode.PARAMETER_ERROR);
+    public String carrierShow( Long userId,String orderId,Model model) {
+        Order order = orderService.findByOrderId(orderId);
+        if(order == null || !order.getUser().getUserId().equals(userId)) {
+            throw new OrderNotFoundException(Constant.ORDER_NOT_FOUND);
         }
         UserCarrierVo userCarrierVo = userCarrierService.carrierShow(orderId);
-        return ApiResult.resultWith(AppCode.SUCCESS,userCarrierVo);
+        model.addAttribute("carrier",userCarrierVo);
+        model.addAttribute("orderId",orderId);
+        model.addAttribute("userId",userId);
+        return "report/carrierInfo";
     }
 
     /**
@@ -157,14 +163,14 @@ public class CarrierController {
      * @return
      */
     @RequestMapping("/riskContactList")
-    @ResponseBody
-    public ApiResult riskContactList(@RequestHeader(value = "userId") Long userId,String orderId) {
-        Order order = orderService.findByUserIdAndOrderId(userId,orderId);
-        if(order == null) {
-            return ApiResult.resultWith(AppCode.PARAMETER_ERROR);
+    public String riskContactList(Long userId,String orderId,Model model) {
+        Order order = orderService.findByOrderId(orderId);
+        if(order == null || !order.getUser().getUserId().equals(userId)) {
+            throw new OrderNotFoundException(Constant.ORDER_NOT_FOUND);
         }
         List<RiskContactStats> contactStatsList = riskContactStatsRepository.findByOrderId(orderId);
-        return ApiResult.resultWith(AppCode.SUCCESS,contactStatsList);
+        model.addAttribute("riskContactList",contactStatsList);
+        return "report/riskContact";
     }
 
     /**
@@ -174,14 +180,14 @@ public class CarrierController {
      * @return
      */
     @RequestMapping("/riskContactDetailList")
-    @ResponseBody
-    public ApiResult riskContactDetailList(@RequestHeader(value = "userId") Long userId,String orderId) {
-        Order order = orderService.findByUserIdAndOrderId(userId,orderId);
-        if(order == null) {
-            return ApiResult.resultWith(AppCode.PARAMETER_ERROR);
+    public String riskContactDetailList( Long userId, String orderId,Model model) {
+        Order order = orderService.findByOrderId(orderId);
+        if(order == null || !order.getUser().getUserId().equals(userId)) {
+            throw new OrderNotFoundException(Constant.ORDER_NOT_FOUND);
         }
         List<RiskContactDetail> riskContactDetailList = riskContactDetailRepository.findByOrderId(orderId);
-        return ApiResult.resultWith(AppCode.SUCCESS,riskContactDetailList);
+        model.addAttribute("riskContactDetailList",riskContactDetailList);
+        return "report/riskContactDetail";
     }
 
     /**
@@ -191,14 +197,15 @@ public class CarrierController {
      * @return
      */
     @RequestMapping("/consumeBillList")
-    @ResponseBody
-    public ApiResult consumeBillList(@RequestHeader(value = "userId") Long userId,String orderId) {
-        Order order = orderService.findByUserIdAndOrderId(userId,orderId);
-        if(order == null) {
-            return ApiResult.resultWith(AppCode.PARAMETER_ERROR);
+    public String consumeBillList( Long userId,String orderId, Model model) {
+        Order order = orderService.findByOrderId(orderId);
+        if(order == null || !order.getUser().getUserId().equals(userId)) {
+            throw new OrderNotFoundException(Constant.ORDER_NOT_FOUND);
         }
         List<ConsumeBill> consumeBillList = consumeBillRepository.findByOrderId(orderId);
-        return ApiResult.resultWith(AppCode.SUCCESS,consumeBillList);
+        consumeBillList.sort(Comparator.comparing(ConsumeBill::getMonth));
+        model.addAttribute("consumeBillList",consumeBillList);
+        return "report/consumeBill";
     }
 
 }

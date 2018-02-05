@@ -48,6 +48,12 @@ public class UserCarrier {
     private String realName;
 
     /**
+     * 运营商
+     */
+    @Column(name = "mobile_carrier")
+    private String mobileCarrier;
+
+    /**
      * 身份证号
      */
     @Column(name = "identity_code")

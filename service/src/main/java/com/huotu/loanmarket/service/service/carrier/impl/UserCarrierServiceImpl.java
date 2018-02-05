@@ -196,6 +196,10 @@ public class UserCarrierServiceImpl implements UserCarrierService {
         //手机号码
         String mobile = !mobileInfo.get("user_mobile").isJsonNull() ?
                 mobileInfo.get("user_mobile").getAsString() : null;
+        //运营商
+        String mobileCarrier = !mobileInfo.get("mobile_carrier").isJsonNull() ?
+                mobileInfo.get("mobile_carrier").getAsString() : null;
+
         //手机归属地
         String mobileAddr = !mobileInfo.get("mobile_net_addr").isJsonNull() ?
                 mobileInfo.get("mobile_net_addr").getAsString() : null;
@@ -239,6 +243,7 @@ public class UserCarrierServiceImpl implements UserCarrierService {
         userCarrier.setIdentityCode(identityCode);
         userCarrier.setRealName(realName);
         userCarrier.setMobile(mobile);
+        userCarrier.setMobileCarrier(mobileCarrier);
 //        userCarrier.setInfo(reportData);
         if (mobileAddr == null) {
             mobileAddr = "";

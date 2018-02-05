@@ -153,5 +153,7 @@ public class Constant {
      */
     public static final String DS = "ds";
 
+    public static final String ORDER_NOT_FOUND = "订单不存在";
+
 
 }

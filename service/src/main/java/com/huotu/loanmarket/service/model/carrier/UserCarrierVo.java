@@ -23,6 +23,11 @@ public class UserCarrierVo {
     private String identityCode;
 
     /**
+     * 运营商
+     */
+    private String mobileCarrier;
+
+    /**
      * 入网时间
      */
     private String netTime;
