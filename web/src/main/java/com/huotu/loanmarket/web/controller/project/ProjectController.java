@@ -7,7 +7,7 @@
  *   ~ 2017-2020. All rights reserved.
  */
 
-package com.huotu.loanmarket.web.controller.backgroud;
+package com.huotu.loanmarket.web.controller.project;
 
 import com.huotu.loanmarket.common.SysConstant;
 import com.huotu.loanmarket.common.enums.ApplicationMaterialEnum;

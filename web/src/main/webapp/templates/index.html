@@ -34,7 +34,8 @@
                         欢迎：
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                                 <span class="clear">
-                                    <span class="block m-t-xs"><strong class="font-bold">超级管理员</strong><b class="caret"></b></span>
+                                    <span class="block m-t-xs"><strong class="font-bold">超级管理员</strong><b
+                                            class="caret"></b></span>
                                 </span>
                         </a>
                         <ul class="dropdown-menu animated fadeInDown m-t-xs">
@@ -56,14 +57,14 @@
                         <span class="nav-label">桌面</span>
                     </a>
                 </li>
-                <li >
+                <li class="active">
                     <a href="#"><i class="fa fa-edit"></i><span class="nav-label">产品管理</span><span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li><a class="J_menuItem" href="form_basic.html" th:href="@{/project/list}">产品列表</a>
                         </li>
                         <li><a class="J_menuItem" href="form_validate.html" th:href="@{/project/edit}">添加产品</a>
                         </li>
-                        <li><a class="J_menuItem" href="form_advanced.html" th:href="@{/category/list}">产品分类</a>
+                        <li><a class="J_menuItem" href="form_advanced.html" th:href="@{/category/list}">类目列表</a>
                         </li>
                         <li><a class="J_menuItem" href="form_advanced.html" th:href="@{/category/edit}">添加分类</a>
                         </li>
@@ -112,10 +113,12 @@
                     </li>
                 </ul>
             </div>
-            <a href="login.html" th:href="@{/logout}" class="roll-nav roll-right J_tabExit"><i class="fa fa fa-sign-out"></i>退出</a>
+            <a href="login.html" th:href="@{/logout}" class="roll-nav roll-right J_tabExit"><i
+                    class="fa fa fa-sign-out"></i>退出</a>
         </div>
         <div class="row J_mainContent" id="content-main">
-            <iframe class="J_iframe" name="iframe0" width="100%" height="100%" src="" frameborder="0" data-id="http://www.baidu.com" seamless></iframe>
+            <iframe class="J_iframe" name="iframe0" width="100%" height="100%" src="" frameborder="0"
+                    data-id="http://www.baidu.com" seamless></iframe>
         </div>
     </div>
     <!--右侧部分结束-->
