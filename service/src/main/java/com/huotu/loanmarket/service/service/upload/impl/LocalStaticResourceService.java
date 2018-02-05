@@ -27,7 +27,7 @@ public class LocalStaticResourceService extends AbstractStaticResourceService {
         File file = new File(context.getServletContext().getRealPath("/resource"));
         this.fileHome = file.toURI();
         String url = System.getProperty("user.dir");
-        StringBuilder stringBuilder = new StringBuilder("http://localhost:8080/api/resource");
+        StringBuilder stringBuilder = new StringBuilder("http://localhost:8080/resource");
         stringBuilder.append(context.getServletContext().getContextPath());
         try {
 //            this.huobanmallPrefix = new URI(SysConstant.HUOBANMALL_RESOURCE_HOST);

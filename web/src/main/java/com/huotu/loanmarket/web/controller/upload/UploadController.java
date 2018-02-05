@@ -35,8 +35,8 @@ public class UploadController {
             throw new FileNotFoundException("未上传任何图片");
         }
         // TODO: 27/10/2017 图片属性校验
-        String path = MessageFormat.format(StaticResourceService.PROJECT__IMG,
-                "project-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmSS"))) + staticResourceService.getSuffix(fileName);
+        String path = StaticResourceService.PROJECT__IMG +
+                "project-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmSS")) + staticResourceService.getSuffix(fileName);
         URI uri = staticResourceService.uploadResource(path, file.getInputStream());
         JSONObject responseData = new JSONObject();
         responseData.put("fileUrl", uri);

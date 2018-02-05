@@ -56,7 +56,7 @@ public interface StaticResourceService {
     /**
      * 产品目录
      */
-    String PROJECT__IMG = IMG + "project/{1}";
+    String PROJECT__IMG ="image/project/";
     /**
      * 临时文件目录
      */
