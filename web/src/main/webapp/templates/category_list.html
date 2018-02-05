@@ -45,7 +45,7 @@
                             <!--/*@thymesVar id="items" type="java.util.List<com.huotu.loanmarket.service.entity.category.Category>"*/-->
                             <tr th:each="item:${items}">
                                 <td th:text="${item.name}"></td>
-                                <td><img src="" th:src="${@resourceService.get(item.icon).toString()}" width="80" height="80"/></td>
+                                <td><img src="" th:src="${@resourceService.getResource(item.icon).toString()}" width="80" height="80"/></td>
                                 <td>
                                     <span th:onclick="'javascript:categoryListHandler.editCategory('+${item.categoryId}+')'"
                                           class="cursor-point"><i class="fa fa-pencil tooltips" data-placement="top"

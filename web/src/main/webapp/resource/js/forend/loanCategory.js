@@ -25,12 +25,12 @@ $(function () {
         }, "post", 300);
 
     });
-
+    var uploadUrl = /*[[@{/resource/upload/img}]]*/ "/resource/upload/img";
     // 上传图片插件调用
     var uploader = WebUploader.create({
         auto: true,
         swf: 'http://resali.huobanplus.com/cdn/WebUploader/0.1.6/Uploader.swf',
-        server: '/resource/upload/img',
+        server: uploadUrl,
         pick: {
             id: '#J_uploadFile',
             multiple: false,
@@ -40,7 +40,8 @@ $(function () {
             title: 'Images',
             extensions: 'jpg,jpeg,png',
             mimeTypes: 'image/jpg,image/jpeg,image/png'
-        }
+        },
+        formData: {imgType: 1}
     });
 
     uploader.on('fileQueued', function (file) {
@@ -69,6 +70,7 @@ $(function () {
             hot.tip.error("文件类型不支持");
         }
     });
+
     /**
      * 检查
      * @returns {boolean}
@@ -80,7 +82,7 @@ $(function () {
             return false;
         }
         console.log($("#categoryName").val().length);
-        if($("#categoryName").val().length > 20) {
+        if ($("#categoryName").val().length > 20) {
             hot.tip.error("超过限制长度");
             $("#categoryName").focus();
             return false;

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<!--
+  ~ 版权所有:杭州火图科技有限公司
+  ~ 地址:浙江省杭州市滨江区西兴街道阡陌路智慧E谷B幢4楼在地图中查看
+  ~
+  ~ (c) Copyright Hangzhou Hot Technology Co., Ltd.
+  ~ Floor 4,Block B,Wisdom E Valley,Qianmo Road,Binjiang District
+  ~ 2016-2018. All rights reserved.
+  -->
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>消息</title>
+    <link href="http://resali.huobanplus.com/cdn/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/animate.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/style.min-1.0.8.css" rel="stylesheet">
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><span th:text="(${data.vid})!=null?'编辑':'新增'"></span>消息</h5>
+                </div>
+                <!--/*@thymesVar id="data" type="com.huotu.loanmarket.service.entity.system.AppSystemVersion"*/-->
+                <div class="ibox-content" th:object="${data}">
+                    <form method="post" class="form-horizontal">
+                        <input type="hidden" id="form_id" name="form_id" value="0" th:value="${data.vid}"/>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">设备</label>
+                            <div class="col-sm-10">
+                                <div class="input-group-btn">
+                                    <button data-toggle="dropdown" th:attr="disabled=(${data.vid}>0?'true':'false')"  class="btn btn-white dropdown-toggle" type="button">
+                                        <span class="dropdown_text" th:text="(${data.deviceType})">Android</span><span class="caret"></span>
+                                    </button>
+                                    <input type="hidden" id="form_deviceType" name="form_deviceType" th:value="(${data.deviceType.getCode()}=='1'?1:0)" value="0"/>
+                                    <ul class="dropdown-menu" style="right: auto">
+                                        <li>
+                                            <a onclick="editHandler.selectedTab(this)" data-value="0">Android</a>
+                                        </li>
+                                        <li>
+                                            <a onclick="editHandler.selectedTab(this)" data-value="1">IOS</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">内部版本号</label>
+                            <div class="col-sm-6">
+                                <input id="form_versionCode" th:attr="disabled=(${data.vid}>0?'true':'false')" name="form_versionCode" type="text" class="form-control" th:value="${data.versionCode}"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">版本号</label>
+                            <div class="col-sm-2">
+                                <input id="form_version" th:attr="disabled=(${data.vid}>0?'true':'false')" name="form_version" type="text" class="form-control" th:value="${data.version}"/>
+                                <span>版本号格式：1.*.*.*...</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">更新地址</label>
+                            <div class="col-sm-6">
+                                <input id="form_updateLink" name="form_updateLink" type="text" class="form-control" th:value="${data.updateLink}"/>
+                            </div>
+                        </div>
+                        <div class="form-group ios-devcieType" th:style="(${data.deviceType.code}=='0'?'':'display:none')">
+                            <label class="col-sm-2 control-label">MD5</label>
+                            <div class="col-sm-6">
+                                <input id="form_md5" name="form_md5" type="text" class="form-control" th:value="${data.md5}"/>
+                            </div>
+                        </div>
+                        <div class="form-group ios-devcieType" th:style="(${data.deviceType.code}=='0'?'':'display:none')">
+                            <label class="col-sm-2 control-label">文件大小</label>
+                            <div class="col-sm-6">
+                                <input id="form_size" name="form_size" type="text" value="0" class="form-control" th:value="${data.size}"/>
+                            </div>
+                        </div>
+                        <div class="form-group ios-devcieType">
+                            <label class="col-sm-2 control-label">更新类型</label>
+                            <div class="col-sm-10">
+                                <div class="input-group-btn">
+                                    <button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">
+                                        <span class="dropdown_text dropdown_enable_text" th:text="(${data.updateType})==1?'强制更新':'普通更新'">普通更新</span><span class="caret"></span>
+                                    </button>
+                                    <input type="hidden" id="form_updateType" name="form_updateType" th:value="${data.updateType}" value="0"/>
+                                    <ul class="dropdown-menu" style="right: auto">
+                                        <li>
+                                            <!--0=普通更新 1=强制更新-->
+                                            <a onclick="editHandler.selectedTab(this,true)" data-value="0">普通更新</a>
+                                        </li>
+                                        <li>
+                                            <a onclick="editHandler.selectedTab(this,true)" data-value="1">强制更新</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">更新内容</label>
+                            <div class="col-sm-6">
+                                <textarea id="form_content" th:text="${data.updateDesc}" class="form-control" rows="5"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">是否变包</label>
+                            <div class="col-sm-10">
+                                <div class="input-group-btn">
+                                    <button data-toggle="dropdown"  class="btn btn-white dropdown-toggle" type="button">
+                                        <span class="dropdown_text" th:text="(${data.packageType.code}==0?'是':'否')">Android</span><span class="caret"></span>
+                                    </button>
+                                    <input type="hidden" id="form_packageType" name="form_packageType" th:value="(${data.packageType.code})" value="0"/>
+                                    <ul class="dropdown-menu" style="right: auto">
+                                        <li>
+                                            <a onclick="editHandler.selectedTab(this)" data-value="0">是</a>
+                                        </li>
+                                        <li>
+                                            <a onclick="editHandler.selectedTab(this)" data-value="1">否</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <button id="save" onclick="editHandler.save()" class="btn btn-primary" type="button">保存</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="http://resali.huobanplus.com/cdn/jquery/2.2.4/jquery.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/bootstrap/3.3.5/bootstrap.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/layer/3.1.0/layer.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/v2/bootstrap.hot.extra-utils.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/v2/bootstrap.hot.extra-init.js"></script>
+<script src="../../resource/js/version/appVersion.js.js" th:src="@{/resource/js/version/appVersion.js}"></script>
+</html>

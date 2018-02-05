@@ -11,10 +11,14 @@ package com.huotu.loanmarket.service.repository.system;
 
 import com.huotu.loanmarket.service.entity.system.AppSystemVersion;
 import com.huotu.loanmarket.service.enums.DeviceTypeEnum;
+import com.huotu.loanmarket.service.enums.PackageTypeEnum;
+import com.huotu.loanmarket.service.enums.UserAuthorizedStatusEnums;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author guomw
@@ -31,4 +35,14 @@ public interface AppVersionRepository extends JpaRepository<AppSystemVersion, Lo
      */
     @Query("select v from AppSystemVersion v where v.deviceType=?1 and v.version=?2")
     AppSystemVersion findByVersion(DeviceTypeEnum deviceTypeEnum,String version);
+
+    /**
+     * 更新变包类型
+     * @param vid
+     * @param packageType
+     */
+    @Query("update AppSystemVersion a set a.packageType=?2 where a.vid=?1")
+    @Modifying(clearAutomatically = true)
+    @Transactional(rollbackFor = RuntimeException.class)
+    void updatePackageType(Long vid, PackageTypeEnum  packageType);
 }

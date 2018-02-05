@@ -12,6 +12,7 @@ package com.huotu.loanmarket.service.service.upload.impl;
 import com.huotu.loanmarket.service.service.upload.StaticResourceService;
 import com.huotu.loanmarket.service.service.upload.VFSHelper;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.vfs2.FileObject;
@@ -30,7 +31,7 @@ import java.net.URISyntaxException;
  * @author guomw
  * @date 16/11/2017
  */
-@Service
+@Service("resourceService")
 public abstract class AbstractStaticResourceService implements StaticResourceService {
 
     private static final Log log = LogFactory.getLog(AbstractStaticResourceService.class);
@@ -117,6 +118,9 @@ public abstract class AbstractStaticResourceService implements StaticResourceSer
      * @throws URISyntaxException
      */
     private URI getURIByPath(String path, boolean isHomePrefix) throws URISyntaxException {
+        if (StringUtils.isEmpty(path)) {
+            return new URI("");
+        }
         StringBuilder stringBuilder = new StringBuilder();
         if (isHomePrefix) {
             stringBuilder.append(fileHome.toString());
