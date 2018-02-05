@@ -88,7 +88,7 @@ public interface ConfigParameter {
     }
 
     /**
-     * 短信接口参数
+     * 认证费配置参数
      */
     @AllArgsConstructor
     @MerchantConfigType(type = MerchantConfigEnum.AUTH_FEE)
@@ -96,11 +96,11 @@ public interface ConfigParameter {
         /**
          * 行业黑名单费用
          */
-        BACKLIST_BUS_FEE("backlist_bus_fee", "行业黑名单认证费"),
-        BACKLIST_FINANCE_FEE("backlist_finance_fee", "金融黑名单认证费"),
-        CARRIER_FEE("carrier_fee", "运营商认证费"),
-        TAOBAO_FEE("taobao_fee", "淘宝授权认证"),
-        JINGDONG_FEE("jingdong_fee", "京东授权认证费");
+        BACKLIST_BUS_FEE("auth_backlist_bus_fee", "行业黑名单认证费"),
+        BACKLIST_FINANCE_FEE("auth_backlist_finance_fee", "金融黑名单认证费"),
+        CARRIER_FEE("auth_carrier_fee", "运营商认证费"),
+        TAOBAO_FEE("auth_taobao_fee", "淘宝授权认证"),
+        JINGDONG_FEE("auth_jingdong_fee", "京东授权认证费");
         private String key;
         private String message;
 
