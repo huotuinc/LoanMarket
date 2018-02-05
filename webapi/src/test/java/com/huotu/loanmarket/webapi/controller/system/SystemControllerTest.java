@@ -14,6 +14,7 @@ import com.huotu.loanmarket.common.utils.RandomUtils;
 import com.huotu.loanmarket.service.entity.user.User;
 import com.huotu.loanmarket.service.enums.AppCode;
 import com.huotu.loanmarket.webapi.controller.base.BaseTest;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -50,6 +51,7 @@ public class SystemControllerTest extends BaseTest {
     }
 
     @Test
+    @Ignore
     public void sendVerifyCode() throws Exception {
 
         String mobile = RandomUtils.randomAllMobile();
