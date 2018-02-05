@@ -13,9 +13,11 @@ import com.huotu.loanmarket.common.Constant;
 import com.huotu.loanmarket.common.utils.RandomUtils;
 import com.huotu.loanmarket.service.entity.user.User;
 import com.huotu.loanmarket.service.enums.AppCode;
+import com.huotu.loanmarket.service.service.system.AppVersionService;
 import com.huotu.loanmarket.webapi.controller.base.BaseTest;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.Assert.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -27,6 +29,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  *
  */
 public class SystemControllerTest extends BaseTest {
+
+    @Autowired
+    private AppVersionService appVersionService;
 
     @Test
     public void init() throws Exception {
@@ -42,6 +47,8 @@ public class SystemControllerTest extends BaseTest {
 
     @Test
     public void checkUpdate() throws Exception {
+
+        //appVersionService.save();
         mockMvc.perform(post("/api/sys/checkUpdate")
                 .header(Constant.APP_VERSION_KEY, "1.0.0")
                 .header(Constant.APP_SYSTEM_TYPE_KEY, "android"))

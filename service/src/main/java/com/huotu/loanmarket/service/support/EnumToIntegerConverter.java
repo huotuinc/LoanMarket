@@ -46,13 +46,5 @@ public class EnumToIntegerConverter<T extends ICommonEnum> implements AttributeC
     public static class UserAuthorizedStatusEnumsConverter extends EnumToIntegerConverter<UserAuthorizedStatusEnums>
             implements AttributeConverter<UserAuthorizedStatusEnums, Integer> {
     }
-    /**
-     * 设备类型转换
-     */
-    @Converter
-    public static class DeviceTypeEnumConverter extends EnumToIntegerConverter<DeviceTypeEnum>
-            implements AttributeConverter<DeviceTypeEnum, Integer> {
-
-    }
 
 }

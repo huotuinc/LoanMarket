@@ -107,7 +107,7 @@ public class SystemController {
                     userService.updateLastLoginTime(userId);
                     map.put("userInfo", userInfoVo);
                 }
-            } catch (ErrorMessageException e) {
+            } catch (Exception e) {
                 log.error(e);
             }
         }

@@ -12,7 +12,6 @@ package com.huotu.loanmarket.service.entity.system;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.huotu.loanmarket.service.enums.DeviceTypeEnum;
 import com.huotu.loanmarket.service.enums.PackageTypeEnum;
-import com.huotu.loanmarket.service.support.EnumToIntegerConverter;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -89,7 +88,6 @@ public class AppSystemVersion {
      * 设备类型
      */
     @Column(name = "device_type",columnDefinition = "tinyint")
-    @Convert(converter = EnumToIntegerConverter.DeviceTypeEnumConverter.class)
     private DeviceTypeEnum deviceType=DeviceTypeEnum.Android;
 
     /**
