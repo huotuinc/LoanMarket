@@ -50,13 +50,13 @@
 
                     </div>
                 </li>
-                <li>
+                <li class="active">
                     <a class="J_menuItem" href="">
                         <i class="fa fa-home"></i>
                         <span class="nav-label">桌面</span>
                     </a>
                 </li>
-                <li class="active">
+                <li >
                     <a href="#"><i class="fa fa-edit"></i><span class="nav-label">产品管理</span><span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li><a class="J_menuItem" href="form_basic.html" th:href="@{/project/list}">产品列表</a>
@@ -66,6 +66,13 @@
                         <li><a class="J_menuItem" href="form_advanced.html" th:href="@{/category/list}">产品分类</a>
                         </li>
                         <li><a class="J_menuItem" href="form_advanced.html" th:href="@{/category/edit}">添加分类</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#"><i class="fa fa-edit"></i><span class="nav-label">系统设置</span><span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li><a class="J_menuItem" href="../templates/version/list.html" th:href="@{/version/list}">APP版本管理</a>
                         </li>
                     </ul>
                 </li>

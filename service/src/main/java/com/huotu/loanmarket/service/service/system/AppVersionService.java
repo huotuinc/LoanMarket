@@ -11,6 +11,7 @@ package com.huotu.loanmarket.service.service.system;
 
 import com.huotu.loanmarket.service.entity.system.AppSystemVersion;
 import com.huotu.loanmarket.service.enums.DeviceTypeEnum;
+import com.huotu.loanmarket.service.enums.PackageTypeEnum;
 import com.huotu.loanmarket.service.model.PageListView;
 
 /**
@@ -27,6 +28,14 @@ public interface AppVersionService {
      * @return
      */
     boolean delete(Long itemId);
+
+    /**
+     * 更新变包类型
+     * @param itemId
+     * @param packageTypeEnum
+     * @return
+     */
+    boolean updatePackageType(Long itemId, PackageTypeEnum packageTypeEnum);
 
     /**
      * 保存消息
