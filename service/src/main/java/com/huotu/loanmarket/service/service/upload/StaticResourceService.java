@@ -54,6 +54,10 @@ public interface StaticResourceService {
 
     String ID_CARD_IMG = IMG + "idcard/{1}/{2}";
     /**
+     * 产品目录
+     */
+    String PROJECT__IMG = IMG + "project/{1}";
+    /**
      * 临时文件目录
      */
     String ID_CARD_IMG_TEMPLATE = IMG_TEMPLATE + "idcard/{1}/{2}";
