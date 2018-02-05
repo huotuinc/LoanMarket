@@ -80,7 +80,7 @@ public interface UserService {
      * @param userToken
      * @return
      */
-    boolean checkLoginToken(int merchantId, long userId, String userToken);
+    boolean checkLoginToken(int merchantId, Long userId, String userToken);
 
     /**
      * 获取邀请数
