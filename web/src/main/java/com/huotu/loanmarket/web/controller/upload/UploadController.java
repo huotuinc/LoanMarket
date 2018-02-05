@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
@@ -29,14 +30,21 @@ public class UploadController {
 
     @RequestMapping("/img")
     @ResponseBody
-    public ApiResult upload(@RequestParam(value = "file", required = false) MultipartFile file) throws IOException, URISyntaxException {
+    public ApiResult upload(@RequestParam(value = "file", required = false) MultipartFile file, int imgType) throws IOException, URISyntaxException {
         String fileName = file.getOriginalFilename();
         if (StringUtils.isEmpty(fileName)) {
             throw new FileNotFoundException("未上传任何图片");
         }
         // TODO: 27/10/2017 图片属性校验
-        String path = StaticResourceService.PROJECT__IMG +
-                "project-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmSS")) + staticResourceService.getSuffix(fileName);
+        String path;
+        if (imgType == 0) {
+            path = StaticResourceService.PROJECT__IMG +
+                    "project-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmSS")) + staticResourceService.getSuffix(fileName);
+        } else {
+            path = StaticResourceService.PROJECT__IMG +
+                    "category-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmSS")) + staticResourceService.getSuffix(fileName);
+        }
+
         URI uri = staticResourceService.uploadResource(path, file.getInputStream());
         JSONObject responseData = new JSONObject();
         responseData.put("fileUrl", uri);

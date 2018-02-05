@@ -371,7 +371,7 @@
             });
             applicationMaterials = applicationMaterials.substring(0, applicationMaterials.length - 1);
             var contact = $.trim($("#contact").val());
-            if(contact.length==0){
+            if (contact.length == 0) {
                 hot.tip.error("请输入联系人");
                 return;
             }
@@ -463,9 +463,9 @@
             title: 'Images',
             extensions: 'jpg,jpeg,png',
             mimeTypes: 'image/jpg,image/jpeg,image/png'
-        }
+        },
+        formData: {imgType: 0}
     });
-
     uploader.on('fileQueued', function (file) {
         uploader.makeThumb(file, function (error, src) {
             if (error) {
@@ -475,7 +475,6 @@
         });
     });
     uploader.on('uploadSuccess', function (file, response) {
-        console.log(response)
         $("#logo").val(response.data.filePath);
         hot.tip.success("上传成功");
         uploader.reset();
