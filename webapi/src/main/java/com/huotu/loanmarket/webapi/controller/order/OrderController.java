@@ -108,6 +108,7 @@ public class OrderController {
                 orderCreateResultVo.setPayType(order.getPayType().getCode());
                 orderCreateResultVo.setTradeType(order.getOrderType().getCode());
                 orderCreateResultVo.setSurplusAmount(order.getPayAmount());
+                orderCreateResultVo.setThirdAuthUrl(order.getThirdAuthUrl());
                 //--下面是各支付方式提供发起支付需要用到的东东
                 PaymentBizParametersVo bizParameters = quickPaymentContext.getCurrent(order.getPayType()).getBizParameters(order);
                 orderCreateResultVo.setBizParameters(bizParameters);
