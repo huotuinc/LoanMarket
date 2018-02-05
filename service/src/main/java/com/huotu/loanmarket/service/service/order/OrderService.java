@@ -14,8 +14,8 @@ import com.huotu.loanmarket.service.entity.order.Order;
 import com.huotu.loanmarket.service.entity.user.User;
 import com.huotu.loanmarket.service.enums.OrderEnum;
 import com.huotu.loanmarket.service.enums.UserAuthorizedStatusEnums;
-import com.huotu.loanmarket.service.model.PageListView;
-import com.huotu.loanmarket.service.model.order.*;
+import com.huotu.loanmarket.service.model.order.ApiCheckoutResultVo;
+import com.huotu.loanmarket.service.model.order.ApiOrderInfoVo;
 import com.huotu.loanmarket.service.model.order.PayReturnVo;
 import com.huotu.loanmarket.service.model.order.SubmitOrderInfo;
 import org.springframework.transaction.annotation.Transactional;
@@ -125,6 +125,4 @@ public interface OrderService {
      */
     void paid(Order order, User user);
 
-
-    Order findByUserIdAndOrderId(Long userId, String orderId);
 }

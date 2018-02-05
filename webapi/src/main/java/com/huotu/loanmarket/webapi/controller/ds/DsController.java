@@ -47,7 +47,7 @@ public class DsController {
     @RequestMapping("/dsShow")
     @ResponseBody
     public ApiResult dsShow(@RequestHeader(value = "userId") Long userId, String orderId) throws ExecutionException, InterruptedException {
-        Order order = orderService.findByUserIdAndOrderId(userId,orderId);
+        Order order = orderService.findByOrderId(orderId);
         if(order == null) {
             return ApiResult.resultWith(AppCode.PARAMETER_ERROR);
         }
@@ -64,7 +64,7 @@ public class DsController {
     @RequestMapping("/dsOrder")
     @ResponseBody
     public ApiResult dsOrder(@RequestHeader(value = "userId") Long userId, String orderId) {
-        Order order = orderService.findByUserIdAndOrderId(userId,orderId);
+        Order order = orderService.findByOrderId(orderId);
         if(order == null) {
             return ApiResult.resultWith(AppCode.PARAMETER_ERROR);
         }
@@ -82,7 +82,7 @@ public class DsController {
     @RequestMapping("/receiverList")
     @ResponseBody
     public ApiResult receiverList(@RequestHeader(value = "userId") Long userId, String orderId) {
-        Order order = orderService.findByUserIdAndOrderId(userId,orderId);
+        Order order = orderService.findByOrderId(orderId);
         if(order == null) {
             return ApiResult.resultWith(AppCode.PARAMETER_ERROR);
         }

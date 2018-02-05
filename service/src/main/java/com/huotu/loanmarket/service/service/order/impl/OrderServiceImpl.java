@@ -20,13 +20,11 @@ import com.huotu.loanmarket.service.config.LoanMarkConfigProvider;
 import com.huotu.loanmarket.service.config.SesameSysConfig;
 import com.huotu.loanmarket.service.entity.order.Order;
 import com.huotu.loanmarket.service.entity.order.OrderLog;
-import com.huotu.loanmarket.service.entity.user.Invite;
 import com.huotu.loanmarket.service.entity.user.User;
 import com.huotu.loanmarket.service.enums.ConfigParameter;
 import com.huotu.loanmarket.service.enums.MerchantConfigEnum;
 import com.huotu.loanmarket.service.enums.OrderEnum;
 import com.huotu.loanmarket.service.enums.UserAuthorizedStatusEnums;
-import com.huotu.loanmarket.service.model.PageListView;
 import com.huotu.loanmarket.service.model.order.ApiCheckoutResultVo;
 import com.huotu.loanmarket.service.model.order.ApiOrderInfoVo;
 import com.huotu.loanmarket.service.model.order.PayReturnVo;
@@ -456,8 +454,4 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.save(unifiedOrder);
     }
 
-    @Override
-    public Order findByUserIdAndOrderId(Long userId, String orderId) {
-        return orderRepository.findByOrderIdAndUser_userId(orderId,userId);
-    }
 }
