@@ -24,6 +24,7 @@ public interface UserRepository extends JpaRepository<User, Long> , JpaSpecifica
      * @param userId
      * @return
      */
+    @Query("select u from User u where u.merchantId=?1 and u.userId=?2")
     User findByMerchantIdAndUserId(Integer merchantId, Long userId);
 
     /**
