@@ -11,8 +11,8 @@
     <link href="http://resali.huobanplus.com/cdn/hotui/css/style.min-1.0.8.css" rel="stylesheet">
 </head>
 <body class="gray-bg">
-<!--/*@thymesVar id="configItem" type="com.huotu.superloan.service.entity.merchant.MerchantConfigItem"*/-->
-<!--/*@thymesVar id="configEnum" type="com.huotu.superloan.service.enums.MerchantConfigEnum"*/-->
+<!--/*@thymesVar id="configItem" type="com.huotu.loanmarket.service.entity.merchant.MerchantConfigItem"*/-->
+<!--/*@thymesVar id="configEnum" type="com.huotu.loanmarket.service.enums.MerchantConfigEnum"*/-->
 <div class="wrapper wrapper-content">
     <div class="ibox float-e-margins">
         <div class="ibox-content">
@@ -47,7 +47,7 @@
                         <div class="col-sm-8">
                             <label>
                                 <textarea rows="6" class="form-control" value="杭州" id="value"
-                                          name="value" th:text="${configItem.code}" required></textarea>
+                                          name="value" th:text="${configItem.value}" required></textarea>
                             </label>
                         </div>
                     </div>
