@@ -54,7 +54,7 @@ public class InitService {
     @Order(Ordered.HIGHEST_PRECEDENCE)
     public void init() {
         initConfigs();
-
+        initAlipay();
         initTemp();
         initSmsMessage();
         initsesame();
@@ -86,6 +86,18 @@ public class InitService {
         smsTemplateRepository.flush();
     }
 
+    /**
+     * 支付宝参数
+     */
+    @Transactional(rollbackFor = RuntimeException.class)
+    public void initAlipay() {
+        Map<String, String> map = new HashMap<>();
+        map.put(ConfigParameter.AlipayParameter.ALIPAY_APPID.getKey(), "2017120900477560");
+        map.put(ConfigParameter.AlipayParameter.ALIPAY_PUBLIC_KEY.getKey(), "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqexBEoP9mPAA3HH8uvrBbW4DfRqvEM1AnO/zfR1B6ij9MWnSI7XnAq/nizNAn6XWA87ouEx1uY+wSdOyOMbQjLIcVxHP9H6ktZ/up4oagE8O6uTnQLR0zgz0nFi54HicrEQ+ufhYbNpK1O8glL5ljRLP6AbZbIjYjvbAFHknjwBV8o699KgLF0k6QduE0/+5Eocr4YiNopeq+1GpIZ8Yg6mWuIXMgq2clv7cKHpayCa2BKnvumSQysxP932s5T/LkMbF4Y3wnYmUEffWpTpFjPDZHsHGtDc81pcTT7m02ZkbaO1Y0nCympWwV5RKFeEOiND3ZkJlo1z0wk7IpuvJIQIDAQAB");
+        map.put(ConfigParameter.AlipayParameter.ALIPAY_RSA_PUBLIC_KEY.getKey(), "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnKE7ApA2jS6oMZwu+wHwrY0cmH1wm+8TRcE8h/cvz+uV8B3QZ/4srZ1IpZ44CnQ7NW7frmE2cLf99A+164c17snNBaq30OhISdwQA9oZ70TxdkkPjHe9X1YpvKn+eVc+hyPMcu8Y7SKQoewtzETb4LJnhSx13UFo/Wjs5fIFh1GS9VFmpqbTr9E/RPgZUWVTiTISFM00uTcXfHLY9YfYx8fJi8mA2wZXGNr/s9+2V6ArxCtK/rVWOQ/qY/M2waXSQ8qXx24qpp7iOwbVbCINuUdx7ji9KCGnY9/T/bpfNexeQVkl8BKUdRghToTUFX1JGrc2ql5uPlTJnuAtS/sNFwIDAQAB");
+        map.put(ConfigParameter.AlipayParameter.ALIPAY_RSA_PRIVAT_EKEY.getKey(), "MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQCcoTsCkDaNLqgxnC77AfCtjRyYfXCb7xNFwTyH9y/P65XwHdBn/iytnUilnjgKdDs1bt+uYTZwt/30D7XrhzXuyc0FqrfQ6EhJ3BAD2hnvRPF2SQ+Md71fVim8qf55Vz6HI8xy7xjtIpCh7C3MRNvgsmeFLHXdQWj9aOzl8gWHUZL1UWamptOv0T9E+BlRZVOJMhIUzTS5Nxd8ctj1h9jHx8mLyYDbBlcY2v+z37ZXoCvEK0r+tVY5D+pj8zbBpdJDypfHbiqmnuI7BtVsIg25R3HuOL0oIadj39P9ul817F5BWSXwEpR1GCFOhNQVfUkatzaqXm4+VMme4C1L+w0XAgMBAAECggEBAIYgR0ENr7k8oAlDnrOR2ME1mqw2lwzhMNbGAAjKsyXQrugdD89NyIKvsnsovwKsv9sk4+UXGCB0XsL2BSn48kVWh/v3UktR7j1ZdllmFllf54oMTIVUMFWImlsWE3VjMYdWL4iomObQd5xBfIJ04PlMrPtMtG3QypBenqbWlsdlyVNXhQ2mmjPDFUemzbY0upS9Ag6syQR+CV0LG1DFi7Lavs4sPrNeSY6YG9Div/YwQpdjD/0ogRa8/fpreAc+fXF+AosfGc1xyS6DPXs+azdhbt+zwpWfdloqNGBGHFpF9wv4GK6ZYStf8JREV120QLG4PiHX7iJl8c2j7Dc0OoECgYEA4EhsKXaMk7qx/Bi2nvIKhKesCsFb4E/G0s43od5wiqBIKLFUfdQ2fI6sDmQ5dUWklDq88fn4WZQkrPo6oKEMmqrmUrGlw3Dw4/NljshxwNkFDLZoXw6T49CkvMvDenkr5TjyjMgSVtybvFrSCTMGSABYYn1ejq7iAOXBRuwE2NcCgYEAsseaq1AGp2viy0OXp1FOwLu/GXD/cml9DOtosm5dGYoO9FlHFiQwQh60g0EMwN9B0FR8iFItg+OgYGz8Lq0/ZrfmMKvkYS+YrcMa8mA236sXXWrINKNQIyH0j8mLEsVc1mPnv0GCS/FiylrRUyXQS5bL9eYqyLpp2NdPeODXpcECgYEA1TckVFqWE871a2KXIg2ZwDiiTms5i8prinZu3txXgwIS91R1rVV0Iv+DQ/81vG3jouMgQq3P0mEKaMNNvuy7zcHQSicGHgGdkCcQkieuNJZbvZUfLdbu8zGjmrPfduwAtd5ofzuoa5k4GF0CtaojO4nQfHkQznYk9pN1JZY0mWsCgYEAlsynOjmWY0ItWyb4lLmQpCG5X8xgrDEuuecXuOo+vXwmgRWNUK/VxPABc3U7PLUU3pVlNdebbNRkQvGrBfQ8tngIQqW7Tf7H2knoQOnHX4MBglq/5SacQgYyM9bc6EhxtqUupbSsI0LJAcb5KhmLSTc5c4FiNU6IWc/DyUJepAECgYB6l4ma5EhoRk5hTFPFCe1SJIrU2aO6nrHbNTLQl1wUkLUYGuDTxbhbrL0HC6xMSyl1LaMQTzMFlg0/1aMwoYbtXlpULnU/hCO+ORtelJ9V4yZUNR7lGucOk+OiBNz/aa14QA7eVqf0m8CPfVCeHiTcijyDs3QyngXCmD2TeTgkQA==");
+        initMerchantConfigItem(map, MerchantConfigEnum.ALIPAY);
+    }
 
     /**
      * 初始化芝麻认证参数

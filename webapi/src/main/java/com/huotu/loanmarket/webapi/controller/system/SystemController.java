@@ -113,6 +113,12 @@ public class SystemController {
         }
 
 
+
+        map.put("aboutUrl","http://wwww.baidu.com");
+        map.put("registerUrl","");
+        map.put("creditAuthUrl","");
+
+
         return ApiResult.resultWith(AppCode.SUCCESS, map);
     }
 
