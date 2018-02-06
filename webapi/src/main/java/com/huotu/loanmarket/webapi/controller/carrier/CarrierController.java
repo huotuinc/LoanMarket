@@ -10,6 +10,7 @@ import com.huotu.loanmarket.service.entity.carrier.RiskContactDetail;
 import com.huotu.loanmarket.service.entity.carrier.RiskContactStats;
 import com.huotu.loanmarket.service.entity.order.Order;
 import com.huotu.loanmarket.service.enums.AppCode;
+import com.huotu.loanmarket.service.enums.OrderEnum;
 import com.huotu.loanmarket.service.enums.UserAuthorizedStatusEnums;
 import com.huotu.loanmarket.service.model.carrier.UserCarrierVo;
 import com.huotu.loanmarket.service.repository.carrier.AsyncTaskRepository;
@@ -145,15 +146,26 @@ public class CarrierController {
      */
     @RequestMapping("/carrierShow")
     public String carrierShow( Long userId,String orderId,Model model) {
-        Order order = orderService.findByOrderId(orderId);
-        if(order == null || !order.getUser().getUserId().equals(userId)) {
-            throw new OrderNotFoundException(Constant.ORDER_NOT_FOUND);
-        }
+        checkParam(userId, orderId);
         UserCarrierVo userCarrierVo = userCarrierService.carrierShow(orderId);
         model.addAttribute("carrier",userCarrierVo);
         model.addAttribute("orderId",orderId);
         model.addAttribute("userId",userId);
         return "report/carrierInfo";
+    }
+
+    private void checkParam(Long userId, String orderId) {
+        Order order = orderService.findByOrderId(orderId);
+        if(order == null || !order.getUser().getUserId().equals(userId)) {
+            throw new OrderNotFoundException(Constant.ORDER_NOT_FOUND);
+        }
+        if(!OrderEnum.OrderStatus.Normal.equals(order.getOrderStatus())){
+            throw new OrderNotFoundException("订单状态："+order.getOrderStatus().getName());
+        }
+        if(!UserAuthorizedStatusEnums.AUTH_SUCCESS.equals(order.getAuthStatus())){
+            throw new OrderNotFoundException("订单认证状态："+order.getAuthStatus().getName());
+        }
+
     }
 
     /**
@@ -164,10 +176,7 @@ public class CarrierController {
      */
     @RequestMapping("/riskContactList")
     public String riskContactList(Long userId,String orderId,Model model) {
-        Order order = orderService.findByOrderId(orderId);
-        if(order == null || !order.getUser().getUserId().equals(userId)) {
-            throw new OrderNotFoundException(Constant.ORDER_NOT_FOUND);
-        }
+        checkParam(userId, orderId);
         List<RiskContactStats> contactStatsList = riskContactStatsRepository.findByOrderId(orderId);
         model.addAttribute("riskContactList",contactStatsList);
         return "report/riskContact";
@@ -181,10 +190,7 @@ public class CarrierController {
      */
     @RequestMapping("/riskContactDetailList")
     public String riskContactDetailList( Long userId, String orderId,Model model) {
-        Order order = orderService.findByOrderId(orderId);
-        if(order == null || !order.getUser().getUserId().equals(userId)) {
-            throw new OrderNotFoundException(Constant.ORDER_NOT_FOUND);
-        }
+        checkParam(userId, orderId);
         List<RiskContactDetail> riskContactDetailList = riskContactDetailRepository.findByOrderId(orderId);
         model.addAttribute("riskContactDetailList",riskContactDetailList);
         return "report/riskContactDetail";
@@ -198,10 +204,7 @@ public class CarrierController {
      */
     @RequestMapping("/consumeBillList")
     public String consumeBillList( Long userId,String orderId, Model model) {
-        Order order = orderService.findByOrderId(orderId);
-        if(order == null || !order.getUser().getUserId().equals(userId)) {
-            throw new OrderNotFoundException(Constant.ORDER_NOT_FOUND);
-        }
+        checkParam(userId, orderId);
         List<ConsumeBill> consumeBillList = consumeBillRepository.findByOrderId(orderId);
         consumeBillList.sort(Comparator.comparing(ConsumeBill::getMonth));
         model.addAttribute("consumeBillList",consumeBillList);

@@ -71,7 +71,7 @@ var editHandler = {
         }
 
         var deviceType = $("#form_deviceType").val();
-        if (deviceType == 1) {
+        if (deviceType == 0) {
             if ($("#form_md5").val().length == 0) {
                 hot.tip.error("请输入文件MD5");
                 $("#form_md5").focus();

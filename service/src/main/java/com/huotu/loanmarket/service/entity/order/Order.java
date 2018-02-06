@@ -142,7 +142,7 @@ public class Order {
     /**
      * 第三方认证连接
      */
-    @Column(name = "third_auth_url", length = 200)
+    @Column(name = "third_auth_url", columnDefinition = "text")
     private String thirdAuthUrl;
 
     /**

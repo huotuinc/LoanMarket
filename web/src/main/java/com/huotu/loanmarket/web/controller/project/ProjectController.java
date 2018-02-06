@@ -57,7 +57,7 @@ public class ProjectController {
             project = new Project();
         }
         model.addAttribute("project", project);
-        return "project_edit";
+        return "project/project_edit";
     }
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
@@ -98,7 +98,7 @@ public class ProjectController {
         model.addAttribute("totalPage", projectPage.getTotalPages());
         model.addAttribute("projects", projectPage.getContent());
 
-        return "project_list";
+        return "project/project_list";
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
