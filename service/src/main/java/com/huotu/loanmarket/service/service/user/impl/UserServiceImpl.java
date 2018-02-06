@@ -72,6 +72,7 @@ public class UserServiceImpl implements UserService {
      * @throws ErrorMessageException
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public User register(User user, String verifyCode) throws ErrorMessageException {
         /**
          * 验证验证码是否有效
@@ -235,7 +236,7 @@ public class UserServiceImpl implements UserService {
             return false;
         }
 
-        if (myUser.getUserToken().equals(userToken)) {
+        if (myUser.getUserToken() != null && myUser.getUserToken().equals(userToken)) {
             return true;
         }
         return false;
