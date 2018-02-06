@@ -116,7 +116,7 @@ var editHandler = {
 
 
         var deviceType = $("#form_deviceType").val();
-        if (deviceType != 1) {
+        if (deviceType != 0) {
             $(".ios-devcieType").hide();
         }
         else {
