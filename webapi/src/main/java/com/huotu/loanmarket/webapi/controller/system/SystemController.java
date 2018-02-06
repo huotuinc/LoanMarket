@@ -115,8 +115,8 @@ public class SystemController {
 
 
         map.put("aboutUrl","http://wwww.baidu.com");
-        map.put("registerUrl","");
-        map.put("creditAuthUrl","");
+        map.put("regAgreementUrl","http://wwww.baidu.com");
+        map.put("creditAuthUrl","http://wwww.baidu.com");
 
 
         return ApiResult.resultWith(AppCode.SUCCESS, map);

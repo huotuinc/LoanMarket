@@ -46,4 +46,18 @@ public class ApiOrderCreateResultVo {
      * 一些支付要用到的业务参数
      */
     private PaymentBizParametersVo bizParameters;
+
+    /**
+     * 姓名
+     */
+    private String name;
+    /**
+     * 手机号码
+     */
+    private String mobile;
+    /**
+     * 身份证号码
+     */
+    private String idCardNo;
+
 }

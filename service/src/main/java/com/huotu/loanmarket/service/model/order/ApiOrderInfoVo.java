@@ -40,4 +40,7 @@ public class ApiOrderInfoVo {
      * 第三方认证地址
      */
     private String thirdAuthUrl;
+
+
+
 }

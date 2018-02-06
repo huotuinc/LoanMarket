@@ -20,10 +20,7 @@ import com.huotu.loanmarket.service.enums.AppCode;
 import com.huotu.loanmarket.service.enums.OrderEnum;
 import com.huotu.loanmarket.service.enums.UserAuthorizedStatusEnums;
 import com.huotu.loanmarket.service.enums.UserResultCode;
-import com.huotu.loanmarket.service.model.order.ApiCheckoutResultVo;
-import com.huotu.loanmarket.service.model.order.ApiOrderCreateResultVo;
-import com.huotu.loanmarket.service.model.order.PayReturnVo;
-import com.huotu.loanmarket.service.model.order.SubmitOrderInfo;
+import com.huotu.loanmarket.service.model.order.*;
 import com.huotu.loanmarket.service.model.payconfig.PaymentBizParametersVo;
 import com.huotu.loanmarket.service.service.order.OrderService;
 import com.huotu.loanmarket.service.service.thirdpay.QuickPaymentContext;
@@ -38,6 +35,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.interceptor.ExcludeDefaultInterceptors;
 import java.text.MessageFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 
 /**
@@ -109,6 +107,9 @@ public class OrderController {
                 orderCreateResultVo.setTradeType(order.getOrderType().getCode());
                 orderCreateResultVo.setSurplusAmount(order.getPayAmount());
                 orderCreateResultVo.setThirdAuthUrl(order.getThirdAuthUrl());
+                orderCreateResultVo.setName(order.getRealName());
+                orderCreateResultVo.setMobile(order.getMobile());
+                orderCreateResultVo.setIdCardNo(order.getIdCardNo());
                 //--下面是各支付方式提供发起支付需要用到的东东
                 PaymentBizParametersVo bizParameters = quickPaymentContext.getCurrent(order.getPayType()).getBizParameters(order);
                 orderCreateResultVo.setBizParameters(bizParameters);
@@ -228,7 +229,7 @@ public class OrderController {
                           @RequestParam(required = false, defaultValue = "0") Long inviteeId) {
 
         LinkedHashMap<String, Object> map = new LinkedHashMap<>();
-        UserAuthorizedStatusEnums authStatus=null;
+        UserAuthorizedStatusEnums authStatus = null;
         if (inviteeId != null && inviteeId > 0) {
             User user = userService.findByMerchantIdAndUserId(Constant.MERCHANT_ID, inviteeId);
             if (user == null || !user.getInviterId().equals(userId)) {
@@ -236,11 +237,44 @@ public class OrderController {
                 return ApiResult.resultWith(AppCode.SUCCESS, map);
             }
             userId = inviteeId;
-            authStatus=UserAuthorizedStatusEnums.AUTH_SUCCESS;
+            authStatus = UserAuthorizedStatusEnums.AUTH_SUCCESS;
         }
         pageIndex = pageIndex <= 0 ? 1 : pageIndex;
-        map.put("list", orderService.getList(userId, pageIndex, pageSize,authStatus));
+        map.put("list", orderService.getList(userId, pageIndex, pageSize, authStatus));
         return ApiResult.resultWith(AppCode.SUCCESS, map);
+    }
+
+    /**
+     * 获取订单信息
+     *
+     * @param orderId
+     * @return
+     */
+    @RequestMapping("/detail")
+    @ResponseBody
+    public ApiResult detail(@RequestParam String orderId) {
+        try {
+            ApiOrderCreateResultVo orderInfo = new ApiOrderCreateResultVo();
+            Order order = orderService.findByOrderId(orderId);
+            if (order != null && order.getPayStatus().equals(OrderEnum.PayStatus.NOT_PAY)) {
+                orderInfo.setOrderNo(order.getOrderId());
+                orderInfo.setPayType(order.getPayType().getCode());
+                orderInfo.setTradeType(order.getOrderType().getCode());
+                orderInfo.setSurplusAmount(order.getPayAmount());
+                orderInfo.setThirdAuthUrl(order.getThirdAuthUrl());
+                orderInfo.setName(order.getRealName());
+                orderInfo.setMobile(order.getMobile());
+                orderInfo.setIdCardNo(order.getIdCardNo());
+                PaymentBizParametersVo bizParameters = quickPaymentContext.getCurrent(order.getPayType()).getBizParameters(order);
+                orderInfo.setBizParameters(bizParameters);
+                return ApiResult.resultWith(AppCode.SUCCESS, orderInfo);
+            } else {
+                return ApiResult.resultWith(AppCode.ERROR, "订单不存在");
+            }
+        } catch (Exception ex) {
+            log.error("detail发生异常：" + ex.getMessage(), ex);
+            return ApiResult.resultWith(AppCode.ERROR, "订单不存在");
+        }
     }
 
 }
