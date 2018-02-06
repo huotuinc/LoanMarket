@@ -10,6 +10,7 @@ import com.huotu.loanmarket.service.entity.carrier.RiskContactDetail;
 import com.huotu.loanmarket.service.entity.carrier.RiskContactStats;
 import com.huotu.loanmarket.service.entity.order.Order;
 import com.huotu.loanmarket.service.enums.AppCode;
+import com.huotu.loanmarket.service.enums.OrderEnum;
 import com.huotu.loanmarket.service.enums.UserAuthorizedStatusEnums;
 import com.huotu.loanmarket.service.model.carrier.UserCarrierVo;
 import com.huotu.loanmarket.service.repository.carrier.AsyncTaskRepository;
@@ -158,6 +159,13 @@ public class CarrierController {
         if(order == null || !order.getUser().getUserId().equals(userId)) {
             throw new OrderNotFoundException(Constant.ORDER_NOT_FOUND);
         }
+        if(!OrderEnum.OrderStatus.Normal.equals(order.getOrderStatus())){
+            throw new OrderNotFoundException("订单状态："+order.getOrderStatus().getName());
+        }
+        if(!UserAuthorizedStatusEnums.AUTH_SUCCESS.equals(order.getAuthStatus())){
+            throw new OrderNotFoundException("订单认证状态："+order.getAuthStatus().getName());
+        }
+
     }
 
     /**

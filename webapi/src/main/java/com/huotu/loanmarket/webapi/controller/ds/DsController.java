@@ -3,6 +3,8 @@ package com.huotu.loanmarket.webapi.controller.ds;
 import com.huotu.loanmarket.common.Constant;
 import com.huotu.loanmarket.service.entity.ds.Receiver;
 import com.huotu.loanmarket.service.entity.order.Order;
+import com.huotu.loanmarket.service.enums.OrderEnum;
+import com.huotu.loanmarket.service.enums.UserAuthorizedStatusEnums;
 import com.huotu.loanmarket.service.model.ds.DsOrderVo;
 import com.huotu.loanmarket.service.model.ds.DsVo;
 import com.huotu.loanmarket.service.repository.ds.DsOrderRepository;
@@ -88,5 +90,12 @@ public class DsController {
         if(order == null || !order.getUser().getUserId().equals(userId)) {
             throw new OrderNotFoundException(Constant.ORDER_NOT_FOUND);
         }
+        if(!OrderEnum.OrderStatus.Normal.equals(order.getOrderStatus())){
+            throw new OrderNotFoundException("订单状态："+order.getOrderStatus().getName());
+        }
+        if(!UserAuthorizedStatusEnums.AUTH_SUCCESS.equals(order.getAuthStatus())){
+            throw new OrderNotFoundException("订单认证状态："+order.getAuthStatus().getName());
+        }
+
     }
 }
