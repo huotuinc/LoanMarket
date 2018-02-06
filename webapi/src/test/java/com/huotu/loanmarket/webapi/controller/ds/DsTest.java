@@ -1,7 +1,6 @@
 package com.huotu.loanmarket.webapi.controller.ds;
 
 import com.huotu.loanmarket.common.utils.JsonUtils;
-import com.huotu.loanmarket.service.entity.order.Order;
 import com.huotu.loanmarket.service.model.ds.DsOrderVo;
 import com.huotu.loanmarket.service.model.ds.DsVo;
 import com.huotu.loanmarket.service.repository.ds.DsOrderRepository;
@@ -30,12 +29,12 @@ public class DsTest extends BaseTest {
     @Test
     public void queryDsResult() throws Exception {
 
-        Order order = new Order();
-        order.setOrderId(String.valueOf(System.currentTimeMillis()));
-        orderRepository.saveAndFlush(order);
+//        Order order = new Order();
+//        order.setOrderId(String.valueOf(System.currentTimeMillis()));
+//        orderRepository.saveAndFlush(order);
 //        String taskId = "TASKYYS100000201801151643430331920947";
         String taskId = "TASKDS000103201801291138560751361175";
-        dsService.queryResult(taskId,order.getOrderId(),1);
+        dsService.queryResult(taskId,orderId,1);
     }
 
     @Test
