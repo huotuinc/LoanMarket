@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>同盾贷前检查日志</title>
+    <link href="http://resali.huobanplus.com/cdn/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/animate.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/style.min-1.0.8.css" rel="stylesheet">
+    <!--datetimepick-->
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/datetimepick/daterangepicker.css" rel="stylesheet"/>
+    <link href="../../resource/css/common.css" th:href="@{/resource/css/common.css}" rel="stylesheet"/>
+    <style type="text/css">
+        .report-table .result-text {
+            display: inline-block;
+            width: 80px;
+            height: 22px;
+            line-height: 22px;
+            font-size: 12px;
+            background: url("https://credittest.tongdun.cn/htdocs/images/result-bg01.png") no-repeat;
+        }
+
+        .report-table .result-text.scaning {
+            background-image: none;
+        }
+
+        .report-table .result-text.reject {
+            color: #ff6c5c;
+            background-position: left center;
+        }
+
+        .report-table .result-text.accept {
+            color: #8cdb65;
+            background-position: left bottom;
+        }
+
+        .report-table .result-text.review {
+            color: #f8d438;
+            background-position: left top;
+        }
+
+        .report-table .result-text .score {
+            display: inline-block;
+            width: 35px;
+            font-size: 12px;
+            color: #fff;
+            text-align: center;
+        }
+
+        .iframe-wrap {
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            z-index: 999999;
+            top: 0;
+            left: 0%;
+            display: none;
+        }
+
+        .iframe {
+            width: 100%;
+            height: 100%;
+            overflow-y: scroll;
+        }
+
+        #report_detail_iframe .close {
+            float: right;
+            line-height: 40px;
+            font-size: 22px;
+            cursor: pointer;
+            color: #dbdbdb;
+            margin-right: 10px;
+        }
+
+        #report_detail_iframe .close:hover {
+            text-decoration: none;
+            color: #a0a0a0;
+        }
+    </style>
+</head>
+
+<body class="gray-bg">
+<!--/*@thymesVar id="searchCondition" type="com.huotu.loanmarket.service.model.tongdun.TongdunLogSearchCondition"*/-->
+<div class="wrapper wrapper-content animated fadeInRight tooltip-demo" th:object="${searchCondition}">
+    <!--search-->
+    <form role="form" id="searchForm" class="search-panel" th:action="@{/admin/tongdun/logList}" method="get"
+          >
+        <input type="hidden" name="pageIndex" th:value="*{pageIndex}"/>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content">
+                        <div class="form-inline">
+                            <div class="form-group m-r-sm">
+                                <label class=" control-label">搜索类型：</label>
+                                <select class="form-control input-sm" name="searchType" id="searchType">
+                                    <option th:each="logSearchType:${logSearchTypeList}"
+                                            th:value="${logSearchType.code}" th:text="${logSearchType.name}"
+                                            th:selected="${logSearchType.code}==*{searchType}"></option>
+                                </select>
+                                <input type="text" class="form-control" id="searchKey" name="searchKey"
+                                       placeholder="关键字" style="width:200px;" th:value="*{searchKey}"/>
+                                <label class=" control-label">调用状态：</label>
+                                <select class="form-control input-sm" name="state" id="state">
+                                    <option value="-1">所有</option>
+                                    <option value="1" th:selected="*{state}==1">成功</option>
+                                    <option value="0" th:selected="*{state}==0">失败</option>
+                                    <option value="2" th:selected="*{state}==2">生成中</option>
+                                </select>
+                                <label class=" control-label">报告结果：</label>
+                                <select class="form-control input-sm" name="decision" id="decision">
+                                    <option value="-1">所有</option>
+                                    <option th:each="decisionType:${decisionTypeList}" th:value="${decisionType.code}"
+                                            th:text="${decisionType.name}"
+                                            th:selected="${decisionType.code}==*{decision}"></option>
+                                </select>
+                            </div>
+                            <div class="form-group m-r-sm">
+                                <label class=" control-label" for="beginTimePick">报告时间：</label>
+                                <input type="text" class="form-control input-sm mb10 data-range-pick"
+                                       id="beginTimePick" name="beginTimePick" start-element="#beginTime"
+                                       end-element="#endTime" placeholder="开始时间-结束时间" style="width: 300px;"
+                                       th:value="(*{beginTime!= null and beginTime != ''}  ? *{beginTime} :'')  + (*{endTime != null and endTime != ''} ?  ' - ' + *{endTime} :'') "
+                                />
+                                <input type="hidden" id="beginTime" name="beginTime" th:value="*{beginTime}"/>
+                                <input type="hidden" id="endTime" name="endTime" th:value="*{endTime}"/>
+                            </div>
+                            <span onclick="logListHandler.search(1)" class="btn btn-success btn-sm">搜索</span>
+                            <span onclick="logListHandler.searchAll()" class="btn btn-success btn-sm">显示所有</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </form>
+    <!--search-->
+
+    <!--list-->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins m-b-none">
+                <div class="ibox-content p-xxs no-top-border">
+                    <div class="panel-body">
+                        <table class="table table-bordered table-hover table-center report-table">
+                            <thead>
+                            <tr>
+                                <th></th>
+                                <th>报告编号/申请编号</th>
+                                <th>订单号</th>
+                                <th>姓名</th>
+                                <th>手机</th>
+                                <th>扫描时间</th>
+                                <th>扫描建议</th>
+                                <th>调用状态</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <!--/*@thymesVar id="log" type="com.huotu.loanmarket.service.entity.tongdun.TongdunRequestLog"*/-->
+                            <tr th:each="log,index:${logPage.getContent()}">
+                                <td th:text="${index.count}">1</td>
+                                <td>
+                                    <th:block th:if="${log.reportId!=null}" th:text="${log.reportId}"></th:block>
+                                    <br>
+                                    <th:block th:if="${log.applicationId!=null}" th:text="${log.applicationId}"></th:block>
+                                </td>
+                                <td th:text="${log.orderId}">2018020610241234</td>
+                                <td th:text="${log.name}">姓名</td>
+                                <td th:text="${log.mobile}">13754325420</td>
+                                <td>
+                                    <span th:if="${log.applyTime}!=null" th:text="${#strings.replace(log.applyTime,'T',' ')}">2017-11-28</span>
+                                </td>
+                                <td style="text-align:left;padding-left:15px;">
+                                    <span class="result-text Accept" th:class="|result-text ${log.finalDecision}|"
+                                          th:if="${log.state}==1">
+                                        <span class="score" th:text="${log.finalScore}">0</span>
+                                        <span class="text" th:text="${log.finalDecision}">Accept</span>
+                                    </span>
+                                </td>
+                                <td th:switch="${log.state}">
+                                    <span style="color:blue;" th:case="2">生成中</span>
+                                    <span style="color:green;" th:case="1">成功</span>
+                                    <span style="color:red;" th:case="0">失败<a href="" th:href="|javascript:logListHandler.showError(${log.id})|">[查看]</a></span>
+                                </td>
+                                <td>
+                                    <span style="display:none;" th:utext="${log.exception}" id="spError1"
+                                          th:id="|spError1_${log.id}|"></span>
+                                    <span style="display:none;" th:if="${log.submitReasonCode}!=null"
+                                          th:utext="|${log.submitReasonCode}(${log.submitReasonDesc})|"
+                                          th:id="|spError2_${log.id}|"></span>
+                                    <a th:onclick="|logListHandler.showReport(${log.id})|"
+                                       class="btn btn-myGreen btn-xs" th:if="${log.state}==1">
+                                        <i class="fa tooltips" data-toggle="tooltip" data-original-title="查看报告">查看报告</i>
+                                    </a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <p style="float: left; margin: 20px 0;">共
+                            <th:block th:text="${logPage.getTotalElements()}"></th:block>
+                            条记录，当前第
+                            <th:block th:text="*{pageIndex}"></th:block>
+                            /
+                            <th:block th:text="${logPage.getTotalPages()}"></th:block>
+                            ，每页20条记录
+                        </p>
+                        <ul style="float: right;" class="pagination pagination-split">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--基础框架js-->
+<script src="http://resali.huobanplus.com/cdn/jquery/2.2.4/jquery.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/bootstrap/3.3.5/bootstrap.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/v2/content.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/layer/3.1.0/layer.js"></script>
+<!--日期选择-->
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/datetimepick/moment.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/datetimepick/daterangepicker.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/v2/bootstrap.hot.extra-utils-0.2.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/v2/bootstrap.hot.extra-init.js"></script>
+
+<script type="text/javascript" th:inline="javascript">
+    var listUrl = /*[[@{/admin/tongdun/logList}]]*/ "";
+    var totalPage = /*[[${logPage.getTotalPages()}]]*/ 10;
+</script>
+
+<script type="text/javascript">
+    $(function () {
+        $("input[class~=data-range-pick]").daterangepicker({
+            locale: {
+                format: 'YYYY-MM-DD HH:mm:ss'
+            }
+        });
+        $("input[class~=data-range-pick]").on('cancel.daterangepicker',function(ev, picker) {
+            $(this).val("");
+        });
+
+        var pageinate = new hot.paging(".pagination", parseInt($("input[name=pageIndex]").val()), totalPage, 7);
+        pageinate.init(function (p) {
+            logListHandler.search(p);
+        });
+    });
+
+    var logListHandler = {
+        search: function (pageIndex) {
+            $("input[name=pageIndex]").val(pageIndex);
+            $("#searchForm").submit();
+        },
+        searchAll: function () {
+            window.location.href = listUrl;
+        },
+        showError: function (id) {
+            var error1 = $('#spError1_' + id).html(), error2 = $('#spError2_' + id).html();
+            var error = (error1 || '') + (error2 || '');
+            layer.alert(error, {icon: 2});
+        },
+        showReport: function (id) {
+            var html = '<div id="iframe-wrap" class="iframe-wrap" style="display: block;">' +
+                    '<iframe name="iframe" class="iframe" src="/admin/tongdun/report/' + id + '" frameborder="0" scrolling="auto"></iframe>' +
+                    '</div>';
+            $('#iframe-wrap').remove();
+            $('body').append(html);
+        }
+    }
+</script>
+</body>
+
+</html>

@@ -58,22 +58,43 @@
                     </a>
                 </li>
                 <li class="active">
-                    <a href="#"><i class="fa fa-edit"></i><span class="nav-label">产品管理</span><span class="fa arrow"></span></a>
+                    <a href="#"><i class="fa fa-edit"></i><span class="nav-label">产品管理</span><span
+                            class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
-                        <li><a class="J_menuItem" href="form_basic.html" th:href="@{/project/list}">产品列表</a>
+                        <li><a class="J_menuItem" href="project/project_list.html" th:href="@{/project/list}">产品列表</a>
                         </li>
-                        <li><a class="J_menuItem" href="form_validate.html" th:href="@{/project/edit}">添加产品</a>
+                        <li><a class="J_menuItem" href="project/project_edit.html" th:href="@{/project/edit}">添加产品</a>
                         </li>
-                        <li><a class="J_menuItem" href="form_advanced.html" th:href="@{/category/list}">类目列表</a>
-                        </li>
-                        <li><a class="J_menuItem" href="form_advanced.html" th:href="@{/category/edit}">添加分类</a>
-                        </li>
+
+
                     </ul>
                 </li>
                 <li>
-                    <a href="#"><i class="fa fa-edit"></i><span class="nav-label">系统设置</span><span class="fa arrow"></span></a>
+                    <a href="#"><i class="fa fa-edit"></i><span class="nav-label">类目管理</span><span
+                            class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li><a class="J_menuItem" href="category/category_list.html"
+                               th:href="@{/category/list}">类目列表</a>
+                        </li>
+                        <li><a class="J_menuItem" href="category/category_edit.html"
+                               th:href="@{/category/edit}">添加分类</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="active">
+                    <a href="#"><i class="fa fa-edit"></i><span class="nav-label">第三方请求</span><span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li><a class="J_menuItem" href="tongdun/log_list.html" th:href="@{/admin/tongdun/logList}">同盾日志</a>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#"><i class="fa fa-edit"></i><span class="nav-label">系统设置</span><span
+                            class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li><a class="J_menuItem" href="../templates/version/list.html" th:href="@{/version/list}">APP版本管理</a>
+                        </li>
+                        <li><a class="J_menuItem" href="config/merchant_config.html"
+                               th:href="@{/admin/config/systemConfig}">系统参数配置</a>
                         </li>
                     </ul>
                 </li>

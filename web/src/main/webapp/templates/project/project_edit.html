@@ -124,7 +124,7 @@
                                         <div class="col-sm-10">
                                             <ul class="list-inline">
                                                 <li>
-                                                    <img src="../resource/img/logo.png"
+                                                    <img src="../../resource/img/logo.png"
                                                          th:src="${@resourceService.getResource(project.logo).toString()}"
                                                          id="J_imgLogo"
                                                          class="img-rounded" width="92" height="92"/>
@@ -285,8 +285,8 @@
 
 <script src="http://resali.huobanplus.com/cdn/hotui/js/v2/bootstrap.hot.extra-utils.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/v2/bootstrap.hot.extra-init.js"></script>
-<script src="../resource/js/mock/mock-min.js" th:remove="all"></script>
-<script src="../resource/js/mock/api.js" th:remove="all"></script>
+<script src="../../resource/js/mock/mock-min.js" th:remove="all"></script>
+<script src="../../resource/js/mock/api.js" th:remove="all"></script>
 <script type="text/javascript" th:inline="javascript">
     var uploadUrl = /*[[@{/resource/upload/img}]]*/ "/resource/upload/img";
     var requestUrl = /*[[@{/project/save}]]*/ "";

@@ -4,6 +4,8 @@ import com.huotu.loanmarket.common.utils.StringUtilsExt;
 import com.huotu.loanmarket.service.enums.ConfigParameter;
 import com.huotu.loanmarket.service.model.CarrierConfig;
 import com.huotu.loanmarket.service.model.sesame.SesameConfig;
+import com.huotu.loanmarket.service.model.tongdun.TongdunApiConfig;
+import com.huotu.loanmarket.service.model.tongdun.TongdunRiskRuleIdConfig;
 import com.huotu.loanmarket.service.service.merchant.MerchantCfgService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -55,6 +57,54 @@ public class LoanMarkConfigProvider {
 
     private Pattern rechargeRangePattern = Pattern.compile("\\[([^\\-]+)-([^\\]]+)\\]\\s*=\\s*([^;]+);");
 
+    /**
+     * 得到同盾接口参数
+     *
+     * @param merchantId 商家id
+     * @return
+     */
+    public TongdunApiConfig getTongdunApiConfig(Integer merchantId) {
+        Map<String, String> map = this.getMerchantConfigParameters(merchantId);
+        TongdunApiConfig tongdunApiConfig = new TongdunApiConfig();
+        tongdunApiConfig.setPartnerApp(StringUtilsExt.safeGetMapValue(ConfigParameter.TongdunParameter.PARTNER_APP.getKey(), map, "ckd_web"));
+        tongdunApiConfig.setPartnerCode(StringUtilsExt.safeGetMapValue(ConfigParameter.TongdunParameter.PARTNER_CODE.getKey(), map, "ghwl"));
+        tongdunApiConfig.setPartnerKey(StringUtilsExt.safeGetMapValue(ConfigParameter.TongdunParameter.PARTNER_KEY.getKey(), map, "ae28ff1a3e424235ad14e40ec88b8938"));
+        tongdunApiConfig.setQueryUrl(StringUtilsExt.safeGetMapValue(ConfigParameter.TongdunParameter.QUERY_URL.getKey(), map, "https://apitest.tongdun.cn/preloan/report/v9"));
+        tongdunApiConfig.setSubmitUrl(StringUtilsExt.safeGetMapValue(ConfigParameter.TongdunParameter.SUBMIT_URL.getKey(), map, "https://apitest.tongdun.cn/preloan/apply/v5"));
+        return tongdunApiConfig;
+    }
+
+    /**
+     * 得到同盾信用报告风控规则id
+     *
+     * @param merchantId 商家id
+     * @return
+     */
+    public TongdunRiskRuleIdConfig getTongdunRiskRuleIdConfig(Integer merchantId) {
+        Map<String, String> map = this.getMerchantConfigParameters(merchantId);
+        TongdunRiskRuleIdConfig ruleIdConfig = new TongdunRiskRuleIdConfig();
+        String ruleIds = StringUtilsExt.safeGetMapValue(ConfigParameter.TongdunRuleIdParameter.COURT_LOSEFAITH.getKey(), map, "2695083");
+        ruleIdConfig.setCourtLoseFaithRuleIds(this.convertToList(ruleIds));
+        ruleIds = StringUtilsExt.safeGetMapValue(ConfigParameter.TongdunRuleIdParameter.COURT_EXECUTION.getKey(), map, "2695087");
+        ruleIdConfig.setCourtExecutionRuleIds(this.convertToList(ruleIds));
+        ruleIds = StringUtilsExt.safeGetMapValue(ConfigParameter.TongdunRuleIdParameter.COURT_CASERULEIDS.getKey(), map, "2695097");
+        ruleIdConfig.setCourtCaseRuleIds(this.convertToList(ruleIds));
+        ruleIds = StringUtilsExt.safeGetMapValue(ConfigParameter.TongdunRuleIdParameter.DISCREDIT.getKey(), map, "2695133,2695175");
+        ruleIdConfig.setDiscreditRuleIds(this.convertToList(ruleIds));
+        ruleIds = StringUtilsExt.safeGetMapValue(ConfigParameter.TongdunRuleIdParameter.FUZZYNAMEHITS.getKey(), map, "2695105,2695101,2695103,2695099");
+        ruleIdConfig.setFuzzyNameHitsRuleIds(this.convertToList(ruleIds));
+        ruleIds = StringUtilsExt.safeGetMapValue(ConfigParameter.TongdunRuleIdParameter.CRIMINALWANTED.getKey(), map, "2696223");
+        ruleIdConfig.setCriminalWantedRuleIds(this.convertToList(ruleIds));
+        ruleIds = StringUtilsExt.safeGetMapValue(ConfigParameter.TongdunRuleIdParameter.PHONEN_UMBER_RISKS.getKey(), map, "2695125,2695127,2695129");
+        ruleIdConfig.setPhoneNumberRisksRuleIds(this.convertToList(ruleIds));
+        ruleIds = StringUtilsExt.safeGetMapValue(ConfigParameter.TongdunRuleIdParameter.PLATFORM_APPLY7.getKey(), map, "2695233,2695271");
+        ruleIdConfig.setPlatformApply7RuleIds(this.convertToList(ruleIds));
+        ruleIds = StringUtilsExt.safeGetMapValue(ConfigParameter.TongdunRuleIdParameter.PLATFORM_APPLY30.getKey(), map, "2695273");
+        ruleIdConfig.setPlatformApply30RuleIds(this.convertToList(ruleIds));
+        ruleIds = StringUtilsExt.safeGetMapValue(ConfigParameter.TongdunRuleIdParameter.PLATFORM_APPLY90.getKey(), map, "2695273");
+        ruleIdConfig.setPlatformApply90RuleIds(this.convertToList(ruleIds));
+        return ruleIdConfig;
+    }
 
     //region 私有方法
     private BigDecimal parseBigDecimal(String a, BigDecimal defaultValue) {
