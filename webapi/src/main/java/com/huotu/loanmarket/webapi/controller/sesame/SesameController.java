@@ -241,17 +241,12 @@ public class SesameController {
     }
 
     @RequestMapping("/getSesameReport")
-    public ApiResult getSesameReport(@RequestHeader(Constant.APP_USER_ID_KEY) Long userId
-            , @RequestHeader(Constant.APP_MERCHANT_ID_KEY) Integer merchantId, String orderId) {
-        if (userId == null || userId == 0) {
-            return ApiResult.resultWith(SesameResultCode.USERID_EMPTY);
-        }
-        User user = userService.findByMerchantIdAndUserId(merchantId, userId);
-        if (user == null) {
-            return ApiResult.resultWith(UserResultCode.CODE5);
-        }
+    public String getSesameReport(@RequestHeader(Constant.APP_USER_ID_KEY) Long userId
+            , @RequestHeader(Constant.APP_MERCHANT_ID_KEY) Integer merchantId, String orderId, Model model) {
+
         List<Industry> industryList = sesameService.findByUserIdAndOrderId(userId, orderId);
+        model.addAttribute("industryList", industryList);
         // TODO: 2018/2/2  
-        return null;
+        return "report/sesame";
     }
 }

@@ -132,7 +132,9 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
          * 以下规则接口，必须进行登录验证
          */
         registration.addPathPatterns("/api/user/**")
-                    .addPathPatterns("/api/order/**");
+                    .addPathPatterns("/api/order/**")
+                    .addPathPatterns("/api/project/applyLog")
+        ;
 
 
         /**

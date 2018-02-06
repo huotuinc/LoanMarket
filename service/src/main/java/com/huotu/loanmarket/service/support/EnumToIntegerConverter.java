@@ -3,6 +3,7 @@ package com.huotu.loanmarket.service.support;
 
 import com.huotu.loanmarket.common.enums.EnumHelper;
 import com.huotu.loanmarket.common.enums.ICommonEnum;
+import com.huotu.loanmarket.service.enums.DeviceTypeEnum;
 import com.huotu.loanmarket.service.enums.UserAuthorizedStatusEnums;
 
 import javax.persistence.AttributeConverter;

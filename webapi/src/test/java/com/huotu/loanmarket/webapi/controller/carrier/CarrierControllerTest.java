@@ -4,6 +4,7 @@ import com.huotu.loanmarket.common.utils.JsonUtils;
 import com.huotu.loanmarket.service.entity.carrier.ConsumeBill;
 import com.huotu.loanmarket.service.entity.carrier.RiskContactDetail;
 import com.huotu.loanmarket.service.entity.carrier.RiskContactStats;
+import com.huotu.loanmarket.service.entity.order.Order;
 import com.huotu.loanmarket.service.model.carrier.UserCarrierVo;
 import com.huotu.loanmarket.service.repository.carrier.ConsumeBillRepository;
 import com.huotu.loanmarket.service.repository.carrier.RiskContactDetailRepository;
@@ -37,9 +38,9 @@ public class CarrierControllerTest extends BaseTest {
     @Test
     public void queryResult() throws Exception {
 
-//        Order order = new Order();
-//        order.setOrderId(String.valueOf(System.currentTimeMillis()));
-//        orderRepository.saveAndFlush(order);
+        Order order = new Order();
+        order.setOrderId(orderId);
+        orderRepository.saveAndFlush(order);
 //        String taskId = "TASKYYS100000201801151643430331920947";
         String taskId = "TASKYYS100000201801301118560711030451";
         userCarrierService.queryResult(taskId,orderId,1);

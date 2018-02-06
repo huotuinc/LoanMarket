@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>风险通话</title>
+    <link rel="stylesheet" href="http://resali.huobanplus.com/cdn/weui/1.1.2/weui.min.css">
+    <link rel="stylesheet" href="../..//resource/css/wap/main.css" th:href="@{/resource/css/wap/main.css(t=20180201)}">
+</head>
+<body style="background: #fff">
+<div id="app">
+    <div class="riskCall-page">
+        <table border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <th>
+                    <div>风险类型</div>
+                </th>
+                <th>
+                    <div>近6月通话号码数量</div>
+                </th>
+                <th>
+                    <div>近6月通话次数</div>
+                </th>
+                <th>
+                    <div>近6月通话时长(秒)</div>
+                </th>
+            </tr>
+            <tr th:each="riskContact:${riskContactList}">
+                <td>
+                    <div th:text="${riskContact.riskType}"></div>
+                </td>
+                <td>
+                    <div th:text="${riskContact.contactCountSix}"></div>
+                </td>
+                <td>
+                    <div th:text="${riskContact.callCountSix}"></div>
+                </td>
+                <td>
+                    <div th:text="${riskContact.callTimeSix}"></div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+<script src="http://resali.huobanplus.com/cdn/jquery/3.2.1/jquery.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/weuijs/1.1.3/weui.min.js"></script>
+<script src="../mock/mock-min.js" th:remove="all"></script>
+<script src="../mock/api.js" th:remove="all"></script>
+
+</html>

@@ -11,6 +11,7 @@ package com.huotu.loanmarket.service.service.system.impl;
 
 import com.huotu.loanmarket.service.entity.system.AppSystemVersion;
 import com.huotu.loanmarket.service.enums.DeviceTypeEnum;
+import com.huotu.loanmarket.service.enums.PackageTypeEnum;
 import com.huotu.loanmarket.service.model.PageListView;
 import com.huotu.loanmarket.service.repository.system.AppVersionRepository;
 import com.huotu.loanmarket.service.service.system.AppVersionService;
@@ -38,10 +39,28 @@ public class AppVersionServiceImpl implements AppVersionService {
     private AppVersionRepository appVersionRepository;
 
 
+    /**
+     * 删除
+     * @param itemId
+     * @return
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean delete(Long itemId) {
         appVersionRepository.delete(itemId);
+        return true;
+    }
+
+    /**
+     * 更新包类型
+     * @param itemId
+     * @param packageTypeEnum
+     * @return
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean updatePackageType(Long itemId, PackageTypeEnum packageTypeEnum) {
+        appVersionRepository.updatePackageType(itemId, packageTypeEnum);
         return true;
     }
 
@@ -71,7 +90,7 @@ public class AppVersionServiceImpl implements AppVersionService {
             predicates.add(criteriaBuilder.equal(root.get("deviceType").as(DeviceTypeEnum.class), deviceTypeEnum));
             return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
         };
-        Page<AppSystemVersion> page = appVersionRepository.findAll(specification,pageable);
+        Page<AppSystemVersion> page = appVersionRepository.findAll(specification, pageable);
         List<AppSystemVersion> versionList = page.getContent();
         if (versionList != null && versionList.size() > 0) {
             return versionList.get(0);
@@ -80,14 +99,13 @@ public class AppVersionServiceImpl implements AppVersionService {
     }
 
     /**
-     *
      * @param deviceTypeEnum
      * @param appVersion
      * @return
      */
     @Override
-    public AppSystemVersion findByAppVersion(DeviceTypeEnum deviceTypeEnum,String appVersion) {
-        return appVersionRepository.findByVersion(deviceTypeEnum,appVersion);
+    public AppSystemVersion findByAppVersion(DeviceTypeEnum deviceTypeEnum, String appVersion) {
+        return appVersionRepository.findByVersion(deviceTypeEnum, appVersion);
     }
 
     @Override

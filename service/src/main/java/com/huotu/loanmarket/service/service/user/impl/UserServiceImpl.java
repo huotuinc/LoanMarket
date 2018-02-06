@@ -222,7 +222,10 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public boolean checkLoginToken(int merchantId, long userId, String userToken) {
+    public boolean checkLoginToken(int merchantId, Long userId, String userToken) {
+        if (userId == null || userId == 0 || StringUtils.isEmpty(userToken)) {
+            return false;
+        }
         User myUser = userRepository.findByMerchantIdAndUserId(merchantId, userId);
         if (myUser == null) {
             return false;

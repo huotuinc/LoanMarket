@@ -28,7 +28,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URISyntaxException;
@@ -80,7 +79,7 @@ public class SystemController {
 
         PackageTypeEnum packageTypeEnum = PackageTypeEnum.Simple;
 
-        DeviceTypeEnum deviceTypeEnum = DeviceTypeEnum.H5;
+        DeviceTypeEnum deviceTypeEnum = DeviceTypeEnum.Android;
         if (DeviceTypeEnum.Android.getName().equalsIgnoreCase(osType)) {
             deviceTypeEnum = DeviceTypeEnum.Android;
         } else if (DeviceTypeEnum.IOS.getName().equalsIgnoreCase(osType)) {
@@ -108,7 +107,7 @@ public class SystemController {
                     userService.updateLastLoginTime(userId);
                     map.put("userInfo", userInfoVo);
                 }
-            } catch (ErrorMessageException e) {
+            } catch (Exception e) {
                 log.error(e);
             }
         }
@@ -136,7 +135,7 @@ public class SystemController {
         } else if (DeviceTypeEnum.Android.getName().equalsIgnoreCase(osType)) {
             deviceTypeEnum = DeviceTypeEnum.IOS;
         } else {
-            return ApiResult.resultWith(AppCode.NOT_UPDATE);
+            deviceTypeEnum = DeviceTypeEnum.Android;
         }
 
         AppSystemVersion version = systemService.checkUpdate(appVersion, deviceTypeEnum);

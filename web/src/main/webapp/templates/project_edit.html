@@ -125,7 +125,7 @@
                                             <ul class="list-inline">
                                                 <li>
                                                     <img src="../resource/img/logo.png"
-                                                         th:src="${@resourceService.get(project.logo).toString()}"
+                                                         th:src="${@resourceService.getResource(project.logo).toString()}"
                                                          id="J_imgLogo"
                                                          class="img-rounded" width="92" height="92"/>
                                                     <div id="J_uploadFile"
@@ -371,7 +371,7 @@
             });
             applicationMaterials = applicationMaterials.substring(0, applicationMaterials.length - 1);
             var contact = $.trim($("#contact").val());
-            if(contact.length==0){
+            if (contact.length == 0) {
                 hot.tip.error("请输入联系人");
                 return;
             }
@@ -463,9 +463,9 @@
             title: 'Images',
             extensions: 'jpg,jpeg,png',
             mimeTypes: 'image/jpg,image/jpeg,image/png'
-        }
+        },
+        formData: {imgType: 0}
     });
-
     uploader.on('fileQueued', function (file) {
         uploader.makeThumb(file, function (error, src) {
             if (error) {

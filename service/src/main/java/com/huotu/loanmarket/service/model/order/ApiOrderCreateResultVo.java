@@ -39,6 +39,10 @@ public class ApiOrderCreateResultVo {
      */
     private BigDecimal surplusAmount;
     /**
+     * 第三方授权地址
+     */
+    private String thirdAuthUrl;
+    /**
      * 一些支付要用到的业务参数
      */
     private PaymentBizParametersVo bizParameters;

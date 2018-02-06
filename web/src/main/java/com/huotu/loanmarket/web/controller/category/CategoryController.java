@@ -7,7 +7,7 @@
  *   ~ 2017-2020. All rights reserved.
  */
 
-package com.huotu.loanmarket.web.controller.backgroud;
+package com.huotu.loanmarket.web.controller.category;
 
 import com.huotu.loanmarket.service.entity.category.Category;
 import com.huotu.loanmarket.service.entity.project.Project;
