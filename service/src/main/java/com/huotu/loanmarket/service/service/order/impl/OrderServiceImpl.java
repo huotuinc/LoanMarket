@@ -201,7 +201,8 @@ public class OrderServiceImpl implements OrderService {
         if (money == null || StringUtils.isEmpty(money)) {
             money = "10";
         }
-        order.setPayAmount(BigDecimal.valueOf(Long.parseLong(money)));
+        ;
+        order.setPayAmount(new BigDecimal(money));
         return order;
     }
 
