@@ -274,6 +274,9 @@ public class OrderServiceImpl implements OrderService {
     private OrderEnum.ApiOrderStatus getApiOrderStatus(Order order) {
         OrderEnum.ApiOrderStatus status = OrderEnum.ApiOrderStatus.CANCEL;
 
+        if(order==null){
+            return status;
+        }
         if (order.getOrderStatus().equals(OrderEnum.OrderStatus.CANCEL)) {
             return OrderEnum.ApiOrderStatus.CANCEL;
         }
