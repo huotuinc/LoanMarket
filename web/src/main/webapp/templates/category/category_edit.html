@@ -83,7 +83,7 @@
                                         <div class="col-sm-10">
                                             <ul class="list-inline">
                                                 <li>
-                                                    <img src="../resource/img/logo.png" th:src="${@resourceService.getResource(category.icon).toString()}" id="uploadCategoryIcon"
+                                                    <img src="../../resource/img/logo.png" th:src="${@resourceService.getResource(category.icon).toString()}" id="uploadCategoryIcon"
                                                          class="img-rounded" width="92" height="92"/>
                                                     <div id="J_uploadFile" style="display: inline-block;vertical-align: bottom">选择文件</div>
                                                     <input type="hidden" id="categoryIcon" th:value="${category.icon}"/>
@@ -113,9 +113,9 @@
 <script src="http://resali.huobanplus.com/cdn/hotui/js/v2/bootstrap.hot.extra-utils.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/v2/bootstrap.hot.extra-init.js"></script>
 <script src="http://resali.huobanplus.com/cdn/WebUploader/0.1.6/webuploader.min.js"></script>
-<script src="../resource/js/mock/mock-min.js" th:remove="all"></script>
-<script src="../resource/js/mock/api.js" th:remove="all"></script>
-<script src="../resource/js/forend/loanCategory.js" th:src="@{/resource/js/forend/loanCategory.js}"></script>
+<script src="../../resource/js/mock/mock-min.js" th:remove="all"></script>
+<script src="../../resource/js/mock/api.js" th:remove="all"></script>
+<script src="../../resource/js/forend/loanCategory.js" th:src="@{/resource/js/forend/loanCategory.js}"></script>
 </body>
 
 </html>

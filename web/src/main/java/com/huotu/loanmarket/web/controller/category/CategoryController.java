@@ -41,7 +41,7 @@ public class CategoryController {
     public String list(Model model) {
         List<Category> items = categoryService.findAll();
         model.addAttribute("items", items);
-        return "category_list";
+        return "category/category_list";
     }
 
 
@@ -72,7 +72,7 @@ public class CategoryController {
 
 
         model.addAttribute("items", items);
-        return "category_edit";
+        return "category/category_edit";
     }
 
 

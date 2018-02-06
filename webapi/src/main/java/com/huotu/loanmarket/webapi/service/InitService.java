@@ -53,6 +53,7 @@ public class InitService {
     @PostConstruct
     @Order(Ordered.HIGHEST_PRECEDENCE)
     public void init() {
+        initConfigs();
 
         initTemp();
         initSmsMessage();
@@ -60,6 +61,10 @@ public class InitService {
         initAuthFee();
     }
 
+    @Transactional(rollbackFor = RuntimeException.class)
+    public void initConfigs() {
+        merchantConfigItems = merchantConfigItemRepository.findByMerchantId(Constant.MERCHANT_ID);
+    }
 
     @Transactional(rollbackFor = RuntimeException.class)
     public void initTemp() {
