@@ -20,11 +20,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,6 +49,9 @@ public class TongdunReportServiceImpl implements TongdunReportService {
     public ApiResult getRiskReport(String orderId) {
         try {
             //1、检查订单
+            if(StringUtils.isEmpty(orderId)){
+                return ApiResult.resultWith(AppCode.ERROR, "订单参数丢失");
+            }
             Order orderInfo = orderRepository.findOne(orderId);
             if (orderInfo == null) {
                 return ApiResult.resultWith(AppCode.ERROR, "订单不存在");
@@ -121,7 +126,9 @@ public class TongdunReportServiceImpl implements TongdunReportService {
             //3、转换报告为前台viewModel
             ReportDetailVo reportDetailVo = tongdunRequestLogService.convertRequestLogToReport(requestLog);
             ApiRiskControlVo riskControlVo = this.analyzeRiskControl(reportDetailVo, new Long(merchantId));
-            return ApiResult.resultWith(AppCode.SUCCESS, riskControlVo);
+            HashMap hashMap = new HashMap(1);
+            hashMap.put("risk",riskControlVo);
+            return ApiResult.resultWith(AppCode.SUCCESS, hashMap);
         } catch (Exception ex) {
             log.error("[getRiskReport] throw exception, details: " + ex.getMessage() + "|" + Arrays.toString(ex.getStackTrace()));
             return ApiResult.resultWith(AppCode.ERROR.getCode(), "getRiskReport异常");

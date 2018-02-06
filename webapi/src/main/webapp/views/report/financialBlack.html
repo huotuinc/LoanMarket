@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>信用信息</title>
+    <link rel="stylesheet" href="http://resali.huobanplus.com/cdn/weui/1.1.2/weui.min.css">
+    <link rel="stylesheet" href="../resource/css/wap/main.css" th:href="@{/resource/css/wap/main.css(t=20180102)}">
+</head>
+<body>
+<div id="app">
+    <div class="credit-page"></div>
+</div>
+</body>
+<script src="http://resali.huobanplus.com/cdn/jquery/3.2.1/jquery.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/weuijs/1.1.3/weui.min.js"></script>
+<script src="https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>
+<script src="../mock/mock-min.js" th:remove="all"></script>
+<script src="../mock/api.js" th:remove="all"></script>
+<script src="../resource/js/template-web.js" th:src="@{/resource/js/template-web.js}"></script>
+<script src="../resource/js/wap/common.js" th:src="@{/resource/js/common.js}"></script>
+<script id="J_tplBody" type="text/html">
+    <div class="weui-cells__title">风控信息</div>
+    <div class="weui-cells">
+        <!--<div class="weui-cell">-->
+        <!--<div class="weui-cell__bd">法院失信</div>-->
+        <!--<div class="weui-cell__ft">{{risk.courtLoseFaith == 1 ? '是' : '否'}}</div>-->
+        <!--</div>-->
+        <!--<div class="weui-cell">-->
+        <!--<div class="weui-cell__bd">法院执行</div>-->
+        <!--<div class="weui-cell__ft">{{risk.courtLoseFaith == 1 ? '是' : '否'}}</div>-->
+        <!--</div>-->
+        <!--<div class="weui-cell">-->
+        <!--<div class="weui-cell__bd">法院结案</div>-->
+        <!--<div class="weui-cell__ft">{{risk.courtCase == 1 ? '是' : '否'}}</div>-->
+        <!--</div>-->
+        <!--<div class="weui-cell">-->
+        <!--<div class="weui-cell__bd">信贷逾期</div>-->
+        <!--<div class="weui-cell__ft">{{risk.discredit == 1 ? '是' : '否'}}</div>-->
+        <!--</div>-->
+        <div class="weui-cell weui-cell_access weui-cell_up">
+            <div class="weui-cell__bd">身份证黑名单</div>
+            <div class="weui-cell__ft"></div>
+        </div>
+        <div class="weui-cell weui-sub-text">
+            <div class="weui-cell__bd weui-cell__sub bg-gray">
+                {{if risk.fuzzyNameHits && risk.fuzzyNameHits.length > 0}}
+                {{each risk.fuzzyNameHits}}
+                <p>{{$value}}</p>
+                {{/each}}
+                {{else}}
+                {{'暂无'}}
+                {{/if}}
+            </div>
+        </div>
+        <div class="weui-cell weui-cell_access weui-cell_up">
+            <div class="weui-cell__bd">手机号黑名单</div>
+            <div class="weui-cell__ft"></div>
+        </div>
+        <div class="weui-cell weui-sub-text">
+            <div class="weui-cell__bd weui-cell__sub bg-gray">
+                {{if risk.phoneNumberRisks && risk.phoneNumberRisks.length > 0}}
+                {{each risk.phoneNumberRisks}}
+                <p>{{$value}}</p>
+                {{/each}}
+                {{else}}
+                {{'暂无'}}
+                {{/if}}
+            </div>
+        </div>
+        <div class="weui-cell weui-cell_access weui-cell_up">
+            <div class="weui-cell__bd">多平台借贷记录</div>
+            <div class="weui-cell__ft"></div>
+        </div>
+        <div class="weui-cell weui-sub-text">
+            <div class="weui-cell__bd weui-cell__sub bg-gray">
+                3个月内有在{{risk.platformApply90}}个平台申请借款的记录
+            </div>
+        </div>
+        <!---->
+        <!--<div class="weui-cell">-->
+        <!--<div class="weui-cell__bd">7天内小贷平台申请个数</div>-->
+        <!--<div class="weui-cell__ft">{{risk.platformApply7}}</div>-->
+        <!--</div>-->
+        <!--<div class="weui-cell">-->
+        <!--<div class="weui-cell__bd">30天内申请的小贷平台数</div>-->
+        <!--<div class="weui-cell__ft">{{risk.platformApply30}}</div>-->
+        <!--</div>-->
+        <!--<div class="weui-cell">-->
+        <!--<div class="weui-cell__bd">90天内申请的小贷平台数</div>-->
+        <!--<div class="weui-cell__ft">{{risk.platformApply90}}</div>-->
+        <!--</div>-->
+    </div>
+
+</script>
+<script id="J_tplError" type="text/html">
+    <div style="text-align: center;padding: 50px  0px 30px 0px;">
+        <i class="weui-icon-warn weui-icon_msg-primary"></i>
+    </div>
+    <div style="text-align:center;color:#ccc;">
+    {error}
+    </div>
+</script>
+<script>
+    FastClick.attach(document.body);
+    var postData = {};
+    postData.orderId = getQueryString('orderId');
+    var creditPage = $('.credit-page');
+    var loading = weui.loading('loading', {content: '报告加载中'});
+    $.ajax('getFinancialBlack', {
+        method: 'post',
+        dataType: 'json',
+        data: postData
+    })
+            .done(function (response) {
+                if (response.resultCode != 2000) {
+                    var errorHtml = $('#J_tplError').html().replace('{error}',response.resultMsg);
+                    creditPage.append(errorHtml);
+                    loading.hide();
+                    return;
+                }
+                var res = response.data;
+                var html = template('J_tplBody', res);
+                creditPage.append(html);
+                loading.hide();
+            })
+            .fail(function () {
+                loading.hide();
+                weui.toast('数据加载失败', {
+                    duration: 1000,
+                    className: 'toast-cancel'
+                });
+            });
+
+    $(document).on('click', '.weui-cell_up', function () {
+        $(this).toggleClass('weui-cell_down').next('.weui-sub-text').slideToggle()
+    });
+</script>
+</html>
