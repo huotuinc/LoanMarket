@@ -139,4 +139,59 @@ public interface ConfigParameter {
         }
     }
 
+    /**
+     * 同盾接口参数
+     */
+    @AllArgsConstructor
+    @MerchantConfigType(type = MerchantConfigEnum.TONGDUN)
+    enum TongdunParameter implements IMerchantParameterEnum {
+        SUBMIT_URL("tongdun_submiturl", "申请接口地址"),
+        QUERY_URL("tongdun_queryurl", "查询报告接口地址"),
+        PARTNER_CODE("tongdun_partnercode", "合作方标识"),
+        PARTNER_KEY("tongdun_partnerkey ", "合作方密钥"),
+        PARTNER_APP("tongdun_partneraapp ", "应用名");
+
+        private String key;
+        private String message;
+
+        @Override
+        public String getKey() {
+            return key;
+        }
+
+        @Override
+        public String getMessage() {
+            return message;
+        }
+    }
+
+    /**
+     * 同盾审核规则id
+     */
+    @AllArgsConstructor
+    @MerchantConfigType(type = MerchantConfigEnum.TONGDUN_RULE)
+    enum TongdunRuleIdParameter implements IMerchantParameterEnum {
+        COURT_LOSEFAITH("tdrule_court_losefaith", "法院失信的规则id"),
+        COURT_EXECUTION("tdrule_court_Execution", "法院执行的规则id"),
+        COURT_CASERULEIDS("tdrule_court_caseruleids", "法院结案的规则id"),
+        DISCREDIT("tdrule_discredit", "信贷逾期的规则id"),
+        FUZZYNAMEHITS("tdrule_fuzzynamehits", "模糊名单命中的规则id"),
+        CRIMINALWANTED("tdrule_criminalwanted", "犯罪通缉的规则id"),
+        PHONEN_UMBER_RISKS("tdrule_phonen_umber_risks", "手机号风险的规则id"),
+        PLATFORM_APPLY7("tdrule_platform_apply7", "7天小贷申请的规则id"),
+        PLATFORM_APPLY30("tdrule_platform_apply30", "30天小贷申请的规则id"),
+        PLATFORM_APPLY90("tdrule_platform_apply90", "3个月小贷申请的规则id");
+        private String key;
+        private String message;
+
+        @Override
+        public String getKey() {
+            return key;
+        }
+
+        @Override
+        public String getMessage() {
+            return message;
+        }
+    }
 }

@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="/htdocs/fonts/iconfont.css"/>
+    <script src="http://resali.huobanplus.com/cdn/jquery/2.2.4/jquery.min.js"></script>
+    <style>
+        html, body {
+            zoom: 1;
+            z-index: 99999;
+            height: 100%;
+            position: relative;
+            margin: 0;
+            padding: 0;
+        }
+
+        .w30 {
+            width: 30px !important;
+        }
+
+        .container {
+            position: absolute;
+            margin-left: -449px;
+            top: 0;
+            left: 50%;
+            background-color: #f9f9f9;
+            padding-top: 10px;
+            padding-left: 20px;
+            padding-right: 20px;
+            font-size: 13px;
+            width: 859px;
+            min-height: 100%;
+        }
+
+        .report-a-close {
+            position: fixed;
+            background-color: #fff;
+            width: 52px;
+            height: 50px;
+            font-size: 32px;
+            line-height: 50px;
+            text-align: center;
+            margin-left: 888px;
+            top: 0;
+        }
+
+        .report-a-close a {
+            text-decoration: none;
+            color: #ccc;
+        }
+
+        .header {
+            font-size: 12px;
+            overflow: hidden;
+            padding: 13px 0px;
+            font-family: STSong, NSimSun, SimSun, serif;
+        }
+
+        .header-title {
+            margin: 0 10px 0 0;
+            font-size: 20px;
+            color: #333;
+            font-family: 'Microsoft Yahei';
+        }
+
+        .header-report-id {
+            margin-top: 8px;
+        }
+
+        .header-report-application {
+            margin-top: 3px;
+        }
+
+        .header-scan-time {
+            margin-top: 8px;
+        }
+
+        .container .time-line {
+            font-size: 13px;
+            margin-top: 10px 10px 24px 10px;
+            padding: 20px;
+            background: #f0f0f0;
+            position: relative;
+        }
+
+        .vertical-line {
+            position: absolute;
+            width: 2px;
+            background: #ccc;
+            top: 31px;
+            bottom: 30px;
+            left: 115px;
+        }
+
+        .each-container {
+            position: relative;
+            margin-top: 10px;
+        }
+
+        .label-date {
+            position: absolute;
+            margin-top: 15px;
+        }
+
+        .label-circle {
+            width: 8px;
+            height: 8px;
+            border: 3px solid #fff;
+            position: absolute;
+            margin-top: 17px;
+            left: 89px;
+            background: #2EA5FF;
+            border-radius: 10px;
+        }
+
+        .risk-content {
+            margin-top: 10px;
+            margin-left: 115px;
+            background-color: #fff;
+            padding: 0 25px;
+            border-radius: 10px;
+        }
+
+        .risk-content:before {
+            content: ' ';
+            width: 0;
+            position: absolute;
+            border: 10px solid transparent;
+            border-right-color: #fff;
+            left: 95px;
+            top: 11px;
+        }
+
+        .risk-content-info {
+            font-size: 13px;
+            padding-left: 20px;
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table .risk-col1 {
+            width: 30%;
+            height: 50px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        table .risk-col2 {
+            height: 50px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .risk-row {
+            font-size: 14px;
+            color: #999;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .risk-content-info-title {
+            color: #000;
+            font-size: 15px;
+        }
+
+        .label-scan-time, .no_risk_info {
+            text-align: center;
+            margin-bottom: 15px;
+            margin-top: 0px;
+        }
+
+        .time-line .label-scan-time-title, .time-line .label-scan-time-content {
+            font-family: STSong, NSimSun, SimSun, serif;
+            font-size: 12px;
+        }
+
+        /*个人基本信息*/
+        .person-info {
+            padding-top: 5px;
+            border-top: 20px solid #f9f9f9;
+            border-bottom: 10px solid #f9f9f9;
+            position: relative;
+            z-index: 997;
+        }
+
+        h2 {
+            color: #666;
+        }
+
+        .rpi-subitem .fl {
+            margin-top: 10px !important;
+            margin: 0px;
+        }
+
+        .person-info .monitor-report-preloan, .person-info .monitor-report-loan {
+            display: inline-block;
+            width: 48%;
+            font-size: 14px;
+            color: #999;
+        }
+
+        .person-info .rpi-subitem {
+            overflow: hidden;
+            padding: 0 23px 16px;
+            font-size: 14px;
+            color: #999;
+        }
+
+        .person-info .pl30 {
+            padding-left: 30px;
+        }
+
+        .person-info .rpi-subitem .rpi-title {
+            font-size: 14px;
+            padding-left: 0;
+            margin-top: 0;
+        }
+
+        .person-info .rpi-subitem .rpi-subitem {
+            padding: 0 0 0 16px;
+        }
+
+        .person-info .rpi-subitem p.fl, .person-info .rpi-subitem p.fr {
+            display: inline-block;
+            width: 49%;
+        }
+
+        .person-info .rpi-subitem .per49w {
+            display: inline-block;
+            width: 49%;
+            height: 18px;
+            line-height: 18px;
+            margin-top: 0;
+            vertical-align: top;
+            /*overflow: hidden;*/
+        }
+
+        .person-info .rpi-subitem .per98w {
+            width: 98%;
+        }
+
+        .person-info .rpi-subitem .p-hidden {
+            height: 18px;
+            line-height: 18px;
+            overflow: hidden;
+        }
+
+        .person-info .contact-person {
+            overflow: hidden;
+        }
+
+        .person-info .contact1_person, .person-info .contact2_person, .person-info .contact3_person {
+            display: inline-block;
+            width: 32%;
+            vertical-align: top;
+        }
+
+        /*设备信息*/
+        .rp-device-info {
+            padding: 10px 10px 10px 0px;
+            overflow: hidden;
+            position: relative;
+            z-index: 997;
+        }
+
+        .rp-device-info .rpi-subitem {
+            padding-left: 20px;
+            margin-bottom: 13px;
+            overflow: hidden;
+        }
+
+        .rp-device-info p.fl, .rp-device-info p.fr {
+            width: 50%;
+            display: inline-block;
+        }
+
+        .rp-device-info .rpi-subitem .fr {
+            margin-bottom: 0px;
+        }
+
+        /*检测项目*/
+        .rp-basic-check {
+            padding: 10px 10px 10px 0px;
+            color: #999;
+        }
+
+        .rp-item {
+            border-bottom: 10px solid #f9f9f9;
+            border-top: 20px solid #f9f9f9;
+            position: relative;
+            z-index: 997;
+        }
+
+        .table-wrap {
+            padding: 0 20px 10px;
+        }
+
+        .check-table {
+            font-size: 13px;
+            padding-left: 20px;
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .check-table thead {
+            border-bottom: 2px solid #eaeaea;
+        }
+
+        .check-table .risk-item-name {
+            color: #333;
+        }
+
+        .check-table .risk-item-level {
+            color: #333;
+            text-align: center;
+        }
+
+        .check-table .border-bottom-2 {
+            border-bottom: 2px solid #eaeaea;
+        }
+
+        .check-table .border-bottom-1 {
+            border-bottom: 1px solid #eaeaea;
+        }
+
+        .check-table th, .check-table td {
+            padding-left: 10px;
+            height: 36px;
+            text-align: left;
+        }
+
+        .check-table .inline-center {
+            text-align: center;
+            padding-left: 0px;
+        }
+
+        /*查看详情*/
+        .a-detail {
+            width: 480px;
+            display: none;
+            position: fixed;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            background-color: #fff;
+            box-shadow: 0 2px 16px rgba(0, 0, 0, .2);
+            overflow-y: scroll;
+            z-index: 9999;
+        }
+
+        .detail-a-close a {
+            text-decoration: none;
+            color: #999;
+        }
+
+        .detail-a-close {
+            text-align: right;
+            margin: 10px 10px 0px 10px;
+        }
+
+        .detail-table {
+            overflow-y: scroll;
+        }
+
+        .detail-table table {
+            width: 96%;
+            margin: 10px 2%;
+            border-collapse: collapse;
+            border: 1px solid #ccc;
+        }
+
+        .detail-table table td {
+            border: 1px solid #ccc;
+            height: 36px;
+            font-size: 15px;
+            line-height: 36px;
+            color: #666;
+        }
+
+        /*报告内自体的颜色*/
+        .container .risk-content-count-now, .container .table-mark {
+            color: #C00;
+        }
+
+        .label-number {
+            font-size: 12px;
+        }
+
+        .label-span {
+            color: #666;
+            word-break: break-all;
+            display: inline-block;
+        }
+
+        .label-title {
+            display: inline-block;
+            vertical-align: top;
+        }
+
+        .label {
+            color: #999;
+            font-size: 14px;
+        }
+
+        .project-name, .inline-center {
+            color: #666;
+        }
+
+        .rpi-title {
+            font-size: 16px;
+            font-weight: 700;
+            padding: 0px 23px 0px 20px;
+        }
+
+        .contact-person-title {
+            font-size: 16px;
+            font-weight: 700;
+            padding: 0px 23px 0px 20px;
+        }
+
+        .jz, .table-href {
+            color: #2ea5ff;
+            cursor: pointer;
+        }
+
+        .j-rpi-toggle-target {
+            display: none;
+        }
+
+        .table-href {
+            text-decoration: none;
+            /*margin-left: 40px;*/
+        }
+
+        .table-href:hover {
+            opacity: .7;
+            text-decoration: underline;
+        }
+
+        .scan-time {
+            margin-right: 20px;
+        }
+
+        /*报告头部信息*/
+        .risk-score {
+            height: 178px;
+            position: relative;
+        }
+
+        .result-score-wrap {
+            width: 244px;
+            height: 122px;
+            position: absolute;
+            top: 50%;
+            left: 47px;
+            margin-top: -61px;
+        }
+
+        .result-score-canvas-main {
+            position: absolute;
+        }
+
+        #canvas-main {
+            display: block;
+            width: 244px;
+            height: 122px;
+        }
+
+        .result-score-canvas-bg {
+            position: absolute;
+        }
+
+        .result-score-text {
+            top: 60%;
+            left: 28px;
+            width: 64px;
+            margin-top: -42px;
+            position: absolute;
+        }
+
+        .result-score {
+            font-size: 32px;
+            color: #333;
+            text-align: center;
+        }
+
+        .result-cat {
+            font-size: 14px;
+            text-align: center;
+            height: 23px;
+            line-height: 23px;
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+        }
+
+        .result-text {
+            margin-top: 60px;
+            margin-left: 325px;
+            float: left;
+        }
+
+        .result-text .result {
+            font-size: 14px;
+            margin-top: 12px;
+        }
+
+        .result-text p {
+            line-height: 1;
+        }
+
+        .result-text a {
+            display: inline-block;
+            color: #2ea5ff;
+            height: 18px;
+            line-height: 18px;
+            padding: 0 2px;
+            border-bottom: 1px solid #2ea5ff;
+            text-decoration: none;
+        }
+
+        .tongdun-certification {
+            margin-top: 50px;
+            margin-right: 88px;
+        }
+
+        .fl {
+            float: left;
+        }
+
+        .fr {
+            float: right;
+        }
+
+        .result-text .tip {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .result-cat.reject {
+            color: #ff6c5c;
+        }
+
+        .result-cat.accept {
+            color: #8cdb65;
+        }
+
+        .result-cat.review {
+            color: #f8d436;
+        }
+
+        .col1 {
+            width: 45%;
+            padding-right: 10px;
+            text-align: right;
+        }
+
+        .col2 {
+            padding-left: 10px;
+        }
+
+        .report-mask {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #000;
+            opacity: 0.7;
+        }
+
+        .msk-detail {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            background-color: #000;
+            opacity: 0;
+            right: 0;
+            display: none;
+            z-index: 998;
+        }
+
+        .report-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            overflow-y: auto;
+        }
+
+        .contact {
+            font-size: 14px;
+        }
+
+        .dimension-section, .risk-detail-section {
+            padding-top: 1px;
+            color: #666;
+        }
+
+        .risk-detail-section {
+            width: 300px;
+        }
+
+        .dimension-title, .risk-detail-title {
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .dimension-list, .risk-detail-list {
+            display: none;
+            padding: 1px 0 0 20px;
+            list-style: none;
+        }
+
+        .risk-detail-list {
+            list-style-type: circle;
+        }
+
+        .dimension-item {
+            padding-bottom: 3px;
+        }
+
+        .inner {
+            background-color: #fff;
+        }
+
+        .header .report-application {
+            margin-bottom: 2px;
+        }
+
+        .bg {
+            position: absolute;
+        }
+
+        .person-info .left, .person-info .right {
+            display: inline-block;
+            width: 300px;
+            margin: 0px 0px 14px 0px;
+            height: 18px;
+            line-height: 18px;
+        }
+
+        .kunta-href {
+            color: #2ea5ff;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<!--@thymesVar id="report" type="com.huotu.loanmarket.service.model.tongdun.report.ReportDetailVo"-->
+<div class="report-mask"></div>
+<div class="report-container" th:object="${report}">
+    <div class="container">
+        <div class="report-a-close" id="report-a-close"><a href="javascript:void(0)"><img
+                src="/resource/img/close-btn.png" alt=""/></a></div>
+        <div class="header">
+            <h1 class="header-title fl">贷前审核报告</h1>
+            <div class="header-report-application  fl">
+                <div class="report-application"><span class="label-number">报告编号:</span>
+                    <span id="monitor-detail-id" th:text="*{reportId}">ER2017120213100040EE1F55</span>
+                </div>
+                <div class="report-application">
+                    <span class="label-number">申请编号:</span>
+                    <span id="monitor-detail-id" th:text="*{applyId}">171202131000242B55E5BFCB1C58C883</span>
+                </div>
+            </div>
+            <div class="header-scan-time fr">
+                <span class="label-number">报告时间:</span>
+                <span id="monitor-scan-time" th:text="*{reportTime}">2017-12-02 13:10:00</span>
+            </div>
+        </div>
+        <div class="inner">
+            <div class="risk-score">
+                <div class="fl result-score-wrap">
+                    <div class="result-score-canvas-main">
+                        <canvas id="canvas-main"></canvas>
+                    </div>
+                    <div class="result-score-canvas-bg">
+                        <canvas id="canvas-bg"></canvas>
+                    </div>
+                    <div class="result-score-text">
+                        <div id="result-score" class="result-score" th:text="*{finalScore}">100</div>
+                        <div id="result-cat" class="result-cat"
+                             th:class="'result-cat '+*{#strings.toLowerCase(finalDecision)}"
+                             th:switch="*{finalDecision}">
+                            <span th:case="Reject">建议拒绝</span>
+                            <span th:case="Reivew">建议复审</span>
+                            <span th:case="Accept">建议通过</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="fl result-text" th:switch="*{finalDecision}">
+                    <p class="tip" th:case="Reject">申请用户检测出高危风险，建议拒绝</p>
+                    <p class="tip" th:case="Reivew">申请用户存在较大风险，建议进行人工审核</p>
+                    <p class="tip" th:case="Accept">申请用户未检出高危风险，建议通过</p>
+
+                    <p class="result">共发现<a id="risk-count" href="javascript:void(0);"
+                                            th:text="*{riskCount}">42</a>异常信息</p>
+                </div>
+            </div>
+
+            <!-- 复杂入参start -->
+            <div class="person-info" style="border-bottom: 0;">
+                <h2 class="rpi-title">个人基本信息</h2>
+                <div class="rpi-subitem" style="display: none;">
+                    <p class="per49w">
+                        <span class="label">申请借款金额: <span class="label-span" th:if="*{submitRequest.loanAmount!=null}"
+                                                          th:text="|*{submitRequest.loanAmount}元|">10000.00元</span></span>
+                    </p>
+                    <p class="per49w">
+                        <span class="label">申请借款期限: <span class="label-span"><th:block
+                                th:text="*{submitRequest.loanTerm}" th:remove="tag">12</th:block><th:block
+                                th:text="*{submitRequest.loanTerm}=='MONTH'?'月':'天'">天</th:block></span></span>
+                    </p>
+                    <p class="per49w">
+                        <span class="label">申请借款日期: <span class="label-span" th:text="*{submitRequest.loanTerm}">2018-11-11</span></span>
+                    </p>
+                </div>
+                <div class="rpi-subitem">
+                    <p class="per49w">
+                        <span class="label">姓&nbsp;&nbsp;&nbsp;&nbsp;名: <span class="label-span"
+                                                                              th:text="*{submitRequest.name}">皮晴晴</span></span>
+                    </p>
+                    <p class="per49w">
+                        <span class="label">身份证号:<span class="label-span" th:text="*{submitRequest.idNumber}">370404199006301915</span></span>
+                    </p>
+                    <p class="per49w">
+                        <span class="label">手机号码: <span class="label-span"
+                                                        th:text="*{submitRequest.mobile}">13333333333 </span></span>
+                    </p>
+                    <p class="per49w">
+                        <span class="label">银行卡号: <span class="label-span" th:text="*{submitRequest.cardNumber}">6230901807030310952</span></span>
+                    </p>
+                    <p class="per49w" th:if="*{submitRequest.qq!=null}">
+                        <span class="label">Q&nbsp;&nbsp;Q号码: <span class="label-span" th:text="*{submitRequest.qq}">893939741</span></span>
+                    </p>
+                    <p class="per49w" th:if="*{submitRequest.email!=null}">
+                        <span class="label">电子邮箱: <span class="label-span" th:text="*{submitRequest.email}">893939741@qq.com</span></span>
+                    </p>
+                </div>
+                <div class="contact-person">
+                    <div class="contact1_person" th:if="*{submitRequest.contact1Name!=null}">
+                        <h2 class="contact-person-title">第一联系人</h2>
+                        <div class="rpi-subitem">
+                            <p><span class="label">姓名:</span> <span class="label-span" th:text="*{submitRequest.contact1Name}">联系人1</span></p>
+                            <p><span class="label">手机号码:</span> <span class="label-span" th:text="*{submitRequest.contact1Mobile}">13166643330</span></p>
+                            <p><span class="label">社会关系:</span><span class="label-span">亲戚</span></p></div>
+                    </div>
+                    <div class="contact2_person" th:if="*{submitRequest.contact2Name!=null}">
+                        <h2 class="contact-person-title">第二联系人</h2>
+                        <div class="rpi-subitem">
+                            <p><span class="label">姓名:</span> <span class="label-span" th:text="*{submitRequest.contact2Name}">联系人1</span></p>
+                            <p><span class="label">手机号码:</span> <span class="label-span" th:text="*{submitRequest.contact2Mobile}">13166643330</span></p>
+                            <p><span class="label">社会关系:</span><span class="label-span">朋友</span></p></div>
+                    </div>
+                </div>
+            </div>
+
+            <!--归属地解析-->
+            <div class="person-info">
+                <h2 class="rpi-title">归属地解析</h2>
+                <div class="rpi-subitem">
+                    <p class="p-hidden" th:if="*{addressDetect.id_card_address!=null}">
+                        <span class="label">身份证所属地: <span class="label-span"
+                                                          th:text="*{addressDetect.id_card_address}"></span></span>
+                    </p>
+                    <p class="p-hidden" th:if="*{addressDetect.mobile_address!=null}">
+                        <span class="label">手机所属地: <span class="label-span" th:text="*{addressDetect.mobile_address}">河北省秦皇岛市</span></span>
+                    </p>
+                    <p class="p-hidden" th:if="*{addressDetect.bank_card_address!=null}">
+                        <span class="label">银行卡所属地: <span class="label-span"
+                                                          th:text="*{addressDetect.bank_card_address}">湖南省湖南省农村信用社联合社</span></span>
+                    </p>
+                    <!--自定义表单的归属地解析-->
+                </div>
+            </div>
+
+
+            <!-- 检测项目 -->
+
+            <style>
+                .name-detail-em {
+                    color: #C00;
+                }
+
+                .description {
+                    margin-bottom: 0px;
+                    color: #666;
+                }
+
+                .check-table .rownbsp {
+                    width: 18%;
+                }
+
+                .check-table .row1 {
+                    width: 30%;
+                }
+
+                .check-table .risk-item-level {
+                    color: #333;
+                    text-align: center;
+                }
+
+                .check-table .row3 {
+                    /*width:35%;*/
+                }
+
+                .check-table .row2 {
+                    width: 13%;
+                    text-align: center;
+                    padding-left: 0px;
+                }
+
+                .check-table .row4 {
+                    width: 13%;
+                }
+
+                .template-tip {
+                    padding: 0px 23px 0px 20px;
+                    color: #C00;
+                    display: none;
+                    font-size: 14px;
+                }
+            </style>
+
+
+            <div class="rp-item rp-basic-check" id="risk-items">
+                <h2 class="rpi-title">贷前风险情况</h2>
+                <input type="hidden" value="false" id="tip-value">
+
+                <div class="template-tip">提示：存在未进行分组配置的规则</div>
+                <div class="table-wrap">
+                    <table class="check-table">
+                        <thead>
+                        <tr>
+                            <th class="rownbsp">&nbsp;</th>
+                            <th class="row1">检查项目</th>
+                            <th class="row2">风险等级</th>
+                            <th class="row3">备注</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <th:block th:each="group:${report.riskItems}">
+                            <tr class="risk-items-flag border-bottom-1" th:if="${#arrays.length(group.value)==0}">
+                                <td th:text="${group.key}">个人基本信息核查
+                                </td>
+                                <td class="risk-item-name" colspan="3"><img src="/resource/img/pass.png" alt=""></td>
+                            </tr>
+                            <tr class="risk-items-flag border-bottom-1" th:if="${#arrays.length(group.value)>0}"
+                                th:each="item,iterStat:${group.value}">
+                                <td th:if="${iterStat.first}" th:rowspan="${iterStat.size}"
+                                    th:text="${item.group}">个人基本信息核查
+                                </td>
+                                <td class="risk-item-name" th:text="${item.item_name}">身份证归属地位于高风险较为集中地区</td>
+                                <td class="risk-item-level" th:switch="${item.risk_level}">
+                                    <hot th:text="低" th:case="low"></hot>
+                                    <hot th:text="中" th:case="medium"></hot>
+                                    <hot th:text="高" th:case="high"></hot>
+                                </td>
+                                <td>
+                                    <div th:if="${item.item_detail!=null}" th:object="${item.item_detail}"
+                                         th:remove="tag">
+                                        <th:block th:switch="*{type}">
+                                            <th:block th:case="platform_detail">
+                                                <ul class="table-mark" th:if="*{platform_detail!=null}">
+                                                    <li style="list-style: none; margin-left: -16px;padding-bottom: 3px;">
+                                                        总个数：
+                                                        <th:block th:text="*{platform_count}">89
+                                                        </th:block>
+                                                    </li>
+                                                    <li th:each="row:*{platform_detail}" th:text="${row}">房地产金融: 1</li>
+                                                    <div class="dimension-section">
+                                                        <span class="dimension-title"><i class="iconfont icon-list"></i> 各维度多头详情</span>
+                                                        <ul class="dimension-list"
+                                                            th:if="*{platform_detail_dimension!=null}">
+                                                            <li class="dimension-item"
+                                                                th:each="dimension:*{platform_detail_dimension}">
+                                                                <span class="dimension-item-title"
+                                                                      th:text="${dimension.dimension}">借款人邮箱详情:</span>
+                                                                <ul class="dimension-sub-list">
+                                                                    <li>总个数：
+                                                                        <th:block th:text="${dimension.count}">2
+                                                                        </th:block>
+                                                                    </li>
+                                                                    <li class="dimension-sub-item"
+                                                                        th:each="row:${dimension.detail}"
+                                                                        th:text="${row}">银行消费金融公司: 1
+                                                                    </li>
+                                                                </ul>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </ul>
+                                            </th:block>
+
+                                            <th:block th:case="frequency_detail">
+                                                <ul class="table-mark" th:each="detailInfo:*{frequency_detail_list}">
+                                                    <div class="risk-detail-section">
+                                                        <span class="risk-detail-title"><i
+                                                                class="iconfont icon-list"></i> 频度规则详情</span>
+                                                        <ul class="risk-detail-list" style="display:none;">
+                                                            <li class="risk-detail-item">
+                                                                <span class="risk-detail-item-title"
+                                                                      th:text="${detailInfo.detail}">3个月内银行卡_姓名关联多个身份证：3</span>
+                                                                <ul class="risk-detail-sub-list"
+                                                                    th:if="${detailInfo.data!=null}"><!--判断是否含有字段-->
+                                                                    <li class="risk-detail-sub-item"
+                                                                        th:each="dataItem:${detailInfo.data}"
+                                                                        th:text="${dataItem}">370404199006301915
+                                                                    </li>
+                                                                </ul>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </ul>
+                                            </th:block>
+
+                                            <th:block th:case="discredit_count">
+                                                <ul class="table-mark">
+                                                    <li>逾期次数: <!--/*/<th:block th:text="*{discredit_times}">/*/-->4
+                                                        <!--/*/</th:block>/*/--></li>
+                                                    <!--/*/<th:block th:each="de:*{overdue_details}">/*/-->
+                                                    <li>
+                                                        逾期金额:
+                                                        <!--/*/<th:block th:text="${de.overdue_amount_range}">/*/-->
+                                                        (10000, 50000]<!--/*/</th:block>/*/-->
+                                                        逾期笔数:
+                                                        <!--/*/<th:block th:text="${de.overdue_count}">/*/-->4
+                                                        <!--/*/</th:block>/*/-->
+                                                        逾期天数:<!--/*/<th:block th:text="${de.overdue_day_range}">/*/-->
+                                                        (90, 180]<!--/*/</th:block>/*/-->
+                                                        逾期入库时间: <!--/*/<th:block th:text="${de.overdue_time}">/*/-->
+                                                        2017-02<!--/*/</th:block>/*/-->
+                                                    </li>
+                                                    <!--/*/</th:block>/*/-->
+                                                </ul>
+                                            </th:block>
+
+                                            <th:block th:case="custom_list">
+                                                <ul class="table-mark">
+                                                    <li th:if="*{high_risk_areas!=null}">高风险较为集中地区:
+                                                        <th:block th:text="*{#strings.arrayJoin(high_risk_areas,',')}">
+                                                            山东省枣庄市峄城区
+                                                        </th:block>
+                                                    </li>
+                                                    <li th:if="*{hit_list_datas!=null}">列表:
+                                                        <th:block th:text="*{#strings.arrayJoin(hit_list_datas,',')}">
+                                                            列表数据
+                                                        </th:block>
+                                                    </li>
+                                                </ul>
+                                            </th:block>
+
+                                            <th:block th:case="cross_frequency_detail">
+                                                <div>XXXX</div>
+                                            </th:block>
+
+                                            <th:block th:case="cross_event_detail">
+                                                <div>XXXX</div>
+                                            </th:block>
+
+                                            <th:block th:case="suspect_team_detail">
+                                                <div>XXXX</div>
+                                            </th:block>
+                                        </th:block>
+                                        <th:block th:if="*{namelist_hit_details!=null}">
+                                            <th:block th:each="detail:*{namelist_hit_details}">
+                                                <div class="description">
+                                                    <table>
+                                                        <tr>
+                                                            <td style="width:65px; padding:0px;height: 16px!important;vertical-align: top;">
+                                                                规则描述：
+                                                            </td>
+                                                            <td style="vertical-align:top;word-break: break-all;word-wrap:break-word;padding: 0px;height:16px!important;"
+                                                                th:text="${detail.description}">
+                                                                手机号命中虚假号码库
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                                <ul style="margin-top:1px;color:#666;"
+                                                    th:if="${detail.type}=='grey_list'"><!--关注名单-->
+                                                    <li><span class="name-detail-em">风险类型：</span>
+                                                        <th:block th:text="${detail.fraud_type}">虚假号码、虚假号码</th:block>
+                                                    </li>
+                                                    <li><span class="name-detail-em">匹配字段：</span>
+                                                        <th:block th:text="${detail.hit_type_displayname}">借款人手机
+                                                        </th:block>
+                                                    </li>
+                                                </ul>
+                                                <ul style="margin-top:1px;color:#666;"
+                                                    th:if="${detail.type}=='black_list'"><!--风险名单:-->
+                                                    <li><span class="name-detail-em">风险类型：</span>
+                                                        <th:block th:text="${detail.fraud_type}">虚假号码、虚假号码</th:block>
+                                                    </li>
+                                                    <li><span class="name-detail-em">匹配字段：</span>
+                                                        <th:block th:text="${detail.hit_type_displayname}">借款人手机
+                                                        </th:block>
+                                                    </li>
+                                                    <li th:if="${detail.court_details!=null}">
+                                                        <a class='table-href' href='javascript:void(0)'>法院详情</a>
+                                                        <div class="a-detail" style="display:none;">
+                                                            <div class="detail-a-close">
+                                                                <a href="javascript:void(0)" class="detail-close-x"><img
+                                                                        src="/resource/img/close-btn.png" alt=""
+                                                                        style=" width: 20px;"/></a>
+                                                            </div>
+                                                            <div class="detail-table">
+                                                                <table th:each="court:${detail.court_details}">
+                                                                    <tr>
+                                                                        <td class="col1">被执行人姓名:</td>
+                                                                        <td class="col2" th:text="${court.name}">皮晴晴
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="col1">性别:</td>
+                                                                        <td class="col2" th:text="${court.gender}">男
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="col1">年龄:</td>
+                                                                        <td class="col2" th:text="${court.age}">27</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="col1">执行法院:</td>
+                                                                        <td class="col2" th:text="${court.court_name}">
+                                                                            运城市人民法院
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="col1">省份:</td>
+                                                                        <td class="col2" th:text="${court.province}">
+                                                                            山西
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="col1">执行依据文号:</td>
+                                                                        <td class="col2" th:text="${court.province}">
+                                                                            (2017)榆民二初字第112号民事判决书
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="col1">立案时间:</td>
+                                                                        <td class="col2"
+                                                                            th:text="${court.filling_time}">2010年1月4日
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="col1">案号:</td>
+                                                                        <td class="col2" th:text="${court.case_number}">
+                                                                            (2010)榆执字第0121234号
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="col1">做出执行依据单位:</td>
+                                                                        <td class="col2"
+                                                                            th:text="${court.execution_department}">
+                                                                            运城市人民法院
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="col1">生效法律文书确定的义务:</td>
+                                                                        <td class="col2" th:text="${court.duty}">
+                                                                            被告于本判决生效后10日内偿还原告借款10000元并支付相应利息
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="col1">被执行人的履行性质:</td>
+                                                                        <td class="col2" th:text="${court.situation}">
+                                                                            全部未履行
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="col1">失信被执行人行为具体情形:</td>
+                                                                        <td class="col2"
+                                                                            th:text="${court.discredit_detail}">
+                                                                            其他有履行能力而拒不履行生效法律文书确定义务
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                                <ul style="margin-top:1px;color:#666;"
+                                                    th:if="${detail.type}=='fuzzy_list'"
+                                                    th:each="fuzzy_detail:${detail.fuzzy_detail_hits}"><!--模糊名单-->
+                                                    <li><span class="name-detail-em">风险类型：</span>
+                                                        <th:block th:text="${fuzzy_detail.fraud_type}">信贷逾期名单</th:block>
+                                                    </li>
+                                                    <li><span class="name-detail-em">姓名：</span>
+                                                        <th:block th:text="${fuzzy_detail.fuzzy_name}">皮晴晴</th:block>
+                                                    </li>
+                                                    <li><span class="name-detail-em">模糊身份证：</span>
+                                                        <th:block th:text="${fuzzy_detail.fuzzy_id_number}">
+                                                            3704041990****1915
+                                                        </th:block>
+                                                    </li>
+                                                </ul>
+                                                <ul class="table-mark">
+                                                </ul>
+                                            </th:block>
+                                        </th:block>
+                                    </div>
+                                </td>
+                            </tr>
+                        </th:block>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="msk-detail"></div>
+            <!-- kunta(三方基础数据源)调用结果汇总-->
+
+        </div>
+    </div>
+</div>
+<div class="detail-section-wrap"></div>
+<!--<link rel="stylesheet" type="text/css" href="/htdocs/styles/credit.css?v=1512049601632">-->
+<script src="/resource/js/tongdun/preloanreport.js"></script>
+</body>
+</html>
+
+
+
+

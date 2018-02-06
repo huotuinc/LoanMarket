@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>系统配置</title>
+    <link href="http://resali.huobanplus.com/cdn/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/animate.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/style.min-1.0.8.css" rel="stylesheet">
+    <link href="../../resource/css/common.css" rel="stylesheet"/>
+    <style>
+        td {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .tabs-container .tabs-left > .nav-tabs, .tabs-container .tabs-right > .nav-tabs {
+            width: 15%;
+        }
+
+        .tabs-container .tabs-left .panel-body {
+            margin-left: 15%;
+            width: 85%;
+        }
+    </style>
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="tabs-container">
+                <div class="tabs-left">
+                    <ul class="nav nav-tabs">
+                        <li th:each="configItem:${configEnums}"
+                            th:class="${configEnum.code==configItem.code}?'active':null">
+                            <a data-toggle="tab" href="#protocol_borrow"
+                               th:value="${configItem.code}"
+                               th:text="${configItem.name}">借款协议参数</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="protocol_borrow" class="tab-pane active">
+                            <div class="panel-body">
+                                <table class="table table-bordered table-hover table-center"
+                                       style="table-layout: fixed">
+                                    <thead>
+                                    <tr>
+                                        <th>参数编号</th>
+                                        <th>参数名称</th>
+                                        <th>参数值</th>
+                                        <th>参数类型</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <input id="configType" th:value="${configEnum.code}" type="hidden">
+                                    <tbody>
+                                    <!--/*@thymesVar id="configItem" type="com.huotu.loanmarket.service.entity.merchant.MerchantConfigItem"*/-->
+                                    <!--/*@thymesVar id="configEnum" type="com.huotu.loanmarket.service.enums.MerchantConfigEnum"*/-->
+                                    <tr th:each="configItem:${configItems}" th:style="(${configItem.display})?'':'display:none'">
+                                        <td th:text="${configItem.code}">12560</td>
+                                        <td th:text="${configItem.name}">15684895878</td>
+                                        <td th:text="${configItem.value}">王宝强</td>
+                                        <td th:text="${configEnum.name}">
+
+                                        </td>
+                                        <td>
+                                            <span th:style="(${configItem.editAble})?'':'display:none'">
+                                                                <span onclick="configListHandler.edit(this)"
+                                                                      th:attr="configId=${configItem.configId},name=${configItem.name},code=${configItem.code}"
+                                                                      class="btn btn-myBlue btn-xs">编辑 </span>
+                                            <span onclick="configListHandler.delete(this)"
+                                                  th:attr="configId=${configItem.configId}"
+                                                  class="btn btn-myRed btn-xs">禁用 </span>
+                                                </span>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="http://resali.huobanplus.com/cdn/jquery/2.2.4/jquery.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/bootstrap/3.3.5/bootstrap.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/layer/3.1.0/layer.js"></script>
+<script src="http://resali.huobanplus.com/cdn/jquery-validation/1.16.0/jquery.validate.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/v2/bootstrap.hot.extra-utils-0.2.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/v2/bootstrap.hot.extra-init.js"></script>
+</body>
+<script type="text/javascript" th:inline="javascript">
+    var ajaxUrl = /*[[@{/admin/config/}]]*/ "/";
+    $(function () {
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            var id = $(e.target).attr("value");
+            window.location.href = ajaxUrl + "systemConfig?type=" + id;
+        })
+    });
+    var configListHandler = {
+        edit: function (obj) {
+            var configId = $(obj).attr("configId");
+            console.log(configId)
+            if (configId != null) {
+                window.location.href = ajaxUrl + "configEdit/" + configId;
+            } else {
+                var configType = $("#configType").val();
+                var code = $(obj).attr("code");
+                var name = $(obj).attr("name");
+                window.location.href = ajaxUrl + "configDetailEdit?configType=" + configType + "&code=" + code + "&name=" + name;
+            }
+        },
+        delete: function (obj) {
+            var configId = $(obj).attr("configId");
+            hot.confirm("是否要禁用?", function () {
+                hot.ajax("/admin/config/configDelete/" + configId, null, function (res) {
+                    if (res.resultCode == 2000) {
+                        window.location.reload();
+                    } else {
+                        hot.tip.error("禁用失败：" + res.resultMsg);
+                    }
+                }, function () {
+                }, "get", 100);
+            });
+        }
+    }
+</script>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>配置信息</title>
+    <link href="http://resali.huobanplus.com/cdn/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/animate.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css"
+          rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/style.min-1.0.8.css" rel="stylesheet">
+</head>
+<body class="gray-bg">
+<!--/*@thymesVar id="configItem" type="com.huotu.superloan.service.entity.merchant.MerchantConfigItem"*/-->
+<!--/*@thymesVar id="configEnum" type="com.huotu.superloan.service.enums.MerchantConfigEnum"*/-->
+<div class="wrapper wrapper-content">
+    <div class="ibox float-e-margins">
+        <div class="ibox-content">
+            <form id="config" class="form-horizontal">
+                <input type="hidden" id="configId" name="configId" th:value="${configItem.configId}">
+                <div class="form-group  form-inline">
+                    <div class="col-sm-6">
+                        <label class="col-sm-4 control-label">参数编号</label>
+                        <div class="col-sm-8">
+                            <label>
+                                <input type="text" class="form-control" value="12123" id="code"
+                                       name="code" readonly="readonly" th:value="${configItem.code}" required>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group  form-inline">
+                    <div class="col-sm-6">
+                        <label class="col-sm-4 control-label">参数名称</label>
+                        <div class="col-sm-8">
+                            <label>
+                                <span th:utext="${configItem.name}"></span>
+                                <input style="display: none;" type="text" class="form-control" value="110" id="name"
+                                       name="name" readonly="readonly" th:value="${configItem.name}" required>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group  form-inline">
+                    <div class="col-sm-6">
+                        <label class="col-sm-4 control-label">参数值</label>
+                        <div class="col-sm-8">
+                            <label>
+                                <textarea rows="6" class="form-control" value="杭州" id="value"
+                                          name="value" th:text="${configItem.code}" required></textarea>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group  form-inline">
+                    <div class="col-sm-6">
+                        <label class="col-sm-4 control-label">参数类型</label>
+                        <div class="col-sm-8">
+                            <label>
+                                <input type="text" th:if="${status}" class="form-control" value="1000"
+                                       readonly="readonly" th:value="${configEnum.name}">
+                                <input type="hidden" th:if="${status}" class="form-control" value="1000" id="configType"
+                                       name="configType" th:value="${configEnum.code}">
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 col-sm-offset-2">
+                        <button class="btn btn-success btn-submit" type="button" onclick="edit.submit()">保存
+                        </button>
+
+                        <button class="btn btn-default btn-submit" type="button" onclick="history.go(-1)">返回
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+<script src="http://resali.huobanplus.com/cdn/jquery/2.2.4/jquery.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/bootstrap/3.3.5/bootstrap.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/jquery-validation/1.16.0/jquery.validate.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/jquery-validation/1.16.0/additional-methods.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/jquery-validation/1.16.0/localization/messages_zh.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/layer/3.1.0/layer.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/chosen/chosen.jquery.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/v2/bootstrap.hot.extra-utils-0.2.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/v2/bootstrap.hot.extra-init.js"></script>
+
+<script type="text/javascript">
+    var edit = {
+        submit: function () {
+            if (!$("#config").valid()) {
+                return;
+            }
+            var configId = $('#configId').val();
+            var code = $('#code').val();
+            var value = $('#value').val();
+            var configType = $('#configType').val();
+            var name = $('#name').val();
+            var requestDate = {
+                configId: configId,
+                code: code,
+                name: name,
+                value: value,
+                configType: configType,
+            };
+            hot.ajax("/admin/config/saveConfig", requestDate, function (res) {
+                if (res.resultCode == 2000) {
+                    hot.tip.success("操作成功,2秒后将会跳转到参数列表");
+                    setTimeout(function () {
+                        window.location.href = '/admin/config/systemConfig?type=' + configType;
+                    }, 2000);
+                } else {
+                    hot.tip.error("编辑失败：" + res.resultMsg);
+                }
+            }, function () {
+            }, "post", 100);
+        }
+    }
+
+</script>
+</html>

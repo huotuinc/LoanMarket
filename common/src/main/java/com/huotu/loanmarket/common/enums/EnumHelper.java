@@ -11,6 +11,9 @@ package com.huotu.loanmarket.common.enums;
 
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 枚举处理类
  *
@@ -53,5 +56,21 @@ public class EnumHelper {
             }
         }
         return null;
+    }
+
+    /**
+     * 获取某个枚举类型的值列表
+     * @param enumClass 枚举类型
+     * @param <T>
+     * @return
+     */
+    public static <T extends Enum<T> & ICommonEnum> List<KeyValueItem> getEnumList(Class<T> enumClass) {
+        List<KeyValueItem> keyValueItemList = new ArrayList<>();
+        Enum[] arrEnums = enumClass.getEnumConstants();
+        for (Enum<T> e : arrEnums) {
+            ICommonEnum commonEnum = (ICommonEnum)e;
+            keyValueItemList.add(new KeyValueItem(commonEnum.getCode(),commonEnum.getName()));
+        }
+        return keyValueItemList;
     }
 }
