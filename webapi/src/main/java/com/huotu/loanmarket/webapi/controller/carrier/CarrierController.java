@@ -145,15 +145,19 @@ public class CarrierController {
      */
     @RequestMapping("/carrierShow")
     public String carrierShow( Long userId,String orderId,Model model) {
-        Order order = orderService.findByOrderId(orderId);
-        if(order == null || !order.getUser().getUserId().equals(userId)) {
-            throw new OrderNotFoundException(Constant.ORDER_NOT_FOUND);
-        }
+        checkParam(userId, orderId);
         UserCarrierVo userCarrierVo = userCarrierService.carrierShow(orderId);
         model.addAttribute("carrier",userCarrierVo);
         model.addAttribute("orderId",orderId);
         model.addAttribute("userId",userId);
         return "report/carrierInfo";
+    }
+
+    private void checkParam(Long userId, String orderId) {
+        Order order = orderService.findByOrderId(orderId);
+        if(order == null || !order.getUser().getUserId().equals(userId)) {
+            throw new OrderNotFoundException(Constant.ORDER_NOT_FOUND);
+        }
     }
 
     /**
@@ -164,10 +168,7 @@ public class CarrierController {
      */
     @RequestMapping("/riskContactList")
     public String riskContactList(Long userId,String orderId,Model model) {
-        Order order = orderService.findByOrderId(orderId);
-        if(order == null || !order.getUser().getUserId().equals(userId)) {
-            throw new OrderNotFoundException(Constant.ORDER_NOT_FOUND);
-        }
+        checkParam(userId, orderId);
         List<RiskContactStats> contactStatsList = riskContactStatsRepository.findByOrderId(orderId);
         model.addAttribute("riskContactList",contactStatsList);
         return "report/riskContact";
@@ -181,10 +182,7 @@ public class CarrierController {
      */
     @RequestMapping("/riskContactDetailList")
     public String riskContactDetailList( Long userId, String orderId,Model model) {
-        Order order = orderService.findByOrderId(orderId);
-        if(order == null || !order.getUser().getUserId().equals(userId)) {
-            throw new OrderNotFoundException(Constant.ORDER_NOT_FOUND);
-        }
+        checkParam(userId, orderId);
         List<RiskContactDetail> riskContactDetailList = riskContactDetailRepository.findByOrderId(orderId);
         model.addAttribute("riskContactDetailList",riskContactDetailList);
         return "report/riskContactDetail";
@@ -198,10 +196,7 @@ public class CarrierController {
      */
     @RequestMapping("/consumeBillList")
     public String consumeBillList( Long userId,String orderId, Model model) {
-        Order order = orderService.findByOrderId(orderId);
-        if(order == null || !order.getUser().getUserId().equals(userId)) {
-            throw new OrderNotFoundException(Constant.ORDER_NOT_FOUND);
-        }
+        checkParam(userId, orderId);
         List<ConsumeBill> consumeBillList = consumeBillRepository.findByOrderId(orderId);
         consumeBillList.sort(Comparator.comparing(ConsumeBill::getMonth));
         model.addAttribute("consumeBillList",consumeBillList);

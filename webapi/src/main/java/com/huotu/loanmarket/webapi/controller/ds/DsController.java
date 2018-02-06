@@ -1,20 +1,19 @@
 package com.huotu.loanmarket.webapi.controller.ds;
 
-import com.huotu.loanmarket.common.utils.ApiResult;
+import com.huotu.loanmarket.common.Constant;
 import com.huotu.loanmarket.service.entity.ds.Receiver;
 import com.huotu.loanmarket.service.entity.order.Order;
-import com.huotu.loanmarket.service.enums.AppCode;
 import com.huotu.loanmarket.service.model.ds.DsOrderVo;
 import com.huotu.loanmarket.service.model.ds.DsVo;
 import com.huotu.loanmarket.service.repository.ds.DsOrderRepository;
 import com.huotu.loanmarket.service.repository.ds.ReceiverRepository;
 import com.huotu.loanmarket.service.service.ds.DsService;
 import com.huotu.loanmarket.service.service.order.OrderService;
+import com.huotu.loanmarket.webapi.controller.exception.OrderNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -45,14 +44,13 @@ public class DsController {
      * @throws InterruptedException
      */
     @RequestMapping("/dsShow")
-    @ResponseBody
-    public ApiResult dsShow(@RequestHeader(value = "userId") Long userId, String orderId) throws ExecutionException, InterruptedException {
-        Order order = orderService.findByOrderId(orderId);
-        if(order == null) {
-            return ApiResult.resultWith(AppCode.PARAMETER_ERROR);
-        }
+    public String dsShow(Long userId, String orderId,Model model) {
+        checkParam(userId, orderId);
         DsVo dsVo = dsService.dsShow(orderId);
-        return ApiResult.resultWith(AppCode.SUCCESS,dsVo);
+        model.addAttribute("ds",dsVo);
+        model.addAttribute("orderId",orderId);
+        model.addAttribute("userId",userId);
+        return "report/dsInfo";
     }
 
     /**
@@ -62,15 +60,11 @@ public class DsController {
      * @return
      */
     @RequestMapping("/dsOrder")
-    @ResponseBody
-    public ApiResult dsOrder(@RequestHeader(value = "userId") Long userId, String orderId) {
-        Order order = orderService.findByOrderId(orderId);
-        if(order == null) {
-            return ApiResult.resultWith(AppCode.PARAMETER_ERROR);
-        }
-
+    public String dsOrder(Long userId, String orderId,Model model) {
+        checkParam(userId, orderId);
         DsOrderVo dsOrderVo = dsOrderRepository.stats(orderId);
-        return ApiResult.resultWith(AppCode.SUCCESS,dsOrderVo);
+        model.addAttribute("dsOrder",dsOrderVo);
+        return "report/dsOrder";
     }
 
     /**
@@ -80,15 +74,19 @@ public class DsController {
      * @return
      */
     @RequestMapping("/receiverList")
-    @ResponseBody
-    public ApiResult receiverList(@RequestHeader(value = "userId") Long userId, String orderId) {
-        Order order = orderService.findByOrderId(orderId);
-        if(order == null) {
-            return ApiResult.resultWith(AppCode.PARAMETER_ERROR);
-        }
+    public String receiverList(Long userId, String orderId,Model model) {
+        checkParam(userId, orderId);
 
         List<Receiver> receiverList = receiverRepository.findByOrderId(orderId);
         List<String> list = receiverList.stream().map(Receiver::getArea).collect(Collectors.toList());
-        return ApiResult.resultWith(AppCode.SUCCESS,list);
+        model.addAttribute("receiverList",list);
+        return "report/receiverList";
+    }
+
+    private void checkParam(Long userId, String orderId) {
+        Order order = orderService.findByOrderId(orderId);
+        if(order == null || !order.getUser().getUserId().equals(userId)) {
+            throw new OrderNotFoundException(Constant.ORDER_NOT_FOUND);
+        }
     }
 }

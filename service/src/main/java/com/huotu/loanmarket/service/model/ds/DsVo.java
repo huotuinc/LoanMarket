@@ -26,6 +26,10 @@ public class DsVo {
      * 真实姓名
      */
     private String name;
+    /**
+     * 邮箱。如：123@qq.com
+     */
+    private String email;
 
     /**
      * 实名认证姓名。脱敏部分用＊
