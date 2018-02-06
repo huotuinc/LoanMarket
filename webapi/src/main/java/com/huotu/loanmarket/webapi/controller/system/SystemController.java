@@ -132,7 +132,7 @@ public class SystemController {
         DeviceTypeEnum deviceTypeEnum;
         if (DeviceTypeEnum.Android.getName().equalsIgnoreCase(osType)) {
             deviceTypeEnum = DeviceTypeEnum.Android;
-        } else if (DeviceTypeEnum.Android.getName().equalsIgnoreCase(osType)) {
+        } else if (DeviceTypeEnum.IOS.getName().equalsIgnoreCase(osType)) {
             deviceTypeEnum = DeviceTypeEnum.IOS;
         } else {
             deviceTypeEnum = DeviceTypeEnum.Android;

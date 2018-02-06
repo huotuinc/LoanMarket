@@ -143,7 +143,7 @@ public class UserController {
             userInfoVo.setUserToken(user.getUserToken());
             userInfoVo.setHeadimg(user.getHeadimg());
             userInfoVo.setAuthStatus(user.getAuthStatus().getCode());
-            return ApiResult.resultWith(AppCode.SUCCESS, user);
+            return ApiResult.resultWith(AppCode.SUCCESS, userInfoVo);
         } catch (ErrorMessageException e) {
             return ApiResult.resultWith(e.code, e.getMessage(), null);
         }
