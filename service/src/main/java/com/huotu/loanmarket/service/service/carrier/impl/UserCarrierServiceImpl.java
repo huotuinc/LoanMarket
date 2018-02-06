@@ -157,6 +157,7 @@ public class UserCarrierServiceImpl implements UserCarrierService {
             int resultCode;
             if (flag) {
                 order.setAuthStatus(UserAuthorizedStatusEnums.AUTH_SUCCESS);
+                order.getUser().setAuthStatus(UserAuthorizedStatusEnums.AUTH_SUCCESS);
                 resultCode = AppCode.SUCCESS.getCode();
             } else {
                 order.setAuthStatus(UserAuthorizedStatusEnums.AUTH_ERROR);

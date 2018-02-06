@@ -44,7 +44,7 @@ public class Order {
      * 用户id
      */
     @JoinColumn(name = "user_id")
-    @ManyToOne(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.LAZY)
     private User user;
 
     /**

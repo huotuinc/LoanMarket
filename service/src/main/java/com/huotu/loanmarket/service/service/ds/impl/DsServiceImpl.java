@@ -108,6 +108,7 @@ public class DsServiceImpl implements DsService {
 //                String channelCode = data.get("channel_code").getAsString();
                 assembleData(data,orderId);
                 order.setAuthStatus(UserAuthorizedStatusEnums.AUTH_SUCCESS);
+                order.getUser().setAuthStatus(UserAuthorizedStatusEnums.AUTH_SUCCESS);
                 resultCode = AppCode.SUCCESS.getCode();
             } else {
                 log.error(MessageFormat.format("【数据魔盒】电商数据查询失败，订单id：{0}，任务id：{1},失败原因：{2}", orderId,taskId,operatorMessage));

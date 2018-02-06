@@ -32,6 +32,7 @@ import com.huotu.loanmarket.service.model.sesame.IdentityParam;
 import com.huotu.loanmarket.service.model.sesame.SesameConfig;
 import com.huotu.loanmarket.service.repository.order.OrderLogRepository;
 import com.huotu.loanmarket.service.repository.order.OrderRepository;
+import com.huotu.loanmarket.service.service.BaseService;
 import com.huotu.loanmarket.service.service.merchant.MerchantCfgService;
 import com.huotu.loanmarket.service.service.order.OrderService;
 import com.huotu.loanmarket.service.service.user.UserService;
@@ -75,6 +76,8 @@ public class OrderServiceImpl implements OrderService {
     private OrderRepository orderRepository;
     @Autowired
     private LoanMarkConfigProvider loanMarkConfigProvider;
+    @Autowired
+    private BaseService baseService;
 
     /**
      * 创建订单
@@ -401,19 +404,33 @@ public class OrderServiceImpl implements OrderService {
         }
         //订单所有的状态 状态0已取消 1待支付 2认证中 3认证成功 4认证失败
         OrderEnum.ApiOrderStatus orderStatus=getApiOrderStatus(order);
-
+        String homeURI = baseService.apiHomeURI();
         String url = "";
         switch (order.getOrderType()) {
             case BACKLIST_FINANCE:
                 break;
             case CARRIER:
-                url = String.format("https://open.shujumohe.com/box/yys?box_token=5884F7B994A7445E9B6C89CA2D2942AA&real_name=%s&identity_code=%s&user_mobile=%s&passback_params=%s", order.getRealName(), order.getIdCardNo(), order.getMobile(), order.getOrderId() + ",1," + Constant.YYS);
+                if(orderStatus.equals(OrderEnum.ApiOrderStatus.AUTH_SUCCESS)){
+                    url = homeURI + "api/carrier/carrierShow?userId="+order.getUser().getUserId()+"&orderId="+order.getOrderId();
+                }
+                if(orderStatus.equals(OrderEnum.ApiOrderStatus.AUTH_ING)){
+                    url = String.format("https://open.shujumohe.com/box/yys?box_token=5884F7B994A7445E9B6C89CA2D2942AA&real_name=%s&identity_code=%s&user_mobile=%s&passback_params=%s", order.getRealName(), order.getIdCardNo(), order.getMobile(), order.getOrderId() + ",1," + Constant.YYS);
+                }
+
                 break;
             case JINGDONG:
-                url = String.format("https://open.shujumohe.com/box/jd?box_token=5884F7B994A7445E9B6C89CA2D2942AA&passback_params=%s", order.getOrderId() + ",1," + Constant.DS);
+                if(orderStatus.equals(OrderEnum.ApiOrderStatus.AUTH_SUCCESS)){
+                    url = homeURI + "api/ds/dsShow?userId="+order.getUser().getUserId()+"&orderId="+order.getOrderId();
+                }
+                if(orderStatus.equals(OrderEnum.ApiOrderStatus.AUTH_ING)) {
+                    url = String.format("https://open.shujumohe.com/box/jd?box_token=5884F7B994A7445E9B6C89CA2D2942AA&passback_params=%s", order.getOrderId() + ",1," + Constant.DS);
+                }
                 break;
             case TAOBAO:
                 // 淘宝不支持h5对接。
+                if(orderStatus.equals(OrderEnum.ApiOrderStatus.AUTH_SUCCESS)){
+                    url = homeURI + "api/ds/dsShow?userId="+order.getUser().getUserId()+"&orderId="+order.getOrderId();
+                }
                 break;
             case BACKLIST_BUS:
                 ZhimaAuthInfoAuthorizeRequest req = new ZhimaAuthInfoAuthorizeRequest();
@@ -442,6 +459,7 @@ public class OrderServiceImpl implements OrderService {
             default:
                 break;
         }
+
         orderThirdUrlInfo.setUrl(url);
         return orderThirdUrlInfo;
     }

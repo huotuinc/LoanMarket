@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title>运营商报告</title>
+
+    <link href="http://resali.huobanplus.com/cdn/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/animate.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/style.min-1.0.8.css" rel="stylesheet">
+</head>
+<style>
+    .msg_title {
+        display: inline-block;
+        text-align: right;
+    }
+    .msg_content {
+        display: inline-block;
+    }
+
+</style>
+<body class="gray-bg">
+<div class="wrapper wrapper-content">
+    <div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                基本信息
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-7">
+                        <div>
+                            <div class="msg_title col-sm-4">手机号：</div>
+                            <span class="msg_content" th:text="${carrier.mobile}">15675504080</span>
+                        </div>
+                        <div>
+                            <div class="msg_title col-sm-4">号码归属地：</div>
+                            <span class="msg_content" th:text="${carrier.mobileAddr}">号码归属地</span>
+                        </div>
+                        <div>
+                            <div class="msg_title col-sm-4">运营商：</div>
+                            <span class="msg_content" th:text="${carrier.mobileCarrier}">中国移动</span>
+                        </div>
+                        <div>
+                            <div class="msg_title col-sm-4">运营商登记姓名：</div>
+                            <span class="msg_content" th:text="${carrier.realName}">张三</span>
+                        </div>
+                        <div>
+                            <div class="msg_title col-sm-4">运营商登记身份证号码：</div>
+                            <span class="msg_content" th:text="${carrier.identityCode}">340222166415263625</span>
+                        </div>
+                        <div>
+                            <div class="msg_title col-sm-4">手机号账户状态：</div>
+                            <span class="msg_content" th:text="${carrier.status}">正常</span>
+                        </div>
+                        <div>
+                            <div class="msg_title col-sm-4">账户余额：</div>
+                            <span class="msg_content" th:text="${carrier.accountBalance + '元'}">100</span>
+                        </div>
+                        <div>
+                            <div class="msg_title col-sm-4">入网时间：</div>
+                            <span class="msg_content" th:text="${carrier.netTime}">2017-18-74</span>
+                        </div>
+                        <div>
+                            <div class="msg_title col-sm-4">近6个月互通号码数量：</div>
+                            <span class="msg_content" th:text="${carrier.mutualNumber}">74</span>
+                        </div>
+                        <div>
+                            <div class="msg_title col-sm-4">前10联系人黑名单人数占比：</div>
+                            <span class="msg_content" th:text="${carrier.blackRadio}">74</span>
+                        </div>
+                        <div>
+                            <div class="msg_title col-sm-4">前10联系人信贷逾期名单人数占比：</div>
+                            <span class="msg_content" th:text="${carrier.blackCreditRadio}">74</span>
+                        </div>
+                        <div>
+                            <div class="msg_title col-sm-4">前10联系人近3月平均申请平台数：</div>
+                            <span class="msg_content" th:text="${carrier.applyCount}">74</span>
+                        </div>
+                        <div>
+                            <div class="msg_title col-sm-4">前10联系人近3月申请2个及以上平台的人数：</div>
+                            <span class="msg_content" th:text="${carrier.applyCountOverTwo}">74</span>
+                        </div>
+                        <div>
+                            <div class="msg_title col-sm-4">近3月通话活跃天数：</div>
+                            <span class="msg_content" th:text="${carrier.activeDayCallThree}">74</span>
+                        </div>
+                        <div>
+                            <div class="msg_title col-sm-4">近3月无通话静默天数：</div>
+                            <span class="msg_content" th:text="${carrier.silenceDayCallThree}">74</span>
+                        </div>
+
+                        <div>
+                            <div class="msg_title col-sm-4">近3月连续无通话静默>=3天的次数：</div>
+                            <span class="msg_content" th:text="${carrier.continueSilenceDayOverThree}">张三</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                风险通话
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="ibox float-e-margins m-b-none">
+                            <div class="ibox-content p-xxs no-top-border">
+                                <td class="panel-body">
+                                    <table class="table table-bordered table-hover table-center">
+                                        <thead>
+                                        <tr>
+                                            <th>
+                                               风险类型
+                                            </th>
+                                            <th>
+                                                近6月通话号码数量
+                                            </th>
+                                            <th>
+                                                近6月通话次数
+                                            </th>
+                                            <th>
+                                                近6月通话时长(秒)
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="riskContact:${riskContactList}">
+                                            <td th:text="${riskContact.riskType}"></td>
+                                            <td th:text="${riskContact.contactCountSix}"></td>
+                                            <td th:text="${riskContact.callCountSix}"></td>
+                                            <td th:text="${riskContact.callTimeSix}"></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <div class="row">
+        <div class="panel panel-default col-sm-4">
+            <div class="panel-heading">
+                号码标签
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="ibox float-e-margins m-b-none">
+                            <div class="ibox-content p-xxs no-top-border">
+                                <div class="panel-body">
+                                    <table class="table table-bordered table-hover table-center">
+                                        <thead>
+                                        <tr>
+                                            <th>号码</th>
+                                            <th>标签</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="riskContactDetail:${riskContactDetailList}">
+                                            <td th:text="${riskContactDetail.contactNumber}">12560</td>
+                                            <td th:text="${riskContactDetail.contactName}">15684895878</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default col-sm-8">
+            <div class="panel-heading">
+                话费明细
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="ibox float-e-margins m-b-none">
+                            <div class="ibox-content p-xxs no-top-border">
+                                <div class="panel-body">
+                                    <table class="table table-bordered table-hover table-center">
+                                        <thead>
+                                        <tr>
+                                            <th>月份</th>
+                                            <th>消费金额</th>
+                                            <th>充值金额</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="consumeBill:${consumeBillList}">
+                                            <td th:text="${consumeBill.month}">12560</td>
+                                            <td th:text="${consumeBill.consumeAmount + '元'}">15684895878</td>
+                                            <td th:text="${consumeBill.rechargeAmount + '元'}">77</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+</body>
+
+</html>

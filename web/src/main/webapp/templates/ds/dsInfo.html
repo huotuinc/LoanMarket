@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title>电商报告</title>
+
+    <link href="http://resali.huobanplus.com/cdn/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/animate.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/style.min-1.0.8.css" rel="stylesheet">
+</head>
+<style>
+    .msg_title {
+        display: inline-block;
+        text-align: right;
+    }
+    .msg_content {
+        display: inline-block;
+    }
+
+</style>
+<body class="gray-bg">
+<div class="wrapper wrapper-content">
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                基本信息
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-7">
+                        <div>
+                            <div class="msg_title col-sm-3">用户名：</div>
+                            <span class="msg_content" th:text="${ds.userName}">15675504080</span>
+                        </div>
+                        <div>
+                            <div class="msg_title col-sm-3">邮箱：</div>
+                            <span class="msg_content" th:text="${ds.email}">号码归属地</span>
+                        </div>
+                        <div>
+                            <div class="msg_title col-sm-3">用户级别：</div>
+                            <span class="msg_content" th:text="${ds.userLevel}">中国移动</span>
+                        </div>
+                        <div>
+                            <div class="msg_title col-sm-3">昵称：</div>
+                            <span class="msg_content" th:text="${ds.nickName}">张三</span>
+                        </div>
+                        <div>
+                            <div class="msg_title col-sm-3">真实姓名：</div>
+                            <span class="msg_content" th:text="${ds.name}">340222166415263625</span>
+                        </div>
+                        <div>
+                            <div class="msg_title col-sm-3">性别：</div>
+                            <span class="msg_content" th:text="${ds.gender}">正常</span>
+                        </div>
+                        <div>
+                            <div class="msg_title col-sm-3">绑定手机号：</div>
+                            <span class="msg_content" th:text="${ds.mobile}">100</span>
+                        </div>
+                        <div>
+                            <div class="msg_title col-sm-3">实名认证姓名：</div>
+                            <span class="msg_content" th:text="${ds.realName}">2017-18-74</span>
+                        </div>
+                        <div>
+                            <div class="msg_title col-sm-3">实名认证身份证：</div>
+                            <span class="msg_content" th:text="${ds.identityCode}">74</span>
+                        </div>
+                        <div>
+                            <div class="msg_title col-sm-3">账号余额：</div>
+                            <span class="msg_content" th:text="${ds.accountBalance + '元'}">74</span>
+                        </div>
+                        <div>
+                            <div class="msg_title col-sm-3">金融账户余额：</div>
+                            <span class="msg_content" th:text="${ds.financialAccountBalance + '元'}">74</span>
+                        </div>
+                        <div>
+                            <div class="msg_title col-sm-3">信用分数：</div>
+                            <span class="msg_content" th:text="${ds.creditPoint}">74</span>
+                        </div>
+                        <div>
+                            <div class="msg_title col-sm-3">信用额度：</div>
+                            <span class="msg_content" th:text="${ds.creditQuota + '元'}">74</span>
+                        </div>
+                        <div>
+                            <div class="msg_title col-sm-3">消费额度：</div>
+                            <span class="msg_content" th:text="${ds.consumeQuota + '元'}">74</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="panel panel-default col-sm-6">
+                <div class="panel-heading">
+                    订单数据
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="ibox float-e-margins m-b-none">
+                                <div class="ibox-content p-xxs no-top-border">
+                                    <td class="panel-body">
+                                        <table class="table table-bordered table-hover table-center">
+                                            <thead>
+                                            <tr>
+                                                <th>
+                                                    消费次数
+                                                </th>
+                                                <th>
+                                                    平均消费金额
+                                                </th>
+                                                <th>
+                                                    最早消费时间
+                                                </th>
+                                                <th>
+                                                    最近消费时间
+                                                </th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td th:text="${dsOrder.count}"></td>
+                                                <td th:text="${dsOrder.avgMoney + '元'}"></td>
+                                                <td th:text="${dsOrder.firstTiem}"></td>
+                                                <td th:text="${dsOrder.lastTiem}"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default col-sm-6">
+                <div class="panel-heading">
+                    收货地址
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="ibox float-e-margins m-b-none">
+                                <div class="ibox-content p-xxs no-top-border">
+                                    <div class="panel-body">
+                                        <table class="table table-bordered table-hover table-center">
+                                            <thead>
+                                            <tr>
+                                                <th>地址</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="receiver:${receiverList}">
+                                                <td th:text="${receiver}">12560</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+
+</html>

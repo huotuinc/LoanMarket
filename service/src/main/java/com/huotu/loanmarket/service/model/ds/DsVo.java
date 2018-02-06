@@ -13,6 +13,10 @@ import java.math.BigDecimal;
 public class DsVo {
 
     /**
+     * 用户名
+     */
+    private String userName;
+    /**
      * 用户级别
      */
     private String userLevel;
