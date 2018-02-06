@@ -167,8 +167,11 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
                     .excludePathPatterns("/api/order/return/**")
                     //第三方支付支付宝通知、返回、去支付
                     .excludePathPatterns("/api/alipay/**")
-                    .excludePathPatterns("/api/sys/checkUpdate");
-
+                    .excludePathPatterns("/api/sys/checkUpdate")
+                    // 数据魔盒回调
+                    .excludePathPatterns("/api/carrier/**")
+                    //内嵌页面接口请求
+                    .excludePathPatterns("/api/ds/**");
     }
 
 
