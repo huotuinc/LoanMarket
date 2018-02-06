@@ -25,10 +25,7 @@ import com.huotu.loanmarket.service.enums.ConfigParameter;
 import com.huotu.loanmarket.service.enums.MerchantConfigEnum;
 import com.huotu.loanmarket.service.enums.OrderEnum;
 import com.huotu.loanmarket.service.enums.UserAuthorizedStatusEnums;
-import com.huotu.loanmarket.service.model.order.ApiCheckoutResultVo;
-import com.huotu.loanmarket.service.model.order.ApiOrderInfoVo;
-import com.huotu.loanmarket.service.model.order.PayReturnVo;
-import com.huotu.loanmarket.service.model.order.SubmitOrderInfo;
+import com.huotu.loanmarket.service.model.order.*;
 import com.huotu.loanmarket.service.model.payconfig.ApiPaymentVo;
 import com.huotu.loanmarket.service.model.sesame.BizParams;
 import com.huotu.loanmarket.service.model.sesame.IdentityParam;
@@ -146,7 +143,8 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderId(RandomUtils.randomDateTimeString(6));
         order.setPayType(submitOrderInfo.getPayType());
         //设置第三方授权页面地址
-        order.setThirdAuthUrl(authenticationUrl(order));
+       OrderThirdUrlInfo thirdUrlInfo= getOrderThirdUrl(order);
+        order.setThirdAuthUrl(thirdUrlInfo.getUrl());
         order = orderRepository.save(order);
 
         OrderLog log = new OrderLog();
@@ -237,8 +235,9 @@ public class OrderServiceImpl implements OrderService {
             OrderEnum.ApiOrderStatus status = getApiOrderStatus(order);
             apiOrderInfoVo.setStatus(status.getCode());
             apiOrderInfoVo.setStatusName(status.getName());
-            if (status.equals(OrderEnum.ApiOrderStatus.AUTH_ING)) {
-                apiOrderInfoVo.setThirdAuthUrl(order.getThirdAuthUrl());
+            if (status.equals(OrderEnum.ApiOrderStatus.AUTH_ING)||status.equals(OrderEnum.ApiOrderStatus.AUTH_SUCCESS)) {
+                OrderThirdUrlInfo thirdUrlInfo= getOrderThirdUrl(order);
+                apiOrderInfoVo.setThirdAuthUrl(thirdUrlInfo.getUrl());
             }
             String desc = "";
             switch (order.getOrderType()) {
@@ -385,8 +384,20 @@ public class OrderServiceImpl implements OrderService {
     }
 
 
+    /***
+     * 获取订单第三方来链接
+     * @param order
+     * @return
+     */
     @Override
-    public String authenticationUrl(Order order) {
+    public OrderThirdUrlInfo getOrderThirdUrl(Order order) {
+        OrderThirdUrlInfo orderThirdUrlInfo=new OrderThirdUrlInfo();
+        if(order==null){
+            return  orderThirdUrlInfo;
+        }
+        //订单所有的状态 状态0已取消 1待支付 2认证中 3认证成功 4认证失败
+        OrderEnum.ApiOrderStatus orderStatus=getApiOrderStatus(order);
+
         String url = "";
         switch (order.getOrderType()) {
             case BACKLIST_FINANCE:
@@ -427,8 +438,8 @@ public class OrderServiceImpl implements OrderService {
             default:
                 break;
         }
-
-        return url;
+        orderThirdUrlInfo.setUrl(url);
+        return orderThirdUrlInfo;
     }
 
     /**

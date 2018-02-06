@@ -14,10 +14,7 @@ import com.huotu.loanmarket.service.entity.order.Order;
 import com.huotu.loanmarket.service.entity.user.User;
 import com.huotu.loanmarket.service.enums.OrderEnum;
 import com.huotu.loanmarket.service.enums.UserAuthorizedStatusEnums;
-import com.huotu.loanmarket.service.model.order.ApiCheckoutResultVo;
-import com.huotu.loanmarket.service.model.order.ApiOrderInfoVo;
-import com.huotu.loanmarket.service.model.order.PayReturnVo;
-import com.huotu.loanmarket.service.model.order.SubmitOrderInfo;
+import com.huotu.loanmarket.service.model.order.*;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -111,11 +108,11 @@ public interface OrderService {
     Order save(Order order);
 
     /**
-     * 根据订单返回第三方认证链接,不满足条件返回null
+     * 根据订单返回第三方链接
      * @param order
      * @return
      */
-    String authenticationUrl(Order order);
+    OrderThirdUrlInfo getOrderThirdUrl(Order order);
 
 
     /**
