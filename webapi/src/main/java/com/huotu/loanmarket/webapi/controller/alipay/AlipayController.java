@@ -10,8 +10,10 @@
 package com.huotu.loanmarket.webapi.controller.alipay;
 
 import com.huotu.loanmarket.common.Constant;
+import com.huotu.loanmarket.common.utils.ApiResult;
 import com.huotu.loanmarket.service.entity.order.Order;
 import com.huotu.loanmarket.service.entity.user.User;
+import com.huotu.loanmarket.service.enums.AppCode;
 import com.huotu.loanmarket.service.enums.OrderEnum;
 import com.huotu.loanmarket.service.service.order.OrderService;
 import com.huotu.loanmarket.service.service.thirdpay.QuickPaymentContext;
@@ -22,10 +24,12 @@ import com.huotu.loanmarket.webapi.controller.order.OrderController;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.interceptor.ExcludeDefaultInterceptors;
 import javax.servlet.http.HttpServletRequest;
@@ -63,7 +67,7 @@ public class AlipayController {
      * @param response
      * @return
      */
-    @RequestMapping(value = "/notify",method = RequestMethod.POST)
+    @RequestMapping(value = "/notify", method = RequestMethod.POST)
     @ExcludeDefaultInterceptors
     public void payNotify(HttpServletRequest request, HttpServletResponse response) {
         try {
@@ -112,9 +116,9 @@ public class AlipayController {
             } else if (TRADE_SUCCESS.equals(tradeStatus)) {
                 orderService.paid(unifiedOrder, user);
             }
-            this.outputResult(true, MessageFormat.format("单号：{0}支付成功", outTradeNo),response);
+            this.outputResult(true, MessageFormat.format("单号：{0}支付成功", outTradeNo), response);
         } catch (Exception e) {
-            this.outputResult(false,e.getMessage(),response);
+            this.outputResult(false, e.getMessage(), response);
         }
     }
 
@@ -133,5 +137,27 @@ public class AlipayController {
         } catch (IOException e) {
             log.error("outputResult异常：" + e.getMessage(), e);
         }
+    }
+
+    @Autowired
+    private Environment env;
+
+    /***
+     * 测试。只在开发环境下执行
+     * @param orderId
+     * @return
+     */
+    @RequestMapping(value = "/test", method = RequestMethod.GET)
+    @ResponseBody
+    public ApiResult test(String orderId) {
+        if (env.acceptsProfiles(Constant.PROFILE_DEV, Constant.PROFILE_UN_CHECK)) {
+            Order unifiedOrder = orderService.findByOrderId(orderId);
+            unifiedOrder.setTradeNo(orderId);
+            unifiedOrder.setOnlineAmount(unifiedOrder.getPayAmount());
+            unifiedOrder.setPayType(OrderEnum.PayType.ALIPAY);
+            User user = unifiedOrder.getUser();
+            orderService.paid(unifiedOrder, user);
+        }
+        return ApiResult.resultWith(AppCode.SUCCESS);
     }
 }
