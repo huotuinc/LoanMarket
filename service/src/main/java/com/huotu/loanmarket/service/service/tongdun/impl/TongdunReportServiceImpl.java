@@ -5,14 +5,13 @@ import com.huotu.loanmarket.service.config.LoanMarkConfigProvider;
 import com.huotu.loanmarket.service.entity.order.Order;
 import com.huotu.loanmarket.service.entity.tongdun.TongdunRequestLog;
 import com.huotu.loanmarket.service.entity.user.User;
-import com.huotu.loanmarket.service.enums.AppCode;
-import com.huotu.loanmarket.service.enums.OrderEnum;
-import com.huotu.loanmarket.service.enums.TongdunEnum;
-import com.huotu.loanmarket.service.enums.UserResultCode;
+import com.huotu.loanmarket.service.enums.*;
 import com.huotu.loanmarket.service.model.tongdun.*;
 import com.huotu.loanmarket.service.model.tongdun.report.ReportDetailVo;
 import com.huotu.loanmarket.service.model.tongdun.report.RiskItem;
 import com.huotu.loanmarket.service.repository.order.OrderRepository;
+import com.huotu.loanmarket.service.repository.user.UserRepository;
+import com.huotu.loanmarket.service.service.order.OrderService;
 import com.huotu.loanmarket.service.service.tongdun.PreLoanRiskService;
 import com.huotu.loanmarket.service.service.tongdun.TongdunReportService;
 import com.huotu.loanmarket.service.service.tongdun.TongdunRequestLogService;
@@ -44,22 +43,29 @@ public class TongdunReportServiceImpl implements TongdunReportService {
     private LoanMarkConfigProvider loanMarkConfigProvider;
     @Autowired
     private PreLoanRiskService preLoanRiskService;
+    @Autowired
+    private OrderService orderService;
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
-    public ApiResult getRiskReport(String orderId) {
+    public ApiResult getRiskReport(String orderId, Long userId) {
         try {
             //1、检查订单
-            if(StringUtils.isEmpty(orderId)){
+            if (StringUtils.isEmpty(orderId)) {
                 return ApiResult.resultWith(AppCode.ERROR, "订单参数丢失");
             }
             Order orderInfo = orderRepository.findOne(orderId);
             if (orderInfo == null) {
                 return ApiResult.resultWith(AppCode.ERROR, "订单不存在");
             }
+            User userInfo = orderInfo.getUser();
+            if (!userInfo.getUserId().equals(userId)) {
+                return ApiResult.resultWith(AppCode.ERROR, "订单用户不一致");
+            }
             if (!orderInfo.getPayStatus().equals(OrderEnum.PayStatus.PAY_SUCCESS)) {
                 return ApiResult.resultWith(AppCode.ERROR, "订单非支付状态");
             }
-            User userInfo = orderInfo.getUser();
             Integer merchantId = userInfo.getMerchantId();
             TongdunRequestLog requestLog = tongdunRequestLogService.findByOrderId(orderId);
             //2、同盾报告信息检查
@@ -120,6 +126,13 @@ public class TongdunReportServiceImpl implements TongdunReportService {
                 requestLog = tongdunRequestLogService.save(reviewResult);
                 if (!reviewResult.getState().equals(TongdunEnum.ReportStatus.SUCCESS.getCode())) {
                     return ApiResult.resultWith(UserResultCode.REPORT_TONGDUN_BUILD_ERROR);
+                } else {
+                    //更新订单状态
+                    orderService.updateOrderAuthStatus(orderId, UserAuthorizedStatusEnums.AUTH_SUCCESS);
+                    //更改用户状态
+                    if (!userInfo.getAuthStatus().equals(UserAuthorizedStatusEnums.AUTH_SUCCESS)) {
+                        userRepository.updateAuthStatus(userInfo.getUserId(), UserAuthorizedStatusEnums.AUTH_SUCCESS);
+                    }
                 }
                 //endregion
             }
@@ -127,7 +140,7 @@ public class TongdunReportServiceImpl implements TongdunReportService {
             ReportDetailVo reportDetailVo = tongdunRequestLogService.convertRequestLogToReport(requestLog);
             ApiRiskControlVo riskControlVo = this.analyzeRiskControl(reportDetailVo, new Long(merchantId));
             HashMap hashMap = new HashMap(1);
-            hashMap.put("risk",riskControlVo);
+            hashMap.put("risk", riskControlVo);
             return ApiResult.resultWith(AppCode.SUCCESS, hashMap);
         } catch (Exception ex) {
             log.error("[getRiskReport] throw exception, details: " + ex.getMessage() + "|" + Arrays.toString(ex.getStackTrace()));
