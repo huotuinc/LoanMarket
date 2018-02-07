@@ -1,6 +1,7 @@
 package com.huotu.loanmarket.service.repository.user;
 
 import com.huotu.loanmarket.service.entity.user.User;
+import com.huotu.loanmarket.service.enums.UserAuthorizedStatusEnums;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -64,4 +65,14 @@ public interface UserRepository extends JpaRepository<User, Long> , JpaSpecifica
     @Transactional(rollbackFor = RuntimeException.class)
     int updateLastLoginTime(long userId, LocalDateTime loginTime);
 
+    /**
+     * 更新用户认证状态
+     * @param userId 用户id
+     * @param statusEnums 认证状态
+     * @return
+     */
+    @Query("update User u set u.authStatus = ?2 where u.userId = ?1")
+    @Modifying(clearAutomatically = true)
+    @Transactional(rollbackFor = RuntimeException.class)
+    int updateAuthStatus(long userId, UserAuthorizedStatusEnums statusEnums);
 }

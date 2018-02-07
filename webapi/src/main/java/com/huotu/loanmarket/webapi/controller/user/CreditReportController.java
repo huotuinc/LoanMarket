@@ -31,12 +31,13 @@ public class CreditReportController {
 
     /**
      * 获取金融黑名单数据(基于同盾)
+     *
      * @param orderId
      * @return
      */
     @RequestMapping(value = "/getFinancialBlack", method = RequestMethod.POST)
     @ResponseBody
-    public ApiResult getFinancialBlack(String orderId) {
-        return tongdunReportService.getRiskReport(orderId);
+    public ApiResult getFinancialBlack(String orderId, Long userId) {
+        return tongdunReportService.getRiskReport(orderId, userId);
     }
 }

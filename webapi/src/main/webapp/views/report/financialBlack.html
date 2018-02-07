@@ -106,6 +106,7 @@
     FastClick.attach(document.body);
     var postData = {};
     postData.orderId = getQueryString('orderId');
+    postData.userId = getQueryString('userId');
     var creditPage = $('.credit-page');
     var loading = weui.loading('loading', {content: '报告加载中'});
     $.ajax('getFinancialBlack', {
