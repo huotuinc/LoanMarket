@@ -13,11 +13,15 @@ package com.huotu.loanmarket.webapi.controller.base;
 import com.huotu.loanmarket.common.Constant;
 import com.huotu.loanmarket.common.utils.RandomUtils;
 import com.huotu.loanmarket.service.config.ServiceConfig;
+import com.huotu.loanmarket.service.entity.sesame.Industry;
 import com.huotu.loanmarket.service.entity.user.User;
+import com.huotu.loanmarket.service.enums.SesameEnum;
+import com.huotu.loanmarket.service.repository.sesame.IndustryRepository;
 import com.huotu.loanmarket.service.repository.user.UserRepository;
 import com.huotu.loanmarket.webapi.config.MvcConfig;
 
 import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
@@ -41,13 +45,15 @@ import java.util.UUID;
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {ServiceConfig.class, MvcConfig.class})
-@ActiveProfiles(Constant.PROFILE_DEV)
+@ActiveProfiles(Constant.PROFILE_UNIT_TEST)
 public abstract class BaseTest {
 
     @Autowired
     private WebApplicationContext context;
     @Autowired
     protected UserRepository userRepository;
+    @Autowired
+    protected IndustryRepository industryRepository;
     Integer merchantId;
 
 
@@ -74,6 +80,17 @@ public abstract class BaseTest {
         return userRepository.saveAndFlush(user);
     }
 
+    protected Industry mockIndusTry(Long userId, String orderId) {
+        Industry industry = new Industry();
+        industry.setBiz_code(SesameEnum.IndustryType.E_COMMERCE_INDUSTRY);
+        industry.setMerchantId(merchantId);
+        industry.setOrderId(orderId);
+        industry.setSettlement(true);
+        industry.setStatement(UUID.randomUUID().toString());
+        industry.setUserId(userId);
+        industry.setStatus(SesameEnum.Status.STATUS_ONE);
+        return industryRepository.saveAndFlush(industry);
+    }
 }
 
 

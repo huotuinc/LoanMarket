@@ -132,8 +132,9 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
          * 以下规则接口，必须进行登录验证
          */
         registration.addPathPatterns("/api/user/**")
-                    .addPathPatterns("/api/order/**")
-                    .addPathPatterns("/api/project/applyLog")
+                .addPathPatterns("/api/order/**")
+                .addPathPatterns("/api/project/applyLog")
+                .addPathPatterns("/api/sesame/**")
         ;
 
 
@@ -163,15 +164,16 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
          * 以下规则接口，不进行签名验证
          */
         registration.excludePathPatterns("/api/sys/test")
-                    //通用支付返回页面
-                    .excludePathPatterns("/api/order/return/**")
-                    //第三方支付支付宝通知、返回、去支付
-                    .excludePathPatterns("/api/alipay/**")
-                    .excludePathPatterns("/api/sys/checkUpdate")
-                    // 数据魔盒回调
-                    .excludePathPatterns("/api/carrier/**")
-                    //内嵌页面接口请求
-                    .excludePathPatterns("/api/ds/**");
+                //通用支付返回页面
+                .excludePathPatterns("/api/order/return/**")
+                //第三方支付支付宝通知、返回、去支付
+                .excludePathPatterns("/api/alipay/**")
+                .excludePathPatterns("/api/sys/checkUpdate")
+                // 数据魔盒回调
+                .excludePathPatterns("/api/carrier/**")
+                //内嵌页面接口请求
+                .excludePathPatterns("/api/ds/**")
+                .excludePathPatterns("/api/sesameReport/**");
     }
 
 
