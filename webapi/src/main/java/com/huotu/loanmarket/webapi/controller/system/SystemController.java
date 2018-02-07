@@ -120,7 +120,7 @@ public class SystemController {
         map.put("aboutUrl", MessageFormat.format("{0}api/other/about", baseService.apiHomeURI()));
         map.put("regAgreementUrl", MessageFormat.format("{0}api/other/regAgreement", baseService.apiHomeURI()));
         map.put("creditAuthUrl", MessageFormat.format("{0}api/other/creditAuth", baseService.apiHomeURI()));
-
+        map.put("loanProjectProcessUrl", MessageFormat.format("{0api/projectView/loanProcess}", baseService.apiHomeURI()));
         return ApiResult.resultWith(AppCode.SUCCESS, map);
     }
 
@@ -186,6 +186,7 @@ public class SystemController {
 
     /**
      * 获取分享接口
+     *
      * @param userId 用户id
      * @return 结果
      */
@@ -196,7 +197,7 @@ public class SystemController {
         User user = userService.findByMerchantIdAndUserId(Constant.MERCHANT_ID, userId);
         if (user != null) {
             ShareInfoVo shareInfo = ShareInfoVo.builder()
-                    .title(tempTitle.replace("{name}", MaskUtils.maskMobile(user.getUserName())) )
+                    .title(tempTitle.replace("{name}", MaskUtils.maskMobile(user.getUserName())))
                     .description(tempDescription)
                     .icon("http://cdn1.51morecash.com/logozx.png")
                     .url(baseService.h5HomeURI() + "invite?i=" + userId).build();
