@@ -270,7 +270,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public PageListView<UserInviteVo> getMyInviteList(Long userId, boolean isAuthSuccess, int pageIndex, int pageSize) {
         PageListView<UserInviteVo> result = new PageListView<>();
-        Pageable pageable = new PageRequest(pageIndex - 1, pageSize, new Sort(Sort.Direction.ASC, "id"));
+        Pageable pageable = new PageRequest(pageIndex - 1, pageSize, new Sort(Sort.Direction.DESC, "id"));
 
         Specification<Invite> specification = getInviteSpecification(userId, isAuthSuccess);
         Page<Invite> page = inviteRepository.findAll(specification, pageable);

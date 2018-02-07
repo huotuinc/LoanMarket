@@ -16,18 +16,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
-    <title>用户列表</title>
+    <title>用户邀请列表</title>
 
     <link href="http://resali.huobanplus.com/cdn/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
     <link href="http://resali.huobanplus.com/cdn/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
     <!-- Morris -->
     <link href="http://resali.huobanplus.com/cdn/hotui/css/animate.min.css" rel="stylesheet">
     <link href="http://resali.huobanplus.com/cdn/hotui/css/style.min-1.0.8.css" rel="stylesheet">
-    <!--datetimepick-->
-    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/datetimepick/daterangepicker.css" rel="stylesheet"/>
-    <!--checkbox-->
-    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css"
-          rel="stylesheet">
 
     <style>
         .cate-select {
@@ -41,40 +36,9 @@
 <body class="gray-bg">
 <div class="wrapper wrapper-content animated fadeInRight tooltip-demo">
     <!--search-->
-    <form role="form" id="searchForm" class="search-panel" th:action="@{/user}" method="get"
-          th:object="${userSearcher}">
-        <input type="hidden" name="pageIndex" th:value="*{pageIndex}"/>
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="ibox float-e-margins">
-                    <div class="ibox-content p-m no-borders">
-                        <div class="form-inline">
-                            <div class="form-group m-r-sm">
-                                <label class="control-label" for="name">用户名：</label>
-                                <input type="text" class="form-control input-sm mb10" id="name" name="name"
-                                       th:value="*{userName}" placeholder="用户名"/>
-                            </div>
-                            <div class="form-group m-r-sm">
-                                <label class="control-label">注册时间：</label>
-                                <input type="text" class="form-control data-range-pick"
-                                       name="createTimePick" start-element="#createBeginTime"
-                                       end-element="#createEndTime" placeholder="开始时间-结束时间" style="width: 200px"
-                                       th:value="(*{createBeginTime!= null and createBeginTime != ''}  ? *{createBeginTime} :'')  + (*{createEndTime != null and createEndTime != ''} ?  ' - ' + *{createEndTime} :'') "/>
-
-                                <input type="hidden" name="createBeginTime" id="createBeginTime" placeholder="开始时间">
-                                <input type="hidden" name="createEndTime" id="createEndTime" placeholder="结束时间">
-                            </div>
-                            <div class="form-group m-r-sm">
-                                <button type="button" onclick="userListHandler.search(1)" class="btn btn-success">筛选
-                                </button>
-                                <button type="button" onclick="userListHandler.searchAll()" class="btn btn-success">显示全部
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <form role="form" id="searchForm" class="search-panel" th:action="@{'/user/' + ${userId} + '/invite'}" method="get">
+        <input type="hidden" name="pageIndex" th:value="${pageIndex}"/>
+        <input type="hidden" name="isAuthSuccess" th:value="${isAuthSuccess}"/>
     </form>
     <!--search-->
 
@@ -83,14 +47,19 @@
         <div class="col-lg-12">
             <div class="ibox float-e-margins m-b-none">
                 <div class="ibox-content p-xxs no-top-border">
+                    <div class="tabs-container">
+                        <ul class="nav nav-tabs">
+                            <li class="active" th:class="${isAuthSuccess} ? 'active' : ''"><a href="javascript:userInviteListHandler.showList(true);">已认证([[${authSuccessCount}]]人)</a></li>
+                            <li th:class="${!isAuthSuccess} ? 'active' : ''"><a href="javascript:userInviteListHandler.showList(false)">未认证([[${authFailureCount}]]人)</a></li>
+                        </ul>
+                    </div>
                     <div class="panel-body">
                         <table class="table table-bordered table-hover table-center">
                             <thead>
                             <tr>
                                 <th>用户ID</th>
                                 <th>用户名</th>
-                                <th>注册时间</th>
-                                <th>他的邀请（人数）</th>
+                                <th>邀请时间</th>
                                 <th>征信查询（次数）</th>
                             </tr>
                             </thead>
@@ -98,14 +67,8 @@
                             <tr th:each="user:${userList}">
                                 <td th:text="${user.userId}">1</td>
                                 <td th:text="${user.userName}">15100000000</td>
-                                <td th:text="${user.regTime}"></td>
-                                <!--<td th:text="${#dates.format(user.regTime,'yyyy-MM-dd HH:mm:ss')}"></td>-->
-                                <td>
-                                    <a th:href="@{'/user/' + ${user.userId} + '/invite'}" th:text="${user.inviteCount}">0</a>
-                                </td>
-                                <td>
-                                    <a th:text="${user.orderCount}">0</a>
-                                </td>
+                                <td th:text="${user.inviteTime}"></td>
+                                <td th:text="${user.orderCount}">0</td>
                             </tr>
                             </tbody>
                         </table>
@@ -134,9 +97,6 @@
 <script src="http://resali.huobanplus.com/cdn/hotui/js/v2/bootstrap.hot.extra-utils.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/v2/bootstrap.hot.extra-init.js"></script>
 
-<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/datetimepick/moment.js"></script>
-<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/datetimepick/daterangepicker.js"></script>
-
 <script type="text/javascript" th:inline="javascript">
     var listUrl = /*[[@{/user}]]*/ "";
     var totalPage = /*[[${totalPage}]]*/ 10;
@@ -150,22 +110,20 @@
         pageinate.init(function (p) {
             userListHandler.search(p);
         });
-
-        $("input[class~=data-range-pick]").daterangepicker({
-            timePicker: false,
-            locale: {
-                format: 'YYYY-MM-DD'
-            }
-        });
     });
 
-    var userListHandler = {
+    var userInviteListHandler = {
         search: function (pageIndex) {
             $("input[name=pageIndex]").val(pageIndex);
             $("#searchForm").submit();
         },
         searchAll: function () {
             window.location.href = listUrl;
+        },
+        showList:function(isAuthSuccess){
+            $("input[name=isAuthSuccess]").val(isAuthSuccess);
+            $("input[name=pageIndex]").val(1);
+            $("#searchForm").submit();
         }
     }
 </script>
