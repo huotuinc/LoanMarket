@@ -438,33 +438,37 @@ public class OrderServiceImpl implements OrderService {
                 }
                 break;
             case BACKLIST_BUS:
-                ZhimaAuthInfoAuthorizeRequest req = new ZhimaAuthInfoAuthorizeRequest();
-                // 必要参数
-                req.setChannel("apppc");
-                req.setPlatform("zmop");
-                req.setIdentityType("2");
-                IdentityParam identityParam = new IdentityParam();
-                identityParam.setCertNo(order.getIdCardNo());
-                identityParam.setName(order.getRealName());
-                req.setIdentityParam(identityParam.toString());
-                BizParams bizParams = new BizParams();
-                bizParams.setState(order.getUser().getUserId() + "," + order.getOrderId());
-                req.setBizParams(bizParams.toString());
-                //读取系统参数
-                SesameConfig sesameConfig = loanMarkConfigProvider.getSesameConfig(order.getMerchant());
-                DefaultZhimaClient client = new DefaultZhimaClient(SesameSysConfig.SESAME_CREDIT_URL, sesameConfig.getAppId(),
-                        sesameConfig.getPrivateKey().trim(),
-                        sesameConfig.getPublicKey().trim());
-                try {
-                    url = client.generatePageRedirectInvokeUrl(req);
-                } catch (ZhimaApiException e) {
-                    log.info("芝麻行业黑名单授权异常" + e);
+                if (orderStatus.equals(OrderEnum.ApiOrderStatus.AUTH_SUCCESS)) {
+                    url = homeURI + "/api/sesameReport/getSesameReport?userId=" + order.getUser().getUserId() + "&orderId=" + order.getOrderId();
+                }
+                if (orderStatus.equals(OrderEnum.ApiOrderStatus.AUTH_ING)) {
+                    ZhimaAuthInfoAuthorizeRequest req = new ZhimaAuthInfoAuthorizeRequest();
+                    // 必要参数
+                    req.setChannel("apppc");
+                    req.setPlatform("zmop");
+                    req.setIdentityType("2");
+                    IdentityParam identityParam = new IdentityParam();
+                    identityParam.setCertNo(order.getIdCardNo());
+                    identityParam.setName(order.getRealName());
+                    req.setIdentityParam(identityParam.toString());
+                    BizParams bizParams = new BizParams();
+                    bizParams.setState(order.getUser().getUserId() + "," + order.getOrderId());
+                    req.setBizParams(bizParams.toString());
+                    //读取系统参数
+                    SesameConfig sesameConfig = loanMarkConfigProvider.getSesameConfig(order.getMerchant());
+                    DefaultZhimaClient client = new DefaultZhimaClient(SesameSysConfig.SESAME_CREDIT_URL, sesameConfig.getAppId(),
+                            sesameConfig.getPrivateKey().trim(),
+                            sesameConfig.getPublicKey().trim());
+                    try {
+                        url = client.generatePageRedirectInvokeUrl(req);
+                    } catch (ZhimaApiException e) {
+                        log.info("芝麻行业黑名单授权异常" + e);
+                    }
                 }
                 break;
             default:
                 break;
         }
-
         orderThirdUrlInfo.setUrl(url);
         return orderThirdUrlInfo;
     }
