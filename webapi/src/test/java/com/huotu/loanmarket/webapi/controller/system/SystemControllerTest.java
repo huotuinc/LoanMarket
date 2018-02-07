@@ -38,7 +38,7 @@ public class SystemControllerTest extends BaseTest {
         User user = mockUser();
         mockMvc.perform(post("/api/sys/init")
                 .header(Constant.APP_USER_ID_KEY, user.getUserId())
-                .header(Constant.APP_USER_TOKEN_KEY,user.getUserToken())
+                .header(Constant.APP_USER_TOKEN_KEY, user.getUserToken())
                 .header(Constant.APP_SYSTEM_TYPE_KEY, "android"))
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -63,7 +63,7 @@ public class SystemControllerTest extends BaseTest {
 
         String mobile = RandomUtils.randomAllMobile();
         mockMvc.perform(post("/api/sys/sendVerifyCode")
-                .param("mobile",mobile)
+                .param("mobile", mobile)
                 .header(Constant.APP_VERSION_KEY, "1.0.0")
                 .header(Constant.APP_SYSTEM_TYPE_KEY, "android"))
                 .andExpect(status().isOk())
