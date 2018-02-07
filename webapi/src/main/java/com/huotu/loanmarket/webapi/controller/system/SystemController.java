@@ -120,7 +120,7 @@ public class SystemController {
         map.put("aboutUrl", MessageFormat.format("{0}api/other/about", baseService.apiHomeURI()));
         map.put("regAgreementUrl", MessageFormat.format("{0}api/other/regAgreement", baseService.apiHomeURI()));
         map.put("creditAuthUrl", MessageFormat.format("{0}api/other/creditAuth", baseService.apiHomeURI()));
-        map.put("loanProjectProcessUrl", MessageFormat.format("{0}api/projectView/loanProcess}", baseService.apiHomeURI()));
+        map.put("loanProjectProcessUrl", MessageFormat.format("{0}api/projectView/loanProcess", baseService.apiHomeURI()));
         return ApiResult.resultWith(AppCode.SUCCESS, map);
     }
 
