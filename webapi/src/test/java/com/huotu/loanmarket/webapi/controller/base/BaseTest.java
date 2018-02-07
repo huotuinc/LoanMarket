@@ -45,7 +45,7 @@ import java.util.UUID;
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {ServiceConfig.class, MvcConfig.class})
-@ActiveProfiles(Constant.PROFILE_DEV)
+@ActiveProfiles(Constant.PROFILE_UNIT_TEST)
 public abstract class BaseTest {
 
     @Autowired
