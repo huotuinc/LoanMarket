@@ -70,7 +70,8 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
      *
      * @return
      */
-    private ViewResolver backendTemplateResolver() {
+    @Bean
+    public ViewResolver backendTemplateResolver() {
         SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver();
         resolver.setPrefix("/templates/");
         resolver.setSuffix(".html");
