@@ -46,11 +46,10 @@
 <script src="../../resource/js/mock/mock-min.js" th:remove="all"></script>
 <script src="../../resource/js/mock/api.js" th:remove="all"></script>
 <script type="text/javascript">
-    var userId = [[${userId}]];
     var loanHandle = {
         getProjectDetail: function (obj) {
             var projectId = $(obj).attr("projectId");
-            window.location.href = "/forend/project/getDetail?projectId=" + projectId + "&userId=" + userId;
+            window.location.href = "/forend/project/getDetail?projectId=" + projectId;
         }
     }
 </script>

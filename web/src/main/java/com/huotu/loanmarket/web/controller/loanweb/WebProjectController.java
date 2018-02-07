@@ -41,7 +41,7 @@ public class WebProjectController {
     }
 
     @RequestMapping("/list")
-    public String getProjectList(Long userId, Model model) {
+    public String getProjectList(Model model) {
         List<LoanProject> loanprojectlist = projectService.findAll();
         loanprojectlist.forEach(p -> {
             if (!StringUtils.isEmpty(p.getLogo())) {
@@ -53,7 +53,6 @@ public class WebProjectController {
             }
         });
         model.addAttribute("projectList", loanprojectlist);
-        model.addAttribute("userId", userId);
         return "forend/loanList";
     }
 

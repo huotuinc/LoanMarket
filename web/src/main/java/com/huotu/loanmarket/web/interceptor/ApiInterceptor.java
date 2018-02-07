@@ -25,18 +25,18 @@ public class ApiInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        response.setContentType("application/json");
-        response.setCharacterEncoding("utf-8");
-        String userId = request.getParameter("userId");
-        if (StringUtils.isEmpty(userId)) {
-            response.getWriter().write(new ObjectMapper().writeValueAsString("用户编号未传"));
-            return false;
-        }
-        LoanUser user = userService.findOne(Long.parseLong(userId));
-        if (user == null) {
-            response.getWriter().write(new ObjectMapper().writeValueAsString("用户不存在"));
-            return false;
-        }
+//        response.setContentType("application/json");
+//        response.setCharacterEncoding("utf-8");
+//        String userId = request.getParameter("userId");
+//        if (StringUtils.isEmpty(userId)) {
+//            response.getWriter().write(new ObjectMapper().writeValueAsString("用户编号未传"));
+//            return false;
+//        }
+//        LoanUser user = userService.findOne(Long.parseLong(userId));
+//        if (user == null) {
+//            response.getWriter().write(new ObjectMapper().writeValueAsString("用户不存在"));
+//            return false;
+//        }
         return true;
     }
 }
