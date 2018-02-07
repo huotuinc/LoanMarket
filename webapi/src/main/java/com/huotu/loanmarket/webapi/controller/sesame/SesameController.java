@@ -29,6 +29,7 @@ import com.huotu.loanmarket.service.model.sesame.SesameConfig;
 import com.huotu.loanmarket.service.service.order.OrderService;
 import com.huotu.loanmarket.service.service.sesame.SesameService;
 import com.huotu.loanmarket.service.service.user.UserService;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,8 +61,7 @@ import java.util.Map;
 @RequestMapping("/api/sesame")
 public class SesameController {
     private static final Log log = LogFactory.getLog(SesameController.class);
-    @Autowired
-    private UserService userService;
+
     @Autowired
     private SesameService sesameService;
     @Autowired
@@ -73,13 +73,6 @@ public class SesameController {
     @ResponseBody
     public ApiResult verifyIdAndName(@RequestHeader(Constant.APP_MERCHANT_ID_KEY) Integer merchantId,
                                      @RequestHeader(value = Constant.APP_USER_ID_KEY, required = false) Long userId, String name, String idCardNum) {
-        if (userId == null || userId == 0) {
-            return ApiResult.resultWith(SesameResultCode.USERID_EMPTY);
-        }
-        User user = userService.findByMerchantIdAndUserId(merchantId, userId);
-        if (user == null) {
-            return ApiResult.resultWith(UserResultCode.CODE5);
-        }
         log.info("用户欺诈信息开始芝麻授权userId：" + userId);
         ZhimaCreditAntifraudVerifyRequest req = new ZhimaCreditAntifraudVerifyRequest();
         req.setChannel("apppc");
@@ -93,11 +86,20 @@ public class SesameController {
         DefaultZhimaClient client = new DefaultZhimaClient(SesameSysConfig.SESAME_CREDIT_URL, sesameConfig.getAppCheatId(), sesameConfig.getPrivateCheatKey(), sesameConfig.getPublicCheatKey());
         try {
             ZhimaCreditAntifraudVerifyResponse response = client.execute(req);
-            if (response.isSuccess()) {
-                return ApiResult.resultWith(AppCode.SUCCESS);
+            if (!StringUtils.isEmpty(response.getBizNo()) && response.getVerifyCode().size() > 0) {
+                String[] strings = response.getVerifyCode().get(0).split("_");
+                if (strings.length > 3 && !strings[3].equals("MA")) {
+                    //不成功
+                    return ApiResult.resultWith(SesameResultCode.NAME_AND_NUM_NOT_AGREEMENT);
+                } else {
+                    //成功
+                    return ApiResult.resultWith(AppCode.SUCCESS);
+                }
             } else {
+                //不成功
                 return ApiResult.resultWith(SesameResultCode.NAME_AND_NUM_NOT_AGREEMENT);
             }
+
         } catch (ZhimaApiException e) {
             log.error("芝麻欺诈信息验证异常：" + e);
         }
@@ -115,13 +117,6 @@ public class SesameController {
     @ResponseBody
     public ApiResult getAuthenticationUrl(@RequestHeader(Constant.APP_USER_ID_KEY) Long userId
             , @RequestHeader(Constant.APP_MERCHANT_ID_KEY) Integer merchantId, String name, String orderId, String idCardNum) throws ErrorMessageException {
-        if (userId == null || userId == 0) {
-            return ApiResult.resultWith(SesameResultCode.USERID_EMPTY);
-        }
-        User user = userService.findByMerchantIdAndUserId(merchantId, userId);
-        if (user == null) {
-            return ApiResult.resultWith(UserResultCode.CODE5);
-        }
         log.info("用户行业黑名单开始芝麻授权userId：" + userId);
         ZhimaAuthInfoAuthorizeRequest req = new ZhimaAuthInfoAuthorizeRequest();
         // 必要参数
@@ -190,10 +185,9 @@ public class SesameController {
             req.setOpenId(map.get("open_id"));
             ZhimaCreditWatchlistiiGetResponse response = client.execute(req);
             Order order = orderService.findByOrderId(orderId);
-            User user = userService.findByMerchantIdAndUserId(Constant.MERCHANT_ID, userId);
             //1.修改订单状态 2.保存行业名单信息 3.更新用户认账状态
             if (response.isSuccess()) {
-                user.setAuthStatus(UserAuthorizedStatusEnums.AUTH_SUCCESS);
+                order.getUser().setAuthStatus(UserAuthorizedStatusEnums.AUTH_SUCCESS);
                 order.setAuthStatus(UserAuthorizedStatusEnums.AUTH_SUCCESS);
                 List<ZmWatchListDetail> details = response.getDetails();
                 details.forEach(detail -> {
@@ -209,11 +203,9 @@ public class SesameController {
                     sesameService.save(industry);
                 });
             } else {
-                user.setAuthStatus(UserAuthorizedStatusEnums.AUTH_ERROR);
                 order.setAuthStatus(UserAuthorizedStatusEnums.AUTH_ERROR);
             }
             orderService.save(order);
-            userService.save(user);
             if (response.isSuccess()) {
                 return "sesame/sesame_success";
             } else {
@@ -221,32 +213,10 @@ public class SesameController {
                 return "sesame/sesame_error";
             }
         } catch (Exception e) {
-            return null;
-//            StringWriter sw = new StringWriter();
-//            PrintWriter pw = new PrintWriter(sw);
-//            e.printStackTrace(pw);
-//            //发送邮件
-//            HybridPageConfig hybridPageConfig = superloanConfigProvider.getHybridPageConfig(merchantId);
-//            String emails = hybridPageConfig.getReceiveEmailUserName().trim();
-//            try {
-//                emailService.send(merchantId, emails, "报警信息-芝麻回调"
-//                        , MessageFormat.format("芝麻信用回调时发生错误，params：{0}，sign：{1}，异常信息：{2}"
-//                                , params, sign, sw.toString()));
-//            } catch (Exception e1) {
-//                log.error("发送报警邮件发生错误:" + e1);
-//            }
-//            log.error("芝麻认证(回调)异常：" + e);
-//            throw new ErrorMessageException(AuthenticationResultCode.SESAME_AUTHENTICATION_ERROR.getValue(), e.getMessage());
+            log.error("芝麻回调异常" + e);
+            return "sesame/sesame_error";
         }
     }
 
-    @RequestMapping("/getSesameReport")
-    public String getSesameReport(@RequestHeader(Constant.APP_USER_ID_KEY) Long userId
-            , @RequestHeader(Constant.APP_MERCHANT_ID_KEY) Integer merchantId, String orderId, Model model) {
 
-        List<Industry> industryList = sesameService.findByUserIdAndOrderId(userId, orderId);
-        model.addAttribute("industryList", industryList);
-        // TODO: 2018/2/2  
-        return "report/sesame";
-    }
 }

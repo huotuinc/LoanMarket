@@ -161,7 +161,7 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderId(RandomUtils.randomDateTimeString(6));
         order.setPayType(submitOrderInfo.getPayType());
         //设置第三方授权页面地址
-       OrderThirdUrlInfo thirdUrlInfo= getOrderThirdUrl(order);
+        OrderThirdUrlInfo thirdUrlInfo = getOrderThirdUrl(order);
         order.setThirdAuthUrl(thirdUrlInfo.getUrl());
         order = orderRepository.save(order);
 
@@ -254,8 +254,8 @@ public class OrderServiceImpl implements OrderService {
             OrderEnum.ApiOrderStatus status = getApiOrderStatus(order);
             apiOrderInfoVo.setStatus(status.getCode());
             apiOrderInfoVo.setStatusName(status.getName());
-            if (status.equals(OrderEnum.ApiOrderStatus.AUTH_ING)||status.equals(OrderEnum.ApiOrderStatus.AUTH_SUCCESS)) {
-                OrderThirdUrlInfo thirdUrlInfo= getOrderThirdUrl(order);
+            if (status.equals(OrderEnum.ApiOrderStatus.AUTH_ING) || status.equals(OrderEnum.ApiOrderStatus.AUTH_SUCCESS)) {
+                OrderThirdUrlInfo thirdUrlInfo = getOrderThirdUrl(order);
                 apiOrderInfoVo.setThirdAuthUrl(thirdUrlInfo.getUrl());
             }
             String desc = "";
@@ -292,7 +292,7 @@ public class OrderServiceImpl implements OrderService {
     private OrderEnum.ApiOrderStatus getApiOrderStatus(Order order) {
         OrderEnum.ApiOrderStatus status = OrderEnum.ApiOrderStatus.CANCEL;
 
-        if(order==null){
+        if (order == null) {
             return status;
         }
         if (order.getOrderStatus().equals(OrderEnum.OrderStatus.CANCEL)) {
@@ -413,68 +413,80 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     public OrderThirdUrlInfo getOrderThirdUrl(Order order) {
-        OrderThirdUrlInfo orderThirdUrlInfo=new OrderThirdUrlInfo();
-        if(order==null){
-            return  orderThirdUrlInfo;
+        OrderThirdUrlInfo orderThirdUrlInfo = new OrderThirdUrlInfo();
+        if (order == null) {
+            return orderThirdUrlInfo;
         }
         //订单所有的状态 状态0已取消 1待支付 2认证中 3认证成功 4认证失败
-        OrderEnum.ApiOrderStatus orderStatus=getApiOrderStatus(order);
+        OrderEnum.ApiOrderStatus orderStatus = getApiOrderStatus(order);
         String homeURI = baseService.apiHomeURI();
         String url = "";
         switch (order.getOrderType()) {
             case BACKLIST_FINANCE:
+                if (orderStatus.equals(OrderEnum.ApiOrderStatus.AUTH_ING)
+                        || orderStatus.equals(OrderEnum.ApiOrderStatus.AUTH_SUCCESS)
+                        || orderStatus.equals(OrderEnum.ApiOrderStatus.AUTH_ERROR)) {
+                    url = homeURI + "report/financialBlack?userId=" + order.getUser().getUserId() + "&orderId=" + order.getOrderId();
+                }
                 break;
             case CARRIER:
-                if(orderStatus.equals(OrderEnum.ApiOrderStatus.AUTH_SUCCESS)){
-                    url = homeURI + "api/carrier/carrierShow?userId="+order.getUser().getUserId()+"&orderId="+order.getOrderId();
+                if (orderStatus.equals(OrderEnum.ApiOrderStatus.AUTH_SUCCESS)) {
+                    url = homeURI + "api/carrier/carrierShow?userId=" + order.getUser().getUserId() + "&orderId=" + order.getOrderId();
                 }
-                if(orderStatus.equals(OrderEnum.ApiOrderStatus.AUTH_ING)){
+                if (orderStatus.equals(OrderEnum.ApiOrderStatus.AUTH_ING)) {
                     url = String.format("https://open.shujumohe.com/box/yys?box_token=5884F7B994A7445E9B6C89CA2D2942AA&real_name=%s&identity_code=%s&user_mobile=%s&passback_params=%s", order.getRealName(), order.getIdCardNo(), order.getMobile(), order.getOrderId() + ",1," + Constant.YYS);
                 }
 
                 break;
             case JINGDONG:
-                if(orderStatus.equals(OrderEnum.ApiOrderStatus.AUTH_SUCCESS)){
-                    url = homeURI + "api/ds/dsShow?userId="+order.getUser().getUserId()+"&orderId="+order.getOrderId();
+                if (orderStatus.equals(OrderEnum.ApiOrderStatus.AUTH_SUCCESS)) {
+                    url = homeURI + "api/ds/dsShow?userId=" + order.getUser().getUserId() + "&orderId=" + order.getOrderId();
                 }
-                if(orderStatus.equals(OrderEnum.ApiOrderStatus.AUTH_ING)) {
+                if (orderStatus.equals(OrderEnum.ApiOrderStatus.AUTH_ING)) {
                     url = String.format("https://open.shujumohe.com/box/jd?box_token=5884F7B994A7445E9B6C89CA2D2942AA&passback_params=%s", order.getOrderId() + ",1," + Constant.DS);
                 }
                 break;
             case TAOBAO:
                 // 淘宝不支持h5对接。
-                if(orderStatus.equals(OrderEnum.ApiOrderStatus.AUTH_SUCCESS)){
-                    url = homeURI + "api/ds/dsShow?userId="+order.getUser().getUserId()+"&orderId="+order.getOrderId();
+                if (orderStatus.equals(OrderEnum.ApiOrderStatus.AUTH_SUCCESS)) {
+                    url = homeURI + "api/ds/dsShow?userId=" + order.getUser().getUserId() + "&orderId=" + order.getOrderId();
+                }
+                if (orderStatus.equals(OrderEnum.ApiOrderStatus.AUTH_ING)) {
+                    url = "gh_credit://authTaobao";
                 }
                 break;
             case BACKLIST_BUS:
-                ZhimaAuthInfoAuthorizeRequest req = new ZhimaAuthInfoAuthorizeRequest();
-                // 必要参数
-                req.setChannel("apppc");
-                req.setPlatform("zmop");
-                req.setIdentityType("2");
-                IdentityParam identityParam = new IdentityParam();
-                identityParam.setCertNo(order.getIdCardNo());
-                identityParam.setName(order.getRealName());
-                req.setIdentityParam(identityParam.toString());
-                BizParams bizParams = new BizParams();
-                bizParams.setState(order.getUser().getUserId() + "," + order.getOrderId());
-                req.setBizParams(bizParams.toString());
-                //读取系统参数
-                SesameConfig sesameConfig = loanMarkConfigProvider.getSesameConfig(order.getMerchant());
-                DefaultZhimaClient client = new DefaultZhimaClient(SesameSysConfig.SESAME_CREDIT_URL, sesameConfig.getAppId(),
-                        sesameConfig.getPrivateKey().trim(),
-                        sesameConfig.getPublicKey().trim());
-                try {
-                    url = client.generatePageRedirectInvokeUrl(req);
-                } catch (ZhimaApiException e) {
-                    log.info("芝麻行业黑名单授权异常" + e);
+                if (orderStatus.equals(OrderEnum.ApiOrderStatus.AUTH_SUCCESS)) {
+                    url = homeURI + "/api/sesameReport/getSesameReport?userId=" + order.getUser().getUserId() + "&orderId=" + order.getOrderId();
+                }
+                if (orderStatus.equals(OrderEnum.ApiOrderStatus.AUTH_ING)) {
+                    ZhimaAuthInfoAuthorizeRequest req = new ZhimaAuthInfoAuthorizeRequest();
+                    // 必要参数
+                    req.setChannel("apppc");
+                    req.setPlatform("zmop");
+                    req.setIdentityType("2");
+                    IdentityParam identityParam = new IdentityParam();
+                    identityParam.setCertNo(order.getIdCardNo());
+                    identityParam.setName(order.getRealName());
+                    req.setIdentityParam(identityParam.toString());
+                    BizParams bizParams = new BizParams();
+                    bizParams.setState(order.getUser().getUserId() + "," + order.getOrderId());
+                    req.setBizParams(bizParams.toString());
+                    //读取系统参数
+                    SesameConfig sesameConfig = loanMarkConfigProvider.getSesameConfig(order.getMerchant());
+                    DefaultZhimaClient client = new DefaultZhimaClient(SesameSysConfig.SESAME_CREDIT_URL, sesameConfig.getAppId(),
+                            sesameConfig.getPrivateKey().trim(),
+                            sesameConfig.getPublicKey().trim());
+                    try {
+                        url = client.generatePageRedirectInvokeUrl(req);
+                    } catch (ZhimaApiException e) {
+                        log.info("芝麻行业黑名单授权异常" + e);
+                    }
                 }
                 break;
             default:
                 break;
         }
-
         orderThirdUrlInfo.setUrl(url);
         return orderThirdUrlInfo;
     }

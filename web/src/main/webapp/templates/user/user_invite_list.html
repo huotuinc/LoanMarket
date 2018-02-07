@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<!--
+  ~   ~ 版权所有:杭州火图科技有限公司
+  ~   ~ 地址:浙江省杭州市滨江区西兴街道阡陌路智慧E谷B幢4楼
+  ~   ~
+  ~   ~ (c) Copyright Hangzhou Hot Technology Co., Ltd.
+  ~   ~ Floor 4,Block B,Wisdom E Valley,Qianmo Road,Binjiang District
+  ~   ~ 2017-2020. All rights reserved.
+  -->
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title>用户邀请列表</title>
+
+    <link href="http://resali.huobanplus.com/cdn/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+    <!-- Morris -->
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/animate.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/style.min-1.0.8.css" rel="stylesheet">
+
+    <style>
+        .cate-select {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 5px;
+        }
+    </style>
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight tooltip-demo">
+    <!--search-->
+    <form role="form" id="searchForm" class="search-panel" th:action="@{'/user/' + ${userId} + '/invite'}" method="get">
+        <input type="hidden" name="pageIndex" th:value="${pageIndex}"/>
+        <input type="hidden" name="isAuthSuccess" th:value="${isAuthSuccess}"/>
+    </form>
+    <!--search-->
+
+    <!--list-->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins m-b-none">
+                <div class="ibox-content p-xxs no-top-border">
+                    <div class="tabs-container">
+                        <ul class="nav nav-tabs">
+                            <li class="active" th:class="${isAuthSuccess} ? 'active' : ''"><a href="javascript:userInviteListHandler.showList(true);">已认证([[${authSuccessCount}]]人)</a></li>
+                            <li th:class="${!isAuthSuccess} ? 'active' : ''"><a href="javascript:userInviteListHandler.showList(false)">未认证([[${authFailureCount}]]人)</a></li>
+                        </ul>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-bordered table-hover table-center">
+                            <thead>
+                            <tr>
+                                <th>用户ID</th>
+                                <th>用户名</th>
+                                <th>邀请时间</th>
+                                <th>征信查询（次数）</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="user:${userList}">
+                                <td th:text="${user.userId}">1</td>
+                                <td th:text="${user.userName}">15100000000</td>
+                                <td th:text="${user.inviteTime}"></td>
+                                <td th:text="${user.orderCount}">0</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <p style="float: left; margin: 20px 0;">共
+                            <th:block th:text="${totalRecord}"></th:block>
+                            条记录，当前第
+                            <th:block th:text="${pageIndex}"></th:block>
+                            /
+                            <th:block th:text="${totalPage}"></th:block>
+                            ，每页20条记录
+                        </p>
+                        <ul style="float: right;" class="pagination pagination-split">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--基础框架js-->
+<script src="http://resali.huobanplus.com/cdn/jquery/2.2.4/jquery.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/bootstrap/3.3.5/bootstrap.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/content.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/layer/3.1.0/layer.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/v2/bootstrap.hot.extra-utils.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/v2/bootstrap.hot.extra-init.js"></script>
+
+<script type="text/javascript" th:inline="javascript">
+    var listUrl = /*[[@{/user}]]*/ "";
+    var totalPage = /*[[${totalPage}]]*/ 10;
+</script>
+
+<script type="text/javascript">
+    $(function () {
+        //初始化分页
+        var pageinate = new hot.paging(".pagination", $("input[name=pageIndex]").val(), totalPage, 7);
+
+        pageinate.init(function (p) {
+            userListHandler.search(p);
+        });
+    });
+
+    var userInviteListHandler = {
+        search: function (pageIndex) {
+            $("input[name=pageIndex]").val(pageIndex);
+            $("#searchForm").submit();
+        },
+        searchAll: function () {
+            window.location.href = listUrl;
+        },
+        showList:function(isAuthSuccess){
+            $("input[name=isAuthSuccess]").val(isAuthSuccess);
+            $("input[name=pageIndex]").val(1);
+            $("#searchForm").submit();
+        }
+    }
+</script>
+</body>
+
+</html>

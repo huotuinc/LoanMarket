@@ -75,7 +75,7 @@ public class AppSystemVersion {
      * 创建时间
      */
     @Column(name = "create_time", columnDefinition = "timestamp")
-//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createTime;
 
     /**

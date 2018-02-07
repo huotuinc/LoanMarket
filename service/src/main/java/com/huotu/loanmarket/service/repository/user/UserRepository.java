@@ -1,6 +1,7 @@
 package com.huotu.loanmarket.service.repository.user;
 
 import com.huotu.loanmarket.service.entity.user.User;
+import com.huotu.loanmarket.service.enums.UserAuthorizedStatusEnums;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @author guomw
@@ -16,7 +18,7 @@ import java.time.LocalDateTime;
  * @Date 2018/1/30 16:02
  */
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> , JpaSpecificationExecutor<User> {
+public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User> {
     /**
      * 查询
      *
@@ -47,6 +49,7 @@ public interface UserRepository extends JpaRepository<User, Long> , JpaSpecifica
 
     /**
      * 根据用户名获取数据
+     *
      * @param userName
      * @return
      */
@@ -64,4 +67,24 @@ public interface UserRepository extends JpaRepository<User, Long> , JpaSpecifica
     @Transactional(rollbackFor = RuntimeException.class)
     int updateLastLoginTime(long userId, LocalDateTime loginTime);
 
+    /**
+     * 更新用户认证状态
+     *
+     * @param userId      用户id
+     * @param statusEnums 认证状态
+     * @return
+     */
+    @Query("update User u set u.authStatus = ?2 where u.userId = ?1")
+    @Modifying(clearAutomatically = true)
+    @Transactional(rollbackFor = RuntimeException.class)
+    int updateAuthStatus(long userId, UserAuthorizedStatusEnums statusEnums);
+
+    /**
+     * 统计一批用户的邀请数量
+     *
+     * @param userIdList 邀请人id列表
+     * @return
+     */
+    @Query("select u.inviterId,count(u.inviterId) from User u where u.inviterId in ?1 group by u.inviterId")
+    List<Object[]> countByInviterId(List<Long> userIdList);
 }

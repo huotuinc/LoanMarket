@@ -11,6 +11,7 @@ package com.huotu.loanmarket.webapi.controller.system;
 
 import com.huotu.loanmarket.common.Constant;
 import com.huotu.loanmarket.common.utils.ApiResult;
+import com.huotu.loanmarket.common.utils.MaskUtils;
 import com.huotu.loanmarket.common.utils.RegexUtils;
 import com.huotu.loanmarket.service.entity.system.AppSystemVersion;
 import com.huotu.loanmarket.service.entity.user.User;
@@ -19,7 +20,9 @@ import com.huotu.loanmarket.service.enums.DeviceTypeEnum;
 import com.huotu.loanmarket.service.enums.PackageTypeEnum;
 import com.huotu.loanmarket.service.enums.UserResultCode;
 import com.huotu.loanmarket.service.exceptions.ErrorMessageException;
+import com.huotu.loanmarket.service.model.system.ShareInfoVo;
 import com.huotu.loanmarket.service.model.user.UserInfoVo;
+import com.huotu.loanmarket.service.service.BaseService;
 import com.huotu.loanmarket.service.service.system.AppVersionService;
 import com.huotu.loanmarket.service.service.system.SmsTemplateService;
 import com.huotu.loanmarket.service.service.system.SystemService;
@@ -31,6 +34,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URISyntaxException;
+import java.text.MessageFormat;
 import java.util.LinkedHashMap;
 
 /**
@@ -51,7 +55,8 @@ public class SystemController {
     private UserService userService;
     @Autowired
     private SmsTemplateService smsTemplateService;
-
+    @Autowired
+    private BaseService baseService;
 
     @RequestMapping(value = "/test", method = RequestMethod.GET)
     @ResponseBody
@@ -94,7 +99,7 @@ public class SystemController {
         }
         //包类型
         map.put("packageType", packageTypeEnum.getCode());
-        if (userService.checkLoginToken(Constant.MERCHANT_ID,userId,userToken)) {
+        if (userService.checkLoginToken(Constant.MERCHANT_ID, userId, userToken)) {
             try {
                 User user = userService.findByMerchantIdAndUserId(Constant.MERCHANT_ID, userId);
                 if (user != null) {
@@ -112,13 +117,10 @@ public class SystemController {
             }
         }
 
-
-
-        map.put("aboutUrl","http://wwww.baidu.com");
-        map.put("regAgreementUrl","http://wwww.baidu.com");
-        map.put("creditAuthUrl","http://wwww.baidu.com");
-
-
+        map.put("aboutUrl", MessageFormat.format("{0}api/other/about", baseService.apiHomeURI()));
+        map.put("regAgreementUrl", MessageFormat.format("{0}api/other/regAgreement", baseService.apiHomeURI()));
+        map.put("creditAuthUrl", MessageFormat.format("{0}api/other/creditAuth", baseService.apiHomeURI()));
+        map.put("loanProjectProcessUrl", MessageFormat.format("{0}api/projectView/loanProcess", baseService.apiHomeURI()));
         return ApiResult.resultWith(AppCode.SUCCESS, map);
     }
 
@@ -182,5 +184,25 @@ public class SystemController {
         return ApiResult.resultWith(UserResultCode.CODE8);
     }
 
-
+    /**
+     * 获取分享接口
+     *
+     * @param userId 用户id
+     * @return 结果
+     */
+    @RequestMapping("/getInviteShareConfig")
+    @ResponseBody
+    public ApiResult getInviteShareConfig(@RequestHeader(value = Constant.APP_USER_ID_KEY, required = false, defaultValue = "0") Long userId) {
+        String tempTitle = "{name}邀请您认证个人信息，共享征信数据！", tempDescription = "我刚在过海征信App里查看了非常详细的征信报告，你也快来试试吧。";
+        User user = userService.findByMerchantIdAndUserId(Constant.MERCHANT_ID, userId);
+        if (user != null) {
+            ShareInfoVo shareInfo = ShareInfoVo.builder()
+                    .title(tempTitle.replace("{name}", MaskUtils.maskMobile(user.getUserName())))
+                    .description(tempDescription)
+                    .icon("http://cdn1.51morecash.com/logozx.png")
+                    .url(baseService.h5HomeURI() + "invite?i=" + userId).build();
+            return ApiResult.resultWith(AppCode.SUCCESS, shareInfo);
+        }
+        return ApiResult.resultWith(AppCode.ERROR, "没有找到用户");
+    }
 }
