@@ -10,9 +10,13 @@ import com.huotu.loanmarket.service.model.projectsearch.ProjectSearchCondition;
 import com.huotu.loanmarket.service.service.category.CategoryService;
 import com.huotu.loanmarket.service.service.project.ProjectService;
 import com.huotu.loanmarket.service.service.upload.StaticResourceService;
+import com.huotu.loanmarket.webapi.controller.sesame.SesameController;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +32,7 @@ import java.util.List;
 @Controller
 @RequestMapping(value = "/api/project", method = RequestMethod.POST)
 public class ProjectController {
+    private static final Log log = LogFactory.getLog(ProjectController.class);
     @Autowired
     private ProjectService projectService;
     @Autowired
@@ -44,8 +49,8 @@ public class ProjectController {
      */
     @RequestMapping("/detail")
     @ResponseBody
-    public ApiResult projectDetail(@RequestHeader(value = Constant.APP_USER_ID_KEY,required = false,defaultValue = "0") int userId,
-            int projectId
+    public ApiResult projectDetail(@RequestHeader(value = Constant.APP_USER_ID_KEY, required = false, defaultValue = "0") int userId,
+                                   int projectId
     ) {
         //获取project
         Project project = projectService.findOne(projectId);
@@ -53,6 +58,7 @@ public class ProjectController {
             try {
                 project.setLogo(staticResourceService.getResource(project.getLogo()).toString());
             } catch (URISyntaxException e) {
+                log.error("获取图片异常：" + e);
             }
         }
         if (!StringUtils.isEmpty(project.getTag()) && project.getTag().split(",").length > 3) {
@@ -82,6 +88,7 @@ public class ProjectController {
                 try {
                     p.setIcon(staticResourceService.getResource(p.getIcon()).toString());
                 } catch (URISyntaxException e) {
+                    log.error("获取图片异常：" + e);
                 }
             }
         });
@@ -129,6 +136,7 @@ public class ProjectController {
                 try {
                     projectVo.setLogo(staticResourceService.getResource(p.getLogo()).toString());
                 } catch (URISyntaxException e) {
+                    log.error("获取图片异常：" + e);
                 }
             }
             if (!StringUtils.isEmpty(p.getTag()) && p.getTag().split(",").length > 3) {
@@ -145,13 +153,14 @@ public class ProjectController {
 
     /**
      * 贷款申请记录接口
+     *
      * @param userId
      * @param projectId
      * @return
      */
     @RequestMapping("/applyLog")
     @ResponseBody
-    public ApiResult applyLog(@RequestHeader(value = Constant.APP_USER_ID_KEY,required = false,defaultValue = "0") int userId,
+    public ApiResult applyLog(@RequestHeader(value = Constant.APP_USER_ID_KEY, required = false, defaultValue = "0") int userId,
                               int projectId) {
         projectService.logApply(userId, projectId);
         return ApiResult.resultWith(AppCode.SUCCESS);
@@ -189,6 +198,7 @@ public class ProjectController {
                     p.setLogo(staticResourceService.getResource(p.getLogo()).toString());
                     projectVo.setLogo(staticResourceService.getResource(p.getLogo()).toString());
                 } catch (URISyntaxException e) {
+                    log.error("获取图片异常：" + e);
                 }
             }
             if (!StringUtils.isEmpty(p.getTag()) && p.getTag().split(",").length > 3) {
@@ -214,6 +224,7 @@ public class ProjectController {
                 try {
                     projectVo.setLogo(staticResourceService.getResource(p.getLogo()).toString());
                 } catch (URISyntaxException e) {
+                    log.error("获取图片异常：" + e);
                 }
             }
             if (!StringUtils.isEmpty(p.getTag()) && p.getTag().split(",").length > 3) {
@@ -226,6 +237,8 @@ public class ProjectController {
         map.put("newProjectList", resultNew);
         return ApiResult.resultWith(AppCode.SUCCESS, map);
     }
+
+
 
     private String getTag(Project project) {
         if (project.getTag().split(",").length > 3) {

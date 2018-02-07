@@ -173,6 +173,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/api/carrier/**")
                 //内嵌页面接口请求
                 .excludePathPatterns("/api/ds/**")
+                .excludePathPatterns("/api/projectView/**")
                 .excludePathPatterns("/api/sesameReport/**");
     }
 
