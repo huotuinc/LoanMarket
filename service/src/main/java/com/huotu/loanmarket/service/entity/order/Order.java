@@ -153,6 +153,13 @@ public class Order {
     private String redirectUrl;
 
     /**
+     * 认证的账户名
+     */
+    @Column(name = "account_name")
+    private String accountName;
+
+
+    /**
      * 任务id
      */
     @Column(name = "task_id")

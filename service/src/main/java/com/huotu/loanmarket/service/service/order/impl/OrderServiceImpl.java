@@ -13,6 +13,8 @@ import com.antgroup.zmxy.openplatform.api.DefaultZhimaClient;
 import com.antgroup.zmxy.openplatform.api.ZhimaApiException;
 import com.antgroup.zmxy.openplatform.api.request.ZhimaAuthInfoAuthorizeRequest;
 import com.huotu.loanmarket.common.Constant;
+import com.huotu.loanmarket.common.enums.EnumHelper;
+import com.huotu.loanmarket.common.utils.LocalDateTimeFormatter;
 import com.huotu.loanmarket.common.utils.RandomUtils;
 import com.huotu.loanmarket.common.utils.StringUtilsExt;
 import com.huotu.loanmarket.service.aop.BusinessSafe;
@@ -25,7 +27,12 @@ import com.huotu.loanmarket.service.enums.ConfigParameter;
 import com.huotu.loanmarket.service.enums.MerchantConfigEnum;
 import com.huotu.loanmarket.service.enums.OrderEnum;
 import com.huotu.loanmarket.service.enums.UserAuthorizedStatusEnums;
-import com.huotu.loanmarket.service.model.order.*;
+import com.huotu.loanmarket.service.model.order.ApiCheckoutResultVo;
+import com.huotu.loanmarket.service.model.order.ApiOrderInfoVo;
+import com.huotu.loanmarket.service.model.order.OrderSearchCondition;
+import com.huotu.loanmarket.service.model.order.OrderThirdUrlInfo;
+import com.huotu.loanmarket.service.model.order.PayReturnVo;
+import com.huotu.loanmarket.service.model.order.SubmitOrderInfo;
 import com.huotu.loanmarket.service.model.payconfig.ApiPaymentVo;
 import com.huotu.loanmarket.service.model.sesame.BizParams;
 import com.huotu.loanmarket.service.model.sesame.IdentityParam;
@@ -49,7 +56,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Tuple;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.time.LocalDateTime;
@@ -78,6 +91,8 @@ public class OrderServiceImpl implements OrderService {
     private LoanMarkConfigProvider loanMarkConfigProvider;
     @Autowired
     private BaseService baseService;
+    @Autowired
+    private EntityManager entityManager;
 
     /**
      * 创建订单
@@ -486,5 +501,61 @@ public class OrderServiceImpl implements OrderService {
         unifiedOrder.setAuthCount(3);
         orderRepository.save(unifiedOrder);
     }
+
+    @Override
+    public Page<Order> findAll(OrderSearchCondition condition) {
+        Specification<Order> specification = getOrderSpecification(condition);
+
+        return  orderRepository.findAll(specification, new PageRequest(condition.getPageIndex() - 1, condition.getPageSize()));
+    }
+
+    @Override
+    public BigDecimal sumPayAmount(OrderSearchCondition orderSearchCondition) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Tuple> query = cb.createTupleQuery();
+        Root<Order> root = query.from(Order.class);
+        query.where(getPredicate(orderSearchCondition, root, cb));
+        query.select(cb.tuple(cb.sum(root.get("payAmount"))));
+        TypedQuery<Tuple> q = entityManager.createQuery(query);
+        List<Tuple> result = q.getResultList();
+        Tuple tuple = result.get(0);
+        return (BigDecimal)tuple.get(0);
+    }
+
+    private Specification<Order> getOrderSpecification(OrderSearchCondition condition) {
+        return (root, query, cb) -> getPredicate(condition, root, cb);
+    }
+
+    private Predicate getPredicate(OrderSearchCondition condition, Root<Order> root, CriteriaBuilder cb) {
+        List<Predicate> predicateList = new ArrayList<>();
+        if (org.apache.commons.lang3.StringUtils.isNotEmpty(condition.getUserName())) {
+            predicateList.add(cb.equal(root.get("user").get("userName").as(String.class), condition.getUserName()));
+        }
+        if(condition.getOrderType() != null && condition.getOrderType() >= 0){
+            predicateList.add(cb.equal(root.get("orderType").as(OrderEnum.OrderType.class)
+                    , EnumHelper.getEnumType(OrderEnum.OrderType.class,condition.getOrderType())));
+        }
+
+        if(condition.getAuthStatus() != null && condition.getAuthStatus() >= 0){
+            predicateList.add(cb.equal(root.get("authStatus").as(UserAuthorizedStatusEnums.class)
+                    , EnumHelper.getEnumType(UserAuthorizedStatusEnums.class,condition.getAuthStatus())));
+        }
+
+        if(condition.getPayStatus() != null && condition.getPayStatus() >= 0){
+            predicateList.add(cb.equal(root.get("payStatus").as(OrderEnum.PayStatus.class)
+                    , EnumHelper.getEnumType(OrderEnum.PayStatus.class,condition.getPayStatus())));
+        }
+
+        if (org.apache.commons.lang3.StringUtils.isNotBlank(condition.getPayTimeBegin())) {
+            predicateList.add(cb.and(cb.greaterThanOrEqualTo(root.get("payTime").as(LocalDateTime.class)
+                    , LocalDateTimeFormatter.toLocalDateTime(condition.getPayTimeBegin()))));
+        }
+        if (org.apache.commons.lang3.StringUtils.isNotBlank(condition.getPayTimeEnd())) {
+            predicateList.add(cb.and(cb.lessThanOrEqualTo(root.get("payTime").as(LocalDateTime.class)
+                    , LocalDateTimeFormatter.toLocalDateTime(condition.getPayTimeEnd()))));
+        }
+        return cb.and(predicateList.toArray(new Predicate[predicateList.size()]));
+    }
+
 
 }
