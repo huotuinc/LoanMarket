@@ -341,6 +341,13 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
+    @Override
+    public void setHeadImg(Long userId, String imgUrl) {
+        User user = userRepository.findOne(userId);
+        user.setHeadimg(imgUrl);
+        userRepository.save(user);
+    }
+
     /**
      * 获取邀请筛选添加
      *
