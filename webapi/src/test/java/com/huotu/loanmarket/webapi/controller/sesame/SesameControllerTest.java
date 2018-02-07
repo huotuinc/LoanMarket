@@ -32,7 +32,7 @@ public class SesameControllerTest extends BaseTest {
     public void sesameTest() throws Exception {
         User user = mockUser();
         mockMvc.perform(post(BASE_URL + "/verifyIdAndName")
-                .param("name", "胡轩浩")
+                .param("name", "hj")
                 .param("idCardNum", "330724199409192914")
                 .header(Constant.APP_USER_ID_KEY, user.getUserId())
                 .header(Constant.APP_USER_TOKEN_KEY,user.getUserToken())

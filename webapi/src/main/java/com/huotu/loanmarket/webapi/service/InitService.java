@@ -113,20 +113,7 @@ public class InitService {
         map.put("zhima_private_key", "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBALUEqZqAL/q/zi2Jja6qgn7vV1DHBOv7HDkuIHfdyeT0QUZM4ZcWIUYFqCs7g17M7GsH4BEegJMb0wMyh1lWuOXV3xv7Y/ACiQjVVxbrBb8+CdoVQUbcqOv3RkOfULhWh2U8+YmkKwpweQ4qt2pJqAihiReLdDNYRPqsDLcm2pSVAgMBAAECgYBwkYSzOrIbmfmqYdcE3q4mJ8rBxfHumgr0GBZC1F7ADZEmGZtULIPmmo/4ypqocoE3Ef+qRbCpSu1PGLYIvaBe6Ws3elSNbTqtQpMmHECtHRjM36tM6I1c8FlFQ7MzQ8OOWaa7GcDRsixfvtDmFc7TCjF1WQIEIjUSBhjoVIwQgQJBAN0EPKYbSch1sJv8FUjVJ0alMYCt25VCvoehAw8HxyzXIF1PES11VbSYkv9Khrc6KmImC8+AiDG0EFBw+uwNVjUCQQDRq6lo61vjLXDgiigmGFa0I20MWWZrAcP/aeuQObjrSJl26oe8tFCiCNvVXzPLSHT1QatODkg5Dq5TORn4lJDhAkEA1Eg0hIrjRGId/sSSIQFylv0l3eWfae7Ql+7DxFUBLoV2NYkzA4mWhz6gugn3+NcqTFkksOpQZgUAQnMx3zY0HQJATvr5+tLFr0LbxUllrEv4xSyfFErM4Lwuh5TvrkmAFekoHfpknTnTMeZiYPLWwNmPbR+KlwGcRRn5otHcrZ3RIQJBAIZ9UaQKsdV30wxnWI576Ewg6uzbQVjLXmFh9Z+wU1j9WofBQA2aKgQtmfNd1lIOLOzuJ6mu3ftGr09Fak7Epds=");
         map.put("zhima_cheat_app_id", "1004254");
         map.put("zhima_cheat_public_key", "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCeSC/h+rb55IuG+tPWjMr1+3y4bNBImSb1aG3NogUAYBdMP7i9LHGSkW/jpzzdEOvG1U2RUiYJeanlNh6dkIlixDuZ2NSq4zDLBQnlFHKpa1hb32bD5zG2YtDWcLamKfKqtpzofDD6kc/vbzxMCm/P4Ehq98MPqoq1lMc6MFniGwIDAQAB");
-        map.put("zhima_cheat_private_key", "MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAKaFv9uRLnWuyF7G\n" +
-                "+s7ZaTcwHjs8DK0xwWjnTxRra8ueEJExD8tjEw7Vj5B0PiZGelsUkUrh0u+BtFa/\n" +
-                "hk2GUtouqzoaEH8q4Aukk8HHA2pZiOUiB2m1hs4s1NS7mmJlO+lgQfFGCoUksW8U\n" +
-                "+dn28h+jTf3HC5Ptx4W/0TUYNZ11AgMBAAECgYBUDNhdA/eWUMU0CW0YsOYJhBEO\n" +
-                "Ru4DEUUVJQNmRB4hpUOpdUEKoJRC/Yo8GGAyQ4qIpGX9jORCHY6f5oXsZWs1grjA\n" +
-                "HznpVX0B4vx0sMe7ZNrhcCP11r1rmmGsvJDdiCTpfk+QEhKv8kxXyB13vmHg1L4a\n" +
-                "dUYI7sCggk0AuH7YIQJBANIbmtnxI2kRgt/vRdhBh7jfR1ee5kvqEEt9HFMEs+mK\n" +
-                "9ItmHqSN9O8XeNPCxs5hKBmhXXWMmxmhrrZz+I9i0m0CQQDK5QYQXVQRr8TE3z3R\n" +
-                "NNb5zH52e6ECTTxeaUl9mWs1IYIXMoczfFDFwx4ZfRlN7u7Np5Ypa1wRc8Uq7Kv9\n" +
-                "B1IpAkEAuhhnNIhHo+U1tSCaDWwlSVLCPtJoCm87lZEvyDxPGhjQdrOxinCNtENm\n" +
-                "6rEHI36cZO8u91HdgntZYxMe4elWlQJAQ4u/Ww9W/5Rek5QmhlFrCDp2F4fM8HE6\n" +
-                "Gcw/dRrwP/3py0M9E3zdfxkYGjA1jmZvBfQ2348oVX8PMt0b3N7lEQJAXnEO+vpI\n" +
-                "pSwgGfggekclQrms5nfW/hux3f3VbjMUh7EzRD3hPcXLYBGn93gfOWbAllWLhSox\n" +
-                "dRuLgiQ4chXKtQ==");
+        map.put("zhima_cheat_private_key", "MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAKaFv9uRLnWuyF7G+s7ZaTcwHjs8DK0xwWjnTxRra8ueEJExD8tjEw7Vj5B0PiZGelsUkUrh0u+BtFa/hk2GUtouqzoaEH8q4Aukk8HHA2pZiOUiB2m1hs4s1NS7mmJlO+lgQfFGCoUksW8U+dn28h+jTf3HC5Ptx4W/0TUYNZ11AgMBAAECgYBUDNhdA/eWUMU0CW0YsOYJhBEORu4DEUUVJQNmRB4hpUOpdUEKoJRC/Yo8GGAyQ4qIpGX9jORCHY6f5oXsZWs1grjAHznpVX0B4vx0sMe7ZNrhcCP11r1rmmGsvJDdiCTpfk+QEhKv8kxXyB13vmHg1L4adUYI7sCggk0AuH7YIQJBANIbmtnxI2kRgt/vRdhBh7jfR1ee5kvqEEt9HFMEs+mK9ItmHqSN9O8XeNPCxs5hKBmhXXWMmxmhrrZz+I9i0m0CQQDK5QYQXVQRr8TE3z3RNNb5zH52e6ECTTxeaUl9mWs1IYIXMoczfFDFwx4ZfRlN7u7Np5Ypa1wRc8Uq7Kv9B1IpAkEAuhhnNIhHo+U1tSCaDWwlSVLCPtJoCm87lZEvyDxPGhjQdrOxinCNtENm6rEHI36cZO8u91HdgntZYxMe4elWlQJAQ4u/Ww9W/5Rek5QmhlFrCDp2F4fM8HE6Gcw/dRrwP/3py0M9E3zdfxkYGjA1jmZvBfQ2348oVX8PMt0b3N7lEQJAXnEO+vpIpSwgGfggekclQrms5nfW/hux3f3VbjMUh7EzRD3hPcXLYBGn93gfOWbAllWLhSoxdRuLgiQ4chXKtQ==");
         initMerchantConfigItem(map, MerchantConfigEnum.SESAME);
     }
 

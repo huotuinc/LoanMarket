@@ -272,6 +272,6 @@ public class UserController {
         URI uri = staticResourceService.uploadResource(path, file.getInputStream());
         //更新用户头像
         userService.setHeadImg(userId, uri.toString());
-        return ApiResult.resultWith(AppCode.SUCCESS, uri.toString());
+        return ApiResult.resultWith(AppCode.SUCCESS.getCode(), AppCode.SUCCESS.getName(), uri.toString());
     }
 }
