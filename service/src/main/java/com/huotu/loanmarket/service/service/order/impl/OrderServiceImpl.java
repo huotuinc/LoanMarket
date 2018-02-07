@@ -436,6 +436,9 @@ public class OrderServiceImpl implements OrderService {
                 if (orderStatus.equals(OrderEnum.ApiOrderStatus.AUTH_SUCCESS)) {
                     url = homeURI + "api/ds/dsShow?userId=" + order.getUser().getUserId() + "&orderId=" + order.getOrderId();
                 }
+                if (orderStatus.equals(OrderEnum.ApiOrderStatus.AUTH_ING)) {
+                    url = "gh_credit://authTaobao";
+                }
                 break;
             case BACKLIST_BUS:
                 if (orderStatus.equals(OrderEnum.ApiOrderStatus.AUTH_SUCCESS)) {
