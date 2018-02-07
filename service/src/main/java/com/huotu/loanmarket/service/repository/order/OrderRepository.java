@@ -10,11 +10,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * @author luyuanyuan on 2018/1/31.
  */
 @Repository
-public interface OrderRepository extends JpaRepository<Order, String> ,JpaSpecificationExecutor<Order> {
+public interface OrderRepository extends JpaRepository<Order, String>, JpaSpecificationExecutor<Order> {
 
     /**
      * 修改认证状态
@@ -40,13 +42,14 @@ public interface OrderRepository extends JpaRepository<Order, String> ,JpaSpecif
 
     /**
      * 修改订单支付状态
+     *
      * @param orderId
      * @param payStatus
      */
     @Query("update Order o set o.payStatus=?2 where o.orderId=?1")
     @Modifying(clearAutomatically = true)
     @Transactional(rollbackFor = RuntimeException.class)
-    void updateOrderPayStatusByOrderId(String orderId,OrderEnum.PayStatus payStatus);
+    void updateOrderPayStatusByOrderId(String orderId, OrderEnum.PayStatus payStatus);
 
     /**
      * 修改订单授权次数
@@ -57,4 +60,13 @@ public interface OrderRepository extends JpaRepository<Order, String> ,JpaSpecif
     @Modifying(clearAutomatically = true)
     @Transactional(rollbackFor = RuntimeException.class)
     void updateOrderAuthCountByOrderId(String orderId);
+
+    /**
+     * 统计一批用户的征信查询次数
+     *
+     * @param userIdList
+     * @return
+     */
+    @Query("select o.user.userId,count(o.user.userId) from Order o where o.user.userId in ?1 group by o.user.userId")
+    List<Object[]> countByUserId(List<Long> userIdList);
 }

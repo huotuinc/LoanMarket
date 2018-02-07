@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @author guomw
@@ -17,7 +18,7 @@ import java.time.LocalDateTime;
  * @Date 2018/1/30 16:02
  */
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> , JpaSpecificationExecutor<User> {
+public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User> {
     /**
      * 查询
      *
@@ -48,6 +49,7 @@ public interface UserRepository extends JpaRepository<User, Long> , JpaSpecifica
 
     /**
      * 根据用户名获取数据
+     *
      * @param userName
      * @return
      */
@@ -67,7 +69,8 @@ public interface UserRepository extends JpaRepository<User, Long> , JpaSpecifica
 
     /**
      * 更新用户认证状态
-     * @param userId 用户id
+     *
+     * @param userId      用户id
      * @param statusEnums 认证状态
      * @return
      */
@@ -75,4 +78,13 @@ public interface UserRepository extends JpaRepository<User, Long> , JpaSpecifica
     @Modifying(clearAutomatically = true)
     @Transactional(rollbackFor = RuntimeException.class)
     int updateAuthStatus(long userId, UserAuthorizedStatusEnums statusEnums);
+
+    /**
+     * 统计一批用户的邀请数量
+     *
+     * @param userIdList 邀请人id列表
+     * @return
+     */
+    @Query("select u.inviterId,count(u.inviterId) from User u where u.inviterId in ?1 group by u.inviterId")
+    List<Object[]> countByInviterId(List<Long> userIdList);
 }

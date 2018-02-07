@@ -11,10 +11,12 @@ package com.huotu.loanmarket.webapi.controller.alipay;
 
 import com.huotu.loanmarket.common.Constant;
 import com.huotu.loanmarket.common.utils.ApiResult;
+import com.huotu.loanmarket.common.utils.ApiResultException;
 import com.huotu.loanmarket.service.entity.order.Order;
 import com.huotu.loanmarket.service.entity.user.User;
 import com.huotu.loanmarket.service.enums.AppCode;
 import com.huotu.loanmarket.service.enums.OrderEnum;
+import com.huotu.loanmarket.service.model.order.PayReturnVo;
 import com.huotu.loanmarket.service.service.order.OrderService;
 import com.huotu.loanmarket.service.service.thirdpay.QuickPaymentContext;
 import com.huotu.loanmarket.thirdpay.alipay.model.AlipayConfig;
@@ -26,7 +28,9 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -137,6 +141,23 @@ public class AlipayController {
         } catch (IOException e) {
             log.error("outputResult异常：" + e.getMessage(), e);
         }
+    }
+
+    /**
+     * 支付宝支付完成
+     *
+     * @param unifiedOrderNo
+     * @return
+     */
+    @RequestMapping(value = "/return/order-{unifiedOrderNo}", method = RequestMethod.GET)
+    @ExcludeDefaultInterceptors
+    public String payReturn(@PathVariable(value = "unifiedOrderNo") String unifiedOrderNo, Model model) {
+        PayReturnVo payReturnVo = orderService.getPayReturnInfo(unifiedOrderNo);
+        if (payReturnVo == null) {
+            throw new ApiResultException(ApiResult.resultWith(AppCode.ERROR, MessageFormat.format("订单:{0}不存在", unifiedOrderNo)));
+        }
+        model.addAttribute("returnInfo", payReturnVo);
+        return "order/return";
     }
 
     @Autowired
