@@ -34,6 +34,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URISyntaxException;
+import java.text.MessageFormat;
 import java.util.LinkedHashMap;
 
 /**
@@ -116,10 +117,9 @@ public class SystemController {
             }
         }
 
-
-        map.put("aboutUrl", "http://wwww.baidu.com");
-        map.put("regAgreementUrl", "http://wwww.baidu.com");
-        map.put("creditAuthUrl", "http://wwww.baidu.com");
+        map.put("aboutUrl", MessageFormat.format("{0}api/other/about", baseService.apiHomeURI()));
+        map.put("regAgreementUrl", MessageFormat.format("{0}api/other/regAgreement", baseService.apiHomeURI()));
+        map.put("creditAuthUrl", MessageFormat.format("{0}api/other/creditAuth", baseService.apiHomeURI()));
 
         return ApiResult.resultWith(AppCode.SUCCESS, map);
     }
