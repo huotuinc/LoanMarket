@@ -6,6 +6,9 @@ import com.huotu.loanmarket.service.entity.user.User;
 import com.huotu.loanmarket.service.exceptions.ErrorMessageException;
 import com.huotu.loanmarket.service.model.PageListView;
 import com.huotu.loanmarket.service.model.user.UserInviteVo;
+import com.huotu.loanmarket.service.model.user.UserListVo;
+import com.huotu.loanmarket.service.model.user.UserSearcher;
+import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -103,7 +106,16 @@ public interface UserService {
     PageListView<UserInviteVo> getMyInviteList(Long userId, boolean isAuthSuccess, int pageIndex, int pageSize);
 
     /**
+     * 管理后台 用户列表
+     *
+     * @param userSearcher
+     * @return
+     */
+    Page<UserListVo> getUserList(UserSearcher userSearcher);
+
+    /**
      * 保存
+     *
      * @param user
      * @return
      */

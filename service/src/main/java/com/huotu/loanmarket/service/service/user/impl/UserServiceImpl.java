@@ -13,6 +13,9 @@ import com.huotu.loanmarket.service.enums.UserResultCode;
 import com.huotu.loanmarket.service.exceptions.ErrorMessageException;
 import com.huotu.loanmarket.service.model.PageListView;
 import com.huotu.loanmarket.service.model.user.UserInviteVo;
+import com.huotu.loanmarket.service.model.user.UserListVo;
+import com.huotu.loanmarket.service.model.user.UserSearcher;
+import com.huotu.loanmarket.service.repository.order.OrderRepository;
 import com.huotu.loanmarket.service.repository.system.VerifyCodeRepository;
 import com.huotu.loanmarket.service.repository.user.InviteRepository;
 import com.huotu.loanmarket.service.repository.user.UserRepository;
@@ -21,13 +24,11 @@ import com.huotu.loanmarket.service.service.user.UserService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -39,6 +40,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author hxh
@@ -56,6 +58,8 @@ public class UserServiceImpl implements UserService {
     private SmsTemplateService verifyCodeService;
     @Autowired
     private InviteRepository inviteRepository;
+    @Autowired
+    private OrderRepository orderRepository;
 
 
     @Override
@@ -286,6 +290,49 @@ public class UserServiceImpl implements UserService {
         }
         result.setList(list);
         return result;
+    }
+
+    @Override
+    public Page<UserListVo> getUserList(UserSearcher userSearcher) {
+        Pageable pageable = new PageRequest(userSearcher.getPageIndex() - 1, userSearcher.getPageSize(), new Sort(Sort.Direction.DESC, "userId"));
+        Page<User> userPage = userRepository.findAll((root, cq, cb) -> {
+            List<Predicate> predicateList = new ArrayList<>();
+            if (userSearcher.getUserId() != null && userSearcher.getUserId() > 0) {
+                predicateList.add(cb.equal(root.get("userId"), userSearcher.getUserId()));
+            }
+            if (!StringUtils.isEmpty(userSearcher.getUserName())) {
+                predicateList.add(cb.like(root.get("userName"), "%" + userSearcher.getUserName() + "%"));
+            }
+            if (userSearcher.getMerchantId() != null && userSearcher.getMerchantId() > 0) {
+                predicateList.add(cb.equal(root.get("merchantId"), userSearcher.getMerchantId()));
+            }
+            if (userSearcher.getCreateBeginTime() != null) {
+                predicateList.add(cb.greaterThanOrEqualTo(root.get("regTime"), userSearcher.getCreateBeginTime().atStartOfDay()));
+            }
+            if (userSearcher.getCreateEndTime() != null) {
+                predicateList.add(cb.lessThanOrEqualTo(root.get("regTime"), userSearcher.getCreateEndTime().plusDays(1).atStartOfDay()));
+            }
+            return cb.and(predicateList.toArray(new Predicate[predicateList.size()]));
+        }, pageable);
+        List<UserListVo> userListVoList = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(userPage.getContent())) {
+            userListVoList = userPage.getContent().stream().map(UserListVo::new).collect(Collectors.toList());
+            //单独的userId list
+            List<Long> userIdList = userPage.getContent().stream().map(User::getUserId).collect(Collectors.toList());
+            //统计邀请人数
+            List<Object[]> userInviteCountList = userRepository.countByInviterId(userIdList);
+            for (Object[] userInvite : userInviteCountList) {
+                userListVoList.stream().filter(p -> p.getUserId() == Long.valueOf(userInvite[0].toString()))
+                        .forEach(p -> p.setInviteCount(Integer.valueOf(userInvite[1].toString())));
+            }
+            //统计征信查询次数
+            List<Object[]> userOrderCountList = orderRepository.countByUserId(userIdList);
+            for (Object[] userOrderCount : userOrderCountList) {
+                userListVoList.stream().filter(p -> p.getUserId() == Long.valueOf(userOrderCount[0].toString()))
+                        .forEach(p -> p.setOrderCount(Integer.valueOf(userOrderCount[1].toString())));
+            }
+        }
+        return new PageImpl<>(userListVoList, pageable, userPage.getTotalElements());
     }
 
     @Override
