@@ -21,6 +21,7 @@ import com.huotu.loanmarket.service.repository.order.OrderRepository;
 import com.huotu.loanmarket.service.service.carrier.UserCarrierService;
 import com.huotu.loanmarket.service.service.order.OrderService;
 import com.huotu.loanmarket.webapi.controller.exception.OrderNotFoundException;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,18 +70,23 @@ public class CarrierController {
     @ResponseBody
     public Object magicCallback(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
+        response.setStatus(HttpStatus.OK.value());
+        Map<String,Object> map = new HashMap<>(2);
+        map.put("code",0);
         //回调事件
         String notifyEvent = request.getParameter("notify_event");
         //回调参数
         String passbackParams = request.getParameter("passback_params");
+        if(StringUtils.isBlank(passbackParams)){
+            map.put("message","透传参数为空");
+            return map;
+        }
         String[] split = passbackParams.split(",");
         String orderId = split[0];
         String merchantId = split[1];
         String type = split[2];
         String notifyData = request.getParameter("notify_data");
         log.info(MessageFormat.format("【数据魔盒】回调开始，订单ID：{0}，回调参数：{1}",orderId,notifyData));
-        Map<String,Object> map = new HashMap<>(2);
-        map.put("code",0);
         Order order = orderRepository.findOne(orderId);
         if (order == null) {
             log.info(MessageFormat.format("订单不存在，订单id：{0}", orderId));
@@ -93,7 +99,7 @@ public class CarrierController {
             return map;
         }
         JsonObject jsonObject = new JsonParser().parse(notifyData).getAsJsonObject();
-        response.setStatus(HttpStatus.OK.value());
+
         if("SUCCESS".equals(notifyEvent)){
             String taskId = jsonObject.get("task_id").getAsString();
             log.info("task_id:" + taskId);
