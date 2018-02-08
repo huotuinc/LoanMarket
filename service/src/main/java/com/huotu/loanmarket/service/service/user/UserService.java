@@ -121,4 +121,12 @@ public interface UserService {
      */
     @Transactional(rollbackFor = Exception.class)
     User save(User user);
+
+    /**
+     * 保存用户头像
+     *
+     * @param userId
+     * @param imgUrl
+     */
+    void setHeadImg(Long userId, String imgUrl);
 }

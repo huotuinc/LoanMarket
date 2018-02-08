@@ -45,7 +45,7 @@ public interface StaticResourceService {
      */
     String VEDIO = "vedio/";
 
-    String HEAD_IMG = IMG + "head/{1}/{2}";
+    String HEAD_IMG = "image/head/";
 
     /**
      * 临时目录
@@ -56,7 +56,7 @@ public interface StaticResourceService {
     /**
      * 产品目录
      */
-    String PROJECT__IMG ="image/project/";
+    String PROJECT__IMG = "image/project/";
     /**
      * 临时文件目录
      */
