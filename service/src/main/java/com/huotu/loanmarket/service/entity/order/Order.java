@@ -138,6 +138,11 @@ public class Order {
      */
     @Column(name = "auth_status", columnDefinition = "tinyint default 0")
     private UserAuthorizedStatusEnums authStatus = UserAuthorizedStatusEnums.AUTH_NOT;
+    /**
+     * 最近认证时间
+     */
+    @Column(name = "auth_time",columnDefinition = "datetime")
+    private LocalDateTime authTime;
 
     /**
      * 第三方认证连接

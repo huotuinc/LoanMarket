@@ -23,6 +23,7 @@
     <!--datetimepick-->
     <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/datetimepick/daterangepicker.css" rel="stylesheet"/>
     <link href="../../resource/css/common.css" th:href="@{/resource/css/common.css}" rel="stylesheet"/>
+    <link href="../../resource/js/tongdun/reportViewer.css" th:href="@{/resource/js/tongdun/reportViewer.css}" rel="stylesheet"/>
 </head>
 
 <body class="gray-bg">
@@ -114,7 +115,7 @@
                             <tbody>
                             <tr th:each="order:${orderPage.getContent()}">
                                 <td th:text="${order.orderId}">1</td>
-                                <td th:text="${order.user.userName}">张三</td>
+                                <td th:text="${order.user != null ? order.user.userName : _}">张三</td>
                                 <td th:text="${order.payStatus.name}">15158040000</td>
                                 <td th:text="${order.authStatus.name}">1000.00</td>
                                 <td th:text="${#temporals.format(order.createTime, 'yyyy-MM-dd HH:mm:ss')}">30</td>
@@ -151,9 +152,9 @@
                         <p style="float: left; margin: 20px 0;">共
                             <th:block th:text="${orderPage.getTotalElements()}"></th:block>
                             条记录，当前第
-                            <th:block th:text="*{pageIndex}"></th:block>
+                            <th:block th:text="${pageIndex}"></th:block>
                             /
-                            <th:block th:text="${orderPage.totalPages}"></th:block>
+                            <th:block th:text="${orderPage.getTotalPages()}"></th:block>
                             ，每页20条记录
                         </p>
                         <ul style="float: right;" class="pagination pagination-split">
@@ -176,17 +177,30 @@
 <!--日期选择-->
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/datetimepick/moment.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/datetimepick/daterangepicker.js"></script>
-<script src="http://resali.huobanplus.com/cdn/hotui/js/v2/bootstrap.hot.extra-utils-0.2.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/v2/bootstrap.hot.extra-utils.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/v2/bootstrap.hot.extra-init.js"></script>
+<script  src="../../resource/js/tongdun/reportViewer.js" th:src="@{/resource/js/tongdun/reportViewer.js}"></script>
 <script type="text/javascript" th:inline="javascript">
     var baseUrl = /*[[@{/admin/order}]]*/ "/admin/order";
     var dsUrl = /*[[@{/admin/ds/dsShow}]]*/ "/admin/ds/dsShow";
     var carrierUrl = /*[[@{/admin/carrier/carrierShow}]]*/ "/admin/carrier/carrierShow";
-    $("input[class~=data-range-pick]").daterangepicker({
-        locale: {
-            format: 'YYYY-MM-DD HH:mm:ss'
-        }
+    var totalPage = /*[[${orderPage.getTotalElements()}]]*/ 10;
+</script>
+<script type="text/javascript">
+    $(function () {
+        //初始化分页
+        var pageinate = new hot.paging(".pagination", $("input[name=pageIndex]").val(), totalPage, 7);
+
+        pageinate.init(function (p) {
+            orderListHandler.search(p);
+        });
+        $("input[class~=data-range-pick]").daterangepicker({
+            locale: {
+                format: 'YYYY-MM-DD HH:mm:ss'
+            }
+        });
     });
+
     var orderListHandler = {
         search:function(pageIndex){
             $("input[name=pageIndex]").val(pageIndex);
@@ -198,6 +212,9 @@
         detail:function(obj){
             var orderId = $(obj).attr('orderId');
             var orderType = $(obj).attr('orderType');
+            if(orderType == 1) {
+                reportViewer.showByOrder(orderId);
+            }
             if(orderType == 2) {
                 hot.iframeModal(carrierUrl + "?orderId=" + orderId, '900px', '500px', "运营商报告");
             }
@@ -207,6 +224,7 @@
 
         }
     }
+
 </script>
 </body>
 </html>

@@ -32,6 +32,7 @@ public class OrderController {
         model.addAttribute("payStatus", OrderEnum.PayStatus.values());
         model.addAttribute("userAuthorizedStatusEnums", UserAuthorizedStatusEnums.values());
         model.addAttribute("totalPayAmount", totalPayAmount);
+        model.addAttribute("pageIndex", orderSearchCondition.getPageIndex());
         return "order/order_list";
     }
 }

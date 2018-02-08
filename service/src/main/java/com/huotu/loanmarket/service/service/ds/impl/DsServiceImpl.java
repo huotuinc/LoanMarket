@@ -41,6 +41,7 @@ import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.MessageFormat;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -115,6 +116,7 @@ public class DsServiceImpl implements DsService {
                 order.setAuthStatus(UserAuthorizedStatusEnums.AUTH_ERROR);
                 resultCode = AppCode.ERROR.getCode();
             }
+            order.setAuthTime(LocalDateTime.now());
             orderRepository.saveAndFlush(order);
             return ApiResult.resultWith(resultCode,operatorMessage);
         }

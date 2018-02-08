@@ -11,7 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Created by hxh on 2017-10-26.
  */
 public class IndexControllerTest extends CommonTestBase {
-    @Ignore
+//    @Ignore
     @Test
     public void loadTest() throws Exception {
         // TODO: 2017-10-26 有待测试 
