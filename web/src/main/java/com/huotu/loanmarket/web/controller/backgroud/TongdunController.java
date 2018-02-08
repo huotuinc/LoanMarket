@@ -48,8 +48,7 @@ public class TongdunController {
     /**
      * 报告详情，根据主键
      *
-     * @param
-     * @param id
+     * @param id 主键id
      * @return
      */
     @RequestMapping(value = "/report/{id}", method = RequestMethod.GET)
@@ -59,6 +58,27 @@ public class TongdunController {
             throw new ApiResultException(ApiResult.resultWith(AppCode.ERROR,"报告不存在"));
         }
         model.addAttribute("report", reportDetailVo);
+        return "tongdun/report";
+    }
+
+    /**
+     * 报告详情，根据订单号
+     *
+     * @param orderId 订单号
+     * @return
+     */
+    @RequestMapping(value = "/report/order-{orderid}", method = RequestMethod.GET)
+    public String reportByOrder(@PathVariable(value = "orderid") String orderId, Model model) {
+        TongdunRequestLog log = requestLogService.findByOrderId(orderId);
+        if (log == null) {
+            throw new ApiResultException(ApiResult.resultWith(AppCode.ERROR,"报告不存在"));
+        }
+        if(log.getState() == TongdunEnum.ReportStatus.SUCCESS.getCode()) {
+            ReportDetailVo reportDetailVo = requestLogService.convertRequestLogToReport(log);
+            model.addAttribute("report", reportDetailVo);
+        }else{
+            throw new ApiResultException(ApiResult.resultWith(AppCode.ERROR,"报告非成功状态"));
+        }
         return "tongdun/report";
     }
 }

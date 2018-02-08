@@ -106,7 +106,7 @@ public class DsServiceImpl implements DsService {
                 //返回任务信息和原始数据
                 JsonObject data = jsonObject.getAsJsonObject("data").getAsJsonObject("task_data");
 //                String channelCode = data.get("channel_code").getAsString();
-                assembleData(data,orderId);
+                assembleData(data,orderId,order);
                 order.setAuthStatus(UserAuthorizedStatusEnums.AUTH_SUCCESS);
                 order.getUser().setAuthStatus(UserAuthorizedStatusEnums.AUTH_SUCCESS);
                 resultCode = AppCode.SUCCESS.getCode();
@@ -120,11 +120,12 @@ public class DsServiceImpl implements DsService {
         }
     }
 
-    private void assembleData(JsonObject data, String orderId) {
+    private void assembleData(JsonObject data, String orderId,Order order) {
         //保存电商用户基本信息
         JsonObject baseInfoData = data.getAsJsonObject("base_info");
         if (baseInfoData != null){
-            saveBaseInfo(baseInfoData,orderId);
+            BaseInfo baseInfo = saveBaseInfo(baseInfoData, orderId);
+            order.setAccountName(baseInfo.getName()+"（"+baseInfo.getNickName()+"）");
         }
         //保存电商用户账户信息
         JsonObject accountInfoData = data.getAsJsonObject("account_info");
@@ -205,7 +206,7 @@ public class DsServiceImpl implements DsService {
 
     }
 
-    private void saveBaseInfo(JsonObject baseInfoData, String orderId) {
+    private BaseInfo saveBaseInfo(JsonObject baseInfoData, String orderId) {
         String userName = !baseInfoData.get("user_name").isJsonNull()?baseInfoData.get("user_name").getAsString():null;
         String email = !baseInfoData.get("email").isJsonNull()?baseInfoData.get("email").getAsString():null;
         String userLevel = !baseInfoData.get("user_level").isJsonNull()?baseInfoData.get("user_level").getAsString():null;
@@ -227,7 +228,7 @@ public class DsServiceImpl implements DsService {
         baseInfo.setNickName(nickName);
         baseInfo.setUserLevel(userLevel);
         baseInfo.setUserName(userName);
-        baseInfoRepository.save(baseInfo);
+        return baseInfoRepository.save(baseInfo);
     }
 
     @Override

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<!--
+  ~ 版权所有:杭州火图科技有限公司
+  ~ 地址:浙江省杭州市滨江区西兴街道阡陌路智慧E谷B幢4楼在地图中查看
+  ~
+  ~ (c) Copyright Hangzhou Hot Technology Co., Ltd.
+  ~ Floor 4,Block B,Wisdom E Valley,Qianmo Road,Binjiang District
+  ~ 2013-2017. All rights reserved.
+  -->
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>订单列表</title>
+
+    <link href="http://resali.huobanplus.com/cdn/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/animate.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/style.min-1.0.8.css" rel="stylesheet">
+    <!--datetimepick-->
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/datetimepick/daterangepicker.css" rel="stylesheet"/>
+    <link href="../../resource/css/common.css" th:href="@{/resource/css/common.css}" rel="stylesheet"/>
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight tooltip-demo" th:object="${orderSearchCondition}">
+    <form role="form" id="searchForm" class="search-panel" th:action="@{/admin/order/list}" method="get">
+        <input type="hidden" name="pageIndex" th:value="*{pageIndex}"/>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <div class="form-inline">
+
+                            <div class="form-group m-r-sm">
+                                <label class=" control-label" for="userName">用户名：</label>
+                                <input type="text" class="form-control" id="userName" name="userName" th:value="*{userName}" placeholder="用户名"/>
+                            </div>
+
+                            <div class="form-group m-r-sm">
+                                <label class=" control-label">认证类型：</label>
+                                <select class="form-control input-sm" name="orderType" id="orderType">
+                                    <option selected="selected" value="-1" th:selected="*{orderType==-1}">全部</option>
+                                    <option th:each="type:${orderType}" th:value="${type.code}" th:text="${type.name}"
+                                            th:selected="${orderSearchCondition.orderType == type.code}">行业黑名单</option>
+
+                                </select>
+                            </div>
+
+                            <div class="form-group m-r-sm">
+                                <label class=" control-label">支付状态：</label>
+                                <select class="form-control input-sm" name="payStatus" id="payStatus">
+                                    <option selected="selected" value="-1" th:selected="*{payStatus==-1}">全部</option>
+                                    <option th:each="status:${payStatus}" th:value="${status.code}" th:text="${status.name}"
+                                            th:selected="${orderSearchCondition.payStatus == status.code}">行业黑名单</option>
+
+                                </select>
+                            </div>
+                            <div class="form-group m-r-sm">
+                                <label class=" control-label">认证状态：</label>
+                                <select class="form-control input-sm" name="authStatus" id="authStatus">
+                                    <option selected="selected" value="-1" th:selected="*{authStatus==-1}">全部</option>
+                                    <option th:each="status:${userAuthorizedStatusEnums}" th:value="${status.code}" th:text="${status.name}"
+                                            th:selected="${orderSearchCondition.authStatus == status.code}">行业黑名单</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group m-r-sm">
+                                <label class=" control-label" for="payTimePick">支付时间：</label>
+                                <input type="text" class="form-control input-sm mb10 data-range-pick" runat="server"
+                                       id="payTimePick" name="payTimePick" start-element="#payTimeBegin"
+                                       end-element="#payTimeEnd" placeholder="开始时间-结束时间" style="width: 300px;"
+                                       th:value="(*{payTimeBegin!= null and payTimeBegin != ''}  ? *{payTimeBegin} :'')  + (*{payTimeEnd != null and payTimeEnd != ''} ?  ' - ' + *{payTimeEnd} :'') "/>
+                                <input type="hidden" id="payTimeBegin" name="payTimeBegin" runat="server"
+                                       th:value="*{payTimeBegin}"/>
+                                <input type="hidden" id="payTimeEnd" name="payTimeEnd" runat="server" th:value="*{payTimeEnd}"/>
+                            </div>
+                            <span onclick="orderListHandler.search(1)" class="btn btn-success btn-sm">搜索</span>
+                            <span onclick="orderListHandler.searchAll()" class="btn btn-success btn-sm">显示所有</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <!--search-->
+
+    <!--list-->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins m-b-none">
+                <div class="ibox-content p-xxs no-top-border">
+                    <div class="panel-body">
+                        <table class="table table-bordered table-hover table-center">
+                            <thead>
+                            <tr>
+                                <th>订单号</th>
+                                <th>用户</th>
+                                <th>支付状态</th>
+                                <th>认证状态</th>
+                                <th>创建时间</th>
+                                <th>支付时间</th>
+                                <th>订单金额（元）</th>
+                                <th>主体姓名</th>
+                                <th>主体手机号</th>
+                                <th>淘宝账号</th>
+                                <th>京东账号</th>
+                                <th>认证类型</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="order:${orderPage.getContent()}">
+                                <td th:text="${order.orderId}">1</td>
+                                <td th:text="${order.user.userName}">张三</td>
+                                <td th:text="${order.payStatus.name}">15158040000</td>
+                                <td th:text="${order.authStatus.name}">1000.00</td>
+                                <td th:text="${#temporals.format(order.createTime, 'yyyy-MM-dd HH:mm:ss')}">30</td>
+                                <td th:text="${#temporals.format(order.payTime, 'yyyy-MM-dd HH:mm:ss')}">2017-01-01 00:00:00</td>
+                                <td th:text="${order.payAmount}">870</td>
+                                <td th:text="${order.realName}">130</td>
+                                <td th:text="${order.mobile}"></td>
+                                <td th:text="${order.orderType.code == 3?order.accountName:'/'}"></td>
+                                <td th:text="${order.orderType.code == 4?order.accountName:'/'}"></td>
+                                <td>
+                                    <span th:if="${order.authStatus.code == 2}" th:switch="${order.orderType.code}"  onclick="orderListHandler.detail(this)"
+                                          th:attr="orderId=${order.orderId},orderType=${order.orderType.code}" class="btn btn-myGreen btn-xs">
+                                    <span th:case="0">
+                                        行业黑名单
+                                    </span>
+                                    <span th:case="1">
+                                        金融黑名单
+                                    </span>
+                                    <span th:case="2">
+                                        运营商
+                                    </span>
+                                    <span th:case="3">
+                                        淘宝
+                                    </span>
+                                    <span th:case="4">
+                                        京东
+                                    </span>
+                                    </span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div>当前状态订单总付款额度：<span th:text="${totalPayAmount + '元'}">1000元</span></div>
+                        <p style="float: left; margin: 20px 0;">共
+                            <th:block th:text="${orderPage.getTotalElements()}"></th:block>
+                            条记录，当前第
+                            <th:block th:text="*{pageIndex}"></th:block>
+                            /
+                            <th:block th:text="${orderPage.totalPages}"></th:block>
+                            ，每页20条记录
+                        </p>
+                        <ul style="float: right;" class="pagination pagination-split">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!--基础框架js-->
+
+<script src="http://resali.huobanplus.com/cdn/jquery/2.2.4/jquery.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/bootstrap/3.3.5/bootstrap.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/v2/content.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/layer/3.1.0/layer.js"></script>
+<!--日期选择-->
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/datetimepick/moment.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/datetimepick/daterangepicker.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/v2/bootstrap.hot.extra-utils-0.2.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/v2/bootstrap.hot.extra-init.js"></script>
+<script type="text/javascript" th:inline="javascript">
+    var baseUrl = /*[[@{/admin/order}]]*/ "/admin/order";
+    var dsUrl = /*[[@{/admin/ds/dsShow}]]*/ "/admin/ds/dsShow";
+    var carrierUrl = /*[[@{/admin/carrier/carrierShow}]]*/ "/admin/carrier/carrierShow";
+    $("input[class~=data-range-pick]").daterangepicker({
+        locale: {
+            format: 'YYYY-MM-DD HH:mm:ss'
+        }
+    });
+    var orderListHandler = {
+        search:function(pageIndex){
+            $("input[name=pageIndex]").val(pageIndex);
+            $('#searchForm').submit();
+        },
+        searchAll:function(){
+            window.location.href = baseUrl + "/list";
+        },
+        detail:function(obj){
+            var orderId = $(obj).attr('orderId');
+            var orderType = $(obj).attr('orderType');
+            if(orderType == 2) {
+                hot.iframeModal(carrierUrl + "?orderId=" + orderId, '900px', '500px', "运营商报告");
+            }
+            if(orderType == 3 || orderType == 4){
+                hot.iframeModal(dsUrl + "?orderId=" + orderId, '900px', '500px', "电商报告");
+            }
+
+        }
+    }
+</script>
+</body>
+</html>

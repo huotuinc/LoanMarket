@@ -29,6 +29,7 @@ import com.huotu.loanmarket.service.model.sesame.SesameConfig;
 import com.huotu.loanmarket.service.service.order.OrderService;
 import com.huotu.loanmarket.service.service.sesame.SesameService;
 import com.huotu.loanmarket.service.service.user.UserService;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,11 +86,20 @@ public class SesameController {
         DefaultZhimaClient client = new DefaultZhimaClient(SesameSysConfig.SESAME_CREDIT_URL, sesameConfig.getAppCheatId(), sesameConfig.getPrivateCheatKey(), sesameConfig.getPublicCheatKey());
         try {
             ZhimaCreditAntifraudVerifyResponse response = client.execute(req);
-            if (response.isSuccess()) {
-                return ApiResult.resultWith(AppCode.SUCCESS);
+            if (!StringUtils.isEmpty(response.getBizNo()) && response.getVerifyCode().size() > 0) {
+                String[] strings = response.getVerifyCode().get(0).split("_");
+                if (strings.length > 3 && !strings[3].equals("MA")) {
+                    //不成功
+                    return ApiResult.resultWith(SesameResultCode.NAME_AND_NUM_NOT_AGREEMENT);
+                } else {
+                    //成功
+                    return ApiResult.resultWith(AppCode.SUCCESS);
+                }
             } else {
+                //不成功
                 return ApiResult.resultWith(SesameResultCode.NAME_AND_NUM_NOT_AGREEMENT);
             }
+
         } catch (ZhimaApiException e) {
             log.error("芝麻欺诈信息验证异常：" + e);
         }

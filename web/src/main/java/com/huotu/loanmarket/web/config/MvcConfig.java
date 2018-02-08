@@ -16,6 +16,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
@@ -84,7 +85,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
 
         SpringTemplateEngine engine = new SpringTemplateEngine();
         engine.setTemplateResolver(resolver);
-
+        engine.addDialect(new Java8TimeDialect());
         ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
         viewResolver.setTemplateEngine(engine);
         viewResolver.setContentType("text/html;charset=utf-8");

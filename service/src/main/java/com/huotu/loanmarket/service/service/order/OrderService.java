@@ -15,9 +15,11 @@ import com.huotu.loanmarket.service.entity.user.User;
 import com.huotu.loanmarket.service.enums.OrderEnum;
 import com.huotu.loanmarket.service.enums.UserAuthorizedStatusEnums;
 import com.huotu.loanmarket.service.model.order.*;
+import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -122,4 +124,7 @@ public interface OrderService {
      */
     void paid(Order order, User user);
 
+    Page<Order> findAll(OrderSearchCondition condition);
+
+    BigDecimal sumPayAmount(OrderSearchCondition orderSearchCondition);
 }

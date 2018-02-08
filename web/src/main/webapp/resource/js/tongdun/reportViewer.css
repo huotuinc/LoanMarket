@@ -1,0 +1,30 @@
+
+.iframe-wrap {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: 999999;
+    top: 0;
+    left: 0%;
+    display: none;
+}
+
+.iframe {
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll;
+}
+
+#report_detail_iframe .close {
+    float: right;
+    line-height: 40px;
+    font-size: 22px;
+    cursor: pointer;
+    color: #dbdbdb;
+    margin-right: 10px;
+}
+
+#report_detail_iframe .close:hover {
+    text-decoration: none;
+    color: #a0a0a0;
+}

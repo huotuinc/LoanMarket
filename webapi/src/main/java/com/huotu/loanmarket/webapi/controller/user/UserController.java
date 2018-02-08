@@ -21,6 +21,7 @@ import com.huotu.loanmarket.service.exceptions.ErrorMessageException;
 import com.huotu.loanmarket.service.model.PageListView;
 import com.huotu.loanmarket.service.model.user.UserInfoVo;
 import com.huotu.loanmarket.service.model.user.UserInviteVo;
+import com.huotu.loanmarket.service.service.upload.StaticResourceService;
 import com.huotu.loanmarket.service.service.user.UserService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -28,9 +29,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -47,6 +54,8 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private StaticResourceService staticResourceService;
 
     /**
      * 根据手机号、密码实现用户登录
@@ -136,7 +145,7 @@ public class UserController {
         user.setChannelId(RequestUtils.getHeader(request, Constant.APP_CHANNELID_KEY, "default"));
         user.setInviterId(inviter);
         try {
-            user= userService.register(user, verifyCode);
+            user = userService.register(user, verifyCode);
             UserInfoVo userInfoVo = new UserInfoVo();
             userInfoVo.setUserId(user.getUserId());
             userInfoVo.setUserName(user.getUserName());
@@ -249,5 +258,20 @@ public class UserController {
         LinkedHashMap<String, Object> map = new LinkedHashMap<>();
         map.put("list", result.getList());
         return ApiResult.resultWith(AppCode.SUCCESS, map);
+    }
+
+    @RequestMapping("/img")
+    @ResponseBody
+    public ApiResult uploadImg(@RequestHeader(Constant.APP_USER_ID_KEY) Long userId, @RequestParam(value = "file", required = false) MultipartFile file) throws IOException, URISyntaxException {
+        String fileName = file.getOriginalFilename();
+        if (com.alipay.api.internal.util.StringUtils.isEmpty(fileName)) {
+            throw new FileNotFoundException("未上传任何图片");
+        }
+        String path = StaticResourceService.HEAD_IMG +
+                "head-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmSS")) + staticResourceService.getSuffix(fileName);
+        URI uri = staticResourceService.uploadResource(path, file.getInputStream());
+        //更新用户头像
+        userService.setHeadImg(userId, uri.toString());
+        return ApiResult.resultWith(AppCode.SUCCESS.getCode(), AppCode.SUCCESS.getName(), uri.toString());
     }
 }
