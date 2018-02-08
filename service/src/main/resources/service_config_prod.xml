@@ -13,7 +13,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
     <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
         <property name="jndiName">
-            <value>jdbc/loanmarket</value>
+            <value>jdbc/zhengxin</value>
         </property>
         <property name="resourceRef">
             <value>true</value>
