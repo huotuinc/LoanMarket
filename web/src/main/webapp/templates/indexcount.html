@@ -31,11 +31,11 @@
                             <label style="margin-left: 20px;" class="label label-warning pull-left" th:text="'截止' + *{lastTime} ">截止2018-02-08T15:00:00</label>
                         </div>
                         <div class="form-group form-inline">
-                            <div class="col-sm-2" th:href="@{urlView.getCashAmountUrl()}">
+                            <div class="col-sm-2" th:href="@{/admin/order/list(payStatus=1,payTimeBegin=*{#temporals.format(beginTime, 'yyyy-MM-dd HH:mm:ss')})}">
                                 <h1 th:text="*{orderAmount}">100</h1>
                                 <label>今日现金收入</label>
                             </div>
-                            <div class="col-sm-2" th:href="@{urlView.getCouponsAmountUrl()}">
+                            <div class="col-sm-2" th:href="@{/admin/order/list}">
                                 <h1 th:text="*{totalOrderAmount}">100</h1>
                                 <label>历史总收入</label>
                             </div>
@@ -44,12 +44,12 @@
                             <label class="label label-warning pull-left">今日会员</label>
                         </div>
                         <div class="form-group form-inline">
-                            <div class="col-sm-2" th:href="@{urlView.getBorrowCountUrl()}">
+                            <div class="col-sm-2" th:href="@{/user(createBeginTime=*{#temporals.format(beginTime, 'yyyy-MM-dd')})}">
                                 <h1 th:text="*{userCount}">100</h1>
                                 <label>今日新增</label>
 
                             </div>
-                            <div class="col-sm-2" th:href="@{urlView.getOrderCountUrl()}">
+                            <div class="col-sm-2" th:href="@{/user}">
                                 <h1 th:text="*{orderCount}">100</h1>
                                 <label>总用户数</label>
                             </div>
@@ -58,11 +58,11 @@
                             <label class=" label  pull-left  label-info">今日订单</label>
                         </div>
                         <div class="form-group form-inline">
-                            <div class="col-sm-2" th:href="*{urlView.getLoanMemberCountUrl()}">
+                            <div class="col-sm-2" th:href="@{/admin/order/list(payTimeBegin=*{#temporals.format(beginTime, 'yyyy-MM-dd HH:mm:ss')})}">
                                 <h1 th:text="*{orderCount}">100</h1>
                                 <label>今日新增</label>
                             </div>
-                            <div class="col-sm-2" th:href="*{urlView.getLendMemberCountUrl()}">
+                            <div class="col-sm-2" th:href="@{/admin/order/list(payTimeBegin=*{#temporals.format(beginTime, 'yyyy-MM-dd HH:mm:ss')})}">
                                 <h1 th:text="*{paySuccessOrderCount}">100</h1>
                                 <label>已支付</label>
                             </div>

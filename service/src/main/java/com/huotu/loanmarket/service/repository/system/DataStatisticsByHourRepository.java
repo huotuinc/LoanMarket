@@ -23,6 +23,6 @@ public interface DataStatisticsByHourRepository extends JpaRepository<DataStatis
             "sum(hourDate.orderAmount),sum(hourDate.userCount),sum(hourDate.orderCount),sum(hourDate.orderPayCount)" +
             ",sum(hourDate.authSuccessCount),sum(hourDate.authFailureCount),max(hourDate.endTime))" +
             " from DataStatisticsByHour hourDate" +
-            " where hourDate.merchantId = ?1 and hourDate.beginTime >= ?1 and hourDate.endTime <= ?2")
+            " where hourDate.merchantId = ?1 and hourDate.beginTime >= ?2 and hourDate.endTime <= ?3")
     DataStatisticsByDay sumByBeginTime(Integer merchantId, LocalDateTime beginTime, LocalDateTime endTime);
 }

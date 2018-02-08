@@ -4,6 +4,7 @@ import com.huotu.loanmarket.service.entity.system.DataStatisticsByDay;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.aspectj.weaver.patterns.ThisOrTargetAnnotationPointcut;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -20,6 +21,7 @@ public class DataStatisticsVo {
      * 新增现金收入
      */
     private BigDecimal orderAmount;
+    private String orderAmountUrl;
     /**
      * 总现金收入
      */
@@ -53,6 +55,7 @@ public class DataStatisticsVo {
      */
     private int authFailureCount;
 
+    private LocalDateTime beginTime;
     private LocalDateTime lastTime;
 
     public DataStatisticsVo(DataStatisticsByDay dayData, Long totalUserCount, BigDecimal totalOrderAmount) {
@@ -65,5 +68,8 @@ public class DataStatisticsVo {
         this.authSuccessCount = dayData.getAuthSuccessCount();
         this.authFailureCount = dayData.getAuthFailureCount();
         this.lastTime = dayData.getLastHourTime();
+        this.beginTime = lastTime.toLocalDate().atStartOfDay();
+        this.totalUserCount = totalUserCount.intValue();
+        this.totalOrderAmount = totalOrderAmount;
     }
 }

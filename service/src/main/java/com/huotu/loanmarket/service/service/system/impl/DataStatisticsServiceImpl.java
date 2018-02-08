@@ -45,6 +45,7 @@ public class DataStatisticsServiceImpl implements DataStatisticsService {
     /**
      * 每小时清空一次统计数据
      */
+    @Override
     @Scheduled(cron = "0 0 * * * ?")
     public void cleanCount() {
         todayData.clear();
@@ -61,7 +62,6 @@ public class DataStatisticsServiceImpl implements DataStatisticsService {
         //统计总收入和总用户数
         Object[] sumUserAndAmount = dayRepository.sumUserAndAmount(merchantId);
         DataStatisticsVo statisticsVo = new DataStatisticsVo(sumByHourData, (long) sumUserAndAmount[0], new BigDecimal((double) sumUserAndAmount[1]));
-        statisticsVo.setCreateTime(LocalDateTime.now());
         todayData.put(merchantId, statisticsVo);
         return statisticsVo;
     }

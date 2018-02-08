@@ -11,6 +11,7 @@ import java.time.LocalDate;
  * @author helloztt
  */
 public interface DataStatisticsService {
+    void cleanCount();
     /**
      * 获取今日统计数据
      * @param merchantId 商户Id

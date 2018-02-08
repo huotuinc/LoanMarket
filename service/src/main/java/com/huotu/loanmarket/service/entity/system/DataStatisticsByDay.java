@@ -83,12 +83,28 @@ public class DataStatisticsByDay {
     private LocalDateTime lastHourTime;
 
     public DataStatisticsByDay(BigDecimal orderAmount, Long userCount, Long orderCount, Long orderPayCount, Long authSuccessCount, Long authFailureCount,LocalDateTime lastHourTime) {
-        this.orderAmount = orderAmount;
-        this.userCount = userCount.intValue();
-        this.orderCount = orderCount.intValue();
-        this.orderPayCount = orderPayCount.intValue();
-        this.authSuccessCount = authSuccessCount.intValue();
-        this.authFailureCount = authFailureCount.intValue();
-        this.lastHourTime = lastHourTime;
+        if(orderAmount != null){
+            this.orderAmount = orderAmount;
+        }
+        if(userCount != null){
+            this.userCount = userCount.intValue();
+        }
+        if(orderCount != null){
+            this.orderCount = orderCount.intValue();
+        }
+        if(orderPayCount != null){
+            this.orderPayCount = orderPayCount.intValue();
+        }
+        if(authSuccessCount != null){
+            this.authSuccessCount = authSuccessCount.intValue();
+        }
+        if(authFailureCount != null){
+            this.authFailureCount = authFailureCount.intValue();
+        }
+        if(lastHourTime != null){
+            this.lastHourTime = lastHourTime;
+        }else{
+            this.lastHourTime = LocalDateTime.now();
+        }
     }
 }

@@ -115,7 +115,7 @@
                             <tbody>
                             <tr th:each="order:${orderPage.getContent()}">
                                 <td th:text="${order.orderId}">1</td>
-                                <td th:text="${order.user.userName}">张三</td>
+                                <td th:text="${order.user != null ? order.user.userName : _}">张三</td>
                                 <td th:text="${order.payStatus.name}">15158040000</td>
                                 <td th:text="${order.authStatus.name}">1000.00</td>
                                 <td th:text="${#temporals.format(order.createTime, 'yyyy-MM-dd HH:mm:ss')}">30</td>
@@ -184,7 +184,7 @@
     var baseUrl = /*[[@{/admin/order}]]*/ "/admin/order";
     var dsUrl = /*[[@{/admin/ds/dsShow}]]*/ "/admin/ds/dsShow";
     var carrierUrl = /*[[@{/admin/carrier/carrierShow}]]*/ "/admin/carrier/carrierShow";
-    var totalPage = /*[[${totalPage}]]*/ 10;
+    var totalPage = /*[[${orderPage.getTotalElements()}]]*/ 10;
 </script>
 <script type="text/javascript">
     $(function () {
