@@ -145,7 +145,8 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/api/user/login")
                 .excludePathPatterns("/api/user/register")
                 .excludePathPatterns("/api/user/updatePassword")
-                .excludePathPatterns("/api/order/return/**");
+                .excludePathPatterns("/api/order/return/**")
+                .excludePathPatterns("/api/user/reg/**");
     }
 
     /**
@@ -176,7 +177,8 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/api/sesameReport/**")
                 .excludePathPatterns("/api/projectView/**")
                 //协议等页面
-                .excludePathPatterns("/api/other/**");
+                .excludePathPatterns("/api/other/**")
+                .excludePathPatterns("/api/user/reg/**");
     }
 
 
