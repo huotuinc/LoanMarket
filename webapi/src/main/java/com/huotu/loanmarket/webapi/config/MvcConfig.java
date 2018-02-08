@@ -146,6 +146,8 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/api/user/register")
                 .excludePathPatterns("/api/user/updatePassword")
                 .excludePathPatterns("/api/sesame/rollBack/**")
+                .excludePathPatterns("/api/carrier/**")
+                .excludePathPatterns("/api/other/**")
                 .excludePathPatterns("/api/order/return/**")
                 .excludePathPatterns("/api/user/reg/**");
     }
