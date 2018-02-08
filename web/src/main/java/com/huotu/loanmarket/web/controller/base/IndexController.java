@@ -42,4 +42,9 @@ public class IndexController {
         return "indexcount";
     }
 
+    @RequestMapping("/test")
+    public void test(){
+        dataStatisticsService.toStatisticsDataByHour(Constant.MERCHANT_ID);
+    }
+
 }

@@ -56,12 +56,14 @@ public class DataStatisticsServiceImpl implements DataStatisticsService {
         if (todayData.containsKey(merchantId)) {
             return todayData.get(merchantId);
         }
-        LocalDateTime searchEndTime = LocalDate.now().atStartOfDay(), searchBeginTime = searchEndTime.minusDays(1);
+        LocalDateTime searchBeginTime = LocalDate.now().atStartOfDay(), searchEndTime = searchBeginTime.plusDays(1);
         //统计区间的hour数据
         DataStatisticsByDay sumByHourData = hourRepository.sumByBeginTime(merchantId, searchBeginTime, searchEndTime);
         //统计总收入和总用户数
-        Object[] sumUserAndAmount = dayRepository.sumUserAndAmount(merchantId);
-        DataStatisticsVo statisticsVo = new DataStatisticsVo(sumByHourData, (long) sumUserAndAmount[0], new BigDecimal((double) sumUserAndAmount[1]));
+        Object[] sumUserAndAmount = dayRepository.sumUserAndAmount(merchantId).get(0);
+        DataStatisticsVo statisticsVo = new DataStatisticsVo(sumByHourData
+                , sumUserAndAmount[0] != null ? (long) sumUserAndAmount[0] : 0
+                , sumUserAndAmount[1] != null ? new BigDecimal((double) sumUserAndAmount[1]) : BigDecimal.ZERO);
         todayData.put(merchantId, statisticsVo);
         return statisticsVo;
     }
@@ -76,11 +78,11 @@ public class DataStatisticsServiceImpl implements DataStatisticsService {
         int orderCount = orderRepository.countByMerchantIdAndCreateTime(merchantId, hourData.getBeginTime(), hourData.getEndTime());
         hourData.setOrderCount(orderCount);
         //订单成功支付数量和金额
-        Object[] orderCountAndSum = orderRepository.sumByMerchantIdAndPayTime(merchantId, hourData.getBeginTime(), hourData.getEndTime());
+        Object[] orderCountAndSum = orderRepository.sumByMerchantIdAndPayTime(merchantId, hourData.getBeginTime(), hourData.getEndTime()).get(0);
         if (orderCountAndSum != null) {
-            hourData.setOrderPayCount((int) orderCountAndSum[0]);
+            hourData.setOrderPayCount(orderCountAndSum[0] != null ? ((Long) orderCountAndSum[0]).intValue() : 0);
             if (orderCountAndSum[1] != null) {
-                hourData.setOrderAmount(BigDecimal.valueOf((double) orderCountAndSum[1]));
+                hourData.setOrderAmount((BigDecimal)orderCountAndSum[1]);
             }
         }
         //订单数量
