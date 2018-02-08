@@ -25,7 +25,8 @@
     <link href="http://resali.huobanplus.com/cdn/hotui/css/style.min-1.0.8.css" rel="stylesheet">
 
     <!--checkbox-->
-    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css"
+          rel="stylesheet">
 
     <style>
         .cate-select {
@@ -40,7 +41,8 @@
 <div class="wrapper wrapper-content animated fadeInRight tooltip-demo">
     <!--search-->
     <!--/*@thymesVar id="searchCondition" type="com.huotu.loanmarket.service.searchable.ProjectSearchCondition"*/-->
-    <form role="form" id="searchForm" class="search-panel" th:action="@{/project/list}" method="get" th:object="${searchCondition}">
+    <form role="form" id="searchForm" class="search-panel" th:action="@{/project/list}" method="get"
+          th:object="${searchCondition}">
         <input type="hidden" name="pageIndex" th:value="${pageIndex}"/>
         <div class="row">
             <div class="col-lg-12">
@@ -49,14 +51,16 @@
                         <div class="form-inline">
                             <div class="form-group m-r-sm">
                                 <label class="control-label" for="name">产品名称：</label>
-                                <input type="text" class="form-control input-sm mb10" id="name" name="name" th:value="*{name}" placeholder="产品名称"/>
+                                <input type="text" class="form-control input-sm mb10" id="name" name="name"
+                                       th:value="*{name}" placeholder="产品名称"/>
                             </div>
                             <div class="form-group m-r-sm">
                                 <label class="control-label" for="categoryId">产品分类：</label>
                                 <select class="form-control input-sm" name="categoryId" id="categoryId">
                                     <option th:selected="*{categoryId==0}" value="0">--请选择--</option>
                                     <!--/*@thymesVar id="categories" type="java.util.List<com.huotu.loanmarket.service.entity.LoanCategory>"*/-->
-                                    <option th:each="category:${categories}" th:value="${category.categoryId}" th:text="${category.name}"
+                                    <option th:each="category:${categories}" th:value="${category.categoryId}"
+                                            th:text="${category.name}"
                                             th:selected="${category.categoryId}==*{categoryId}"></option>
                                 </select>
                             </div>
@@ -65,12 +69,23 @@
                         <p style="height: 8px;"></p>
 
                         <div class="form-inline">
-                            <button type="button" onclick="projectListHandler.search(1)" class="btn btn-success">筛选</button>
-                            <button type="button" onclick="projectListHandler.searchAll()" class="btn btn-success">显示全部</button>
-                            <button type="button" class="btn btn-white" id="btnBatchSetHot" onclick="projectListHandler.setHot(1,0)">批量热卖</button>
-                            <button type="button" class="btn btn-white" id="btnBatchCancelHot" onclick="projectListHandler.setHot(0,0)">批量取消热卖</button>
-                            <button type="button" id="btnBatchSetNew" class="btn btn-white" onclick="projectListHandler.setNew(1,0)">批量新品</button>
-                            <button type="button" id="btnBatchCancelNew" class="btn btn-white" onclick="projectListHandler.setNew(0,0)">批量取消新品</button>
+                            <button type="button" onclick="projectListHandler.search(1)" class="btn btn-success">筛选
+                            </button>
+                            <button type="button" onclick="projectListHandler.searchAll()" class="btn btn-success">
+                                显示全部
+                            </button>
+                            <button type="button" class="btn btn-white" id="btnBatchSetHot"
+                                    onclick="projectListHandler.setHot(1,0)">批量热卖
+                            </button>
+                            <button type="button" class="btn btn-white" id="btnBatchCancelHot"
+                                    onclick="projectListHandler.setHot(0,0)">批量取消热卖
+                            </button>
+                            <button type="button" id="btnBatchSetNew" class="btn btn-white"
+                                    onclick="projectListHandler.setNew(1,0)">批量新品
+                            </button>
+                            <button type="button" id="btnBatchCancelNew" class="btn btn-white"
+                                    onclick="projectListHandler.setNew(0,0)">批量取消新品
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -99,6 +114,7 @@
                                 <th>贷款期数</th>
                                 <th>利率</th>
                                 <th>状态</th>
+                                <th>排序字段（越大越前）</th>
                                 <th>添加时间</th>
                                 <th>操作</th>
                             </tr>
@@ -108,29 +124,39 @@
                             <tr th:each="project:${projects}">
                                 <td>
                                     <div class="checkbox checkbox-primary m-b-none m-t-none">
-                                        <input type="checkbox" th:id="${project.loanId}" th:value="${project.loanId}" name="chkProject"/>
+                                        <input type="checkbox" th:id="${project.loanId}" th:value="${project.loanId}"
+                                               name="chkProject"/>
                                         <label th:for="${project.loanId}"></label>
                                     </div>
                                 </td>
                                 <td style="width: 30%;">
                                     <p style="width: 100%; height: 50px;">
                                         <!--商品-->
-                                        <img style="width: 50px; height: 50px; float: left; margin-left: 5px;" src="" th:src="${@resourceService.get(project.logo).toString()}"/>
-                                        <span class="font-hidden" style="width: 76%;float: left;" th:text="${project.name}"></span>
+                                        <img style="width: 50px; height: 50px; float: left; margin-left: 5px;" src=""
+                                             th:src="${@resourceService.get(project.logo).toString()}"/>
+                                        <span class="font-hidden" style="width: 76%;float: left;"
+                                              th:text="${project.name}"></span>
                                     </p>
                                 </td>
                                 <td th:text="${project.minMoney+'~'+project.maxMoney}">sdfsdfee11</td>
-                                <td th:text="${project.minDeadline+'~'+project.maxDeadline+project.deadlineUnitDesc}">￥398</td>
+                                <td th:text="${project.minDeadline+'~'+project.maxDeadline+project.deadlineUnitDesc}">
+                                    ￥398
+                                </td>
                                 <td th:text="${project.interestRate}"></td>
                                 <td>
                                     <span th:if="${project.isHot==1}" class="cate-select">热卖</span>
                                     <span th:if="${project.isNew==1}" class="cate-select">新品</span>
                                 </td>
+                                <td th:text="${project.topSortNum}"></td>
                                 <td th:text="${#dates.format(project.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
                                 <td>
-                                    <span class="cursor-point" th:onclick="|javascript:hot.newTab('@{/project/edit(projectId=${project.loanId})}','${project.name}')|"><i class="fa fa-pencil tooltips" data-placement="top" data-toggle="tooltip" data-original-title="编辑"></i></span>
+                                    <span class="cursor-point"
+                                          th:onclick="|javascript:hot.newTab('@{/project/edit(projectId=${project.loanId})}','${project.name}')|"><i
+                                            class="fa fa-pencil tooltips" data-placement="top" data-toggle="tooltip"
+                                            data-original-title="编辑"></i></span>
                                     &nbsp;
-                                    <span th:onclick="|projectListHandler.deletePro(${project.loanId})|" class="cursor-point">
+                                    <span th:onclick="|projectListHandler.deletePro(${project.loanId})|"
+                                          class="cursor-point">
                                         <i class="fa fa-trash tooltips"
                                            data-placement="top" data-toggle="tooltip" data-original-title="删除"></i>
                                     </span>

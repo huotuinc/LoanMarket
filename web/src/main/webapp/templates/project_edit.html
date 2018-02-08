@@ -245,7 +245,13 @@
                                             </select>
                                         </div>
                                     </div>
-
+                                    <div class="form-group ">
+                                        <label class="col-sm-2 control-label">排序字段：</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control input-sm" id="topSortNum"
+                                                   th:value="*{topSortNum}" placeholder="排序字段" maxlength="20"/>
+                                        </div>
+                                    </div>
                                     <div class="hr-line-dashed "></div>
                                     <div class="form-group ">
                                         <label class="col-sm-2 control-label">连接url：</label>
@@ -363,6 +369,14 @@
                 hot.tip.error("请输入利率");
                 return;
             }
+            var topSortNum = $.trim($("#topSortNum").val());
+            if (topSortNum != "") {
+                var reg = /^[1-9]\d*$/;
+                if(!reg.test(topSortNum)){
+                    hot.tip.error("排序字段请输入整数");
+                    return;
+                }
+            }
             var deadlineUnit = $("#deadline_unit").val();
             var fastestGetTime = $.trim($("#fastest_get_time").val());
             var applicationMaterials = "";
@@ -371,7 +385,7 @@
             });
             applicationMaterials = applicationMaterials.substring(0, applicationMaterials.length - 1);
             var contact = $.trim($("#contact").val());
-            if(contact.length==0){
+            if (contact.length == 0) {
                 hot.tip.error("请输入联系人");
                 return;
             }
@@ -398,7 +412,8 @@
                 categories: getSelectedCate(),
                 applyUrl: apply_url,
                 isNew: isNew,
-                isHot: isHot
+                isHot: isHot,
+                topSortNum: topSortNum
             };
 
             hot.ajax(requestUrl, requestData, function (apiResult) {

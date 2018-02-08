@@ -58,7 +58,7 @@ public class ProjectServiceImpl extends AbstractCrudService<LoanProject, Integer
 
             return cb.and(predicates.toArray(new Predicate[predicates.size()]));
         };
-        Sort sort = new Sort(Sort.Direction.DESC, "createTime");
+        Sort sort = new Sort(Sort.Direction.DESC, "topSortNum");
         Pageable pageable;
         if (searchCondition.getTopNum() > 0) {
             pageable = new PageRequest(0, searchCondition.getTopNum(), sort);
@@ -87,7 +87,7 @@ public class ProjectServiceImpl extends AbstractCrudService<LoanProject, Integer
     @Override
     public List<LoanProject> findAll() {
         List<Predicate> predicates = new ArrayList<>();
-        Sort sort = new Sort(Sort.Direction.DESC, "createTime");
+        Sort sort = new Sort(Sort.Direction.DESC, "topSortNum");
         Specification<LoanProject> specification = (root, criteriaQuery, criteriaBuilder) -> {
             predicates.add(criteriaBuilder.equal(root.get("isDelete").as(Integer.class), 0));
             return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
