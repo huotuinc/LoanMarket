@@ -2,7 +2,11 @@ package com.huotu.loanmarket.service.service.impl;
 
 import com.huotu.loanmarket.service.base.AbstractCrudService;
 import com.huotu.loanmarket.service.entity.LoanProject;
+import com.huotu.loanmarket.service.entity.LoanUserApplyLog;
+import com.huotu.loanmarket.service.entity.LoanUserViewLog;
 import com.huotu.loanmarket.service.repository.LoanProjectRepository;
+import com.huotu.loanmarket.service.repository.LoanUserApplyLogRepository;
+import com.huotu.loanmarket.service.repository.LoanUserViewLogRepository;
 import com.huotu.loanmarket.service.searchable.ProjectSearchCondition;
 import com.huotu.loanmarket.service.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +21,7 @@ import org.springframework.util.StringUtils;
 
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,6 +32,10 @@ import java.util.List;
 public class ProjectServiceImpl extends AbstractCrudService<LoanProject, Integer> implements ProjectService {
 
     private final LoanProjectRepository projectRepository;
+    @Autowired
+    private LoanUserApplyLogRepository loanUserApplyLogRepository;
+    @Autowired
+    private LoanUserViewLogRepository loanUserViewLogRepository;
 
     @Autowired
     public ProjectServiceImpl(LoanProjectRepository repository) {
@@ -92,7 +101,7 @@ public class ProjectServiceImpl extends AbstractCrudService<LoanProject, Integer
             predicates.add(criteriaBuilder.equal(root.get("isDelete").as(Integer.class), 0));
             return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
         };
-        return this.repository.findAll(specification,sort);
+        return this.repository.findAll(specification, sort);
     }
 
 
@@ -105,9 +114,9 @@ public class ProjectServiceImpl extends AbstractCrudService<LoanProject, Integer
             return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
         };
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
-        Pageable pageable=new PageRequest( 0 , 4 , sort);
+        Pageable pageable = new PageRequest(0, 4, sort);
 
-        Page<LoanProject> list = projectRepository.findAll(specification , pageable );
+        Page<LoanProject> list = projectRepository.findAll(specification, pageable);
         return list.getContent();
     }
 
@@ -120,9 +129,9 @@ public class ProjectServiceImpl extends AbstractCrudService<LoanProject, Integer
             return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
         };
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
-        Pageable pageable=new PageRequest( 0 , 16 , sort);
+        Pageable pageable = new PageRequest(0, 16, sort);
 
-        Page<LoanProject> list = projectRepository.findAll(specification , pageable );
+        Page<LoanProject> list = projectRepository.findAll(specification, pageable);
         return list.getContent();
     }
 
@@ -150,27 +159,33 @@ public class ProjectServiceImpl extends AbstractCrudService<LoanProject, Integer
             return cb.and(predicates.toArray(new Predicate[predicates.size()]));
         };
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
-        return projectRepository.findAll(specification,sort);
+        return projectRepository.findAll(specification, sort);
     }
 
     @Override
-    public void projectViewLog(int project) {
-
+    public void projectViewLog(int projectId) {
+        LoanUserViewLog userViewLog = new LoanUserViewLog();
+        userViewLog.setProjectId(projectId);
+        userViewLog.setViewTime(new Date());
+        loanUserViewLogRepository.save(userViewLog);
     }
 
     @Override
     public void projectApplyLog(int projectId) {
-
+        LoanUserApplyLog userApplyLog = new LoanUserApplyLog();
+        userApplyLog.setProjectId(projectId);
+        userApplyLog.setApplyTime(new Date());
+        loanUserApplyLogRepository.save(userApplyLog);
     }
 
     @Override
     public int countProjectView(int projectId) {
-        return 0;
+        return loanUserViewLogRepository.findByProjectId(projectId).size();
     }
 
     @Override
     public int countProjectApply(int projectId) {
-        return 0;
+        return loanUserApplyLogRepository.findByProjectId(projectId).size();
     }
 
     private List<Integer> projectIds(String projectIdsStr) {

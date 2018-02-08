@@ -70,7 +70,7 @@ public class ProjectController {
         Page<LoanProject> projectPage = projectService.findAll(pageIndex, SysConstant.BACKEND_DEFALUT_PAGE_SIZE, searchCondition);
 
         projectPage.getContent().forEach(project -> {
-            if(!StringUtils.isEmpty(project.getDeadline())){
+            if (!StringUtils.isEmpty(project.getDeadline())) {
                 String[] deadlineArray = project.getDeadline().split(",");
                 project.setMinDeadline(Integer.parseInt(deadlineArray[0]));
                 project.setMaxDeadline(Integer.parseInt(deadlineArray[deadlineArray.length - 1]));
@@ -87,9 +87,12 @@ public class ProjectController {
                     default:
                         break;
                 }
-            }else {
+            } else {
                 project.setDeadlineUnitDesc("天");
             }
+            //查询申请量和浏览量
+            project.setViewCount(projectService.countProjectView(project.getLoanId()));
+            project.setApplyCount(projectService.countProjectApply(project.getLoanId()));
         });
 
         model.addAttribute("categories", categories);
@@ -107,7 +110,7 @@ public class ProjectController {
         if (project.getLoanId() == null || project.getLoanId() == 0) {
             project.setCreateTime(new Date());
         }
-        if (!StringUtils.isEmpty(project.getEnableMoney())){
+        if (!StringUtils.isEmpty(project.getEnableMoney())) {
             String[] enableMoneyArray = project.getEnableMoney().split(",");
             project.setMaxMoney(Double.parseDouble(enableMoneyArray[enableMoneyArray.length - 1]));
             project.setMinMoney(Double.parseDouble(enableMoneyArray[0]));

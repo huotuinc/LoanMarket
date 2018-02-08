@@ -81,21 +81,28 @@
     </div>
 </div>
 <div class="footer">
-    <a class="apply-btn" th:attr="url=${loanProject.applyUrl}" onclick="loanDetail.getUrl(this)">立即申请</a>
+    <a class="apply-btn" th:attr="url=${loanProject.applyUrl},projectId=${loanProject.loanId}" onclick="loanDetail.getUrl(this)">立即申请</a>
 </div>
 </body>
 <script src="http://resali.huobanplus.com/cdn/jquery/3.2.1/jquery.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/jquery-weui/1.0.1/jquery-weui.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/layer/3.1.0/layer.js"></script>
 <script src="http://resali.huobanplus.com/cdn/game/fastclick.js"></script>
 <script src="../../resource/js/mock/mock-min.js" th:remove="all"></script>
 <script src="../../resource/js/mock/api.js" th:remove="all"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/v2/bootstrap.hot.extra-utils.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/v2/bootstrap.hot.extra-init.js"></script>
 <script src="../../resource/js/forend/loanApply.js"></script>
 <script src="../../resource/js/forend/loanDetail.js"></script>
 <script type="text/javascript">
     var loanDetail = {
-        getUrl:function (obj) {
+        getUrl: function (obj) {
+            //产品浏览记录
+            var projectId = $(obj).attr("projectId");
+            hot.ajax("/forend/project/applyLog", {projectId: projectId}, function (ret) {
+            }, function (err) {
+            }, "post");
             var url = $(obj).attr("url");
-            console.log(url)
             window.location.href = url;
         }
     }

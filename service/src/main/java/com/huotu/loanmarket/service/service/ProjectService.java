@@ -80,9 +80,9 @@ public interface ProjectService extends CrudService<LoanProject, Integer> {
     /**
      * 记录浏览记录
      *
-     * @param project
+     * @param projectId
      */
-    void projectViewLog(int project);
+    void projectViewLog(int projectId);
 
     /**
      * 记录申请记录

@@ -89,6 +89,8 @@ public class WebProjectController {
             String tag = tags[0] + "," + tags[1] + "," + tags[2];
             loanProject.setTag(tag);
         }
+        //记录浏览量
+        projectService.projectViewLog(projectId);
         model.addAttribute("materials", materialEnumList);
         model.addAttribute("loanProject", loanProject);
         return "forend/loanDetail";
@@ -108,5 +110,18 @@ public class WebProjectController {
         });
         model.addAttribute("hotProject", hotProject);
         return "forend/loanProgress";
+    }
+
+    /**
+     * 产品申请浏览记录
+     *
+     * @param projectId
+     * @return
+     */
+    @RequestMapping("/applyLog")
+    @ResponseBody
+    public ApiResult projectApplyLog(int projectId) {
+        projectService.projectApplyLog(projectId);
+        return ApiResult.resultWith(ResultCodeEnum.SUCCESS);
     }
 }

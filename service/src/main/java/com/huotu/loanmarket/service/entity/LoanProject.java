@@ -143,5 +143,15 @@ public class LoanProject {
     private int minDeadline;
     @Column(name = "Categories")
     private String categories;
+    /**
+     * 浏览量
+     */
+    @Transient
+    private int viewCount;
+    /**
+     * 申请量
+     */
+    @Transient
+    private int applyCount;
 
 }

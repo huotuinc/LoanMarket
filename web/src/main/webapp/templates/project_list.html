@@ -115,6 +115,8 @@
                                 <th>利率</th>
                                 <th>状态</th>
                                 <th>排序字段（越大越前）</th>
+                                <th>浏览量</th>
+                                <th>申请量</th>
                                 <th>添加时间</th>
                                 <th>操作</th>
                             </tr>
@@ -148,6 +150,8 @@
                                     <span th:if="${project.isNew==1}" class="cate-select">新品</span>
                                 </td>
                                 <td th:text="${project.topSortNum}"></td>
+                                <td th:text="${project.viewCount}"></td>
+                                <td th:text="${project.applyCount}"></td>
                                 <td th:text="${#dates.format(project.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
                                 <td>
                                     <span class="cursor-point"
