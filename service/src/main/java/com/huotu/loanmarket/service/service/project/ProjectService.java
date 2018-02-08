@@ -102,4 +102,20 @@ public interface ProjectService {
     ProjectViewLog logView(int userId, int projectId);
 
     ProjectApplyLog logApply(int userId, int projectId);
+
+    /**
+     * 查询产品浏览量
+     *
+     * @param projectId
+     * @return
+     */
+    int countProjectView(int projectId);
+
+    /**
+     * 查询产品申请量
+     *
+     * @param project
+     * @return
+     */
+    int countProjectApply(int project);
 }

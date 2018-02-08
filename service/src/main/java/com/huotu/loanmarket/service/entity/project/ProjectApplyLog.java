@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -32,6 +33,6 @@ public class ProjectApplyLog {
     @Column(name = "Project_Id")
     private int projectId;
 
-    @Column(name = "Apply_Time")
-    private Date applyTime;
+    @Column(name = "Apply_Time",columnDefinition = "datetime")
+    private LocalDateTime applyTime;
 }

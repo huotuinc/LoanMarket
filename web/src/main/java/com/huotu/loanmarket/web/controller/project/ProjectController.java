@@ -90,6 +90,8 @@ public class ProjectController {
             }else {
                 project.setDeadlineUnitDesc("天");
             }
+            //统计产品的浏览量和申请量
+
         });
 
         model.addAttribute("categories", categories);
