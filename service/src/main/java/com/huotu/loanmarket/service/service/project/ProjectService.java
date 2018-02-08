@@ -114,8 +114,8 @@ public interface ProjectService {
     /**
      * 查询产品申请量
      *
-     * @param project
+     * @param projectId
      * @return
      */
-    int countProjectApply(int project);
+    int countProjectApply(int projectId);
 }

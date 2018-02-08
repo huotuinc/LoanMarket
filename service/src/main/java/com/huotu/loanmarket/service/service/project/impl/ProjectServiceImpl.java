@@ -197,11 +197,11 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public int countProjectView(int projectId) {
-        return 0;
+        return projectViewLogRepository.findByProjectId(projectId).size();
     }
 
     @Override
-    public int countProjectApply(int project) {
-        return 0;
+    public int countProjectApply(int projectId) {
+        return projectApplyLogRepository.findByProjectId(projectId).size();
     }
 }
