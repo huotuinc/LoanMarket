@@ -38,18 +38,13 @@
         .bts{ color: #999; font-size: 14px; }
     </style>
 </head>
-<!--/*@thymesVar id="returnInfo" type="com.huotu.superloan.service.model.unifiedorder.PayReturnVo"*/-->
-<body style="background-color: #f2f2f2; overflow: hidden" th:object="${returnInfo}">
+<body style="background-color: #f2f2f2; overflow: hidden">
 <div style="text-align: center;">
     <p style=" padding-top:20%; padding-bottom:2%">
         <img src="../../resource/image/cg2.png" th:src="@{/resource/img/cg2.png}" style="width:24%;">
     </p>
-    <p class="btt">授权失败</p>
+    <p class="btt">查询失败</p>
     <p th:text="${errorMsg}"></p>
-    <p class="bts">点击继续下一步操作</p>
-    <p class="lk">
-        <a href="" th:href="*{redirectUrl}" th:text="*{redirectText}">返回</a>
-    </p>
 </div>
 </body>
 </html>
