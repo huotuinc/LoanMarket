@@ -73,7 +73,7 @@ public class TongdunController {
         if (log == null) {
             throw new ApiResultException(ApiResult.resultWith(AppCode.ERROR,"报告不存在"));
         }
-        if(log.getState().equals(TongdunEnum.ReportStatus.SUCCESS)) {
+        if(log.getState() == TongdunEnum.ReportStatus.SUCCESS.getCode()) {
             ReportDetailVo reportDetailVo = requestLogService.convertRequestLogToReport(log);
             model.addAttribute("report", reportDetailVo);
         }else{
