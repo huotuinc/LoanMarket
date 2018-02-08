@@ -183,7 +183,8 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/api/projectView/**")
                 //协议等页面
                 .excludePathPatterns("/api/other/**")
-                .excludePathPatterns("/api/user/reg/**");
+                .excludePathPatterns("/api/user/reg/**")
+                .excludePathPatterns("/api/user/sendVerifyCode");
     }
 
 
