@@ -14,6 +14,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
 
 /**
  * @author helloztt
@@ -33,12 +36,25 @@ public class OrderSearchCondition {
     private int pageSize = Constant.BACKEND_DEFAULT_PAGE_SIZE;
 
     /**
-     * 开始时间
+     * 支付开始时间
      */
-    private String payTimeBegin;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate payTimeBegin;
     /**
-     * 结束时间
+     * 支付结束时间
      */
-    private String payTimeEnd;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate payTimeEnd;
 
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate createTimeBegin;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate createTimeEnd;
+
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate authTimeBegin;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate authTimeEnd;
 }
