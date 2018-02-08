@@ -14,7 +14,6 @@ import com.antgroup.zmxy.openplatform.api.ZhimaApiException;
 import com.antgroup.zmxy.openplatform.api.request.ZhimaAuthInfoAuthorizeRequest;
 import com.huotu.loanmarket.common.Constant;
 import com.huotu.loanmarket.common.enums.EnumHelper;
-import com.huotu.loanmarket.common.utils.LocalDateTimeFormatter;
 import com.huotu.loanmarket.common.utils.RandomUtils;
 import com.huotu.loanmarket.common.utils.StringUtilsExt;
 import com.huotu.loanmarket.service.aop.BusinessSafe;
@@ -559,14 +558,33 @@ public class OrderServiceImpl implements OrderService {
                     , EnumHelper.getEnumType(OrderEnum.PayStatus.class,condition.getPayStatus())));
         }
 
-        if (org.apache.commons.lang3.StringUtils.isNotBlank(condition.getPayTimeBegin())) {
+        if (condition.getPayTimeBegin() != null) {
             predicateList.add(cb.and(cb.greaterThanOrEqualTo(root.get("payTime").as(LocalDateTime.class)
-                    , LocalDateTimeFormatter.toLocalDateTime(condition.getPayTimeBegin()))));
+                    , condition.getPayTimeBegin().atStartOfDay())));
         }
-        if (org.apache.commons.lang3.StringUtils.isNotBlank(condition.getPayTimeEnd())) {
+        if (condition.getPayTimeEnd() != null) {
             predicateList.add(cb.and(cb.lessThanOrEqualTo(root.get("payTime").as(LocalDateTime.class)
-                    , LocalDateTimeFormatter.toLocalDateTime(condition.getPayTimeEnd()))));
+                    , condition.getPayTimeEnd().atStartOfDay())));
         }
+
+        if (condition.getCreateTimeBegin() != null) {
+            predicateList.add(cb.and(cb.greaterThanOrEqualTo(root.get("createTime").as(LocalDateTime.class)
+                    , condition.getCreateTimeBegin().atStartOfDay())));
+        }
+        if (condition.getCreateTimeEnd() != null) {
+            predicateList.add(cb.and(cb.lessThanOrEqualTo(root.get("createTime").as(LocalDateTime.class)
+                    , condition.getCreateTimeEnd().atStartOfDay())));
+        }
+
+        if (condition.getAuthTimeBegin() != null) {
+            predicateList.add(cb.and(cb.greaterThanOrEqualTo(root.get("authTime").as(LocalDateTime.class)
+                    , condition.getCreateTimeBegin().atStartOfDay())));
+        }
+        if (condition.getAuthTimeEnd() != null) {
+            predicateList.add(cb.and(cb.lessThanOrEqualTo(root.get("authTime").as(LocalDateTime.class)
+                    , condition.getAuthTimeEnd().atStartOfDay())));
+        }
+
         return cb.and(predicateList.toArray(new Predicate[predicateList.size()]));
     }
 

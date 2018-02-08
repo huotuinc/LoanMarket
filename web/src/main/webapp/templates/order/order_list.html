@@ -79,6 +79,27 @@
                                        th:value="*{payTimeBegin}"/>
                                 <input type="hidden" id="payTimeEnd" name="payTimeEnd" runat="server" th:value="*{payTimeEnd}"/>
                             </div>
+                            <div class="form-group m-r-sm">
+                                <label class=" control-label" for="createTimePick">创建时间：</label>
+                                <input type="text" class="form-control input-sm mb10 data-range-pick" runat="server"
+                                       id="createTimePick" name="createTimePick" start-element="#createTimeBegin"
+                                       end-element="#createTimeEnd" placeholder="开始时间-结束时间" style="width: 300px;"
+                                       th:value="(*{createTimeBegin!= null and createTimeBegin != ''}  ? *{createTimeBegin} :'')  + (*{createTimeEnd != null and createTimeEnd != ''} ?  ' - ' + *{createTimeEnd} :'') "/>
+                                <input type="hidden" id="createTimeBegin" name="createTimeBegin" runat="server"
+                                       th:value="*{createTimeBegin}"/>
+                                <input type="hidden" id="createTimeEnd" name="createTimeEnd" runat="server" th:value="*{createTimeEnd}"/>
+                            </div>
+
+                            <div class="form-group m-r-sm">
+                                <label class=" control-label" for="authTimePick">认证时间：</label>
+                                <input type="text" class="form-control input-sm mb10 data-range-pick" runat="server"
+                                       id="authTimePick" name="authTimePick" start-element="#authTimeBegin"
+                                       end-element="#authTimeEnd" placeholder="开始时间-结束时间" style="width: 300px;"
+                                       th:value="(*{authTimeBegin!= null and authTimeBegin != ''}  ? *{authTimeBegin} :'')  + (*{authTimeEnd != null and authTimeEnd != ''} ?  ' - ' + *{authTimeEnd} :'') "/>
+                                <input type="hidden" id="authTimeBegin" name="authTimeBegin" runat="server"
+                                       th:value="*{authTimeBegin}"/>
+                                <input type="hidden" id="authTimeEnd" name="authTimeEnd" runat="server" th:value="*{authTimeEnd}"/>
+                            </div>
                             <span onclick="orderListHandler.search(1)" class="btn btn-success btn-sm">搜索</span>
                             <span onclick="orderListHandler.searchAll()" class="btn btn-success btn-sm">显示所有</span>
                         </div>
@@ -184,7 +205,8 @@
     var baseUrl = /*[[@{/admin/order}]]*/ "/admin/order";
     var dsUrl = /*[[@{/admin/ds/dsShow}]]*/ "/admin/ds/dsShow";
     var carrierUrl = /*[[@{/admin/carrier/carrierShow}]]*/ "/admin/carrier/carrierShow";
-    var totalPage = /*[[${orderPage.getTotalElements()}]]*/ 10;
+    var sesameUrl = /*[[@{/admin/sesame/getReport}]]*/ "/admin/sesame/getReport";
+    var totalPage = /*[[${orderPage.getTotalPages()}]]*/ 10;
 </script>
 <script type="text/javascript">
     $(function () {
@@ -196,7 +218,7 @@
         });
         $("input[class~=data-range-pick]").daterangepicker({
             locale: {
-                format: 'YYYY-MM-DD HH:mm:ss'
+                format: 'YYYY-MM-DD'
             }
         });
     });
@@ -212,8 +234,11 @@
         detail:function(obj){
             var orderId = $(obj).attr('orderId');
             var orderType = $(obj).attr('orderType');
+            if(orderType == 0) {
+                hot.iframeModal(sesameUrl + "?orderId=" + orderId, '900px', '500px', "行业黑名单");
+            }
             if(orderType == 1) {
-                reportViewer.showByOrder(orderId);
+                reportViewer.showByOrderId(orderId);
             }
             if(orderType == 2) {
                 hot.iframeModal(carrierUrl + "?orderId=" + orderId, '900px', '500px', "运营商报告");
