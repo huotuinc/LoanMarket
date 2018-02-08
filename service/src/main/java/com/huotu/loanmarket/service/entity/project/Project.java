@@ -93,6 +93,9 @@ public class Project {
      */
     @Column(name = "Apply_Type")
     private int applyType;
+    /**
+     * 申请链接
+     */
     @Column(name = "Apply_Url")
     private String applyUrl;
     /**
