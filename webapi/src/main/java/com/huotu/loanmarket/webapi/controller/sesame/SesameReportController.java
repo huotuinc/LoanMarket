@@ -1,6 +1,8 @@
 package com.huotu.loanmarket.webapi.controller.sesame;
 
+import com.huotu.loanmarket.service.entity.order.Order;
 import com.huotu.loanmarket.service.entity.sesame.Industry;
+import com.huotu.loanmarket.service.service.order.OrderService;
 import com.huotu.loanmarket.service.service.sesame.SesameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,10 +16,13 @@ import java.util.List;
 public class SesameReportController {
     @Autowired
     private SesameService sesameService;
+    @Autowired
+    private OrderService orderService;
 
     @RequestMapping("/getSesameReport")
-    public String getSesameReport(Long userId, String orderId, Model model) {
-        List<Industry> industryList = sesameService.findByUserIdAndOrderId(userId, orderId);
+    public String getSesameReport(String orderId, Model model) {
+        Order order = orderService.findByOrderId(orderId);
+        List<Industry> industryList = sesameService.findByUserIdAndOrderId(order.getUser().getUserId(), orderId);
         model.addAttribute("industryList", industryList);
         return "report/sesame";
     }
