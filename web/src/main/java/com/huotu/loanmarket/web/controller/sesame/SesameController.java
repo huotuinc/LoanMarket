@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
-@RequestMapping("/sesame")
+@RequestMapping("/admin/sesame")
 @Controller
 public class SesameController {
     @Autowired
