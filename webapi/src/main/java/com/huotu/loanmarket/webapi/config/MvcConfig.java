@@ -141,12 +141,15 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
         /**
          * 基于上面规则接口，不需要进行登录验证的接口配置
          */
-        registration.excludePathPatterns("/api/user/sendVerifyCode")
+        registration.excludePathPatterns("/api/sys/sendVerifyCode")
                 .excludePathPatterns("/api/user/login")
                 .excludePathPatterns("/api/user/register")
                 .excludePathPatterns("/api/user/updatePassword")
                 .excludePathPatterns("/api/sesame/rollBack/**")
                 .excludePathPatterns("/api/carrier/**")
+                .excludePathPatterns("/api/ds/**")
+                .excludePathPatterns("/api/sesameReport/**")
+                .excludePathPatterns("/api/projectView/**")
                 .excludePathPatterns("/api/other/**")
                 .excludePathPatterns("/api/order/return/**")
                 .excludePathPatterns("/api/user/reg/**");
@@ -184,7 +187,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
                 //协议等页面
                 .excludePathPatterns("/api/other/**")
                 .excludePathPatterns("/api/user/reg/**")
-                .excludePathPatterns("/api/user/sendVerifyCode");
+                .excludePathPatterns("/api/sys/sendVerifyCode");
     }
 
 
