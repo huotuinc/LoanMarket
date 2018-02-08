@@ -79,15 +79,6 @@
             </div>
         </div>
     </div>
-    <div class="goods-list material-list">
-        <div class="hd">申请材料</div>
-        <div class="bd clearfix">
-            <div class="material" th:each="material:${materials}">
-                <div th:class="'material-hd material-icon-'+${material.code}" class="material-hd material-icon-0"></div>
-                <div class="material-bd" th:text="${material.name}">基本信息</div>
-            </div>
-        </div>
-    </div>
 </div>
 <div class="footer">
     <a class="apply-btn" th:attr="url=${loanProject.applyUrl}" onclick="loanDetail.getUrl(this)">立即申请</a>
