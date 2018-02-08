@@ -199,7 +199,11 @@ public class SesameController {
                     industry.setStatus(EnumHelper.getEnumType(SesameEnum.Status.class, detail.getStatus()));
                     industry.setStatement(detail.getStatement());
                     industry.setLevel(EnumHelper.getEnumType(SesameEnum.Level.class, detail.getLevel().toString()));
-                    industry.setSettlement(detail.getSettlement());
+                    if (detail.getSettlement()) {
+                        industry.setSettlement(SesameEnum.Settlement.SETTLED);
+                    } else {
+                        industry.setSettlement(SesameEnum.Settlement.UNSETTLED);
+                    }
                     sesameService.save(industry);
                 });
             } else {
@@ -207,7 +211,7 @@ public class SesameController {
             }
             orderService.save(order);
             if (response.isSuccess()) {
-                model.addAttribute("order",order);
+                model.addAttribute("order", order);
                 return "sesame/sesame_success";
             } else {
                 model.addAttribute("errorMsg", response.getErrorMessage());
