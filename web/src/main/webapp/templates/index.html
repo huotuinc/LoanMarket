@@ -90,12 +90,21 @@
                         </li>
                     </ul>
                 </li>
-                <li>
+                <li class="active">
                     <a href="#"><i class="fa fa-edit"></i><span class="nav-label">订单管理</span><span
                             class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li><a class="J_menuItem" href="category/category_list.html"
                                th:href="@{/admin/order/list}">订单列表</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="active">
+                    <a href="#"><i class="fa fa-edit"></i><span class="nav-label">统计报表</span><span
+                            class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li><a class="J_menuItem" href="category/category_list.html"
+                               th:href="@{/stat}">每日统计报表</a>
                         </li>
                     </ul>
                 </li>
@@ -131,6 +140,7 @@
             </button>
             <nav class="page-tabs J_menuTabs" style="margin-left: 80px;">
                 <div class="page-tabs-content">
+                    <a href="javascript:;" class="active J_menuTab" th:attr="data-id=@{/indexCount}">桌面</a>
                 </div>
             </nav>
             <button class="roll-nav roll-right J_tabRight">
@@ -155,8 +165,8 @@
                     class="fa fa fa-sign-out"></i>退出</a>
         </div>
         <div class="row J_mainContent" id="content-main">
-            <iframe class="J_iframe" name="iframe0" width="100%" height="100%" src="" frameborder="0"
-                    data-id="http://www.baidu.com" seamless></iframe>
+            <iframe class="J_iframe" name="iframe0" width="100%" height="100%" src="" frameborder="0" th:src="@{/indexCount}"
+                    th:attr="data-id=@{/indexCount}" seamless></iframe>
         </div>
     </div>
     <!--右侧部分结束-->

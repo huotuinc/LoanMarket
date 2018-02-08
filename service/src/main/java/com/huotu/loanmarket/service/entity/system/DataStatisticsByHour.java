@@ -30,7 +30,7 @@ public class DataStatisticsByHour {
     /**
      * 订单成功金额
      */
-    @Column(name = "order_amount")
+    @Column(name = "order_amount", scale = Constant.SCALE, precision = Constant.PRECISION)
     private BigDecimal orderAmount = BigDecimal.ZERO;
     /**
      * 用户人数
@@ -65,12 +65,12 @@ public class DataStatisticsByHour {
     /**
      * 统计结束时间
      */
-    @Column(name = "statistics_end_time",columnDefinition = "datetime")
+    @Column(name = "statistics_end_time", columnDefinition = "datetime")
     private LocalDateTime endTime = createTime.withMinute(0).withSecond(0).withNano(0);
     /**
      * 统计起始时间
      */
-    @Column(name = "statistics_begin_time",columnDefinition = "datetime")
-    private LocalDateTime beginTime = endTime = endTime.minusHours(1);
+    @Column(name = "statistics_begin_time", columnDefinition = "datetime")
+    private LocalDateTime beginTime = endTime.minusHours(1);
 
 }

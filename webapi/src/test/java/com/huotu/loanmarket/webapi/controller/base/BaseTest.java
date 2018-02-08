@@ -85,7 +85,7 @@ public abstract class BaseTest {
         industry.setBiz_code(SesameEnum.IndustryType.E_COMMERCE_INDUSTRY);
         industry.setMerchantId(merchantId);
         industry.setOrderId(orderId);
-        industry.setSettlement(true);
+        industry.setSettlement(SesameEnum.Settlement.EMPTY);
         industry.setStatement(UUID.randomUUID().toString());
         industry.setUserId(userId);
         industry.setStatus(SesameEnum.Status.STATUS_ONE);

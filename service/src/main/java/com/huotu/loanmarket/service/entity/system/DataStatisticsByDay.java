@@ -32,9 +32,9 @@ public class DataStatisticsByDay {
     @Column(name = "merchant_id")
     private Integer merchantId = Constant.MERCHANT_ID;
     /**
-     * 订单成功金额
+     * 订单支付金额
      */
-    @Column(name = "order_amount")
+    @Column(name = "order_amount", scale = Constant.SCALE, precision = Constant.PRECISION)
     private BigDecimal orderAmount = BigDecimal.ZERO;
     /**
      * 用户人数
@@ -82,28 +82,28 @@ public class DataStatisticsByDay {
     @Transient
     private LocalDateTime lastHourTime;
 
-    public DataStatisticsByDay(BigDecimal orderAmount, Long userCount, Long orderCount, Long orderPayCount, Long authSuccessCount, Long authFailureCount,LocalDateTime lastHourTime) {
-        if(orderAmount != null){
+    public DataStatisticsByDay(BigDecimal orderAmount, Long userCount, Long orderCount, Long orderPayCount, Long authSuccessCount, Long authFailureCount, LocalDateTime lastHourTime) {
+        if (orderAmount != null) {
             this.orderAmount = orderAmount;
         }
-        if(userCount != null){
+        if (userCount != null) {
             this.userCount = userCount.intValue();
         }
-        if(orderCount != null){
+        if (orderCount != null) {
             this.orderCount = orderCount.intValue();
         }
-        if(orderPayCount != null){
+        if (orderPayCount != null) {
             this.orderPayCount = orderPayCount.intValue();
         }
-        if(authSuccessCount != null){
+        if (authSuccessCount != null) {
             this.authSuccessCount = authSuccessCount.intValue();
         }
-        if(authFailureCount != null){
+        if (authFailureCount != null) {
             this.authFailureCount = authFailureCount.intValue();
         }
-        if(lastHourTime != null){
+        if (lastHourTime != null) {
             this.lastHourTime = lastHourTime;
-        }else{
+        } else {
             this.lastHourTime = LocalDateTime.now();
         }
     }

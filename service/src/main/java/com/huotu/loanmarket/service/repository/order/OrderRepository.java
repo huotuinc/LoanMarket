@@ -94,7 +94,7 @@ public interface OrderRepository extends JpaRepository<Order, String>, JpaSpecif
      */
     @Query("select count(o.orderId),sum(o.payAmount) from Order o" +
             " where o.merchant = ?1 and o.payTime >= ?2 and o.payTime < ?3")
-    Object[] sumByMerchantIdAndPayTime(Integer merchantId, LocalDateTime payBeginTime, LocalDateTime payEndTime);
+    List<Object[]> sumByMerchantIdAndPayTime(Integer merchantId, LocalDateTime payBeginTime, LocalDateTime payEndTime);
 
     /**
      * 统计时间范围内认证状态个数
