@@ -69,10 +69,10 @@ public class CarrierController {
     @RequestMapping("/magicCallback")
     @ResponseBody
     public Object magicCallback(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
         response.setStatus(HttpStatus.OK.value());
         Map<String,Object> map = new HashMap<>(2);
         map.put("code",0);
+        try {
         //回调事件
         String notifyEvent = request.getParameter("notify_event");
         //回调参数
@@ -119,6 +119,10 @@ public class CarrierController {
             log.error(MessageFormat.format("【数据魔盒】回调失败，回调通知事件:{0}",notifyEvent));
         }
         map.put("message","success");
+        }catch (Exception e) {
+            map.put("message","回调处理成功");
+            return map;
+        }
         return map;
     }
 
