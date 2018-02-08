@@ -452,7 +452,7 @@ public class OrderServiceImpl implements OrderService {
                     url = homeURI + "api/ds/dsShow?userId=" + order.getUser().getUserId() + "&orderId=" + order.getOrderId();
                 }
                 if (orderStatus.equals(OrderEnum.ApiOrderStatus.AUTH_ING)) {
-                    url = "http://gh_credit_authTaobao";
+                    url = "gh_credit://authTaobao";
                 }
                 break;
             case BACKLIST_BUS:
@@ -518,7 +518,7 @@ public class OrderServiceImpl implements OrderService {
     public Page<Order> findAll(OrderSearchCondition condition) {
         Specification<Order> specification = getOrderSpecification(condition);
 
-        return  orderRepository.findAll(specification, new PageRequest(condition.getPageIndex() - 1, condition.getPageSize()));
+        return orderRepository.findAll(specification, new PageRequest(condition.getPageIndex() - 1, condition.getPageSize()));
     }
 
     @Override
@@ -531,7 +531,7 @@ public class OrderServiceImpl implements OrderService {
         TypedQuery<Tuple> q = entityManager.createQuery(query);
         List<Tuple> result = q.getResultList();
         Tuple tuple = result.get(0);
-        return (BigDecimal)tuple.get(0);
+        return (BigDecimal) tuple.get(0);
     }
 
     private Specification<Order> getOrderSpecification(OrderSearchCondition condition) {
@@ -543,19 +543,19 @@ public class OrderServiceImpl implements OrderService {
         if (org.apache.commons.lang3.StringUtils.isNotEmpty(condition.getUserName())) {
             predicateList.add(cb.equal(root.get("user").get("userName").as(String.class), condition.getUserName()));
         }
-        if(condition.getOrderType() != null && condition.getOrderType() >= 0){
+        if (condition.getOrderType() != null && condition.getOrderType() >= 0) {
             predicateList.add(cb.equal(root.get("orderType").as(OrderEnum.OrderType.class)
-                    , EnumHelper.getEnumType(OrderEnum.OrderType.class,condition.getOrderType())));
+                    , EnumHelper.getEnumType(OrderEnum.OrderType.class, condition.getOrderType())));
         }
 
-        if(condition.getAuthStatus() != null && condition.getAuthStatus() >= 0){
+        if (condition.getAuthStatus() != null && condition.getAuthStatus() >= 0) {
             predicateList.add(cb.equal(root.get("authStatus").as(UserAuthorizedStatusEnums.class)
-                    , EnumHelper.getEnumType(UserAuthorizedStatusEnums.class,condition.getAuthStatus())));
+                    , EnumHelper.getEnumType(UserAuthorizedStatusEnums.class, condition.getAuthStatus())));
         }
 
-        if(condition.getPayStatus() != null && condition.getPayStatus() >= 0){
+        if (condition.getPayStatus() != null && condition.getPayStatus() >= 0) {
             predicateList.add(cb.equal(root.get("payStatus").as(OrderEnum.PayStatus.class)
-                    , EnumHelper.getEnumType(OrderEnum.PayStatus.class,condition.getPayStatus())));
+                    , EnumHelper.getEnumType(OrderEnum.PayStatus.class, condition.getPayStatus())));
         }
 
         if (condition.getPayTimeBegin() != null) {

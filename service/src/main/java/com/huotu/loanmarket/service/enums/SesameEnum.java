@@ -150,4 +150,26 @@ public interface SesameEnum {
             return message;
         }
     }
+
+    /**
+     * 结清状态
+     */
+    @AllArgsConstructor
+    enum Settlement implements  IMerchantParameterEnum{
+        SETTLED("T", "已结算"),
+        UNSETTLED("F", "未结算"),
+        EMPTY("E", "未知");
+        private String key;
+        private String message;
+
+        @Override
+        public String getKey() {
+            return key;
+        }
+
+        @Override
+        public String getMessage() {
+            return message;
+        }
+    }
 }

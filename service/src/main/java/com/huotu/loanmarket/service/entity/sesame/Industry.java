@@ -68,7 +68,7 @@ public class Industry {
      * 空值 未知
      */
     @Column(name = "settlement")
-    private boolean settlement;
+    private SesameEnum.Settlement settlement;
     /**
      * 用户本人对该条负面记录有异议时，表示该异议处理流程的状态
      */

@@ -57,7 +57,7 @@
                                     <tr th:each="industry:${industryList}" th:unless="${#lists.isEmpty(industryList)}">
                                         <td th:text="${industry.biz_code.message}"></td>
                                         <td th:text="${industry.code.message}"></td>
-                                        <td th:text="${industry.settlement}"></td>
+                                        <td th:text="${industry.settlement.message}"></td>
                                         <td th:text="${industry.status.message}"></td>
                                         <td th:text="${industry.statement}"></td>
                                     </tr>
