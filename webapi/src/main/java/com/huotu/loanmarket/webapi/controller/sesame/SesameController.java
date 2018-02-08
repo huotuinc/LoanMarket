@@ -205,6 +205,7 @@ public class SesameController {
             } else {
                 order.setAuthStatus(UserAuthorizedStatusEnums.AUTH_ERROR);
             }
+            order.setAuthTime(LocalDateTime.now());
             orderService.save(order);
             if (response.isSuccess()) {
                 return "sesame/sesame_success";

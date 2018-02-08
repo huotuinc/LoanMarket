@@ -2,22 +2,26 @@ package com.huotu.loanmarket.service.entity.system;
 
 import com.huotu.loanmarket.common.Constant;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
- * 每小时数据统计
+ * 每天数据统计
  *
  * @author helloztt
  */
 @Getter
 @Setter
 @Entity
-@Table(name = "zx_statistics_hour")
-public class DataStatisticsByHour {
+@Table(name = "zx_statistics_day")
+@NoArgsConstructor
+public class DataStatisticsByDay {
     @Id
     @Column(name = "data_id", unique = true, nullable = false, length = 10)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -60,17 +64,31 @@ public class DataStatisticsByHour {
     /**
      * 统计时间(创建时间）
      */
-    @Column(name = "statistics_time", columnDefinition = "timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "statistics_time", columnDefinition = "timestamp")
     private LocalDateTime createTime = LocalDateTime.now();
     /**
-     * 统计结束时间
+     * 统计结束时间(包含）
      */
-    @Column(name = "statistics_end_time",columnDefinition = "datetime")
-    private LocalDateTime endTime = createTime.withMinute(0).withSecond(0).withNano(0);
+    @Column(name = "statistics_end_time", columnDefinition = "datetime")
+    private LocalDate endTime = createTime.toLocalDate();
     /**
-     * 统计起始时间
+     * 统计起始时间（不包含）
      */
-    @Column(name = "statistics_begin_time",columnDefinition = "datetime")
-    private LocalDateTime beginTime = endTime = endTime.minusHours(1);
+    @Column(name = "statistics_begin_time", columnDefinition = "datetime")
+    private LocalDate beginTime = endTime.minusDays(1);
+    /**
+     * 统计截止时间
+     */
+    @Transient
+    private LocalDateTime lastHourTime;
 
+    public DataStatisticsByDay(BigDecimal orderAmount, Long userCount, Long orderCount, Long orderPayCount, Long authSuccessCount, Long authFailureCount,LocalDateTime lastHourTime) {
+        this.orderAmount = orderAmount;
+        this.userCount = userCount.intValue();
+        this.orderCount = orderCount.intValue();
+        this.orderPayCount = orderPayCount.intValue();
+        this.authSuccessCount = authSuccessCount.intValue();
+        this.authFailureCount = authFailureCount.intValue();
+        this.lastHourTime = lastHourTime;
+    }
 }

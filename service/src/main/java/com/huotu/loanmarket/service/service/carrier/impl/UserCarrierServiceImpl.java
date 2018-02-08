@@ -163,6 +163,7 @@ public class UserCarrierServiceImpl implements UserCarrierService {
                 order.setAuthStatus(UserAuthorizedStatusEnums.AUTH_ERROR);
                 resultCode = AppCode.ERROR.getCode();
             }
+            order.setAuthTime(LocalDateTime.now());
             orderRepository.saveAndFlush(order);
             return ApiResult.resultWith(resultCode, message);
         }

@@ -87,4 +87,15 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
      */
     @Query("select u.inviterId,count(u.inviterId) from User u where u.inviterId in ?1 group by u.inviterId")
     List<Object[]> countByInviterId(List<Long> userIdList);
+
+    /**
+     * 根据注册时间统计用户数量
+     *
+     * @param merchantId   商户ID
+     * @param regBeginTime 注册起始时间
+     * @param regEndTime   注册结束时间
+     * @return
+     */
+    @Query("select count(u.userId) from User u where u.merchantId = ?1 and u.regTime >= ?2 and u.regTime < ?3")
+    int countByMerchantIdAndRegTime(Integer merchantId, LocalDateTime regBeginTime, LocalDateTime regEndTime);
 }
