@@ -200,7 +200,7 @@ public class SystemController {
                     .title(tempTitle.replace("{name}", MaskUtils.maskMobile(user.getUserName())))
                     .description(tempDescription)
                     .icon("http://cdn1.51morecash.com/logozx.png")
-                    .url(baseService.h5HomeURI() + "invite?i=" + userId).build();
+                    .url(baseService.h5HomeURI() + "/api/user/reg?inviterId=" + userId).build();
             return ApiResult.resultWith(AppCode.SUCCESS, shareInfo);
         }
         return ApiResult.resultWith(AppCode.ERROR, "没有找到用户");
