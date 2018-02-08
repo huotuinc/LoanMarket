@@ -141,8 +141,9 @@ public class OrderServiceImpl implements OrderService {
             return null;
         }
         PayReturnVo payReturnVo = new PayReturnVo();
-        payReturnVo.setRedirectText("返回");
-        payReturnVo.setRedirectUrl(unifiedOrder.getRedirectUrl());
+        OrderThirdUrlInfo urlInfo = this.getOrderThirdUrl(unifiedOrder);
+        payReturnVo.setRedirectText(urlInfo.getBtnReturnTitle());
+        payReturnVo.setRedirectUrl(urlInfo.getUrl());
         payReturnVo.setUserId(unifiedOrder.getUser().getUserId().intValue());
         payReturnVo.setUnifiedOrderNo(orderNo);
         return payReturnVo;

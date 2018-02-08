@@ -26,7 +26,7 @@ public class OrderThirdUrlInfo {
     /**
      * 返回按钮标题
      */
-    private  String btnReturnTitle;
+    private  String btnReturnTitle = "返回";
 
 
 
