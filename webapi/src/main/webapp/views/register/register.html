@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+    <meta name="viewport" content="width=device-width,minimum-scale=1,user-scalable=no,maximum-scale=1,initial-scale=1" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="description" content="" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="http://resali.huobanplus.com/cdn/weui/1.1.2/weui.min.css">
+    <link rel="stylesheet" type="text/css" href="../../resource/css/wap/weui.min.css" th:href="@{/resource/css/wap/weui.min.css(t=20180201)}">
+    <link rel="stylesheet" href="http://resali.huobanplus.com/cdn/jquery-weui/1.2.0/jquery-weui.min.css">
+    <link rel="stylesheet" type="text/css"  href="../../resource/css/wap/weui.min-rsgghot-diy.css" th:href="@{/resource/css/wap/weui.min-rsgghot-diy.css(t=20180201)}"/>
+    <title>邀请注册</title>
+    <style>
+        body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td {
+            margin: 0;
+            padding: 0;
+        }
+        a, img, button, input, select {
+            -webkit-tap-highlight-color: transparent;
+            outline: 0;
+        }
+        img {
+            border: 0 none;
+        }
+        i, em {
+            font-style: normal
+        }
+        ul {
+            list-style-type: none;
+            display: block;
+            -webkit-margin-before: 0em;
+            -webkit-margin-after: 0em;
+            -webkit-margin-start: 0px;
+            -webkit-margin-end: 0px;
+        }
+        /*请不要删除*/
+        .disabled_verifyCode{
+            background-color:#9b9b9b !important;
+        }
+        body {
+            margin: 0px;
+            padding: 0px;
+            background-color: #fff;
+            min-width: 320px;
+            font-family: Helvetica, STHeiti STXihei, Microsoft YaHei, Arial;
+        }
+
+    </style>
+</head>
+<body>
+<p style="text-align: center; margin: 40px 0px"><img src="../../resource/image/1.png"
+                                                     th:src="@{/resource/image/1.png}"
+                                                     style="width:80%; "></p>
+<div class="loding" style="  margin-top: 0px">
+    <div class="weui_cells weui_cells_form" style="  margin-top: 0px">
+        <div class="weui_cell">
+            <div class="weui_cell_hd margt">
+                <label class="weui_label"><img src="../../resource/image/sj3.png"
+                                               th:src="@{/resource/image/sj3.png}"
+                                               width="25px;"></label>
+            </div>
+            <div class="weui_cell_bd weui_cell_primary">
+                <input id="userMobile" class="weui_input" maxlength="11" type="number" placeholder="请输入手机号码">
+            </div>
+        </div>
+        <div class="weui_cell">
+            <div class="weui_cell_hd margt">
+                <label class="weui_label"><img src="../../resource/image/yzm3.png"
+                                               th:src="@{/resource/image/yzm3.png}"
+                                               width="25px;"></label>
+            </div>
+            <div class="weui_cell_bd weui_cell_primary">
+                <input id="userPassword" class="weui_input" type="number" placeholder="请输入密码">
+            </div>
+        </div>
+        <div class="weui_cell weui_vcode">
+            <div class="weui_cell_hd margt">
+                <label class="weui_label"><img src="../../resource/image/kll3.png"
+                                               th:src="@{/resource/image/kll3.png}"
+                                               width="25px;"></label>
+            </div>
+            <div class="weui_cell_bd weui_cell_primary">
+                <input id="verifyCode" class="weui_input" type="number" placeholder="请输入验证码">
+            </div>
+            <div class="weui_cell_ft"> <a href="javascript:;" class="get_verifyCode weui_btn weui_btn_mini weui_btn_primary" style="background-color: #111">获取验证码</a> </div>
+        </div>
+    </div>
+    <style>
+        .tm_tit-denglu:after, .tm_tit-denglu:before {
+            height: 1px;
+            width: 17%;
+            content: '\20';
+            position: absolute;
+            top: 10px;
+            display: block;
+            background: #eee;
+        }
+    </style>
+
+    <p style="height:45px"></p>
+    <a href="javascript:;" class="weui_btn weui_btn_primary anniu register_btn" style="background-color: #f13c38">注册</a> </div>
+
+<p style="height:20px"></p>
+<p style="height:30px"></p>
+</body>
+<script src="http://resali.huobanplus.com/cdn/jquery/3.2.1/jquery.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/jquery-weui/1.2.0/jquery-weui.min.js"></script>
+<script type="application/javascript" src="../../resource/js/common.js" th:src="@{/resource/js/common.js}"></script>
+<script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js"></script>
+<script>
+    $(function () {
+        $(".register_btn").click(function () {
+            register();
+        });
+        $(".get_verifyCode").click(function () {
+            sendVerifyCode();
+        });
+        IsMobile = function (str) {
+            return /^1[1-9][0-9]{9}$/.test(str);
+        }
+
+        function register() {
+
+            var username = $("#userMobile").val();
+            var password = $("#userPassword").val();
+            var verifyCode = $("#verifyCode").val();
+            if (username.length == 0 || !IsMobile(username)) {
+                $.toptip('手机号码有误', 'warning')
+                return;
+            }
+            if (verifyCode.length == 0) {
+                $.toptip('验证码错误', 'warning')
+                return;
+            }
+            if (password.length == 0) {
+                $.toptip('密码不能为空', 'warning')
+                return;
+            }
+            var inviterId = getQuery("inviterId");
+            $.ajax({
+                url: "/api/user/register",
+                type: "post",
+                dataType: "json",
+                headers: {
+                    merchantId: 1,
+                    osType: "h5"
+                },
+                data: {
+                    username: username,
+                    password: md5(password),
+                    verifyCode: verifyCode,
+                    inviter: inviterId.length == 0 ? "default" : inviterId,
+                },
+                success: function (ret) {
+                    if (ret.resultCode !== 2000) {
+                        $.toptip(ret.resultMsg, 'error')
+                    } else {
+                        $.alert("请下载征信app", "注册成功");
+                    }
+                },
+                error: function (err) {
+                    $.toptip('注册失败', 'error')
+                }
+            })
+        }
+
+        function sendVerifyCode() {
+            var username = $("#userMobile").val();
+            if (username.length == 0 || !IsMobile(username)) {
+                $.toptip('手机号码有误', 'warning')
+                return;
+            }
+            $.ajax({
+                url: "/api/sys/sendVerifyCode",
+                type: "post",
+                dataType: "json",
+                headers: {
+                    merchantId: 1,
+                    osType: "h5"
+                },
+                data: {
+                    mobile: username
+                },
+                success: function (ret) {
+                    if (ret.resultCode === 2000) {
+                        LastTime($(".get_verifyCode"), "disabled_verifyCode", function () {
+                            sendVerifyCode();
+                        });
+                    }
+                    else {
+                        $.toptip(ret.resultMsg, 'error')
+                        if(ret.resultCode==4108){
+                            if(ret.data>3){
+//                                $(".img_verify_code").show();
+                            }
+                        }
+                    }
+                },
+                error: function (err) {
+                }
+            })
+        }
+
+        LastTime = function (el, disCls, callback) {
+            if (el.length < 1)
+                return;
+            var oldText = el.html();
+
+            el.unbind("click");
+            if (el.hasClass(disCls)) {
+                el.addClass("disabled");
+                el.removeClass(disCls);
+                el.attr("disabled", true);
+                var time = 60;
+                var elTime = el.find("span");
+                if (elTime.length == 0) {
+                    el.html("<span>" + time + "</span>秒");
+                    elTime = el.find("span");
+                }
+                var timer = setInterval(function () {
+                    if (time > 1) {
+                        var str = time - 1;
+                        time = time - 1;
+                        elTime.html(str);
+                    } else {
+                        str = "";
+                        el.html(oldText);
+                        el.addClass(disCls);
+                        el.removeClass("disabled");
+                        el.removeAttr("disabled");
+                        if (callback) {
+                            el.click(function () {
+                                callback();
+                            });
+                        }
+                        clearInterval(timer);
+                    }
+
+                }, 1000);
+            } else {
+                el.addClass(disCls);
+                el.attr("disabled", true);
+                var time = 60;
+                var elTime = el.find("span");
+                if (elTime.length == 0) {
+                    el.html("<span>" + time + "</span>秒");
+                    elTime = el.find("span");
+                }
+                var timer = setInterval(function () {
+                    if (time > 1) {
+                        var str = time - 1;
+                        time = time - 1;
+                        elTime.html(str);
+                    } else {
+                        str = "";
+                        el.html(oldText);
+                        if (callback) {
+                            el.click(function () {
+                                callback();
+                            });
+                        }
+                        el.removeClass(disCls);
+                        el.removeAttr("disabled");
+                        clearInterval(timer);
+                    }
+
+                }, 1000)
+            }
+        }
+    })
+</script>
+</html>
