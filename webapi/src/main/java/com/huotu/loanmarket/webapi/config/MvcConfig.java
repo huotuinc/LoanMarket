@@ -173,6 +173,8 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/api/sys/checkUpdate")
                 // 数据魔盒回调
                 .excludePathPatterns("/api/carrier/**")
+                //芝麻信用回调
+                .excludePathPatterns("/api/sesame/rollBack/**")
                 //内嵌页面接口请求
                 .excludePathPatterns("/api/ds/**")
                 .excludePathPatterns("/api/sesameReport/**")
