@@ -208,6 +208,7 @@ public class SesameController {
             order.setAuthTime(LocalDateTime.now());
             orderService.save(order);
             if (response.isSuccess()) {
+                model.addAttribute("order",order);
                 return "sesame/sesame_success";
             } else {
                 model.addAttribute("errorMsg", response.getErrorMessage());

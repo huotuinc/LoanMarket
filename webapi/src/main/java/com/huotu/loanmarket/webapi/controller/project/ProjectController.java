@@ -167,7 +167,7 @@ public class ProjectController {
     }
 
     /**
-     * 首页接口
+     * 首页接口（热卖12 ，新品20）
      *
      * @return
      */
@@ -180,7 +180,6 @@ public class ProjectController {
         List<ProjectVo> resultHot = new ArrayList<>();
         List<ProjectVo> resultNew = new ArrayList<>();
         hotList.forEach(p -> {
-
             ProjectVo projectVo = new ProjectVo();
             projectVo.setLoanId(p.getLoanId());
             projectVo.setApplyType(p.getApplyType());
@@ -192,7 +191,6 @@ public class ProjectController {
             projectVo.setMaxMoney(p.getMaxMoney());
             projectVo.setMinMoney(p.getMinMoney());
             projectVo.setName(p.getName());
-
             if (!StringUtils.isEmpty(p.getLogo())) {
                 try {
                     p.setLogo(staticResourceService.getResource(p.getLogo()).toString());
@@ -237,7 +235,6 @@ public class ProjectController {
         map.put("newProjectList", resultNew);
         return ApiResult.resultWith(AppCode.SUCCESS, map);
     }
-
 
 
     private String getTag(Project project) {

@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="../..//resource/css/wap/main.css" th:href="@{/resource/css/wap/main.css(t=20180201)}">
 </head>
 <body style="background: #fff">
-<div id="app">
+<div id="app" th:unless="${#lists.isEmpty(industryList)}">
     <div class="riskCall-page">
         <table border="0" cellspacing="0" cellpadding="0">
             <tr>
@@ -45,6 +45,34 @@
                 </td>
                 <td>
                     <div th:text="${industry.statement}">5</div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div th:if="${#lists.isEmpty(industryList)}">
+    <div class="riskCall-page">
+        <table border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <th>
+                    <div>风险信息行业编码</div>
+                </th>
+                <th>
+                    <div>行业名单风险类型</div>
+                </th>
+                <th>
+                    <div>结清状态</div>
+                </th>
+                <th>
+                    <div>信息状态</div>
+                </th>
+                <th>
+                    <div>声明状态</div>
+                </th>
+            </tr>
+            <tr>
+                <td colspan='5' rowspan="2" height="50px">
+                    <span>恭喜您暂无风险记录</span>
                 </td>
             </tr>
         </table>

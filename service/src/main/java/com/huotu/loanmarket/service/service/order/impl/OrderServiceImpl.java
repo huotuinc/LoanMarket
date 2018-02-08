@@ -141,8 +141,9 @@ public class OrderServiceImpl implements OrderService {
             return null;
         }
         PayReturnVo payReturnVo = new PayReturnVo();
-        payReturnVo.setRedirectText("返回");
-        payReturnVo.setRedirectUrl(unifiedOrder.getRedirectUrl());
+        OrderThirdUrlInfo urlInfo = this.getOrderThirdUrl(unifiedOrder);
+        payReturnVo.setRedirectText(urlInfo.getBtnReturnTitle());
+        payReturnVo.setRedirectUrl(urlInfo.getUrl());
         payReturnVo.setUserId(unifiedOrder.getUser().getUserId().intValue());
         payReturnVo.setUnifiedOrderNo(orderNo);
         return payReturnVo;
@@ -452,7 +453,7 @@ public class OrderServiceImpl implements OrderService {
                     url = homeURI + "api/ds/dsShow?userId=" + order.getUser().getUserId() + "&orderId=" + order.getOrderId();
                 }
                 if (orderStatus.equals(OrderEnum.ApiOrderStatus.AUTH_ING)) {
-                    url = "gh_credit://authTaobao";
+                    url = "http://gh_credit_authTaobao";
                 }
                 break;
             case BACKLIST_BUS:
