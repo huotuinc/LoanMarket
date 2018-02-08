@@ -153,6 +153,26 @@ public class ProjectServiceImpl extends AbstractCrudService<LoanProject, Integer
         return projectRepository.findAll(specification,sort);
     }
 
+    @Override
+    public void projectViewLog(int project) {
+
+    }
+
+    @Override
+    public void projectApplyLog(int projectId) {
+
+    }
+
+    @Override
+    public int countProjectView(int projectId) {
+        return 0;
+    }
+
+    @Override
+    public int countProjectApply(int projectId) {
+        return 0;
+    }
+
     private List<Integer> projectIds(String projectIdsStr) {
         String[] projectIdsArray = projectIdsStr.split(",");
         List<Integer> projectIds = new ArrayList<>();

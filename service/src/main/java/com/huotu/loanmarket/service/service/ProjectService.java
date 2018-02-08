@@ -76,4 +76,34 @@ public interface ProjectService extends CrudService<LoanProject, Integer> {
      * @return
      */
     List<LoanProject> findByTag(int tag);
+
+    /**
+     * 记录浏览记录
+     *
+     * @param project
+     */
+    void projectViewLog(int project);
+
+    /**
+     * 记录申请记录
+     *
+     * @param projectId
+     */
+    void projectApplyLog(int projectId);
+
+    /**
+     * 查询产品总浏览量
+     *
+     * @param projectId
+     * @return
+     */
+    int countProjectView(int projectId);
+
+    /**
+     * 查询产品总申请量
+     *
+     * @param projectId
+     * @return
+     */
+    int countProjectApply(int projectId);
 }
