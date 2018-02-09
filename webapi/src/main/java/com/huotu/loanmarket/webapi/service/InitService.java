@@ -59,6 +59,7 @@ public class InitService {
         initSmsMessage();
         initsesame();
         initAuthFee();
+        initCarrier();
     }
 
     @Transactional(rollbackFor = RuntimeException.class)

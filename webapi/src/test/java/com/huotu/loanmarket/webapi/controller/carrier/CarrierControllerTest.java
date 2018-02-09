@@ -41,7 +41,7 @@ public class CarrierControllerTest extends BaseTest {
 //        order.setOrderId(orderId);
 //        orderRepository.saveAndFlush(order);
 //        String taskId = "TASKYYS100000201801151643430331920947";
-        String taskId = "TASKYYS100000201801301118560711030451";
+        String taskId = "TASKDS000001201802090950060661530622";
         userCarrierService.queryResult(taskId,orderId,1);
     }
 
