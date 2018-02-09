@@ -127,4 +127,11 @@ public interface OrderService {
     Page<Order> findAll(OrderSearchCondition condition);
 
     BigDecimal sumPayAmount(OrderSearchCondition orderSearchCondition);
+
+    /**
+     * 更新邀请者状态（用户被邀请后认证成功修改状态）目前只维护认证状态
+     * @param userId
+     */
+    @Transactional(rollbackFor = Exception.class)
+    void updateInviteStatus(Long userId);
 }

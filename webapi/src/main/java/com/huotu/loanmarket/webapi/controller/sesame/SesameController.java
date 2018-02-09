@@ -189,11 +189,13 @@ public class SesameController {
             if (response.isSuccess()) {
                 order.getUser().setAuthStatus(UserAuthorizedStatusEnums.AUTH_SUCCESS);
                 order.setAuthStatus(UserAuthorizedStatusEnums.AUTH_SUCCESS);
+                order.setAuthTime(LocalDateTime.now());
+                //先设置邀请状态
+                orderService.updateInviteStatus(userId);
                 List<ZmWatchListDetail> details = response.getDetails();
                 if (details == null || details.size() == 0) {
-                    order.setAuthTime(LocalDateTime.now());
-                    order.getUser().setAuthStatus(UserAuthorizedStatusEnums.AUTH_SUCCESS);
                     orderService.save(order);
+                    //如果该用户是被邀请的，更新邀请表状态
                     model.addAttribute("order", order);
                     return "sesame/sesame_success";
                 }
@@ -216,7 +218,6 @@ public class SesameController {
             } else {
                 order.setAuthStatus(UserAuthorizedStatusEnums.AUTH_ERROR);
             }
-            order.setAuthTime(LocalDateTime.now());
             orderService.save(order);
             if (response.isSuccess()) {
                 model.addAttribute("order", order);

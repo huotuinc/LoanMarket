@@ -21,6 +21,7 @@ import com.huotu.loanmarket.service.config.LoanMarkConfigProvider;
 import com.huotu.loanmarket.service.config.SesameSysConfig;
 import com.huotu.loanmarket.service.entity.order.Order;
 import com.huotu.loanmarket.service.entity.order.OrderLog;
+import com.huotu.loanmarket.service.entity.user.Invite;
 import com.huotu.loanmarket.service.entity.user.User;
 import com.huotu.loanmarket.service.enums.ConfigParameter;
 import com.huotu.loanmarket.service.enums.MerchantConfigEnum;
@@ -38,6 +39,7 @@ import com.huotu.loanmarket.service.model.sesame.IdentityParam;
 import com.huotu.loanmarket.service.model.sesame.SesameConfig;
 import com.huotu.loanmarket.service.repository.order.OrderLogRepository;
 import com.huotu.loanmarket.service.repository.order.OrderRepository;
+import com.huotu.loanmarket.service.repository.user.InviteRepository;
 import com.huotu.loanmarket.service.service.BaseService;
 import com.huotu.loanmarket.service.service.merchant.MerchantCfgService;
 import com.huotu.loanmarket.service.service.order.OrderService;
@@ -92,6 +94,8 @@ public class OrderServiceImpl implements OrderService {
     private BaseService baseService;
     @Autowired
     private EntityManager entityManager;
+    @Autowired
+    private InviteRepository inviteRepository;
 
     /**
      * 创建订单
@@ -531,6 +535,16 @@ public class OrderServiceImpl implements OrderService {
         List<Tuple> result = q.getResultList();
         Tuple tuple = result.get(0);
         return (BigDecimal) tuple.get(0);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updateInviteStatus(Long userId) {
+        Invite invite = inviteRepository.findByUserId(userId);
+        if (invite != null) {
+            invite.setAuthStatus(UserAuthorizedStatusEnums.AUTH_SUCCESS);
+            inviteRepository.save(invite);
+        }
     }
 
     private Specification<Order> getOrderSpecification(OrderSearchCondition condition) {
