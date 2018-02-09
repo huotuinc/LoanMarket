@@ -39,9 +39,8 @@
                 <entry key="javax.persistence.schema-generation.database.action" value="create"/>
                 <entry key="eclipselink.weaving" value="false"/>
                 <entry key="eclipselink.logging.level" value="FINE"/>
-                <entry key="eclipselink.cache.coordination.protocol" value="jms"/>
-                <entry key="eclipselink.cache.coordination.jms.topic" value="java:comp/env/jms/zxJpa"/>
-                <entry key="eclipselink.cache.coordination.jms.factory" value="java:comp/env/jms/ConnectionFactory"/>
+                <!--在发布初期使用无缓存模式-->
+                <entry key="eclipselink.cache.shared.default" value="false"/>
             </map>
         </property>
     </bean>

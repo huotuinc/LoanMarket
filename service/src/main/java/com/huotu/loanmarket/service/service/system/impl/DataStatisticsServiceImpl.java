@@ -63,7 +63,7 @@ public class DataStatisticsServiceImpl implements DataStatisticsService {
         Object[] sumUserAndAmount = dayRepository.sumUserAndAmount(merchantId).get(0);
         DataStatisticsVo statisticsVo = new DataStatisticsVo(sumByHourData
                 , sumUserAndAmount[0] != null ? (long) sumUserAndAmount[0] : 0
-                , sumUserAndAmount[1] != null ? new BigDecimal((double) sumUserAndAmount[1]) : BigDecimal.ZERO);
+                , sumUserAndAmount[1] != null ? (BigDecimal) sumUserAndAmount[1] : BigDecimal.ZERO);
         todayData.put(merchantId, statisticsVo);
         return statisticsVo;
     }
@@ -82,7 +82,7 @@ public class DataStatisticsServiceImpl implements DataStatisticsService {
         if (orderCountAndSum != null) {
             hourData.setOrderPayCount(orderCountAndSum[0] != null ? ((Long) orderCountAndSum[0]).intValue() : 0);
             if (orderCountAndSum[1] != null) {
-                hourData.setOrderAmount((BigDecimal)orderCountAndSum[1]);
+                hourData.setOrderAmount((BigDecimal) orderCountAndSum[1]);
             }
         }
         //订单数量

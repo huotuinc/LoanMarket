@@ -7,7 +7,7 @@
     <meta name="format-detection" content="telephone=no" />
     <meta name="description" content="" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>支付成功</title>
+    <title>查询成功</title>
     <style>
         body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td {
             margin: 0;
@@ -40,11 +40,12 @@
 </head>
 
 <body style="background-color: #f2f2f2; overflow: hidden">
+<!--/*@thymesVar id="order" type="com.huotu.loanmarket.service.entity.order.Order"*/-->
 <div style="text-align: center;">
     <p style=" padding-top:20%; padding-bottom:2%">
         <img src="../../resource/image/cg.png" th:src="@{/resource/image/cg.png}" style="width:24%;">
     </p>
-    <p class="btt">授权成功</p>
+    <p class="btt">查询成功</p>
     <p class="bts">点击继续下一步操作</p>
     <p class="lk">
         <a href="/api/sesameReport/getSesameReport" th:href="@{/api/sesameReport/getSesameReport(orderId=${order.orderId})}">返回</a>

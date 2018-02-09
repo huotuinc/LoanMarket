@@ -190,10 +190,12 @@ public class SesameController {
                 order.getUser().setAuthStatus(UserAuthorizedStatusEnums.AUTH_SUCCESS);
                 order.setAuthStatus(UserAuthorizedStatusEnums.AUTH_SUCCESS);
                 List<ZmWatchListDetail> details = response.getDetails();
-                if(details==null||details.size()==0){
+                if (details == null || details.size() == 0) {
                     order.setAuthTime(LocalDateTime.now());
+                    order.getUser().setAuthStatus(UserAuthorizedStatusEnums.AUTH_SUCCESS);
                     orderService.save(order);
-                    return  "sesame/sesame_success";
+                    model.addAttribute("order", order);
+                    return "sesame/sesame_success";
                 }
                 details.forEach(detail -> {
                     Industry industry = new Industry();
