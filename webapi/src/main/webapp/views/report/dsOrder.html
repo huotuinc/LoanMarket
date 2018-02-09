@@ -17,7 +17,7 @@
                     <div>消费次数</div>
                 </th>
                 <th>
-                    <div>平均消费金额</div>
+                    <div>平均消费金额（元）</div>
                 </th>
                 <th>
                     <div>最早消费时间</div>
@@ -31,13 +31,13 @@
                     <div th:text="${dsOrder.count}"></div>
                 </td>
                 <td>
-                    <div th:text="${dsOrder.avgMoney + '元'}"></div>
+                    <div th:text="${dsOrder.avgMoney!=null?dsOrder.avgMoney:'0' }"></div>
                 </td>
                 <td>
-                    <div th:text="${dsOrder.firstTiem}"></div>
+                    <div th:text="${dsOrder.firstTiem != null?dsOrder.firstTiem:''}"></div>
                 </td>
                 <td>
-                    <div th:text="${dsOrder.lastTiem}"></div>
+                    <div th:text="${dsOrder.lastTiem!=null?dsOrder.lastTiem:''}"></div>
                 </td>
             </tr>
         </table>

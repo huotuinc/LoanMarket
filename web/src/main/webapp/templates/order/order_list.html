@@ -131,6 +131,7 @@
                                 <th>淘宝账号</th>
                                 <th>京东账号</th>
                                 <th>认证类型</th>
+                                <th>操作</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -146,6 +147,23 @@
                                 <td th:text="${order.mobile}"></td>
                                 <td th:text="${order.orderType.code == 3?order.accountName:'/'}"></td>
                                 <td th:text="${order.orderType.code == 4?order.accountName:'/'}"></td>
+                                <th th:switch="${order.orderType.code}">
+                                    <span th:case="0">
+                                        行业黑名单
+                                    </span>
+                                    <span th:case="1">
+                                        金融黑名单
+                                    </span>
+                                    <span th:case="2">
+                                        运营商
+                                    </span>
+                                    <span th:case="3">
+                                        淘宝
+                                    </span>
+                                    <span th:case="4">
+                                        京东
+                                    </span>
+                                </th>
                                 <td>
                                     <span th:if="${order.authStatus.code == 2}" th:switch="${order.orderType.code}"  onclick="orderListHandler.detail(this)"
                                           th:attr="orderId=${order.orderId},orderType=${order.orderType.code}" class="btn btn-myGreen btn-xs">
