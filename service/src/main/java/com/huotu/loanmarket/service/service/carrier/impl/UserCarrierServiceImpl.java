@@ -31,6 +31,7 @@ import com.huotu.loanmarket.service.repository.carrier.RiskContactStatsRepositor
 import com.huotu.loanmarket.service.repository.carrier.UserCarrierRepository;
 import com.huotu.loanmarket.service.repository.order.OrderRepository;
 import com.huotu.loanmarket.service.service.carrier.UserCarrierService;
+import com.huotu.loanmarket.service.service.order.OrderService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.NameValuePair;
@@ -78,6 +79,8 @@ public class UserCarrierServiceImpl implements UserCarrierService {
     private FinanceContactDetailRepository financeContactDetailRepository;
     @Autowired
     private ActiveSilenceStatsRepository activeSilenceStatsRepository;
+    @Autowired
+    private OrderService orderService;
 
     private HttpClientBuilder httpClientBuilder;
     //    private Gson gson = new GsonBuilder().serializeNulls().create();
@@ -158,6 +161,7 @@ public class UserCarrierServiceImpl implements UserCarrierService {
             if (flag) {
                 order.setAuthStatus(UserAuthorizedStatusEnums.AUTH_SUCCESS);
                 order.getUser().setAuthStatus(UserAuthorizedStatusEnums.AUTH_SUCCESS);
+                orderService.updateInviteStatus(order.getUser().getUserId());
                 resultCode = AppCode.SUCCESS.getCode();
             } else {
                 order.setAuthStatus(UserAuthorizedStatusEnums.AUTH_ERROR);
