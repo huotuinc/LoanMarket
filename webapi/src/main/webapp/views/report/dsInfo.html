@@ -15,48 +15,48 @@
         <div class="weui-cells">
             <div class="weui-cell">
                 <div class="weui-cell__bd">用户名</div>
-                <div class="weui-cell__ft" th:text="${ds.userName!=null?ds.userName:'未知'}"></div>
+                <div class="weui-cell__ft" th:text="${ds.userName}"></div>
             </div>
             <div class="weui-cell">
                 <div class="weui-cell__bd">邮箱</div>
-                <div class="weui-cell__ft" th:text="${ds.email!=null?ds.email:'未知'}"></div>
+                <div class="weui-cell__ft" th:text="${ds.email}"></div>
             </div>
             <div class="weui-cell">
                 <div class="weui-cell__bd">用户级别</div>
-                <div class="weui-cell__ft" th:text="${ds.userLevel!= null?ds.userLevel:'未知'}"></div>
+                <div class="weui-cell__ft" th:text="${ds.userLevel}"></div>
             </div>
             <div class="weui-cell">
                 <div class="weui-cell__bd">昵称</div>
-                <div class="weui-cell__ft" th:text="${ds.nickName!= null?ds.nickName:'未知'}"></div>
+                <div class="weui-cell__ft" th:text="${ds.nickName}"></div>
             </div>
             <div class="weui-cell">
                 <div class="weui-cell__bd">真实姓名</div>
-                <div class="weui-cell__ft" th:text="${ds.name != null?ds.name:'未知'}"></div>
+                <div class="weui-cell__ft" th:text="${ds.name}"></div>
             </div>
             <div class="weui-cell">
                 <div class="weui-cell__bd">性别</div>
-                <div class="weui-cell__ft" th:text="${ds.gender!=null?ds.gender'未知'}"></div>
+                <div class="weui-cell__ft" th:text="${ds.gender}"></div>
             </div>
             <div class="weui-cell">
                 <div class="weui-cell__bd">绑定手机号</div>
-                <div class="weui-cell__ft" th:text="${ds.mobile!= null?ds.mobile:'未知'}"></div>
+                <div class="weui-cell__ft" th:text="${ds.mobile}"></div>
             </div>
             <div class="weui-cell">
                 <div class="weui-cell__bd">实名认证姓名</div>
-                <div class="weui-cell__ft" th:text="${ds.realName != null?ds.realName:'未知'}"></div>
+                <div class="weui-cell__ft" th:text="${ds.realName}"></div>
             </div>
 
             <div class="weui-cell">
                 <div class="weui-cell__bd">实名认证身份证</div>
-                <div class="weui-cell__ft"  th:text="${ds.identityCode!= null?ds.identityCode:'未知'}"></div>
+                <div class="weui-cell__ft"  th:text="${ds.identityCode}"></div>
             </div>
             <div class="weui-cell">
-                <div class="weui-cell__bd">账号余额（元）</div>
-                <div class="weui-cell__ft" th:text="${ds.accountBalance != null?ds.accountBalance:'未知'}"></div>
+                <div class="weui-cell__bd">账号余额</div>
+                <div class="weui-cell__ft" th:text="${ds.accountBalance + '元'}"></div>
             </div>
             <div class="weui-cell">
-                <div class="weui-cell__bd">金融账户余额（元）</div>
-                <div class="weui-cell__ft" th:text="${ds.financialAccountBalance !=null ds.financialAccountBalance:'未知'}"></div>
+                <div class="weui-cell__bd">金融账户余额</div>
+                <div class="weui-cell__ft" th:text="${ds.financialAccountBalance + '元'}"></div>
             </div>
             <div class="weui-cell">
                 <div class="weui-cell__bd">信用分数</div>
