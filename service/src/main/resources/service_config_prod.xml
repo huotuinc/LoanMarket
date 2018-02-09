@@ -22,8 +22,12 @@
 
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <property name="dataSource" ref="dataSource"></property>
-        <property name="persistenceUnitName" value="hbmEntity"/>
-        <property name="packagesToScan" value="com.huotu.loanmarket.service.entity"/>
+        <property name="packagesToScan">
+            <array>
+                <value>com.huotu.loanmarket.service.entity</value>
+                <value>org.springframework.data.jpa.convert.threeten</value>
+            </array>
+        </property>
         <property name="persistenceProvider">
             <bean class="org.eclipse.persistence.jpa.PersistenceProvider"/>
         </property>
@@ -36,7 +40,7 @@
                 <entry key="eclipselink.weaving" value="false"/>
                 <entry key="eclipselink.logging.level" value="FINE"/>
                 <entry key="eclipselink.cache.coordination.protocol" value="jms"/>
-                <entry key="eclipselink.cache.coordination.jms.topic" value="java:comp/env/jms/superloanJpa"/>
+                <entry key="eclipselink.cache.coordination.jms.topic" value="java:comp/env/jms/zxJpa"/>
                 <entry key="eclipselink.cache.coordination.jms.factory" value="java:comp/env/jms/ConnectionFactory"/>
             </map>
         </property>
