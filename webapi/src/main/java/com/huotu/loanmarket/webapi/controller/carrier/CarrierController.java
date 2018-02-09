@@ -21,7 +21,6 @@ import com.huotu.loanmarket.service.repository.order.OrderRepository;
 import com.huotu.loanmarket.service.service.carrier.UserCarrierService;
 import com.huotu.loanmarket.service.service.order.OrderService;
 import com.huotu.loanmarket.webapi.controller.exception.OrderNotFoundException;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,18 +68,14 @@ public class CarrierController {
     @RequestMapping("/magicCallback")
     @ResponseBody
     public Object magicCallback(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
         response.setStatus(HttpStatus.OK.value());
         Map<String,Object> map = new HashMap<>(2);
         map.put("code",0);
+        try {
         //回调事件
         String notifyEvent = request.getParameter("notify_event");
         //回调参数
         String passbackParams = request.getParameter("passback_params");
-        if(StringUtils.isBlank(passbackParams)){
-            map.put("message","透传参数为空");
-            return map;
-        }
         String[] split = passbackParams.split(",");
         String orderId = split[0];
         String merchantId = split[1];
@@ -119,6 +114,10 @@ public class CarrierController {
             log.error(MessageFormat.format("【数据魔盒】回调失败，回调通知事件:{0}",notifyEvent));
         }
         map.put("message","success");
+        }catch (Exception e) {
+            map.put("message","回调处理成功");
+            return map;
+        }
         return map;
     }
 
