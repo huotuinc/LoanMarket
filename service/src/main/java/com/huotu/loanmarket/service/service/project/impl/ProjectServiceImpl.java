@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.criteria.Predicate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -179,7 +180,7 @@ public class ProjectServiceImpl implements ProjectService {
         ProjectViewLog userViewLog = new ProjectViewLog();
         userViewLog.setProjectId(projectId);
         userViewLog.setUserId(userId);
-        userViewLog.setViewTime(new Date());
+        userViewLog.setViewTime(LocalDateTime.now());
 
         return projectViewLogRepository.save(userViewLog);
     }
@@ -189,8 +190,18 @@ public class ProjectServiceImpl implements ProjectService {
         ProjectApplyLog userApplyLog = new ProjectApplyLog();
         userApplyLog.setProjectId(projectId);
         userApplyLog.setUserId(userId);
-        userApplyLog.setApplyTime(new Date());
+        userApplyLog.setApplyTime(LocalDateTime.now());
 
         return projectApplyLogRepository.save(userApplyLog);
+    }
+
+    @Override
+    public int countProjectView(int projectId) {
+        return projectViewLogRepository.findByProjectId(projectId).size();
+    }
+
+    @Override
+    public int countProjectApply(int projectId) {
+        return projectApplyLogRepository.findByProjectId(projectId).size();
     }
 }
