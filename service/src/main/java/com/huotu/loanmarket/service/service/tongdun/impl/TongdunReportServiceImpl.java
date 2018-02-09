@@ -133,6 +133,7 @@ public class TongdunReportServiceImpl implements TongdunReportService {
                     if (!userInfo.getAuthStatus().equals(UserAuthorizedStatusEnums.AUTH_SUCCESS)) {
                         userRepository.updateAuthStatus(userInfo.getUserId(), UserAuthorizedStatusEnums.AUTH_SUCCESS);
                     }
+                    orderService.updateInviteStatus(userInfo.getUserId());
                 }
                 //endregion
             }
