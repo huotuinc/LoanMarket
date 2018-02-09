@@ -250,7 +250,6 @@ public class OrderServiceImpl implements OrderService {
             apiOrderInfoVo.setCreateTime(order.getCreateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
             apiOrderInfoVo.setOrderId(order.getOrderId());
             apiOrderInfoVo.setOrderName(order.getOrderType().getName() + "风险检测");
-
             OrderEnum.ApiOrderStatus status = getApiOrderStatus(order);
             apiOrderInfoVo.setStatus(status.getCode());
             apiOrderInfoVo.setStatusName(status.getName());

@@ -73,7 +73,7 @@
                                                width="25px;"></label>
             </div>
             <div class="weui_cell_bd weui_cell_primary">
-                <input id="userPassword" class="weui_input" type="number" placeholder="请输入密码">
+                <input id="userPassword" class="weui_input" type="password" placeholder="请输入密码">
             </div>
         </div>
         <div class="weui_cell weui_vcode">
@@ -87,6 +87,7 @@
             </div>
             <div class="weui_cell_ft"> <a href="javascript:;" class="get_verifyCode weui_btn weui_btn_mini weui_btn_primary" style="background-color: #111">获取验证码</a> </div>
         </div>
+        <input type="hidden" id="appUrl" name="appUrl" th:value="${appUrl}"/>
     </div>
     <style>
         .tm_tit-denglu:after, .tm_tit-denglu:before {
@@ -158,7 +159,10 @@
                     if (ret.resultCode !== 2000) {
                         $.toptip(ret.resultMsg, 'error')
                     } else {
-                        $.alert("请下载征信app", "注册成功");
+                        $.alert("请下载征信app",  function() {
+                           var appurl =  $('#appUrl').val();
+                           window.location.href = appurl;
+                        });
                     }
                 },
                 error: function (err) {

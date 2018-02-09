@@ -127,7 +127,9 @@ public class DsServiceImpl implements DsService {
         JsonObject baseInfoData = data.getAsJsonObject("base_info");
         if (baseInfoData != null){
             BaseInfo baseInfo = saveBaseInfo(baseInfoData, orderId);
-            order.setAccountName(baseInfo.getName()+"（"+baseInfo.getNickName()+"）");
+            String accountNo = baseInfo.getName() + "（" + baseInfo.getNickName() + "）";
+            order.setAccountName(accountNo);
+            order.setAccountNo(accountNo);
         }
         //保存电商用户账户信息
         JsonObject accountInfoData = data.getAsJsonObject("account_info");

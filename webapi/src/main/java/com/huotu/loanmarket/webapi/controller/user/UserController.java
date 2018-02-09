@@ -14,6 +14,8 @@ import com.huotu.loanmarket.common.utils.ApiResult;
 import com.huotu.loanmarket.common.utils.RegexUtils;
 import com.huotu.loanmarket.common.utils.RequestUtils;
 import com.huotu.loanmarket.common.utils.StringUtilsExt;
+import com.huotu.loanmarket.service.config.GeneralConfig;
+import com.huotu.loanmarket.service.config.LoanMarkConfigProvider;
 import com.huotu.loanmarket.service.entity.user.User;
 import com.huotu.loanmarket.service.enums.AppCode;
 import com.huotu.loanmarket.service.enums.UserResultCode;
@@ -27,6 +29,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -59,6 +62,8 @@ public class UserController {
     @Autowired
     private StaticResourceService staticResourceService;
 
+    @Autowired
+    private LoanMarkConfigProvider loanMarkConfigProvider;
     /**
      * 根据手机号、密码实现用户登录
      * 密码跟短信验证码二选一 必填
@@ -282,7 +287,10 @@ public class UserController {
      * @return
      */
     @RequestMapping(value = "/reg",method = RequestMethod.GET)
-    public String registerPage() {
+    public String registerPage(Model model) {
+
+        GeneralConfig generalConfig = loanMarkConfigProvider.getGeneralConfig(Constant.MERCHANT_ID);
+        model.addAttribute("appUrl",generalConfig.getYingyongbaoAddr());
         return "register/register.html";
     }
 }
