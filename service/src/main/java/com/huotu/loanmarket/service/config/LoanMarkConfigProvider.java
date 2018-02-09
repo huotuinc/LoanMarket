@@ -106,6 +106,18 @@ public class LoanMarkConfigProvider {
         return ruleIdConfig;
     }
 
+    /**
+     * 获取通用配置参数
+     * @param merchantId
+     * @return
+     */
+    public GeneralConfig getGeneralConfig(Integer merchantId) {
+        Map<String, String> map = this.getMerchantConfigParameters(merchantId);
+        GeneralConfig generalConfig = new GeneralConfig();
+        generalConfig.setYingyongbaoAddr(StringUtilsExt.safeGetMapValue(ConfigParameter.GeneralParameter.YINGYONGBAO.getKey(), map, ""));
+        return generalConfig;
+    }
+
     //region 私有方法
     private BigDecimal parseBigDecimal(String a, BigDecimal defaultValue) {
         if (StringUtils.isEmpty(a)) {

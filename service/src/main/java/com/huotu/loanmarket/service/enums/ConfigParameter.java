@@ -194,4 +194,25 @@ public interface ConfigParameter {
             return message;
         }
     }
+
+    /**
+     * 同盾审核规则id
+     */
+    @AllArgsConstructor
+    @MerchantConfigType(type = MerchantConfigEnum.GENERAL)
+    enum GeneralParameter implements IMerchantParameterEnum {
+        YINGYONGBAO("general_yingyongbao", "应用宝地址");
+        private String key;
+        private String message;
+
+        @Override
+        public String getKey() {
+            return key;
+        }
+
+        @Override
+        public String getMessage() {
+            return message;
+        }
+    }
 }

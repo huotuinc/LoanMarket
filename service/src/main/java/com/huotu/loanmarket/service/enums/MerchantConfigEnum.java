@@ -22,6 +22,7 @@ public enum MerchantConfigEnum implements ICommonEnum {
     ALIPAY(4,"支付宝支付接口参数"),
     TONGDUN(5, "同盾接口参数"),
     TONGDUN_RULE(6,"同盾规则ID参数"),
+    GENERAL(7,"通用参数"),
     ;
 
     private int code;
