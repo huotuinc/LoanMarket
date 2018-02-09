@@ -516,8 +516,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Page<Order> findAll(OrderSearchCondition condition) {
         Specification<Order> specification = getOrderSpecification(condition);
-
-        return orderRepository.findAll(specification, new PageRequest(condition.getPageIndex() - 1, condition.getPageSize()));
+        Sort sort = new Sort(Sort.Direction.DESC, "createTime");
+        return orderRepository.findAll(specification, new PageRequest(condition.getPageIndex() - 1, condition.getPageSize(),sort));
     }
 
     @Override
