@@ -23,6 +23,7 @@ import com.huotu.loanmarket.service.repository.ds.DsOrderRepository;
 import com.huotu.loanmarket.service.repository.ds.ReceiverRepository;
 import com.huotu.loanmarket.service.repository.order.OrderRepository;
 import com.huotu.loanmarket.service.service.ds.DsService;
+import com.huotu.loanmarket.service.service.order.OrderService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.client.config.RequestConfig;
@@ -63,6 +64,8 @@ public class DsServiceImpl implements DsService {
     private DsOrderRepository dsOrderRepository;
     @Autowired
     private ReceiverRepository receiverRepository;
+    @Autowired
+    private OrderService orderService;
 
     private HttpClientBuilder httpClientBuilder;
 
@@ -109,6 +112,7 @@ public class DsServiceImpl implements DsService {
 //                String channelCode = data.get("channel_code").getAsString();
                 assembleData(data,orderId,order);
                 order.setAuthStatus(UserAuthorizedStatusEnums.AUTH_SUCCESS);
+                orderService.updateInviteStatus(order.getUser().getUserId());
                 order.getUser().setAuthStatus(UserAuthorizedStatusEnums.AUTH_SUCCESS);
                 resultCode = AppCode.SUCCESS.getCode();
             } else {
@@ -127,9 +131,8 @@ public class DsServiceImpl implements DsService {
         JsonObject baseInfoData = data.getAsJsonObject("base_info");
         if (baseInfoData != null){
             BaseInfo baseInfo = saveBaseInfo(baseInfoData, orderId);
-            String accountNo = baseInfo.getName() + "（" + baseInfo.getNickName() + "）";
-            order.setAccountName(accountNo);
-            order.setAccountNo(accountNo);
+            order.setAccountName(baseInfo.getName() + "（" + baseInfo.getNickName() + "）");
+            order.setAccountNo(baseInfo.getName() + "（" + baseInfo.getNickName() + "）");
         }
         //保存电商用户账户信息
         JsonObject accountInfoData = data.getAsJsonObject("account_info");
