@@ -455,7 +455,7 @@ public class OrderServiceImpl implements OrderService {
                     url = homeURI + "api/ds/dsShow?userId=" + order.getUser().getUserId() + "&orderId=" + order.getOrderId();
                 }
                 if (orderStatus.equals(OrderEnum.ApiOrderStatus.AUTH_ING)) {
-                    url = "gh_credit://authTaobao?orderId=" + order.getOrderId();
+                    url = baseService.apiHomeURI() + "gh_credit_authTaobao?orderId=" + order.getOrderId();
                 }
                 break;
             case BACKLIST_BUS:
