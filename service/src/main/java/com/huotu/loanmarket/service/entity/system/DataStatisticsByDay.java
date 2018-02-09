@@ -32,7 +32,7 @@ public class DataStatisticsByDay {
     @Column(name = "merchant_id")
     private Integer merchantId = Constant.MERCHANT_ID;
     /**
-     * 订单成功金额
+     * 订单支付金额
      */
     @Column(name = "order_amount", scale = Constant.SCALE, precision = Constant.PRECISION)
     private BigDecimal orderAmount = BigDecimal.ZERO;

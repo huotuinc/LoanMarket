@@ -121,6 +121,6 @@ public class DataStatisticsServiceImpl implements DataStatisticsService {
                 conditionList.add(cb.lessThanOrEqualTo(root.get("endTime"), searcher.getEndDate()));
             }
             return cb.and(conditionList.toArray(new Predicate[conditionList.size()]));
-        }, new PageRequest(searcher.getPageNo() - 1, searcher.getPageSize(), new Sort(Sort.Direction.DESC, "dataId")));
+        }, new PageRequest(searcher.getPageIndex() - 1, searcher.getPageSize(), new Sort(Sort.Direction.DESC, "dataId")));
     }
 }
