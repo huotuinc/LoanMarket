@@ -455,7 +455,7 @@ public class OrderServiceImpl implements OrderService {
                     url = homeURI + "api/ds/dsShow?userId=" + order.getUser().getUserId() + "&orderId=" + order.getOrderId();
                 }
                 if (orderStatus.equals(OrderEnum.ApiOrderStatus.AUTH_ING)) {
-                    url = "gh_credit://authTaobao";
+                    url = "gh_credit://authTaobao?orderId=" + order.getOrderId();
                 }
                 break;
             case BACKLIST_BUS:
@@ -521,7 +521,7 @@ public class OrderServiceImpl implements OrderService {
     public Page<Order> findAll(OrderSearchCondition condition) {
         Specification<Order> specification = getOrderSpecification(condition);
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
-        return orderRepository.findAll(specification, new PageRequest(condition.getPageIndex() - 1, condition.getPageSize(),sort));
+        return orderRepository.findAll(specification, new PageRequest(condition.getPageIndex() - 1, condition.getPageSize(), sort));
     }
 
     @Override
