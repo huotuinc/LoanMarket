@@ -35,6 +35,9 @@
                 <entry key="javax.persistence.schema-generation.database.action" value="create"/>
                 <entry key="eclipselink.weaving" value="false"/>
                 <entry key="eclipselink.logging.level" value="FINE"/>
+                <entry key="eclipselink.cache.coordination.protocol" value="jms"/>
+                <entry key="eclipselink.cache.coordination.jms.topic" value="java:comp/env/jms/superloanJpa"/>
+                <entry key="eclipselink.cache.coordination.jms.factory" value="java:comp/env/jms/ConnectionFactory"/>
             </map>
         </property>
     </bean>
