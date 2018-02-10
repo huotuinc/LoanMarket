@@ -21,7 +21,6 @@ import com.huotu.loanmarket.service.repository.order.OrderRepository;
 import com.huotu.loanmarket.service.service.carrier.UserCarrierService;
 import com.huotu.loanmarket.service.service.order.OrderService;
 import com.huotu.loanmarket.webapi.controller.exception.OrderNotFoundException;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,10 +76,6 @@ public class CarrierController {
         String notifyEvent = request.getParameter("notify_event");
         //回调参数
         String passbackParams = request.getParameter("passback_params");
-        if(StringUtils.isBlank(passbackParams)){
-            map.put("message","透传参数为空");
-            return map;
-        }
         String[] split = passbackParams.split(",");
         String orderId = split[0];
         String merchantId = split[1];
