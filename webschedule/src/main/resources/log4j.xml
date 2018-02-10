@@ -9,8 +9,7 @@
   -->
 
 <!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
-<log4j:configuration xmlns:log4j='http://jakarta.apache.org/log4j/'
-                     debug="true">
+<log4j:configuration xmlns:log4j='http://jakarta.apache.org/log4j/'">
 
     <appender name="stdout" class="org.apache.log4j.ConsoleAppender">
         <layout class="org.apache.log4j.PatternLayout">
@@ -19,7 +18,7 @@
     </appender>
     <appender name="ServerDailyRollingFile" class="org.apache.log4j.DailyRollingFileAppender">
         <param name="DatePattern" value="'.'yyyy-MM-dd'.log'"/>
-        <param name="File" value="logs/schedule/schedule.log"/>
+        <param name="File" value="logs/zx/schedule.log"/>
         <param name="Append" value="true"/>
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern" value="%d - %m%n"/>
