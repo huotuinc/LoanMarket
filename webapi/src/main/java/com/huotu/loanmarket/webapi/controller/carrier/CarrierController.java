@@ -21,6 +21,7 @@ import com.huotu.loanmarket.service.repository.order.OrderRepository;
 import com.huotu.loanmarket.service.service.carrier.UserCarrierService;
 import com.huotu.loanmarket.service.service.order.OrderService;
 import com.huotu.loanmarket.webapi.controller.exception.OrderNotFoundException;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +66,26 @@ public class CarrierController {
     @Autowired
     private ConsumeBillRepository consumeBillRepository;
 
+    @RequestMapping("/saveTaskId")
+    @ResponseBody
+    public ApiResult saveTabaoTaskId(String orderId,String taskId) {
+
+        if(StringUtils.isBlank(orderId) || StringUtils.isBlank(taskId)){
+            return ApiResult.resultWith(5000,"任务id或订单id不能为空");
+        }
+        AsyncTask asyncTask = asyncTaskRepository.findByOrderIdAndType(orderId,Constant.DS);
+        if(asyncTask != null){
+            asyncTask.setTaskId(taskId);
+        }else{
+            asyncTask = new AsyncTask();
+            asyncTask.setMerchantId(Constant.MERCHANT_ID);
+            asyncTask.setOrderId(orderId);
+            asyncTask.setTaskId(taskId);
+            asyncTask.setType(Constant.DS);
+        }
+        asyncTaskRepository.saveAndFlush(asyncTask);
+        return ApiResult.resultWith(AppCode.SUCCESS);
+    }
     @RequestMapping("/magicCallback")
     @ResponseBody
     public Object magicCallback(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -76,6 +97,10 @@ public class CarrierController {
         String notifyEvent = request.getParameter("notify_event");
         //回调参数
         String passbackParams = request.getParameter("passback_params");
+        if(StringUtils.isBlank(passbackParams)) {
+            map.put("message","回调处理成功");
+            return map;
+        }
         String[] split = passbackParams.split(",");
         String orderId = split[0];
         String merchantId = split[1];

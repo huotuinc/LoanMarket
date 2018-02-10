@@ -146,7 +146,13 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/api/user/register")
                 .excludePathPatterns("/api/user/updatePassword")
                 .excludePathPatterns("/api/sesame/rollBack/**")
-                .excludePathPatterns("/api/carrier/**")
+                // 数据魔盒回调
+                .excludePathPatterns("/api/carrier/magicCallback/**")
+                // 报告h5
+                .excludePathPatterns("/api/carrier/carrierShow/**")
+                .excludePathPatterns("/api/carrier/riskContactList/**")
+                .excludePathPatterns("/api/carrier/riskContactDetailList/**")
+                .excludePathPatterns("/api/carrier/consumeBillList/**")
                 .excludePathPatterns("/api/ds/**")
                 .excludePathPatterns("/api/sesameReport/**")
                 .excludePathPatterns("/api/projectView/**")
@@ -178,7 +184,12 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/api/alipay/**")
                 .excludePathPatterns("/api/sys/checkUpdate")
                 // 数据魔盒回调
-                .excludePathPatterns("/api/carrier/**")
+                .excludePathPatterns("/api/carrier/magicCallback/**")
+                // 报告h5
+                .excludePathPatterns("/api/carrier/carrierShow/**")
+                .excludePathPatterns("/api/carrier/riskContactList/**")
+                .excludePathPatterns("/api/carrier/riskContactDetailList/**")
+                .excludePathPatterns("/api/carrier/consumeBillList/**")
                 //芝麻信用回调
                 .excludePathPatterns("/api/sesame/rollBack/**")
                 //内嵌页面接口请求
