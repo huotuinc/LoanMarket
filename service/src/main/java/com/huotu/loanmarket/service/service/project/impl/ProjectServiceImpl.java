@@ -109,7 +109,7 @@ public class ProjectServiceImpl implements ProjectService {
             return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
         };
         Sort sort = new Sort(Sort.Direction.DESC, "topSortNum");
-        Pageable pageable = new PageRequest(0, 20, sort);
+        Pageable pageable = new PageRequest(0, 12, sort);
 
         Page<Project> list = projectRepository.findAll(specification, pageable);
         return list.getContent();
@@ -124,7 +124,7 @@ public class ProjectServiceImpl implements ProjectService {
             return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
         };
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
-        Pageable pageable = new PageRequest(0, 12, sort);
+        Pageable pageable = new PageRequest(0, 20, sort);
         Page<Project> list = projectRepository.findAll(specification, pageable);
         return list.getContent();
     }
