@@ -193,7 +193,6 @@ public class ProjectController {
             projectVo.setName(p.getName());
             if (!StringUtils.isEmpty(p.getLogo())) {
                 try {
-                    p.setLogo(staticResourceService.getResource(p.getLogo()).toString());
                     projectVo.setLogo(staticResourceService.getResource(p.getLogo()).toString());
                 } catch (URISyntaxException e) {
                     log.error("获取图片异常：" + e);
