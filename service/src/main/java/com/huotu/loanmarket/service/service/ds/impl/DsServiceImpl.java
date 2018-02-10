@@ -106,7 +106,7 @@ public class DsServiceImpl implements DsService {
             Order order = orderRepository.findOne(orderId);
             order.setTaskId(taskId);
             int resultCode;
-            if (operatorCode == 0) {
+            if (operatorCode == 0 || operatorCode == 2011) {
                 //返回任务信息和原始数据
                 JsonObject data = jsonObject.getAsJsonObject("data").getAsJsonObject("task_data");
 //                String channelCode = data.get("channel_code").getAsString();
@@ -115,10 +115,12 @@ public class DsServiceImpl implements DsService {
                 orderService.updateInviteStatus(order.getUser().getUserId());
                 order.getUser().setAuthStatus(UserAuthorizedStatusEnums.AUTH_SUCCESS);
                 resultCode = AppCode.SUCCESS.getCode();
-            } else {
+            } else if(operatorCode == 100 ||operatorCode == 2012){
+                resultCode = AppCode.ERROR.getCode();
+            } else{
                 log.error(MessageFormat.format("【数据魔盒】电商数据查询失败，订单id：{0}，任务id：{1},失败原因：{2}", orderId,taskId,operatorMessage));
                 order.setAuthStatus(UserAuthorizedStatusEnums.AUTH_ERROR);
-                resultCode = AppCode.ERROR.getCode();
+                resultCode = AppCode.SUCCESS.getCode();
             }
             order.setAuthTime(LocalDateTime.now());
             orderRepository.saveAndFlush(order);
