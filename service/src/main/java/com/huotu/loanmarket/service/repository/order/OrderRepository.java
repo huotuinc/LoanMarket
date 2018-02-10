@@ -70,7 +70,7 @@ public interface OrderRepository extends JpaRepository<Order, String>, JpaSpecif
      * @param userIdList
      * @return
      */
-    @Query("select o.user.userId,count(o.user.userId) from Order o where o.user.userId in ?1 group by o.user.userId")
+    @Query("select o.user.userId,count(o.orderId) from Order o where o.user.userId in ?1 group by o.user.userId")
     List<Object[]> countByUserId(List<Long> userIdList);
 
     /**

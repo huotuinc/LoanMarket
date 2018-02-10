@@ -59,14 +59,16 @@
                             <tr>
                                 <th>用户ID</th>
                                 <th>用户名</th>
+                                <th>真实姓名</th>
                                 <th>邀请时间</th>
                                 <th>征信查询（次数）</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="user:${userList}">
+                            <tr th:each="user:${inviteList}">
                                 <td th:text="${user.userId}">1</td>
                                 <td th:text="${user.userName}">15100000000</td>
+                                <td th:text="${user.name}">15100000000</td>
                                 <td th:text="${user.inviteTime}"></td>
                                 <td th:text="${user.orderCount}">0</td>
                             </tr>

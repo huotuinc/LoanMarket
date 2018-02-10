@@ -268,7 +268,7 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public PageListView<UserInviteVo> getMyInviteList(Long userId, boolean isAuthSuccess, int pageIndex, int pageSize) {
+    public PageListView<UserInviteVo> getMyInviteList(Long userId, boolean isAuthSuccess, boolean mobileSafe, int pageIndex, int pageSize) {
         PageListView<UserInviteVo> result = new PageListView<>();
         Pageable pageable = new PageRequest(pageIndex - 1, pageSize, new Sort(Sort.Direction.DESC, "id"));
 
@@ -285,7 +285,11 @@ public class UserServiceImpl implements UserService {
             userInviteVo.setStatus(it.getAuthStatus().getCode());
             userInviteVo.setStatusName(it.getAuthStatus().getName());
             userInviteVo.setUserId(it.getUserId());
-            userInviteVo.setUserName(StringUtilsExt.safeGetMobile(it.getUserName()));
+            if (mobileSafe) {
+                userInviteVo.setUserName(StringUtilsExt.safeGetMobile(it.getUserName()));
+            } else {
+                userInviteVo.setUserName(it.getUserName());
+            }
             list.add(userInviteVo);
         }
         result.setList(list);

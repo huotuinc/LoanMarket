@@ -103,7 +103,7 @@ public interface UserService {
      * @param pageSize
      * @return
      */
-    PageListView<UserInviteVo> getMyInviteList(Long userId, boolean isAuthSuccess, int pageIndex, int pageSize);
+    PageListView<UserInviteVo> getMyInviteList(Long userId, boolean isAuthSuccess, boolean mobileSafe, int pageIndex, int pageSize);
 
     /**
      * 管理后台 用户列表

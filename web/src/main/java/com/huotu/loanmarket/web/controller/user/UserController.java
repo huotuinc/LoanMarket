@@ -47,7 +47,7 @@ public class UserController {
             , @RequestParam(required = false, defaultValue = "1") int pageIndex
             , @RequestParam(required = false, defaultValue = Constant.PAGE_SIZE_STR) int pageSize
             , Model model) {
-        PageListView<UserInviteVo> userInviteVoPage = userService.getMyInviteList(userId, isAuthSuccess, pageIndex, pageSize);
+        PageListView<UserInviteVo> userInviteVoPage = userService.getMyInviteList(userId, isAuthSuccess,false, pageIndex, pageSize);
         //还要统计征信查询次数
         if(!CollectionUtils.isEmpty(userInviteVoPage.getList())){
             List<Long> userIdList = userInviteVoPage.getList().stream().map(UserInviteVo::getUserId).collect(Collectors.toList());

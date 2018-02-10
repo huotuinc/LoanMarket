@@ -43,5 +43,5 @@ public class UserInviteVo {
     /**
      * 这个字段是后台查询时需要赋值的，api 用不到
      */
-    private Integer orderCount;
+    private int orderCount;
 }

@@ -64,6 +64,7 @@ public class UserController {
 
     @Autowired
     private LoanMarkConfigProvider loanMarkConfigProvider;
+
     /**
      * 根据手机号、密码实现用户登录
      * 密码跟短信验证码二选一 必填
@@ -261,7 +262,7 @@ public class UserController {
         pageIndex = pageIndex <= 0 ? 1 : pageIndex;
 
 
-        PageListView<UserInviteVo> result = userService.getMyInviteList(userId, authType == 1, pageIndex, pageSize);
+        PageListView<UserInviteVo> result = userService.getMyInviteList(userId, authType == 1, true, pageIndex, pageSize);
         LinkedHashMap<String, Object> map = new LinkedHashMap<>();
         map.put("list", result.getList());
         return ApiResult.resultWith(AppCode.SUCCESS, map);
@@ -284,13 +285,14 @@ public class UserController {
 
     /**
      * 获取注册页面
+     *
      * @return
      */
-    @RequestMapping(value = "/reg",method = RequestMethod.GET)
+    @RequestMapping(value = "/reg", method = RequestMethod.GET)
     public String registerPage(Model model) {
 
         GeneralConfig generalConfig = loanMarkConfigProvider.getGeneralConfig(Constant.MERCHANT_ID);
-        model.addAttribute("appUrl",generalConfig.getYingyongbaoAddr());
+        model.addAttribute("appUrl", generalConfig.getYingyongbaoAddr());
         return "register/register.html";
     }
 }
