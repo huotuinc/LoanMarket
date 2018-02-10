@@ -42,6 +42,8 @@
                 <entry key="javax.persistence.schema-generation.database.action" value="create"/>
                 <entry key="eclipselink.weaving" value="false"/>
                 <entry key="eclipselink.logging.level" value="FINE"/>
+                <!--在发布初期使用无缓存模式-->
+                <entry key="eclipselink.cache.shared.default" value="false"/>
             </map>
         </property>
     </bean>
