@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -107,4 +108,17 @@ public interface OrderRepository extends JpaRepository<Order, String>, JpaSpecif
      */
     @Query("select count(o.orderId) from Order o where o.merchant = ?1 and o.authStatus = ?2 and o.authTime >= ?3 and o.authTime < ?4")
     int countByAuthStatusAndPayTime(Integer merchantId, UserAuthorizedStatusEnums authStatus, LocalDateTime authBeginTime, LocalDateTime authEndTime);
+
+    /**
+     * 获取超过指定时间的未支付订单数据
+     * @param merchantId 商户ID
+     * @param createTime
+     * @param payStatus
+     * @param orderStatus 订单状态
+     * @return
+     */
+    @Query("select o from Order o where o.merchant = ?1 and o.createTime < ?2 and o.payStatus=?3 and o.orderStatus=?4")
+    List<Order> findNotPayOrderByMerchantIdAndCreateTime(Integer merchantId,LocalDateTime createTime,OrderEnum.PayStatus payStatus,OrderEnum.OrderStatus orderStatus);
+
+
 }
