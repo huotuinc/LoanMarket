@@ -556,16 +556,19 @@ public class OrderServiceImpl implements OrderService {
     @Transactional(rollbackFor = Exception.class)
     public long orderRecycleByNotPay() {
         long count = 0;
+        //默认15分钟
         long minutes = 15;
         try {
+            //获取未支付订单失效配置
             Map<String, String> configItem = merchantCfgService.getConfigItem(Constant.MERCHANT_ID, MerchantConfigEnum.GENERAL);
             if (configItem != null && configItem.containsKey(ConfigParameter.GeneralParameter.ORDER_RECYCLE.getKey())) {
                 minutes = Long.parseLong(configItem.get(ConfigParameter.GeneralParameter.ORDER_RECYCLE.getKey()));
             }
         } catch (Exception ex) {
-            log.info("获取订单回收时效配置异常：未设置订单回收时效，默认30分钟");
+            log.info("获取订单回收时效配置异常：未设置订单回收时效，默认15分钟");
             minutes = 15;
         }
+
         LocalDateTime localDateTime = LocalDateTime.now().minusMinutes(minutes);
 
         List<Order> list = orderRepository.findNotPayOrderByMerchantIdAndCreateTime(Constant.MERCHANT_ID, localDateTime, OrderEnum.PayStatus.NOT_PAY, OrderEnum.OrderStatus.Normal);
