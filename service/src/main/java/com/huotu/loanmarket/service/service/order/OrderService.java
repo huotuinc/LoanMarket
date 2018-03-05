@@ -134,4 +134,11 @@ public interface OrderService {
      */
     @Transactional(rollbackFor = Exception.class)
     void updateInviteStatus(Long userId);
+
+    /**
+     * 回收未支付的订单
+     * @return
+     */
+    @Transactional(rollbackFor = Exception.class)
+    long orderRecycleByNotPay();
 }

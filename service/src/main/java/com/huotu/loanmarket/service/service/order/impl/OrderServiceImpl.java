@@ -336,7 +336,7 @@ public class OrderServiceImpl implements OrderService {
      * @return
      */
     private Specification<Order> getOrderSpecification(Long userId, UserAuthorizedStatusEnums authorizedStatusEnums) {
-        return getOrderSpecification(userId, null, null, null, authorizedStatusEnums);
+        return getOrderSpecification(userId, null, null, OrderEnum.OrderStatus.Normal, authorizedStatusEnums);
     }
 
     /**
@@ -546,6 +546,47 @@ public class OrderServiceImpl implements OrderService {
             inviteRepository.save(invite);
         }
     }
+
+
+    /**
+     * 回收未支付的订单数据
+     * @return
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public long orderRecycleByNotPay() {
+        long count = 0;
+        //默认15分钟
+        long minutes = 15;
+        try {
+            //获取未支付订单失效配置
+            Map<String, String> configItem = merchantCfgService.getConfigItem(Constant.MERCHANT_ID, MerchantConfigEnum.GENERAL);
+            if (configItem != null && configItem.containsKey(ConfigParameter.GeneralParameter.ORDER_RECYCLE.getKey())) {
+                minutes = Long.parseLong(configItem.get(ConfigParameter.GeneralParameter.ORDER_RECYCLE.getKey()));
+            }
+        } catch (Exception ex) {
+            log.info("获取订单回收时效配置异常：未设置订单回收时效，默认15分钟");
+            minutes = 15;
+        }
+
+        LocalDateTime localDateTime = LocalDateTime.now().minusMinutes(minutes);
+
+        List<Order> list = orderRepository.findNotPayOrderByMerchantIdAndCreateTime(Constant.MERCHANT_ID, localDateTime, OrderEnum.PayStatus.NOT_PAY, OrderEnum.OrderStatus.Normal);
+
+        if (list != null && list.size() > 0) {
+
+            list.forEach(item -> {
+                item.setOrderStatus(OrderEnum.OrderStatus.CANCEL);
+            });
+            count = list.size();
+        }
+        return count;
+    }
+
+
+
+
+
 
     private Specification<Order> getOrderSpecification(OrderSearchCondition condition) {
         return (root, query, cb) -> getPredicate(condition, root, cb);

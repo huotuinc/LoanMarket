@@ -201,7 +201,8 @@ public interface ConfigParameter {
     @AllArgsConstructor
     @MerchantConfigType(type = MerchantConfigEnum.GENERAL)
     enum GeneralParameter implements IMerchantParameterEnum {
-        YINGYONGBAO("general_yingyongbao", "应用宝地址");
+        YINGYONGBAO("general_yingyongbao", "应用宝地址"),
+        ORDER_RECYCLE("order_recycle","未支付订单时效,单位分钟"),;
         private String key;
         private String message;
 
