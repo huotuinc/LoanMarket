@@ -74,36 +74,38 @@ public class SesameController {
     public ApiResult verifyIdAndName(@RequestHeader(Constant.APP_MERCHANT_ID_KEY) Integer merchantId,
                                      @RequestHeader(value = Constant.APP_USER_ID_KEY, required = false) Long userId, String name, String idCardNum) {
         log.info("用户欺诈信息开始芝麻授权userId：" + userId);
-        ZhimaCreditAntifraudVerifyRequest req = new ZhimaCreditAntifraudVerifyRequest();
-        req.setChannel("apppc");
-        req.setPlatform("zmop");
-        req.setProductCode(SesameSysConfig.PRODUCT_CODE_CHEAT);
-        req.setTransactionId(RandomUtils.getTransactionId());
-        req.setCertNo(idCardNum);
-        req.setCertType(SesameSysConfig.AUTHENTICATION_TYPE);
-        req.setName(name);
-        SesameConfig sesameConfig = loanMarkConfigProvider.getSesameConfig(merchantId);
-        DefaultZhimaClient client = new DefaultZhimaClient(SesameSysConfig.SESAME_CREDIT_URL, sesameConfig.getAppCheatId(), sesameConfig.getPrivateCheatKey(), sesameConfig.getPublicCheatKey());
-        try {
-            ZhimaCreditAntifraudVerifyResponse response = client.execute(req);
-            if (!StringUtils.isEmpty(response.getBizNo()) && response.getVerifyCode().size() > 0) {
-                String[] strings = response.getVerifyCode().get(0).split("_");
-                if (strings.length > 3 && !strings[3].equals("MA")) {
-                    //不成功
-                    return ApiResult.resultWith(SesameResultCode.NAME_AND_NUM_NOT_AGREEMENT);
-                } else {
-                    //成功
-                    return ApiResult.resultWith(AppCode.SUCCESS);
-                }
-            } else {
-                //不成功
-                return ApiResult.resultWith(SesameResultCode.NAME_AND_NUM_NOT_AGREEMENT);
-            }
-
-        } catch (ZhimaApiException e) {
-            log.error("芝麻欺诈信息验证异常：" + e);
-        }
-        return ApiResult.resultWith(SesameResultCode.NAME_AND_NUM_NOT_AGREEMENT);
+        // TODO: 2018/3/3 有待修改
+//        ZhimaCreditAntifraudVerifyRequest req = new ZhimaCreditAntifraudVerifyRequest();
+//        req.setChannel("apppc");
+//        req.setPlatform("zmop");
+//        req.setProductCode(SesameSysConfig.PRODUCT_CODE_CHEAT);
+//        req.setTransactionId(RandomUtils.getTransactionId());
+//        req.setCertNo(idCardNum);
+//        req.setCertType(SesameSysConfig.AUTHENTICATION_TYPE);
+//        req.setName(name);
+//        SesameConfig sesameConfig = loanMarkConfigProvider.getSesameConfig(merchantId);
+//        DefaultZhimaClient client = new DefaultZhimaClient(SesameSysConfig.SESAME_CREDIT_URL, sesameConfig.getAppId(), sesameConfig.getPrivateKey(), sesameConfig.getPublicKey());
+//        try {
+//            ZhimaCreditAntifraudVerifyResponse response = client.execute(req);
+//            if (!StringUtils.isEmpty(response.getBizNo()) && response.getVerifyCode().size() > 0) {
+//                String[] strings = response.getVerifyCode().get(0).split("_");
+//                if (strings.length > 3 && !strings[3].equals("MA")) {
+//                    //不成功
+//                    return ApiResult.resultWith(SesameResultCode.NAME_AND_NUM_NOT_AGREEMENT);
+//                } else {
+//                    //成功
+//                    return ApiResult.resultWith(AppCode.SUCCESS);
+//                }
+//            } else {
+//                //不成功
+//                return ApiResult.resultWith(SesameResultCode.NAME_AND_NUM_NOT_AGREEMENT);
+//            }
+//
+//        } catch (ZhimaApiException e) {
+//            log.error("芝麻欺诈信息验证异常：" + e);
+//        }
+//        return ApiResult.resultWith(SesameResultCode.NAME_AND_NUM_NOT_AGREEMENT);
+        return ApiResult.resultWith(AppCode.SUCCESS);
     }
 
     /**
