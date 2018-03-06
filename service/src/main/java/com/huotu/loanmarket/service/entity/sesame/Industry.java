@@ -61,6 +61,12 @@ public class Industry {
      */
     @Column(name = "refresh_time")
     private LocalDateTime refresh_time;
+
+    /**
+     * 风险代码
+     */
+    @Column(name = "rank_code")
+    private SesameEnum.RankCode rankCode;
     /**
      * 结清状态
      * T 当前不逾期

@@ -205,8 +205,9 @@ public class SesameController {
                     Industry industry = new Industry();
                     industry.setOrderId(orderId);
                     industry.setUserId(userId);
+                    industry.setRankCode(EnumHelper.getEnumType(SesameEnum.RankCode.class, detail.getCode()));
                     industry.setBiz_code(EnumHelper.getEnumType(SesameEnum.IndustryType.class, detail.getBizCode()));
-                    industry.setCode(EnumHelper.getEnumType(SesameEnum.RankNumber.class, detail.getCode()));
+                    industry.setCode(EnumHelper.getEnumType(SesameEnum.RankNumber.class, detail.getType()));
                     industry.setStatus(EnumHelper.getEnumType(SesameEnum.Status.class, detail.getStatus()));
                     industry.setStatement(detail.getStatement());
                     industry.setLevel(EnumHelper.getEnumType(SesameEnum.Level.class, detail.getLevel().toString()));

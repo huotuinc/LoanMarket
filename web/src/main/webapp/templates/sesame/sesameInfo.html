@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>行业黑名单数据</title>
+    <title>行业黑名单报告</title>
 
     <link href="http://resali.huobanplus.com/cdn/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
     <link href="http://resali.huobanplus.com/cdn/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
@@ -24,7 +24,7 @@
 <div class="wrapper wrapper-content">
     <div class="panel panel-default">
         <div class="panel-heading">
-            行业黑名单
+            行业黑名单报告
         </div>
         <div class="panel-body">
             <div class="row">
@@ -36,19 +36,16 @@
                                     <thead>
                                     <tr>
                                         <th>
-                                            风险信息行业编码
+                                            <div>行业类型</div>
                                         </th>
                                         <th>
-                                            行业名单风险类型
+                                            <div>风险类型</div>
                                         </th>
                                         <th>
-                                            结清状态
+                                            <div>风险代码</div>
                                         </th>
                                         <th>
-                                            信息状态
-                                        </th>
-                                        <th>
-                                            声明状态
+                                            <div>风险等级</div>
                                         </th>
                                     </tr>
                                     </thead>
@@ -57,9 +54,8 @@
                                     <tr th:each="industry:${industryList}" th:unless="${#lists.isEmpty(industryList)}">
                                         <td th:text="${industry.biz_code.message}"></td>
                                         <td th:text="${industry.code.message}"></td>
-                                        <td th:text="${industry.settlement.message}"></td>
-                                        <td th:text="${industry.status.message}"></td>
-                                        <td th:text="${industry.statement}"></td>
+                                        <td th:text="${industry.rankCode.message}"></td>
+                                        <td th:text="${industry.level.message}"></td>
                                     </tr>
                                     <tr th:if="${#lists.isEmpty(industryList)}">
                                         <td colspan='5' rowspan="2" height="50px">
