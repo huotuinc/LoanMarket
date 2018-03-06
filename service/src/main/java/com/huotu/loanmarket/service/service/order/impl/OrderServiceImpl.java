@@ -512,7 +512,13 @@ public class OrderServiceImpl implements OrderService {
         //1、更改订单状态
         unifiedOrder.setPayTime(LocalDateTime.now());
         unifiedOrder.setPayStatus(OrderEnum.PayStatus.PAY_SUCCESS);
-        unifiedOrder.setAuthStatus(UserAuthorizedStatusEnums.AUTH_ING);
+        //淘宝和京东支付成功后，改成未认证，其他改成认证中
+        if (unifiedOrder.getOrderType()==OrderEnum.OrderType.TAOBAO||unifiedOrder.getOrderType()==OrderEnum.OrderType.JINGDONG) {
+            unifiedOrder.setAuthStatus(UserAuthorizedStatusEnums.AUTH_NOT);
+        }
+        else {
+            unifiedOrder.setAuthStatus(UserAuthorizedStatusEnums.AUTH_ING);
+        }
         //TODO:系统配置读取
         unifiedOrder.setAuthCount(3);
         orderRepository.save(unifiedOrder);
