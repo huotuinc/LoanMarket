@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <title>行业黑名单</title>
+    <title>行业黑名单报告</title>
     <link rel="stylesheet" href="http://resali.huobanplus.com/cdn/weui/1.1.2/weui.min.css">
     <link rel="stylesheet" href="../..//resource/css/wap/main.css" th:href="@{/resource/css/wap/main.css(t=20180201)}">
 </head>
@@ -14,19 +14,16 @@
         <table border="0" cellspacing="0" cellpadding="0">
             <tr>
                 <th>
-                    <div>风险信息行业编码</div>
+                    <div>行业类型</div>
                 </th>
                 <th>
-                    <div>行业名单风险类型</div>
+                    <div>风险类型</div>
                 </th>
                 <th>
-                    <div>结清状态</div>
+                    <div>风险代码</div>
                 </th>
                 <th>
-                    <div>信息状态</div>
-                </th>
-                <th>
-                    <div>声明状态</div>
+                    <div>风险等级</div>
                 </th>
             </tr>
             <!--/*@thymesVar id="industry" type="com.huotu.loanmarket.service.entity.sesame.Industry"*/-->
@@ -38,13 +35,10 @@
                     <div th:text="${industry.code.message}">2</div>
                 </td>
                 <td>
-                    <div th:text="${industry.settlement.message}">3</div>
+                    <div th:text="${industry.rankCode.message}">3</div>
                 </td>
                 <td>
-                    <div th:text="${industry.status.message}">4</div>
-                </td>
-                <td>
-                    <div th:text="${industry.statement}">5</div>
+                    <div th:text="${industry.level.message}">4</div>
                 </td>
             </tr>
         </table>
@@ -55,24 +49,22 @@
         <table border="0" cellspacing="0" cellpadding="0">
             <tr>
                 <th>
-                    <div>风险信息行业编码</div>
+                    <div>行业类型</div>
                 </th>
                 <th>
-                    <div>行业名单风险类型</div>
+                    <div>风险类型</div>
                 </th>
                 <th>
-                    <div>结清状态</div>
+                    <div>风险代码</div>
                 </th>
                 <th>
-                    <div>信息状态</div>
-                </th>
-                <th>
-                    <div>声明状态</div>
+                    <div>风险等级</div>
                 </th>
             </tr>
             <tr>
                 <td colspan='5' rowspan="2" height="50px">
-                    <span>恭喜您暂无风险记录</span>
+                    <img src="../../resource/image/risk.png">
+                    <p>恭喜您暂无风险记录</p>
                 </td>
             </tr>
         </table>

@@ -73,6 +73,8 @@ public class CarrierController {
         if(StringUtils.isBlank(orderId) || StringUtils.isBlank(taskId)){
             return ApiResult.resultWith(5000,"任务id或订单id不能为空");
         }
+        Order order = orderService.findByOrderId(orderId);
+        order.setAuthStatus(UserAuthorizedStatusEnums.AUTH_ING);
         AsyncTask asyncTask = asyncTaskRepository.findByOrderIdAndType(orderId,Constant.DS);
         if(asyncTask != null){
             asyncTask.setTaskId(taskId);
@@ -84,6 +86,7 @@ public class CarrierController {
             asyncTask.setType(Constant.DS);
         }
         asyncTaskRepository.saveAndFlush(asyncTask);
+        orderService.save(order);
         return ApiResult.resultWith(AppCode.SUCCESS);
     }
     @RequestMapping("/magicCallback")
