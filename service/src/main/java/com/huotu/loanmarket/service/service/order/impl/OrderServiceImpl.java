@@ -257,6 +257,7 @@ public class OrderServiceImpl implements OrderService {
             OrderEnum.ApiOrderStatus status = getApiOrderStatus(order);
             apiOrderInfoVo.setStatus(status.getCode());
             apiOrderInfoVo.setStatusName(status.getName());
+            apiOrderInfoVo.setOrderType(order.getOrderType().getCode());
             if (status.equals(OrderEnum.ApiOrderStatus.AUTH_ING) || status.equals(OrderEnum.ApiOrderStatus.AUTH_SUCCESS)) {
                 OrderThirdUrlInfo thirdUrlInfo = getOrderThirdUrl(order);
                 apiOrderInfoVo.setThirdAuthUrl(thirdUrlInfo.getUrl());

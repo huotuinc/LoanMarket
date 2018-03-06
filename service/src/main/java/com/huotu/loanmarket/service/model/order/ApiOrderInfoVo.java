@@ -32,6 +32,11 @@ public class ApiOrderInfoVo {
     private int status;
 
     /**
+     * 订单类型 0行业黑名单，1金融黑名单 2运营商 3淘宝 4京东
+     */
+    private int orderType;
+
+    /**
      * 状态描述
      */
     private String statusName;
