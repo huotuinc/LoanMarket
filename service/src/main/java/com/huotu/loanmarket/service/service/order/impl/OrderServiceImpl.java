@@ -456,6 +456,7 @@ public class OrderServiceImpl implements OrderService {
                 }
 
                 if (orderStatus.equals(OrderEnum.ApiOrderStatus.AUTH_ING)){
+                    url = homeURI + "api/ds/dsAuthIng?userId=" + order.getUser().getUserId() + "&orderId=" + order.getOrderId();
 
                 }
 
@@ -470,7 +471,7 @@ public class OrderServiceImpl implements OrderService {
                     url = baseService.apiHomeURI() + "gh_credit_authTaobao?orderId=" + order.getOrderId();
                 }
                 if (orderStatus.equals(OrderEnum.ApiOrderStatus.AUTH_ING)){
-
+                    url = homeURI + "api/ds/dsAuthIng?userId=" + order.getUser().getUserId() + "&orderId=" + order.getOrderId();
                 }
 
                 break;

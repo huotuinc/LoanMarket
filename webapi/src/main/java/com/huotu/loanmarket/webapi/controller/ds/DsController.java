@@ -55,6 +55,19 @@ public class DsController {
         return "report/dsInfo";
     }
 
+
+    /**
+     * 电商认证中页面
+     * @return
+     */
+    @RequestMapping("/dsAuthIng")
+    public String dsAuthIng(Long userId, String orderId,Model model){
+        model.addAttribute("orderId",orderId);
+        model.addAttribute("userId",userId);
+        return "report/dsAuthIng";
+    }
+
+
     /**
      * 电商订单统计
      * @param userId
