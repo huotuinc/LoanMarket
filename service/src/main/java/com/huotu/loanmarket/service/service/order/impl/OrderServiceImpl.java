@@ -258,7 +258,7 @@ public class OrderServiceImpl implements OrderService {
             apiOrderInfoVo.setStatus(status.getCode());
             apiOrderInfoVo.setStatusName(status.getName());
             apiOrderInfoVo.setOrderType(order.getOrderType().getCode());
-            if (status.equals(OrderEnum.ApiOrderStatus.AUTH_ING) || status.equals(OrderEnum.ApiOrderStatus.AUTH_SUCCESS)) {
+            if (status.equals(OrderEnum.ApiOrderStatus.NOT_AUTH) ||status.equals(OrderEnum.ApiOrderStatus.AUTH_ING) || status.equals(OrderEnum.ApiOrderStatus.AUTH_SUCCESS)) {
                 OrderThirdUrlInfo thirdUrlInfo = getOrderThirdUrl(order);
                 apiOrderInfoVo.setThirdAuthUrl(thirdUrlInfo.getUrl());
             }
@@ -314,6 +314,9 @@ public class OrderServiceImpl implements OrderService {
             }
             if (order.getAuthStatus().equals(UserAuthorizedStatusEnums.AUTH_ERROR)) {
                 return OrderEnum.ApiOrderStatus.AUTH_ERROR;
+            }
+            if (order.getAuthStatus().equals(UserAuthorizedStatusEnums.AUTH_NOT)){
+                return OrderEnum.ApiOrderStatus.NOT_AUTH;
             }
         }
         return status;
@@ -443,22 +446,33 @@ public class OrderServiceImpl implements OrderService {
 
                 break;
             case JINGDONG:
+                //京东改成SDK对接。
                 if (orderStatus.equals(OrderEnum.ApiOrderStatus.AUTH_SUCCESS)) {
                     url = homeURI + "api/ds/dsShow?userId=" + order.getUser().getUserId() + "&orderId=" + order.getOrderId();
                 }
-                if (orderStatus.equals(OrderEnum.ApiOrderStatus.AUTH_ING)) {
+                if (orderStatus.equals(OrderEnum.ApiOrderStatus.NOT_AUTH)) {
                     //url = String.format("https://open.shujumohe.com/box/jd?box_token=5884F7B994A7445E9B6C89CA2D2942AA&passback_params=%s", order.getOrderId() + ",1," + Constant.DS);
                     url = baseService.apiHomeURI() + "gh_credit_authjindong?orderId=" + order.getOrderId();
                 }
+
+                if (orderStatus.equals(OrderEnum.ApiOrderStatus.AUTH_ING)){
+
+                }
+
+
                 break;
             case TAOBAO:
                 // 淘宝不支持h5对接。
                 if (orderStatus.equals(OrderEnum.ApiOrderStatus.AUTH_SUCCESS)) {
                     url = homeURI + "api/ds/dsShow?userId=" + order.getUser().getUserId() + "&orderId=" + order.getOrderId();
                 }
-                if (orderStatus.equals(OrderEnum.ApiOrderStatus.AUTH_ING)) {
+                if (orderStatus.equals(OrderEnum.ApiOrderStatus.NOT_AUTH)) {
                     url = baseService.apiHomeURI() + "gh_credit_authTaobao?orderId=" + order.getOrderId();
                 }
+                if (orderStatus.equals(OrderEnum.ApiOrderStatus.AUTH_ING)){
+
+                }
+
                 break;
             case BACKLIST_BUS:
                 if (orderStatus.equals(OrderEnum.ApiOrderStatus.AUTH_SUCCESS)) {
