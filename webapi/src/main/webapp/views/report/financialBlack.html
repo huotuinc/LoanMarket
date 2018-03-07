@@ -44,7 +44,7 @@
             <div class="weui-cell__bd"><strong>身份证黑名单</strong></div>
             <div class="weui-cell__ft"></div>
         </div>
-        <div class="weui-cell weui-sub-text">
+        <div class="weui-cell">
             <div class="weui-cell__bd weui-cell__sub bg-gray">
                 {{if risk.fuzzyNameHits && risk.fuzzyNameHits.length > 0}}
                 {{each risk.fuzzyNameHits}}
@@ -60,7 +60,7 @@
             <div class="weui-cell__bd"><strong>手机号黑名单</strong></div>
             <div class="weui-cell__ft"></div>
         </div>
-        <div class="weui-cell weui-sub-text">
+        <div class="weui-cell">
             <div class="weui-cell__bd weui-cell__sub bg-gray">
                 {{if risk.phoneNumberRisks && risk.phoneNumberRisks.length > 0}}
                 {{each risk.phoneNumberRisks}}
@@ -76,7 +76,7 @@
             <div class="weui-cell__bd"><strong>多平台借贷记录</strong></div>
             <div class="weui-cell__ft"></div>
         </div>
-        <div class="weui-cell weui-sub-text">
+        <div class="weui-cell">
             <div class="weui-cell__bd weui-cell__sub bg-gray">
                 3个月内有在{{risk.platformApply90}}个平台申请借款的记录
             </div>
@@ -102,7 +102,7 @@
         <i class="weui-icon-warn weui-icon_msg-primary"></i>
     </div>
     <div style="text-align:center;color:#ccc;">
-    {error}
+        {error}
     </div>
 </script>
 <script>
@@ -119,7 +119,7 @@
     })
             .done(function (response) {
                 if (response.resultCode != 2000) {
-                    var errorHtml = $('#J_tplError').html().replace('{error}',response.resultMsg);
+                    var errorHtml = $('#J_tplError').html().replace('{error}', response.resultMsg);
                     creditPage.append(errorHtml);
                     loading.hide();
                     return;
