@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <title>信用信息</title>
+    <title>金融黑名单报告</title>
     <link rel="stylesheet" href="http://resali.huobanplus.com/cdn/weui/1.1.2/weui.min.css">
     <link rel="stylesheet" href="../resource/css/wap/main.css" th:href="@{/resource/css/wap/main.css(t=20180102)}">
 </head>
@@ -21,7 +21,7 @@
 <script src="../resource/js/template-web.js" th:src="@{/resource/js/template-web.js}"></script>
 <script src="../resource/js/wap/common.js" th:src="@{/resource/js/common.js}"></script>
 <script id="J_tplBody" type="text/html">
-    <div class="weui-cells__title">风控信息</div>
+    <!--<div class="weui-cells__title">风控信息</div>-->
     <div class="weui-cells">
         <!--<div class="weui-cell">-->
         <!--<div class="weui-cell__bd">法院失信</div>-->
@@ -39,8 +39,9 @@
         <!--<div class="weui-cell__bd">信贷逾期</div>-->
         <!--<div class="weui-cell__ft">{{risk.discredit == 1 ? '是' : '否'}}</div>-->
         <!--</div>-->
-        <div class="weui-cell weui-cell_access weui-cell_up">
-            <div class="weui-cell__bd">身份证黑名单</div>
+        <!--<div class="weui-cell weui-cell_access weui-cell_up">-->
+        <div class="weui-cell">
+            <div class="weui-cell__bd"><strong>身份证黑名单</strong></div>
             <div class="weui-cell__ft"></div>
         </div>
         <div class="weui-cell weui-sub-text">
@@ -54,8 +55,9 @@
                 {{/if}}
             </div>
         </div>
-        <div class="weui-cell weui-cell_access weui-cell_up">
-            <div class="weui-cell__bd">手机号黑名单</div>
+        <!--<div class="weui-cell weui-cell_access weui-cell_up">-->
+        <div class="weui-cell">
+            <div class="weui-cell__bd"><strong>手机号黑名单</strong></div>
             <div class="weui-cell__ft"></div>
         </div>
         <div class="weui-cell weui-sub-text">
@@ -69,8 +71,9 @@
                 {{/if}}
             </div>
         </div>
-        <div class="weui-cell weui-cell_access weui-cell_up">
-            <div class="weui-cell__bd">多平台借贷记录</div>
+        <!--<div class="weui-cell weui-cell_access weui-cell_up">-->
+        <div class="weui-cell">
+            <div class="weui-cell__bd"><strong>多平台借贷记录</strong></div>
             <div class="weui-cell__ft"></div>
         </div>
         <div class="weui-cell weui-sub-text">
