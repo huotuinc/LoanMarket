@@ -169,7 +169,8 @@ public interface OrderEnum {
         NOT_PAY(1,"待支付"),
         AUTH_ING(2,"认证中"),
         AUTH_SUCCESS(3,"认证成功"),
-        AUTH_ERROR(4,"认证失败")
+        AUTH_ERROR(4,"认证失败"),
+        NOT_AUTH(5,"未认证"),
 
         ;
         private int code;
