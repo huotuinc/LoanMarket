@@ -45,7 +45,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * @author guomw
@@ -72,6 +74,7 @@ public class UserController {
      * @param username  用户名
      * @param input     密码(md5)或验证码
      * @param loginType 登录方式[0:密码登录 1:验证码登录]
+     * @param inviter 邀请者
      * @param request
      * @return
      */
@@ -80,6 +83,7 @@ public class UserController {
     public ApiResult login(@RequestParam String username,
                            @RequestParam String input,
                            @RequestParam(required = false, defaultValue = "0") int loginType,
+                           @RequestParam(required = false, defaultValue = "0") Long inviter,
                            HttpServletRequest request) {
 
         if (!RegexUtils.checkMobile(username)) {
@@ -98,7 +102,7 @@ public class UserController {
         }
 
         try {
-            user = userService.login(username, input, loginType, request);
+            user = userService.login(username, input, loginType, inviter,request);
         } catch (ErrorMessageException e) {
             return ApiResult.resultWith(e.code, e.getMessage());
         }
@@ -110,6 +114,54 @@ public class UserController {
         userInfoVo.setAuthStatus(user.getAuthStatus().getCode());
         return ApiResult.resultWith(AppCode.SUCCESS, userInfoVo);
 
+    }
+
+    /**
+     * 验证码登录
+     * @param username
+     * @param input
+     * @param inviter
+     * @param request
+     * @return
+     */
+    @RequestMapping("/loginByVerifyCode")
+    @ResponseBody
+    public ApiResult loginByVerifyCode(@RequestParam String username,
+                                       @RequestParam String input,
+                                       @RequestParam(required = false, defaultValue = "0") Long inviter,
+                                       HttpServletRequest request){
+
+        int loginType=1;
+        if (!RegexUtils.checkMobile(username)) {
+            return ApiResult.resultWith(UserResultCode.CODE1);
+        }
+
+        if (StringUtils.isEmpty(input) || input.length() != Constant.VERIFY_CODE_LENGTH) {
+            return ApiResult.resultWith(UserResultCode.CODE9);
+        }
+        try {
+            User user=userService.login(username, input, loginType, inviter,request);
+            UserInfoVo userInfoVo = new UserInfoVo();
+            userInfoVo.setUserId(user.getUserId());
+            userInfoVo.setUserName(user.getUserName());
+            userInfoVo.setUserToken(user.getUserToken());
+            userInfoVo.setHeadimg(user.getHeadimg());
+            userInfoVo.setAuthStatus(user.getAuthStatus().getCode());
+
+            //登录成功后，同步有信用户数据
+            UserInfoVo yxUserInfo=new UserInfoVo();
+
+
+
+
+            Map<String,Object> map= new HashMap<>();
+            map.put("userInfo",userInfoVo);
+            map.put("yxUserInfo",yxUserInfo);
+            return ApiResult.resultWith(AppCode.SUCCESS, map);
+
+        } catch (ErrorMessageException e) {
+            return ApiResult.resultWith(e.code, e.getMessage());
+        }
     }
 
 

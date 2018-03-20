@@ -127,10 +127,10 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public User login(String loginName, String loginPassword,
-                      @RequestParam(required = false, defaultValue = "0") int loginType,
+                      int loginType,
+                      Long inviter,
                       @RequestParam(required = false) HttpServletRequest request) throws ErrorMessageException {
-
-        if (loginType == 1) {
+        if (loginType==1){
             if (!verifyCodeService.checkVerifyCode(loginName, loginPassword)) {
                 throw new ErrorMessageException(UserResultCode.CODE9);
             }
@@ -138,7 +138,36 @@ public class UserServiceImpl implements UserService {
 
         User userInfo = userRepository.findByUserName(loginName);
         if (userInfo == null) {
-            throw new ErrorMessageException(UserResultCode.CODE5);
+            if (loginType==1){
+                //验证码登录模式下，如果用户不存在，则注册用户
+                userInfo=new User();
+                userInfo.setUserName(loginName);
+                userInfo.setRealName(StringUtilsExt.safeGetMobile(loginName));
+                userInfo.setChannelId(RequestUtils.getHeader(request, Constant.APP_CHANNELID_KEY, "default"));
+                userInfo.setInviterId(0L);
+
+                String inviterName = "";
+                //判断当前注册人身份是否是借款人，且判断是否存在邀请人
+                if (inviter != null
+                        && inviter > 0) {
+                    inviterName = userRepository.findUserNameByUserId(inviter);
+                    if(StringUtils.isEmpty(inviterName)){
+                        inviter=0L;
+                    }
+                }
+                userInfo.setInviterId(inviter);
+                userInfo = userRepository.saveAndFlush(userInfo);
+
+                if (!StringUtils.isEmpty(inviterName)) {
+                    //添加邀请
+                    addInviteLog(userInfo.getUserId(), userInfo.getUserName(), userInfo.getRealName(), userInfo.getInviterId(), inviterName);
+                }
+
+
+            }
+            else {
+                throw new ErrorMessageException(UserResultCode.CODE5);
+            }
         }
 
         //是否删除 是否锁定
@@ -150,7 +179,8 @@ public class UserServiceImpl implements UserService {
             if (!userInfo.getPassword().equalsIgnoreCase(loginPassword)) {
                 throw new ErrorMessageException(UserResultCode.CODE6);
             }
-        } else {
+        }
+        else {
             VerifyCode code = verifyCodeRepository.findByMobileAndMerchantId(loginName);
             code.setUseStatus(true);
         }
@@ -158,6 +188,7 @@ public class UserServiceImpl implements UserService {
         userInfo.setLastLoginTime(LocalDateTime.now());
         userInfo.setLoginCount(userInfo.getLoginCount() + 1);
         if (request != null) {
+
             userInfo.setLastLoginIp(StringUtilsExt.getClientIp(request));
             userInfo.setAppVersion(RequestUtils.getHeader(request, Constant.APP_VERSION_KEY));
             userInfo.setOsType(RequestUtils.getHeader(request, Constant.APP_SYSTEM_TYPE_KEY));

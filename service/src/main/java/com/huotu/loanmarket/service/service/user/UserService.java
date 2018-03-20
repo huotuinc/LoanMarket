@@ -47,12 +47,13 @@ public interface UserService {
      * @param loginName
      * @param loginPassword 密码(md5)或验证码
      * @param loginType     登录方式[0:密码登录 1:验证码登录]
+     *                      @param inviter 邀请者
      * @param request
      * @return
      * @throws ErrorMessageException
      */
     @Transactional(rollbackFor = Exception.class)
-    User login(String loginName, String loginPassword, @RequestParam(required = false, defaultValue = "0") int loginType, @RequestParam(required = false) HttpServletRequest request) throws ErrorMessageException;
+    User login(String loginName, String loginPassword,int loginType,Long inviter, @RequestParam(required = false) HttpServletRequest request) throws ErrorMessageException;
 
     ;
 
