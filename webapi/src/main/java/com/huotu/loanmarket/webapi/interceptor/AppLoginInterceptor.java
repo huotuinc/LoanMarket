@@ -50,9 +50,9 @@ public class AppLoginInterceptor extends HandlerInterceptorAdapter {
          */
         if (!userService.checkLoginToken(merchantId, userId, token)) {
             if (userId > 0 || !StringUtils.isEmpty(token)) {
-                response.getWriter().write(JSON.toJSONString(ApiResult.resultWith(AppCode.TOKEN_ERROR, "您的账号已在另一台设备登录。如非本人操作，则密码可能已泄露，建议修改密码。")));
+                response.getWriter().write(JSON.toJSONString(ApiResult.resultWith(AppCode.TOKEN_ERROR, "登录信息失效，请重新登录")));
             } else {
-                response.getWriter().write(JSON.toJSONString(ApiResult.resultWith(AppCode.TOKEN_ERROR,"您还未登录，建议您登录后在操作。")));
+                response.getWriter().write(JSON.toJSONString(ApiResult.resultWith(AppCode.TOKEN_ERROR,"您还未登录，建议您登录后在操作")));
             }
             return false;
         }

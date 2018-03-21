@@ -32,7 +32,7 @@ public enum AppCode implements ICommonEnum {
     /**
      * token失效
      */
-    TOKEN_ERROR(4003, "你的账号已在另一台设备登录。如非本人操作，则密码可能已泄露，建议修改密码。"),
+    TOKEN_ERROR(4003, "登录信息失效，请重新登录"),
     TIMESTAMP_ERROR(4004, "timestamp失效"),
     NOT_DATA(4005,"暂无数据"),
     ERROR(4006,"操作失败"),
