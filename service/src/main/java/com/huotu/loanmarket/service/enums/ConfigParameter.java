@@ -196,13 +196,15 @@ public interface ConfigParameter {
     }
 
     /**
-     * 同盾审核规则id
+     * 通用
      */
     @AllArgsConstructor
     @MerchantConfigType(type = MerchantConfigEnum.GENERAL)
     enum GeneralParameter implements IMerchantParameterEnum {
         YINGYONGBAO("general_yingyongbao", "应用宝地址"),
-        ORDER_RECYCLE("order_recycle","未支付订单时效,单位分钟"),;
+        ORDER_RECYCLE("order_recycle","未支付订单时效,单位分钟"),
+        YOU_XIN_API_URL("you_xin_api_url","有信接口地址"),
+        ;
         private String key;
         private String message;
 
