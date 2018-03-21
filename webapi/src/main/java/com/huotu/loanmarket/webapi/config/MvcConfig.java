@@ -144,6 +144,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
         registration.excludePathPatterns("/api/sys/sendVerifyCode")
                 .excludePathPatterns("/api/user/login")
                 .excludePathPatterns("/api/user/register")
+                .excludePathPatterns("/api/user/loginByVerifyCode")
                 .excludePathPatterns("/api/user/updatePassword")
                 .excludePathPatterns("/api/sesame/rollBack/**")
                 // 数据魔盒回调

@@ -41,4 +41,9 @@ public class UserInfoVo {
      * 认证状态
      */
     private int authStatus;
+
+    /**
+     * 信用估值(价值)
+     */
+    private int creditValue;
 }

@@ -60,6 +60,8 @@ public class InitService {
         initsesame();
         initAuthFee();
         initCarrier();
+
+        initGeneral();
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
@@ -164,6 +166,15 @@ public class InitService {
         initMerchantConfigItem(map, MerchantConfigEnum.AUTH_FEE);
     }
 
+    /**
+     * 初始化通用配置
+     */
+    @Transactional(rollbackFor = RuntimeException.class)
+    public void initGeneral(){
+        Map<String, String> map = new HashMap<>();
+        map.put(ConfigParameter.GeneralParameter.YOU_XIN_API_URL.getKey(), "http://youxin.51morecash.com");
+        initMerchantConfigItem(map, MerchantConfigEnum.GENERAL);
+    }
 
     /***
      * 初始化指定第三方参数配置

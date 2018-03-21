@@ -137,12 +137,12 @@ public class User {
      * 注册时间
      */
     @Column(name = "reg_time", columnDefinition = "datetime")
-    private LocalDateTime regTime;
+    private LocalDateTime regTime=LocalDateTime.now();
     /**
      * 最后登录时间
      */
     @Column(name = "last_logintime", columnDefinition = "datetime")
-    private LocalDateTime lastLoginTime;
+    private LocalDateTime lastLoginTime=LocalDateTime.now();
     /**
      * 最后登录ip
      */
@@ -177,6 +177,11 @@ public class User {
     @Column(name = "inviter_id")
     private Long inviterId;
 
+    /**
+     * 信用估值
+     */
+    @Column(name = "credit_value")
+    private Integer creditValue=0;
 
 
     /**

@@ -109,6 +109,12 @@ public class Constant {
     public static final String APP_CITY_CODE_KEY = "cityCode";
     public static final String APP_CHANNELID_KEY = "channelId";
 
+
+    /**
+     * 当前APP的渠道key
+     */
+    public static  final String CHANNEL_KEY="zxapp";
+
     /**
      *  商户ID
      */

@@ -113,6 +113,8 @@ public class SystemController {
         }
         //包类型
         map.put("packageType", packageTypeEnum.getCode());
+        //信用估值，默认2000
+        int creditValue=2000;
         if (userService.checkLoginToken(Constant.MERCHANT_ID, userId, userToken)) {
             try {
                 User user = userService.findByMerchantIdAndUserId(Constant.MERCHANT_ID, userId);
@@ -123,18 +125,29 @@ public class SystemController {
                     userInfoVo.setUserToken(user.getUserToken());
                     userInfoVo.setHeadimg(user.getHeadimg());
                     userInfoVo.setAuthStatus(user.getAuthStatus().getCode());
+                    userInfoVo.setCreditValue(user.getCreditValue());
                     userService.updateLastLoginTime(userId);
                     map.put("userInfo", userInfoVo);
+
+                    //登录成功后，同步有信用户数据
+                    UserInfoVo yxUserInfo=new UserInfoVo();
+
+                    map.put("yxUserInfo",yxUserInfo);
+
+                    creditValue=user.getCreditValue();
                 }
             } catch (Exception e) {
                 log.error(e);
             }
         }
-
+        //信用估值
+        map.put("creditValue",creditValue);
         map.put("aboutUrl", MessageFormat.format("{0}api/other/about", baseService.apiHomeURI()));
         map.put("regAgreementUrl", MessageFormat.format("{0}api/other/regAgreement", baseService.apiHomeURI()));
         map.put("creditAuthUrl", MessageFormat.format("{0}api/other/creditAuth", baseService.apiHomeURI()));
         map.put("loanProjectProcessUrl", MessageFormat.format("{0}api/projectView/loanProcess", baseService.apiHomeURI()));
+
+
         return ApiResult.resultWith(AppCode.SUCCESS, map);
     }
 

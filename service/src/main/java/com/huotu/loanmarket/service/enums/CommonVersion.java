@@ -15,5 +15,6 @@ package com.huotu.loanmarket.service.enums;
  * @date 2018/1/17
  */
 public enum CommonVersion {
-    initVersion
+    initVersion,
+    version101,
 }

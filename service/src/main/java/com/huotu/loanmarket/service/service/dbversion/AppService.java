@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -56,12 +57,16 @@ public class AppService implements ApplicationListener<ContextRefreshedEvent> {
             }
 
             if (!env.acceptsProfiles(Constant.PROFILE_UNIT_TEST)) {
-
-                CommonVersion currentVersion = CommonVersion.initVersion;
+                CommonVersion currentVersion = CommonVersion.version101;
                 //系统升级
                 this.systemUpgrade("DatabaseVersion", CommonVersion.class, currentVersion, (upgrade) -> {
                     switch (upgrade) {
                         case initVersion:
+                            break;
+                        case version101:
+                            List<String> listSql=new ArrayList<>();
+                            listSql.add("ALTER TABLE zx_users ADD credit_value INT DEFAULT 0 NULL;");
+                            runJdbcWork(listSql,upgrade);
                             break;
                         default:
                             break;
