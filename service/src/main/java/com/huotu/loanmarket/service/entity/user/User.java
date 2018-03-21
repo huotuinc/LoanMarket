@@ -181,7 +181,7 @@ public class User {
      * 信用估值
      */
     @Column(name = "credit_value")
-    private Integer creditValue;
+    private Integer creditValue=0;
 
 
     /**

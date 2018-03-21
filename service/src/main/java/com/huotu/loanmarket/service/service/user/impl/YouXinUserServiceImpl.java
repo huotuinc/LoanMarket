@@ -54,7 +54,6 @@ public class YouXinUserServiceImpl implements YouXinUserService {
 
     private StringBuilder syncUserUrl;
     private RequestConfig requestConfig;
-    private Map<String, String> configItem;
 
     @PostConstruct
     public void init() {
@@ -63,7 +62,7 @@ public class YouXinUserServiceImpl implements YouXinUserService {
                 .setSocketTimeout(30000).build();
         httpClientBuilder = HttpClientBuilder.create();
         httpClientBuilder.setDefaultRequestConfig(requestConfig).setUserAgent(Constant.DefaultAgent);
-
+        syncUserUrl=new StringBuilder();
         Map<String, String> configItem = merchantCfgService.getConfigItem(Constant.MERCHANT_ID, MerchantConfigEnum.GENERAL);
         if (configItem != null) {
             String url = configItem.get(ConfigParameter.GeneralParameter.YOU_XIN_API_URL.getKey());
@@ -75,43 +74,39 @@ public class YouXinUserServiceImpl implements YouXinUserService {
     public UserInfoVo syncUser(String mobile) {
 
         Map<String, String> resultMap = new TreeMap<>();
-        try {
-            try (CloseableHttpClient httpClient = httpClientBuilder.build()) {
-                String timestamp = String.valueOf(System.currentTimeMillis());
-                resultMap.put(Constant.APP_MERCHANT_ID_KEY.toLowerCase(), Constant.MERCHANT_ID.toString());
-                resultMap.put("username", mobile);
-                resultMap.put(Constant.APP_TIMESTAMP_KEY.toLowerCase(), timestamp);
-                String strSign = BuildSignUtils.buildSignIgnoreEmpty(resultMap, null, Constant.SECRET_KEY);
+
+        try (CloseableHttpClient httpClient = httpClientBuilder.build()) {
+            String timestamp = String.valueOf(System.currentTimeMillis());
+            resultMap.put(Constant.APP_MERCHANT_ID_KEY.toLowerCase(), Constant.MERCHANT_ID.toString());
+            resultMap.put("username", mobile);
+            resultMap.put(Constant.APP_TIMESTAMP_KEY.toLowerCase(), timestamp);
+            String strSign = BuildSignUtils.buildSignIgnoreEmpty(resultMap, null, Constant.SECRET_KEY);
 
 
-                List<NameValuePair> nameValuePairList = new ArrayList<>();
-                nameValuePairList.add(new BasicNameValuePair("username", mobile));
-                nameValuePairList.add(new BasicNameValuePair(Constant.APP_TIMESTAMP_KEY.toLowerCase(), timestamp));
-                nameValuePairList.add(new BasicNameValuePair(Constant.SIGN_KEY.toLowerCase(), strSign));
+            List<NameValuePair> nameValuePairList = new ArrayList<>();
+            nameValuePairList.add(new BasicNameValuePair("username", mobile));
+            nameValuePairList.add(new BasicNameValuePair(Constant.APP_TIMESTAMP_KEY.toLowerCase(), timestamp));
+            nameValuePairList.add(new BasicNameValuePair(Constant.SIGN_KEY.toLowerCase(), strSign));
 
 
-                JsonObject jsonObject = execute(httpClient, syncUserUrl.toString(), nameValuePairList);
+            JsonObject jsonObject = execute(httpClient, syncUserUrl.toString(), nameValuePairList);
+            int resultCode = jsonObject.get("resultCode").getAsInt();
+            if (resultCode == 2000) {
 
-                if (jsonObject.get("resultCode").getAsInt() == 2000) {
+                JsonObject data = jsonObject.getAsJsonObject("data");
+                if (!data.isJsonNull()) {
                     UserInfoVo userInfoVo = new UserInfoVo();
-                    JsonObject data = jsonObject.getAsJsonObject("data");
-                    if (!data.isJsonNull()) {
-                        userInfoVo.setCreditValue(0);
-                        userInfoVo.setUserToken(!data.get("userToken").isJsonNull() ? data.get("userToken").getAsString() : "");
-                        userInfoVo.setUserName(!data.get("userName").isJsonNull() ? data.get("userName").getAsString() : "");
-                        userInfoVo.setUserId(!data.get("userId").isJsonNull() ? data.get("userId").getAsInt() : 0);
-                        userInfoVo.setAuthStatus(!data.get("authIdCard").isJsonNull() ? data.get("authIdCard").getAsBoolean() ? 1 : 0 : 0);
-                    }
-
-
+                    userInfoVo.setCreditValue(0);
+                    userInfoVo.setUserToken(!data.get("userToken").isJsonNull() ? data.get("userToken").getAsString() : "");
+                    userInfoVo.setUserName(!data.get("userName").isJsonNull() ? data.get("userName").getAsString() : "");
+                    userInfoVo.setUserId(!data.get("userId").isJsonNull() ? data.get("userId").getAsInt() : 0);
+                    userInfoVo.setAuthStatus(!data.get("authIdCard").isJsonNull() ? data.get("authIdCard").getAsBoolean() ? 1 : 0 : 0);
                     return userInfoVo;
-
-                } else {
-                    throw new ErrorMessageException(jsonObject.get("resultMsg").getAsString());
                 }
+            } else {
+                throw new ErrorMessageException(jsonObject.get("resultMsg").getAsString());
             }
         } catch (IOException e) {
-            e.printStackTrace();
         }
 
         return null;

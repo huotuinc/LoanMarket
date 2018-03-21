@@ -65,7 +65,7 @@ public class AppService implements ApplicationListener<ContextRefreshedEvent> {
                             break;
                         case version101:
                             List<String> listSql=new ArrayList<>();
-                            listSql.add("ALTER TABLE zx_users ADD credit_value INT DEFAULT 0 NOT NULL;");
+                            listSql.add("ALTER TABLE zx_users ADD credit_value INT DEFAULT 0 NULL;");
                             runJdbcWork(listSql,upgrade);
                             break;
                         default:
