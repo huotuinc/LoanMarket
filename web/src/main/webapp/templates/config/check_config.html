@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title></title>
+    <link href="http://resali.huobanplus.com/cdn/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="http://resali.huobanplus.com/cdn/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/animate.min.css" rel="stylesheet"/>
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/style.min-1.0.8.css" rel="stylesheet"/>
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight tooltip-demo" th:object="${data}">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <form class="form-horizontal" method="post">
+
+                        <div class="form-inline">
+                            <div class="form-group ">
+                                <label>黑名单检测：</label>
+                                <input type="text" id="blackListCheck" name="blackListCheck" class="form-control only-int"
+                                       value="" th:value="*{blackListCheck}">
+                            </div>
+                        </div>
+                        <div class="form-inline">
+                            <div class="form-group ">
+                                <label>运营商风险检测：</label>
+                                <input type="text" id="operatorCheck" name="operatorCheck" class="form-control only-int"
+                                       value="" th:value="*{operatorCheck}">
+                            </div>
+                        </div>
+
+                        <div class="form-inline">
+                            <div class="form-group ">
+                                <label>电商风险检测：</label>
+                                <input type="text" id="electronicBusinessCheck" name="electronicBusinessCheck" class="form-control only-int"
+                                       value="" th:value="*{electronicBusinessCheck}">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-8 col-sm-offset-5">
+                                <button class="btn btn-success btn-submit" type="button" id="infoSubmit"
+                                        onclick="handler.save()">提交
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="http://resali.huobanplus.com/cdn/jquery/2.2.4/jquery.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/bootstrap/3.3.5/bootstrap.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/v2/content.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/layer/3.1.0/layer.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/v2/bootstrap.hot.extra-utils-0.2.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/v2/bootstrap.hot.extra-init.js"></script>
+
+<script type="text/javascript">
+
+    var handler = {
+        save: function () {
+            var blackListCheck = $('#blackListCheck').val();
+            var operatorCheck = $("#operatorCheck").val();
+            var electronicBusinessCheck = $("#electronicBusinessCheck").val();
+
+            var request = {
+                blackListCheck: blackListCheck,
+                operatorCheck: operatorCheck,
+                electronicBusinessCheck: electronicBusinessCheck
+            };
+            this.requestFlag = true;
+            hot.ajax("/admin/config/checkConfigDo", request, function (data) {
+                if (data.resultCode == 2000) {
+                    hot.tip.success("操作成功");
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 1000);
+                } else {
+                    hot.tip.error("保存失败：" + data.resultMsg);
+                }
+            }, function () {
+            }, "post", 100);
+        }
+    }
+</script>
+</body>
+</html>

@@ -13,22 +13,30 @@ import com.huotu.loanmarket.common.Constant;
 import com.huotu.loanmarket.common.utils.ApiResult;
 import com.huotu.loanmarket.common.utils.MaskUtils;
 import com.huotu.loanmarket.common.utils.RegexUtils;
+import com.huotu.loanmarket.service.entity.system.Advertisement;
 import com.huotu.loanmarket.service.entity.system.AppSystemVersion;
+import com.huotu.loanmarket.service.entity.system.CheckConfig;
 import com.huotu.loanmarket.service.entity.user.User;
 import com.huotu.loanmarket.service.enums.AppCode;
 import com.huotu.loanmarket.service.enums.DeviceTypeEnum;
 import com.huotu.loanmarket.service.enums.PackageTypeEnum;
 import com.huotu.loanmarket.service.enums.UserResultCode;
 import com.huotu.loanmarket.service.exceptions.ErrorMessageException;
+import com.huotu.loanmarket.service.model.system.AdvertisementListVo;
+import com.huotu.loanmarket.service.model.system.CheckConfigListVo;
 import com.huotu.loanmarket.service.model.system.ShareInfoVo;
 import com.huotu.loanmarket.service.model.user.UserInfoVo;
+import com.huotu.loanmarket.service.repository.system.AdvertisementRepository;
+import com.huotu.loanmarket.service.repository.system.CheckConfigRepository;
 import com.huotu.loanmarket.service.service.BaseService;
 import com.huotu.loanmarket.service.service.system.AppVersionService;
 import com.huotu.loanmarket.service.service.system.SmsTemplateService;
 import com.huotu.loanmarket.service.service.system.SystemService;
+import com.huotu.loanmarket.service.service.upload.StaticResourceService;
 import com.huotu.loanmarket.service.service.user.UserService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -39,7 +47,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.net.URISyntaxException;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * @author guomw
@@ -211,5 +221,59 @@ public class SystemController {
         return ApiResult.resultWith(AppCode.ERROR, "没有找到用户");
     }
 
+    @Autowired
+    private CheckConfigRepository checkConfigRepository;
+
+    @Autowired
+    private AdvertisementRepository advertisementRepository;
+
+    @Autowired
+    private StaticResourceService staticResourceService;
+
+    /**
+     * 获得检测配置
+     *
+     * @return
+     */
+    @RequestMapping("/getCheckConfig")
+    @ResponseBody
+    public ApiResult getCheckConfig() {
+        CheckConfig checkConfig = checkConfigRepository.findOne(Constant.MERCHANT_ID);
+        if (checkConfig != null) {
+            List<CheckConfigListVo> list = new ArrayList<>();
+            list.add(new CheckConfigListVo(1, checkConfig.getBlackListCheck()));
+            list.add(new CheckConfigListVo(2, checkConfig.getOperatorCheck()));
+            list.add(new CheckConfigListVo(3, checkConfig.getElectronicBusinessCheck()));
+
+            return ApiResult.resultWith(AppCode.SUCCESS, list);
+        }
+        return ApiResult.resultWith(AppCode.ERROR, "检测没有配置");
+    }
+
+
+    /**
+     * 获得广告列表
+     *
+     * @return
+     */
+    @RequestMapping("/getAdvertisementList")
+    @ResponseBody
+    public ApiResult getAdvertisementList() {
+        List<AdvertisementListVo> list = new ArrayList<>();
+        List<Advertisement> advertisements = advertisementRepository.findByMerchantId(Constant.MERCHANT_ID);
+        BeanUtils.copyProperties(advertisements, list);
+        if (list.size() > 0) {
+            list.forEach(item -> {
+                try {
+                    item.setImageUrl(staticResourceService.getResource(item.getImageUrl()).toString());
+                } catch (URISyntaxException e) {
+
+                }
+            });
+        }
+
+
+        return ApiResult.resultWith(AppCode.SUCCESS, list);
+    }
 
 }

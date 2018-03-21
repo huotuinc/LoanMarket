@@ -69,6 +69,8 @@ public interface StaticResourceService {
      */
     String ESIGN_PDF = "pdf/{0}";
 
+    String AD_IMG = "ad/";
+
 
     /**
      * 支持的图片格式

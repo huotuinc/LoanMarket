@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>广告列表</title>
+
+    <link href="http://resali.huobanplus.com/cdn/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/animate.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/style.min-1.0.8.css" rel="stylesheet">
+
+    <!--datetimepick-->
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/datetimepick/daterangepicker.css" rel="stylesheet"/>
+    <link href="../../resource/css/common.css" rel="stylesheet"/>
+
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight tooltip-demo">
+    <a href="/admin/config/advertisementConfig?id=0">新增</a>
+    <!--list-->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins m-b-none">
+                <div class="ibox-content p-xxs no-top-border">
+                    <div class="panel-body">
+                        <table class="table table-bordered table-hover table-center">
+                            <thead>
+                            <tr>
+                                <th>标题</th>
+                                <th>图片地址</th>
+                                <th>跳转地址</th>
+                                <th>排序号</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody id="list">
+                            <tr th:each="item:${list}">
+                                <td th:text="${item.title}"></td>
+                                <td th:text="${item.imageUrl}"></td>
+                                <td th:text="${item.targetUrl}"></td>
+                                <td th:text="${item.sort}"></td>
+                                <td><a class="btn btn-myGreen btn-xs" th:href=" '/admin/config/advertisementConfig?id='+${item.id}">编辑</a>
+                                    <a class="btn btn-myGreen btn-xs" th:onclick="'handler.delete('+${item.id}+')'">删除</a></td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--添加管理员-->
+
+
+<!--基础框架js-->
+
+<script src="http://resali.huobanplus.com/cdn/jquery/2.2.4/jquery.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/bootstrap/3.3.5/bootstrap.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/v2/content.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/layer/3.1.0/layer.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/v2/bootstrap.hot.extra-utils.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/v2/bootstrap.hot.extra-init.js"></script>
+<script src="../../mock/mock-min.js" th:remove="all"></script>
+<script src="../../mock/api.js" th:remove="all"></script>
+
+<script>
+    var handler = {
+        delete: function (id) {
+            var request={id:id};
+            hot.ajax("/admin/config/advertisementDelete", request, function (data) {
+                if (data.resultCode == 2000) {
+                    hot.tip.success("操作成功");
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 1000);
+                } else {
+                    hot.tip.error("保存失败：" + data.resultMsg);
+                }
+            }, function () {
+            }, "post", 100);
+        }
+    };
+</script>
+</body>
+
+</html>
