@@ -119,6 +119,11 @@ public class SystemController {
                     userService.updateLastLoginTime(userId);
                     map.put("userInfo", userInfoVo);
 
+                    //登录成功后，同步有信用户数据
+                    UserInfoVo yxUserInfo=new UserInfoVo();
+
+                    map.put("yxUserInfo",yxUserInfo);
+
                     creditValue=user.getCreditValue();
                 }
             } catch (Exception e) {
