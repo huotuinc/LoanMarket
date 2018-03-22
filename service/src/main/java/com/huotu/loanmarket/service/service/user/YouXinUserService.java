@@ -9,6 +9,7 @@
 
 package com.huotu.loanmarket.service.service.user;
 
+import com.huotu.loanmarket.service.exceptions.ErrorMessageException;
 import com.huotu.loanmarket.service.model.user.UserInfoVo;
 
 /**
@@ -23,6 +24,7 @@ public interface YouXinUserService {
      * 同步用户
      * @param mobile
      * @return
+     * @throws  ErrorMessageException
      */
-    UserInfoVo syncUser(String mobile);
+    UserInfoVo syncUser(String mobile)  throws ErrorMessageException;
 }

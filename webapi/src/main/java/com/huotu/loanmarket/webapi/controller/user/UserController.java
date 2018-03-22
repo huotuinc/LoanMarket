@@ -153,10 +153,6 @@ public class UserController {
 
             //登录成功后，同步有信用户数据
             UserInfoVo yxUserInfo=youXinUserService.syncUser(username);
-
-
-
-
             Map<String,Object> map= new HashMap<>();
             map.put("userInfo",userInfoVo);
             map.put("yxUserInfo",yxUserInfo);

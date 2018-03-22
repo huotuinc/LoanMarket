@@ -19,6 +19,8 @@ import com.huotu.loanmarket.service.handler.JsonResponseHandler;
 import com.huotu.loanmarket.service.model.user.UserInfoVo;
 import com.huotu.loanmarket.service.service.merchant.MerchantCfgService;
 import com.huotu.loanmarket.service.service.user.YouXinUserService;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.EntityBuilder;
@@ -45,6 +47,7 @@ import java.util.TreeMap;
 @Service
 public class YouXinUserServiceImpl implements YouXinUserService {
 
+    private static final Log log = LogFactory.getLog(YouXinUserServiceImpl.class);
     @Autowired
     private Environment environment;
     @Autowired
@@ -62,19 +65,26 @@ public class YouXinUserServiceImpl implements YouXinUserService {
                 .setSocketTimeout(30000).build();
         httpClientBuilder = HttpClientBuilder.create();
         httpClientBuilder.setDefaultRequestConfig(requestConfig).setUserAgent(Constant.DefaultAgent);
-        syncUserUrl=new StringBuilder();
+        syncUserUrl = new StringBuilder();
         Map<String, String> configItem = merchantCfgService.getConfigItem(Constant.MERCHANT_ID, MerchantConfigEnum.GENERAL);
         if (configItem != null) {
             String url = configItem.get(ConfigParameter.GeneralParameter.YOU_XIN_API_URL.getKey());
-            syncUserUrl.append(url + "/api/user/syncUser");
+            syncUserUrl.append("http://localhost:8080/api/user/syncUser");
         }
     }
 
+    /**
+     * 同步有信用户
+     * @param mobile
+     * @return
+     * @throws ErrorMessageException
+     */
     @Override
-    public UserInfoVo syncUser(String mobile) {
+    public UserInfoVo syncUser(String mobile) throws ErrorMessageException {
 
         Map<String, String> resultMap = new TreeMap<>();
-
+        int resultCode = 2000;
+        String resultMsg = "成功";
         try (CloseableHttpClient httpClient = httpClientBuilder.build()) {
             String timestamp = String.valueOf(System.currentTimeMillis());
             resultMap.put(Constant.APP_MERCHANT_ID_KEY.toLowerCase(), Constant.MERCHANT_ID.toString());
@@ -90,9 +100,9 @@ public class YouXinUserServiceImpl implements YouXinUserService {
 
 
             JsonObject jsonObject = execute(httpClient, syncUserUrl.toString(), nameValuePairList);
-            int resultCode = jsonObject.get("resultCode").getAsInt();
+            resultCode = jsonObject.get("resultCode").getAsInt();
+            resultMsg = jsonObject.get("resultMsg").getAsString();
             if (resultCode == 2000) {
-
                 JsonObject data = jsonObject.getAsJsonObject("data");
                 if (!data.isJsonNull()) {
                     UserInfoVo userInfoVo = new UserInfoVo();
@@ -103,13 +113,12 @@ public class YouXinUserServiceImpl implements YouXinUserService {
                     userInfoVo.setAuthStatus(!data.get("authIdCard").isJsonNull() ? data.get("authIdCard").getAsBoolean() ? 1 : 0 : 0);
                     return userInfoVo;
                 }
-            } else {
-                throw new ErrorMessageException(jsonObject.get("resultMsg").getAsString());
+
             }
         } catch (IOException e) {
+            log.error("syncUser error:"+e.getMessage(),e);
         }
-
-        return null;
+        throw new ErrorMessageException(resultCode, resultMsg);
     }
 
     /**

@@ -20,6 +20,7 @@ import com.huotu.loanmarket.service.repository.sesame.IndustryRepository;
 import com.huotu.loanmarket.service.repository.user.UserRepository;
 import com.huotu.loanmarket.webapi.config.MvcConfig;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -72,6 +73,7 @@ public abstract class BaseTest {
         User user = new User();
         user.setUserToken(UUID.randomUUID().toString());
         user.setMerchantId(merchantId);
+        user.setUserName(RandomUtils.randomAllMobile());
         user.setPassword(password);
         LocalDateTime localDateTime = LocalDateTime.now();
         user.setUserToken(RandomUtils.randomString());

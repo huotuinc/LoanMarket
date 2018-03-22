@@ -9,20 +9,21 @@
 
 package com.huotu.loanmarket.webapi.controller.user;
 
-import com.huotu.loanmarket.common.Constant;
-import com.huotu.loanmarket.service.enums.AppCode;
+import com.huotu.loanmarket.service.entity.user.User;
+import com.huotu.loanmarket.service.model.user.UserInfoVo;
+import com.huotu.loanmarket.service.service.user.YouXinUserService;
 import com.huotu.loanmarket.webapi.controller.base.BaseTest;
+import org.eclipse.persistence.jpa.jpql.Assert;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.UUID;
-
-import static org.junit.Assert.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import java.io.UnsupportedEncodingException;
 
 public class UserControllerTest extends BaseTest {
+
+    @Autowired
+    private YouXinUserService youXinUserService;
+
     @Test
     public void login() throws Exception {
 
@@ -49,6 +50,16 @@ public class UserControllerTest extends BaseTest {
 
     @Test
     public void myInviteList() throws Exception {
+    }
+
+    @Test
+    public void syncUser() throws UnsupportedEncodingException {
+        User user =mockUser();
+
+        UserInfoVo vo= youXinUserService.syncUser(user.getUserName());
+
+        Assert.isNotNull(vo,"kong");
+
     }
 
 }
