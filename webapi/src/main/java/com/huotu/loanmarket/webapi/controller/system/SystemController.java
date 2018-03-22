@@ -34,6 +34,7 @@ import com.huotu.loanmarket.service.service.system.SmsTemplateService;
 import com.huotu.loanmarket.service.service.system.SystemService;
 import com.huotu.loanmarket.service.service.upload.StaticResourceService;
 import com.huotu.loanmarket.service.service.user.UserService;
+import com.huotu.loanmarket.service.service.user.YouXinUserService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeanUtils;
@@ -71,6 +72,8 @@ public class SystemController {
     private SmsTemplateService smsTemplateService;
     @Autowired
     private BaseService baseService;
+    @Autowired
+    private YouXinUserService youXinUserService;
 
     @RequestMapping(value = "/test", method = RequestMethod.GET)
     @ResponseBody
@@ -130,8 +133,7 @@ public class SystemController {
                     map.put("userInfo", userInfoVo);
 
                     //登录成功后，同步有信用户数据
-                    UserInfoVo yxUserInfo = new UserInfoVo();
-
+                    UserInfoVo yxUserInfo=youXinUserService.syncUser(user.getUserName());
                     map.put("yxUserInfo", yxUserInfo);
 
                     creditValue = user.getCreditValue();

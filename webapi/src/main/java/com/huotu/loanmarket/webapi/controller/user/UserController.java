@@ -25,6 +25,7 @@ import com.huotu.loanmarket.service.model.user.UserInfoVo;
 import com.huotu.loanmarket.service.model.user.UserInviteVo;
 import com.huotu.loanmarket.service.service.upload.StaticResourceService;
 import com.huotu.loanmarket.service.service.user.UserService;
+import com.huotu.loanmarket.service.service.user.YouXinUserService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +67,8 @@ public class UserController {
 
     @Autowired
     private LoanMarkConfigProvider loanMarkConfigProvider;
+    @Autowired
+    private YouXinUserService youXinUserService;
 
     /**
      * 根据手机号、密码实现用户登录
@@ -149,7 +152,7 @@ public class UserController {
             userInfoVo.setAuthStatus(user.getAuthStatus().getCode());
 
             //登录成功后，同步有信用户数据
-            UserInfoVo yxUserInfo=new UserInfoVo();
+            UserInfoVo yxUserInfo=youXinUserService.syncUser(username);
 
 
 
