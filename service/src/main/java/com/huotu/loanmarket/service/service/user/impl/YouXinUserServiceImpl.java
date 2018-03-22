@@ -69,7 +69,7 @@ public class YouXinUserServiceImpl implements YouXinUserService {
         Map<String, String> configItem = merchantCfgService.getConfigItem(Constant.MERCHANT_ID, MerchantConfigEnum.GENERAL);
         if (configItem != null) {
             String url = configItem.get(ConfigParameter.GeneralParameter.YOU_XIN_API_URL.getKey());
-            syncUserUrl.append("http://localhost:8080/api/user/syncUser");
+            syncUserUrl.append(url+"/api/user/syncUser");
         }
     }
 
