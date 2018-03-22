@@ -114,7 +114,7 @@ public class SystemController {
         //包类型
         map.put("packageType", packageTypeEnum.getCode());
         //信用估值，默认2000
-        int creditValue=2000;
+        int creditValue = 2000;
         if (userService.checkLoginToken(Constant.MERCHANT_ID, userId, userToken)) {
             try {
                 User user = userService.findByMerchantIdAndUserId(Constant.MERCHANT_ID, userId);
@@ -130,18 +130,18 @@ public class SystemController {
                     map.put("userInfo", userInfoVo);
 
                     //登录成功后，同步有信用户数据
-                    UserInfoVo yxUserInfo=new UserInfoVo();
+                    UserInfoVo yxUserInfo = new UserInfoVo();
 
-                    map.put("yxUserInfo",yxUserInfo);
+                    map.put("yxUserInfo", yxUserInfo);
 
-                    creditValue=user.getCreditValue();
+                    creditValue = user.getCreditValue();
                 }
             } catch (Exception e) {
                 log.error(e);
             }
         }
         //信用估值
-        map.put("creditValue",creditValue);
+        map.put("creditValue", creditValue);
         map.put("aboutUrl", MessageFormat.format("{0}api/other/about", baseService.apiHomeURI()));
         map.put("regAgreementUrl", MessageFormat.format("{0}api/other/regAgreement", baseService.apiHomeURI()));
         map.put("creditAuthUrl", MessageFormat.format("{0}api/other/creditAuth", baseService.apiHomeURI()));
@@ -275,14 +275,18 @@ public class SystemController {
         List<AdvertisementListVo> list = new ArrayList<>();
         List<Advertisement> advertisements = advertisementRepository.findByMerchantId(Constant.MERCHANT_ID);
         BeanUtils.copyProperties(advertisements, list);
-        if (list.size() > 0) {
-            list.forEach(item -> {
+        if (advertisements != null) {
+            for (Advertisement advertisement : advertisements) {
+                AdvertisementListVo vo = new AdvertisementListVo();
+                BeanUtils.copyProperties(advertisement, vo);
+
                 try {
-                    item.setImageUrl(staticResourceService.getResource(item.getImageUrl()).toString());
+                    vo.setImageUrl(staticResourceService.getResource(advertisement.getImageUrl()).toString());
                 } catch (URISyntaxException e) {
 
                 }
-            });
+                list.add(vo);
+            }
         }
 
 

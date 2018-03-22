@@ -19,6 +19,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.UnsupportedEncodingException;
+
 import static org.junit.Assert.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -70,6 +72,34 @@ public class SystemControllerTest extends BaseTest {
                 .andDo(print())
                 .andExpect(jsonPath(RESULT_CODE_PATH).value(AppCode.SUCCESS.getCode()));
 
+    }
+
+    @Test
+    public  void  testAdvisement() throws Exception {
+
+
+        User user = mockUser();
+        mockMvc.perform(post("/api/sys/getAdvertisementList")
+
+                .header(Constant.APP_USER_ID_KEY, user.getUserId())
+                .header(Constant.APP_USER_TOKEN_KEY,user.getUserToken())
+                .header(Constant.APP_MERCHANT_ID_KEY, Constant.MERCHANT_ID))
+                .andDo(print())
+                .andExpect(jsonPath("$.resultCode").value(AppCode.SUCCESS.getCode()));
+    }
+
+    @Test
+    public  void  testConfig() throws Exception {
+
+
+        User user = mockUser();
+        mockMvc.perform(post("/api/sys/getCheckConfig")
+
+                .header(Constant.APP_USER_ID_KEY, user.getUserId())
+                .header(Constant.APP_USER_TOKEN_KEY,user.getUserToken())
+                .header(Constant.APP_MERCHANT_ID_KEY, Constant.MERCHANT_ID))
+                .andDo(print())
+                .andExpect(jsonPath("$.resultCode").value(AppCode.SUCCESS.getCode()));
     }
 
 }
