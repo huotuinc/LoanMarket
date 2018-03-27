@@ -44,6 +44,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.math.BigDecimal;
 import java.net.URISyntaxException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -145,12 +146,15 @@ public class SystemController {
         }
 
         /**
-         * 获取活体识别错误阀值
+         * 获取活体识别错误阀值，默认0.6
+         * 0.4十分之一，0.5百分之一，0.6千分之一，0.7万分之一，0.8十万分之一，0.9百万分之一
          */
+        String  faceErrorValue="0.6";
         Map<String, String> configItem = merchantCfgService.getConfigItem(Constant.MERCHANT_ID, MerchantConfigEnum.GENERAL);
         if (configItem != null && configItem.containsKey(ConfigParameter.GeneralParameter.FACE_ERROR_CONFIG.getKey())) {
-            map.put("faceErrorValue", configItem.get(ConfigParameter.GeneralParameter.FACE_ERROR_CONFIG.getKey()));
+            faceErrorValue=configItem.get(ConfigParameter.GeneralParameter.FACE_ERROR_CONFIG.getKey());
         }
+        map.put("faceErrorValue",faceErrorValue);
 
         //信用估值
         map.put("creditValue", creditValue);
