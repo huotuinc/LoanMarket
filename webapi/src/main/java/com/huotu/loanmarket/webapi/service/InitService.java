@@ -173,6 +173,7 @@ public class InitService {
     public void initGeneral(){
         Map<String, String> map = new HashMap<>();
         map.put(ConfigParameter.GeneralParameter.YOU_XIN_API_URL.getKey(), "http://youxin.51morecash.com");
+        map.put(ConfigParameter.GeneralParameter.FACE_ERROR_CONFIG.getKey(),"0.6");
         initMerchantConfigItem(map, MerchantConfigEnum.GENERAL);
     }
 

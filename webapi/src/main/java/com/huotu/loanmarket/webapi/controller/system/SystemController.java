@@ -17,10 +17,7 @@ import com.huotu.loanmarket.service.entity.system.Advertisement;
 import com.huotu.loanmarket.service.entity.system.AppSystemVersion;
 import com.huotu.loanmarket.service.entity.system.CheckConfig;
 import com.huotu.loanmarket.service.entity.user.User;
-import com.huotu.loanmarket.service.enums.AppCode;
-import com.huotu.loanmarket.service.enums.DeviceTypeEnum;
-import com.huotu.loanmarket.service.enums.PackageTypeEnum;
-import com.huotu.loanmarket.service.enums.UserResultCode;
+import com.huotu.loanmarket.service.enums.*;
 import com.huotu.loanmarket.service.exceptions.ErrorMessageException;
 import com.huotu.loanmarket.service.model.system.AdvertisementListVo;
 import com.huotu.loanmarket.service.model.system.CheckConfigListVo;
@@ -29,6 +26,7 @@ import com.huotu.loanmarket.service.model.user.UserInfoVo;
 import com.huotu.loanmarket.service.repository.system.AdvertisementRepository;
 import com.huotu.loanmarket.service.repository.system.CheckConfigRepository;
 import com.huotu.loanmarket.service.service.BaseService;
+import com.huotu.loanmarket.service.service.merchant.MerchantCfgService;
 import com.huotu.loanmarket.service.service.system.AppVersionService;
 import com.huotu.loanmarket.service.service.system.SmsTemplateService;
 import com.huotu.loanmarket.service.service.system.SystemService;
@@ -51,6 +49,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author guomw
@@ -74,6 +73,8 @@ public class SystemController {
     private BaseService baseService;
     @Autowired
     private YouXinUserService youXinUserService;
+    @Autowired
+    private MerchantCfgService merchantCfgService;
 
     @RequestMapping(value = "/test", method = RequestMethod.GET)
     @ResponseBody
@@ -142,6 +143,15 @@ public class SystemController {
                 log.error(e);
             }
         }
+
+        /**
+         * 获取活体识别错误阀值
+         */
+        Map<String, String> configItem = merchantCfgService.getConfigItem(Constant.MERCHANT_ID, MerchantConfigEnum.GENERAL);
+        if (configItem != null && configItem.containsKey(ConfigParameter.GeneralParameter.FACE_ERROR_CONFIG.getKey())) {
+            map.put("faceErrorValue", configItem.get(ConfigParameter.GeneralParameter.FACE_ERROR_CONFIG.getKey()));
+        }
+
         //信用估值
         map.put("creditValue", creditValue);
         map.put("aboutUrl", MessageFormat.format("{0}api/other/about", baseService.apiHomeURI()));

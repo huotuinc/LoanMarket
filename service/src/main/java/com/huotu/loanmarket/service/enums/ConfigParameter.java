@@ -204,6 +204,7 @@ public interface ConfigParameter {
         YINGYONGBAO("general_yingyongbao", "应用宝地址"),
         ORDER_RECYCLE("order_recycle","未支付订单时效,单位分钟"),
         YOU_XIN_API_URL("you_xin_api_url","有信接口地址"),
+        FACE_ERROR_CONFIG("face_error_config","人脸识别错误值"),
         ;
         private String key;
         private String message;
