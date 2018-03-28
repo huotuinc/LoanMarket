@@ -135,7 +135,7 @@ public class SystemController {
                     map.put("userInfo", userInfoVo);
 
                     //登录成功后，同步有信用户数据
-                    UserInfoVo yxUserInfo=youXinUserService.syncUser(user.getUserName());
+                    UserInfoVo yxUserInfo=youXinUserService.syncUser(user.getUserName(),2);
                     map.put("yxUserInfo", yxUserInfo);
 
                     creditValue = user.getCreditValue();
@@ -154,6 +154,11 @@ public class SystemController {
         if (configItem != null && configItem.containsKey(ConfigParameter.GeneralParameter.FACE_ERROR_CONFIG.getKey())) {
             faceErrorValue=configItem.get(ConfigParameter.GeneralParameter.FACE_ERROR_CONFIG.getKey());
         }
+        String youXinApiUrlDomain="http://youxin.51morecash.com";
+        if (configItem != null && configItem.containsKey(ConfigParameter.GeneralParameter.YOU_XIN_API_URL.getKey())) {
+            youXinApiUrlDomain=configItem.get(ConfigParameter.GeneralParameter.YOU_XIN_API_URL.getKey());
+        }
+
         map.put("faceErrorValue",faceErrorValue);
 
         //信用估值
@@ -162,8 +167,9 @@ public class SystemController {
         map.put("regAgreementUrl", MessageFormat.format("{0}api/other/regAgreement", baseService.apiHomeURI()));
         map.put("creditAuthUrl", MessageFormat.format("{0}api/other/creditAuth", baseService.apiHomeURI()));
         map.put("loanProjectProcessUrl", MessageFormat.format("{0}api/projectView/loanProcess", baseService.apiHomeURI()));
-
-
+        map.put("publishListUrl",MessageFormat.format("{0}publishList",youXinApiUrlDomain));
+        map.put("applyListUrl",MessageFormat.format("{0}applyList",youXinApiUrlDomain));
+        map.put("creditUrl",MessageFormat.format("{0}credit",youXinApiUrlDomain));
         return ApiResult.resultWith(AppCode.SUCCESS, map);
     }
 

@@ -132,6 +132,7 @@ public class UserController {
     public ApiResult loginByVerifyCode(@RequestParam String username,
                                        @RequestParam String input,
                                        @RequestParam(required = false, defaultValue = "0") Long inviter,
+                                       @RequestParam(required = false, defaultValue = "2") int zmfScore,
                                        HttpServletRequest request){
 
         int loginType=1;
@@ -152,7 +153,7 @@ public class UserController {
             userInfoVo.setAuthStatus(user.getAuthStatus().getCode());
 
             //登录成功后，同步有信用户数据
-            UserInfoVo yxUserInfo=youXinUserService.syncUser(username);
+            UserInfoVo yxUserInfo=youXinUserService.syncUser(username,zmfScore);
             Map<String,Object> map= new HashMap<>();
             map.put("userInfo",userInfoVo);
             map.put("yxUserInfo",yxUserInfo);

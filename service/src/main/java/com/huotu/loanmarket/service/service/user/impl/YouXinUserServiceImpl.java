@@ -55,7 +55,6 @@ public class YouXinUserServiceImpl implements YouXinUserService {
 
     private HttpClientBuilder httpClientBuilder;
 
-    private StringBuilder syncUserUrl;
     private RequestConfig requestConfig;
 
     @PostConstruct
@@ -65,22 +64,26 @@ public class YouXinUserServiceImpl implements YouXinUserService {
                 .setSocketTimeout(30000).build();
         httpClientBuilder = HttpClientBuilder.create();
         httpClientBuilder.setDefaultRequestConfig(requestConfig).setUserAgent(Constant.DefaultAgent);
-        syncUserUrl = new StringBuilder();
-        Map<String, String> configItem = merchantCfgService.getConfigItem(Constant.MERCHANT_ID, MerchantConfigEnum.GENERAL);
-        if (configItem != null) {
-            String url = configItem.get(ConfigParameter.GeneralParameter.YOU_XIN_API_URL.getKey());
-            syncUserUrl.append(url+"/api/user/syncUser");
-        }
+
     }
 
     /**
      * 同步有信用户
      * @param mobile
+     * @param zmfScoreType
      * @return
      * @throws ErrorMessageException
      */
     @Override
-    public UserInfoVo syncUser(String mobile) throws ErrorMessageException {
+    public UserInfoVo syncUser(String mobile,int zmfScoreType) throws ErrorMessageException {
+
+        StringBuilder syncUserUrl = new StringBuilder();
+        Map<String, String> configItem = merchantCfgService.getConfigItem(Constant.MERCHANT_ID, MerchantConfigEnum.GENERAL);
+        if (configItem != null) {
+            String url = configItem.get(ConfigParameter.GeneralParameter.YOU_XIN_API_URL.getKey());
+            syncUserUrl.append(url+"/api/user/syncUser");
+        }
+
 
         Map<String, String> resultMap = new TreeMap<>();
         int resultCode = 2000;
@@ -89,12 +92,14 @@ public class YouXinUserServiceImpl implements YouXinUserService {
             String timestamp = String.valueOf(System.currentTimeMillis());
             resultMap.put(Constant.APP_MERCHANT_ID_KEY.toLowerCase(), Constant.MERCHANT_ID.toString());
             resultMap.put("username", mobile);
+            resultMap.put("zmfScore", String.valueOf(zmfScoreType));
             resultMap.put(Constant.APP_TIMESTAMP_KEY.toLowerCase(), timestamp);
             String strSign = BuildSignUtils.buildSignIgnoreEmpty(resultMap, null, Constant.SECRET_KEY);
 
 
             List<NameValuePair> nameValuePairList = new ArrayList<>();
             nameValuePairList.add(new BasicNameValuePair("username", mobile));
+            nameValuePairList.add(new BasicNameValuePair("zmfScore", String.valueOf(zmfScoreType)));
             nameValuePairList.add(new BasicNameValuePair(Constant.APP_TIMESTAMP_KEY.toLowerCase(), timestamp));
             nameValuePairList.add(new BasicNameValuePair(Constant.SIGN_KEY.toLowerCase(), strSign));
 
