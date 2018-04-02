@@ -145,7 +145,7 @@ public class InitService {
         map.put("message_url", "http://smssh1.253.com/msg/send/json");
         map.put("message_account", "N8310514");
         map.put("message_password", "Htlm888888");
-        map.put("message_channelNo", "");
+        map.put("message_channelNo", "【过海征信】");
         map.put("message_passageway", "");
         initMerchantConfigItem(map, MerchantConfigEnum.MESSAGE);
     }
