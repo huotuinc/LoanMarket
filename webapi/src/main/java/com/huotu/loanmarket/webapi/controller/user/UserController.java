@@ -77,7 +77,7 @@ public class UserController {
      * @param username  用户名
      * @param input     密码(md5)或验证码
      * @param loginType 登录方式[0:密码登录 1:验证码登录]
-     * @param inviter 邀请者
+     * @param inviter   邀请者
      * @param request
      * @return
      */
@@ -105,7 +105,7 @@ public class UserController {
         }
 
         try {
-            user = userService.login(username, input, loginType, inviter,request);
+            user = userService.login(username, input, loginType, inviter, request);
         } catch (ErrorMessageException e) {
             return ApiResult.resultWith(e.code, e.getMessage());
         }
@@ -121,6 +121,7 @@ public class UserController {
 
     /**
      * 验证码登录
+     *
      * @param username
      * @param input
      * @param inviter
@@ -133,9 +134,9 @@ public class UserController {
                                        @RequestParam String input,
                                        @RequestParam(required = false, defaultValue = "0") Long inviter,
                                        @RequestParam(required = false, defaultValue = "2") int zmfScore,
-                                       HttpServletRequest request){
+                                       HttpServletRequest request) {
 
-        int loginType=1;
+        int loginType = 1;
         if (!RegexUtils.checkMobile(username)) {
             return ApiResult.resultWith(UserResultCode.CODE1);
         }
@@ -144,7 +145,7 @@ public class UserController {
             return ApiResult.resultWith(UserResultCode.CODE9);
         }
         try {
-            User user=userService.login(username, input, loginType, inviter,request);
+            User user = userService.login(username, input, loginType, inviter, request);
             UserInfoVo userInfoVo = new UserInfoVo();
             userInfoVo.setUserId(user.getUserId());
             userInfoVo.setUserName(user.getUserName());
@@ -153,10 +154,10 @@ public class UserController {
             userInfoVo.setAuthStatus(user.getAuthStatus().getCode());
 
             //登录成功后，同步有信用户数据
-            UserInfoVo yxUserInfo=youXinUserService.syncUser(username,zmfScore);
-            Map<String,Object> map= new HashMap<>();
-            map.put("userInfo",userInfoVo);
-            map.put("yxUserInfo",yxUserInfo);
+            UserInfoVo yxUserInfo = youXinUserService.syncUser(username, zmfScore);
+            Map<String, Object> map = new HashMap<>();
+            map.put("userInfo", userInfoVo);
+            map.put("yxUserInfo", yxUserInfo);
             return ApiResult.resultWith(AppCode.SUCCESS, map);
 
         } catch (ErrorMessageException e) {
@@ -291,6 +292,13 @@ public class UserController {
             }
         }
         LinkedHashMap<String, Object> map = new LinkedHashMap<>();
+        if (userId > 0) {
+            User user = userService.findByMerchantIdAndUserId(Constant.MERCHANT_ID, userId);
+            UserInfoVo yxUserInfo = youXinUserService.syncUser(user.getUserName(), 2);
+            map.put("authStatus", yxUserInfo.getAuthStatus());
+        } else {
+            map.put("authStatus", 0);
+        }
         map.put("certifiedCount", certifiedCount);
         map.put("unverifiedCount", unverifiedCount);
         return ApiResult.resultWith(AppCode.SUCCESS, map);
