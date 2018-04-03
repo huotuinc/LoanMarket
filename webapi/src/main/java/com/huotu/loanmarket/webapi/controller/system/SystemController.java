@@ -167,8 +167,8 @@ public class SystemController {
         map.put("regAgreementUrl", MessageFormat.format("{0}api/other/regAgreement", baseService.apiHomeURI()));
         map.put("creditAuthUrl", MessageFormat.format("{0}api/other/creditAuth", baseService.apiHomeURI()));
         map.put("loanProjectProcessUrl", MessageFormat.format("{0}api/projectView/loanProcess", baseService.apiHomeURI()));
-        map.put("publishListUrl",MessageFormat.format("{0}/publishList",youXinApiUrlDomain));
-        map.put("applyListUrl",MessageFormat.format("{0}/applyList",youXinApiUrlDomain));
+        map.put("publishListUrl",MessageFormat.format("{0}/loanPublish/publishList",youXinApiUrlDomain));
+        map.put("applyListUrl",MessageFormat.format("{0}/personal/applyList",youXinApiUrlDomain));
         map.put("creditUrl",MessageFormat.format("{0}/credit",youXinApiUrlDomain));
         return ApiResult.resultWith(AppCode.SUCCESS, map);
     }
