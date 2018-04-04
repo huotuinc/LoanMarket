@@ -27,6 +27,7 @@ import com.huotu.loanmarket.service.repository.system.VerifyCodeRepository;
 import com.huotu.loanmarket.service.service.merchant.MerchantCfgService;
 import com.huotu.loanmarket.service.service.system.SmsTemplateService;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeanUtils;
@@ -271,6 +272,8 @@ public class SmsTemplateServiceImpl implements SmsTemplateService {
         try {
             //获取短信接口参数
             Map<String, String> configItem = merchantCfgService.getConfigItem(merchantId);
+            String signContent=configItem.get(ConfigParameter.MessageParameter.CHANNEL_NO.getKey());
+            message=MessageFormat.format("{0}{1}", StringUtils.isEmpty(signContent)?"【过海征信】":signContent,message);
             String response = HttpSender.batchSend(configItem.get(ConfigParameter.MessageParameter.URL.getKey()),
                     configItem.get(ConfigParameter.MessageParameter.ACCOUNT.getKey()),
                     configItem.get(ConfigParameter.MessageParameter.PASSWORD.getKey()), mobile, message);

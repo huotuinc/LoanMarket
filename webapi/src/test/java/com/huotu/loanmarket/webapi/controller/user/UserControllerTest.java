@@ -56,7 +56,7 @@ public class UserControllerTest extends BaseTest {
     public void syncUser() throws UnsupportedEncodingException {
         User user =mockUser();
 
-        UserInfoVo vo= youXinUserService.syncUser(user.getUserName());
+        UserInfoVo vo= youXinUserService.syncUser(user.getUserName(),2);
 
         Assert.isNotNull(vo,"kong");
 

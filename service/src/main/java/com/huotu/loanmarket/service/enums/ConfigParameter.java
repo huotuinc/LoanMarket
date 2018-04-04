@@ -70,7 +70,7 @@ public interface ConfigParameter {
     enum MessageParameter implements IMerchantParameterEnum {
         URL("message_url", "短信发送地址"),
         ACCOUNT("message_account", "账号"),
-        CHANNEL_NO("message_channelNo", "渠道编号"),
+        CHANNEL_NO("message_channelNo", "短信签名"),
         PASSAGEWAY("message_passageway", "短信通道"),
         PASSWORD("message_password", "密码");
         private String key;

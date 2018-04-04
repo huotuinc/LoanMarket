@@ -23,8 +23,9 @@ public interface YouXinUserService {
     /**
      * 同步用户
      * @param mobile
+     * @param zmfScoreType 1:550以下   2:550~600  3:600~650  4:650以上
      * @return
      * @throws  ErrorMessageException
      */
-    UserInfoVo syncUser(String mobile)  throws ErrorMessageException;
+    UserInfoVo syncUser(String mobile,int zmfScoreType)  throws ErrorMessageException;
 }
