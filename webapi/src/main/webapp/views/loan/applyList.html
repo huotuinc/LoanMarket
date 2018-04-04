@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width,minimum-scale=1,user-scalable=no,maximum-scale=1,initial-scale=1" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="description" content="" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="../../resource/css/wap/main.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/weui/1.1.2/style/weui.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/jquery-weui/1.2.0/css/jquery-weui.min.css">
+    <title>发布</title>
+    <style>
+        .loan-list {
+            padding: 10px 5px;
+            background: #fbf9fe;
+        }
+
+        .loan-card {
+            display: block;
+            margin-bottom: 14px;
+            font-size: 14px;
+            -webkit-box-shadow: 0 5px 0 0 rgba(4, 0, 0, 0.16);
+            box-shadow: 0 5px 0 0 rgba(4, 0, 0, 0.16);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .loan-card .loan-card_hd {
+            padding: 0 12px;
+            height: 30px;
+            line-height: 30px;
+            background: #ce3820;
+            color: #fff;
+        }
+
+        .loan-card .loan-publish_hd {
+            background: #ff9c00;
+        }
+
+        .loan-card .loan-card_bd {
+            padding: 15px;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            height: 50px;
+            background: #fff;
+        }
+
+        .loan-card .loan-card_ft {
+            padding: 15px;
+            height: 20px;
+            background: #fff;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+        }
+
+        .loan-card .loan-publish_ft {
+            height: 10px;
+        }
+
+        .loan-card .loan-card_hd .loan-hd_title {
+            float: left;
+        }
+
+        .loan-card .loan-card_hd .loan-hd_user {
+            float: right;
+        }
+
+        .clearfix::after {
+            content: ' ';
+            display: table;
+            clear: both;
+        }
+
+        .loan-card .loan-card_bd .loan-bd_img {
+            width: 50px;
+            height: 50px;
+            margin-right: 0.8em;
+        }
+
+        .loan-card .loan-card_bd .loan-bd_img img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+        }
+
+        .loan-card .loan-card_bd .loan-bd_content {
+            -webkit-box-flex: 1;
+            -ms-flex: 1;
+            flex: 1;
+            color: #000;
+        }
+
+        .loan-card .loan-card_bd .loan-bd_content span {
+            color: #797979;
+        }
+
+        .vux-1px-b {
+            position: relative;
+        }
+
+        .vux-1px-b:after {
+            content: " ";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            height: 1px;
+            border-bottom: 1px solid #C7C7C7;
+            color: #C7C7C7;
+            -webkit-transform-origin: 0 100%;
+            transform-origin: 0 100%;
+            -webkit-transform: scaleY(0.5);
+            transform: scaleY(0.5);
+        }
+
+        .loan-card .loan-card_ft .loan-ft_content {
+            -webkit-box-flex: 1;
+            -ms-flex: 1;
+            flex: 1;
+            color: #000;
+        }
+
+        .loan-card .loan-card_ft .loan-ft_content span {
+            font-size: 11px;
+            margin-right: 6px;
+        }
+
+        .weui-dialog__btn+.primary {
+            color: #ff9c00 !important;
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <div class="loan-list">
+        <div class="list-item">
+            <template v-for="order in orders">
+                <div class="loan-card" :key="order.id">
+                    <div class="loan-card_hd clearfix">
+                        <span class="loan-hd_title">申请对象：{{order.lenderRealName}}</span>
+                        <span class="loan-hd_user">{{order.statusMsg}}</span>
+                    </div>
+                    <div class="loan-card_bd vux-1px-b">
+                        <div class="loan-bd_img">
+                            <img :src="order.headimg ? order.headimg : 'http://resali.huobanplus.com/cdn/avatar.png'" alt="">
+                        </div>
+                        <div class="loan-bd_content">
+                            <p>联系电话：
+                                <span>{{order.lenderUserName ? order.lenderUserName.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2')
+                                    : ''}}</span>
+                            </p>
+                            <p>借款金额：
+                                <span>{{order.money}}元</span>&nbsp;&nbsp;&nbsp;&nbsp;借款时长：
+                                <span>{{order.interval}}天</span>
+                            </p>
+                            <p>借款用途：
+                                <span>{{order.purpose}}</span>
+                            </p>
+                        </div>
+                    </div>
+                    <!-- <div class="loan-card_ft loan-apply_ft">
+                      <div class="loan-ft_content loan-ft_button">
+                        <a href="javascript:;" class="btn btn-contact">联系TA</a>
+                        <a href="javascript:;" class="btn btn-add">加为好友</a>
+                      </div>
+                    </div> -->
+                </div>
+            </template>
+        </div>
+    </div>
+</body>
+<script src="https://cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/jquery-weui/1.2.0/js/jquery-weui.min.js"></script>
+<script src="../../resource/js/template-web.js"></script>
+<script id="applyList">
+
+</script>
+<script>
+    $.ajax({
+        url: '/api/borrow/getBorrowList',
+        type: 'get',
+        dataType: 'json',
+        headers: {
+            Accept: "application/json; charset=utf-8"
+        },
+        data: {}
+    })
+        .done(function (response) {
+            console.log(response)
+        })
+        .fail(function () {
+
+        })
+</script>
+
+</html>
