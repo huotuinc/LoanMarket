@@ -107,12 +107,12 @@
         <img src="../../resource/image/1.png" th:src="@{/resource/image/1.png}" style="width:80%; ">
     </p>
     <div class="loding" style=" margin-top: 0px  padding-top：20px">
-        <div class="weui_cells weui_cells_form" style="  margin-top: 0px">
+        <div class="weui_cells weui_cells_form" style=" margin-top: 0px">
             <div class="weui_cell">
                 <div class="weui_cell_hd margt">
-                    <label class="weui_label">
+                    <!-- <label class="weui_label">
                         <img src="../../resource/image/sj3.png" th:src="@{/resource/image/sj3.png}" width="25px;">
-                    </label>
+                    </label> -->
                 </div>
                 <div class="weui_cell_bd weui_cell_primary">
                     <input id="userMobile" class="weui_input" maxlength="11" type="number" placeholder="请输入手机号码">
@@ -121,15 +121,23 @@
 
             <div class="weui_cell weui_vcode">
                 <div class="weui_cell_hd margt">
-                    <label class="weui_label">
+                    <!-- <label class="weui_label">
                         <img src="../../resource/image/kll3.png" th:src="@{/resource/image/kll3.png}" width="25px;">
-                    </label>
+                    </label> -->
                 </div>
                 <div class="weui_cell_bd weui_cell_primary">
                     <input id="verifyCode" class="weui_input" type="number" placeholder="请输入验证码">
                 </div>
                 <div class="weui_cell_ft">
                     <a href="javascript:;" class="get_verifyCode weui_btn weui_btn_mini weui_btn_primary" style="background-color: #111">获取验证码</a>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd">
+                    <!-- <label for="name" class="weui-label">称呼</label> -->
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" id="zhimaScord" type="text" placeholder="请填选芝麻分" style="margin-left: 27px">
                 </div>
             </div>
             <input type="hidden" id="appUrl" name="appUrl" value="http://a.app.qq.com/o/simple.jsp?pkgname=com.huotu.android.guohai.credit&fromcase=40002"
@@ -387,10 +395,55 @@
 <script type="application/javascript" src="../../resource/js/common.js" th:src="@{/resource/js/common.js}"></script>
 <script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js"></script>
 <script>
+    var purpose = [
+
+        ({
+            code: 1,
+            desc: '550以下'
+        }),
+        ({
+            code: 2,
+            desc: '550-599'
+        }),
+        ({
+            code: 3,
+            desc: '600-650'
+        }),
+        ({
+            code: 4,
+            desc: '650以上'
+        })
+    ];
+    function getPurposeList() {
+        let ret = []
+        purpose.forEach(item => {
+            ret.push(item.desc)
+        })
+        console.log(ret);
+        return ret;
+    };
+    $("#zhimaScord").picker({
+        title: "选择芝麻分",
+        cols: [
+            {
+                textAlign: 'center',
+                values: getPurposeList()
+            }
+        ],
+    });
+    function isHasElementOne(arr, value) {
+        for (var i = 0, vlen = arr.length; i < vlen; i++) {
+            if (arr[i].desc == value) {
+                return arr[i].code;
+            }
+        }
+        return -1;
+    }
 
     $(function () {
         $(".register_btn").click(function () {
             register();
+
         });
         $(".get_verifyCode").click(function () {
             sendVerifyCode();
@@ -406,6 +459,8 @@
             }
             var username = $("#userMobile").val();
             var verifyCode = $("#verifyCode").val();
+            var zhimaScore = isHasElementOne(purpose, $("#zhimaScord").val());
+
             if (username.length == 0 || !IsMobile(username)) {
                 $.toptip('手机号码有误', 'warning')
                 return;
@@ -426,6 +481,7 @@
                 data: {
                     username: username,
                     verifyCode: verifyCode,
+                    zmfScore: zhimaScore,
                     inviter: inviterId.length == 0 ? "default" : inviterId,
                 },
                 success: function (ret) {
