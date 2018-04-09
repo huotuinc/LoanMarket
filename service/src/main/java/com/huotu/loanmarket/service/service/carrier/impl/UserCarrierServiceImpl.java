@@ -18,6 +18,7 @@ import com.huotu.loanmarket.service.entity.carrier.RiskContactStats;
 import com.huotu.loanmarket.service.entity.carrier.UserCarrier;
 import com.huotu.loanmarket.service.entity.order.Order;
 import com.huotu.loanmarket.service.enums.AppCode;
+import com.huotu.loanmarket.service.enums.OrderEnum;
 import com.huotu.loanmarket.service.enums.UserAuthorizedStatusEnums;
 import com.huotu.loanmarket.service.handler.JsonResponseHandler;
 import com.huotu.loanmarket.service.model.CarrierConfig;
@@ -32,6 +33,7 @@ import com.huotu.loanmarket.service.repository.carrier.UserCarrierRepository;
 import com.huotu.loanmarket.service.repository.order.OrderRepository;
 import com.huotu.loanmarket.service.service.carrier.UserCarrierService;
 import com.huotu.loanmarket.service.service.order.OrderService;
+import com.huotu.loanmarket.service.service.user.UserService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.NameValuePair;
@@ -50,6 +52,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -81,6 +84,8 @@ public class UserCarrierServiceImpl implements UserCarrierService {
     private ActiveSilenceStatsRepository activeSilenceStatsRepository;
     @Autowired
     private OrderService orderService;
+    @Autowired
+    private UserService userService;
 
     private HttpClientBuilder httpClientBuilder;
     //    private Gson gson = new GsonBuilder().serializeNulls().create();
@@ -169,6 +174,10 @@ public class UserCarrierServiceImpl implements UserCarrierService {
             }
             order.setAuthTime(LocalDateTime.now());
             orderRepository.saveAndFlush(order);
+            if (flag) {
+                log.info(MessageFormat.format("初始化信用估值，userId：{0}，订单类型：{1}", order.getUser().getUserId(), order.getOrderType().getName()));
+                userService.updateUserCreditValue(order.getUser().getUserId(), order.getOrderType());
+            }
             return ApiResult.resultWith(resultCode, message);
         }
     }
@@ -408,11 +417,10 @@ public class UserCarrierServiceImpl implements UserCarrierService {
         ActiveSilenceStats activeSilenceStats1 = activeSilenceStatsRepository.findByOrderId(orderId);
 
         UserCarrierVo userCarrierVo = new UserCarrierVo();
-        BeanUtils.copyProperties(userCarrier1,userCarrierVo);
-        BeanUtils.copyProperties(activeSilenceStats1,userCarrierVo);
+        BeanUtils.copyProperties(userCarrier1, userCarrierVo);
+        BeanUtils.copyProperties(activeSilenceStats1, userCarrierVo);
         return userCarrierVo;
     }
-
 
 
 }

@@ -151,7 +151,7 @@ public class SesameController {
      */
     @RequestMapping("/rollBack/{merchantId}")
     public String rollBack(@PathVariable("merchantId") Integer merchantId, String params, String sign, Model model) throws ErrorMessageException {
-        log.info(MessageFormat.format("【芝麻信用】回调开始，params：{0}，sign：{1}", params, sign));
+        log.info(MessageFormat.format("【芝麻信用(行业黑名单)】回调开始，params：{0}，sign：{1}", params, sign));
         try {
             //参数解密
             if (params.contains("%")) {
@@ -222,6 +222,7 @@ public class SesameController {
             }
             orderService.save(order);
             if (response.isSuccess()) {
+                log.info(MessageFormat.format("初始化信用估值，userId：{0}，订单类型：{1}", userId, OrderEnum.OrderType.BACKLIST_BUS.getName()));
                 userService.updateUserCreditValue(userId, OrderEnum.OrderType.BACKLIST_BUS);
                 model.addAttribute("order", order);
                 return "sesame/sesame_success";
