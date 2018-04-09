@@ -454,12 +454,12 @@ public class UserServiceImpl implements UserService {
                 orderTypes.add(OrderEnum.OrderType.JINGDONG);
                 orderTypes.add(OrderEnum.OrderType.TAOBAO);
                 creditValue=checkConfig.getElectronicBusinessCheck();
-                count = orderRepository.countByAuthStatus(Constant.MERCHANT_ID, userId, OrderEnum.OrderType.JINGDONG,OrderEnum.OrderType.TAOBAO);
+                count = orderRepository.countByAuthStatus(Constant.MERCHANT_ID, userId, OrderEnum.OrderType.JINGDONG,OrderEnum.OrderType.TAOBAO,UserAuthorizedStatusEnums.AUTH_SUCCESS);
                 break;
             case CARRIER:
                 orderTypes.add(OrderEnum.OrderType.CARRIER);
                 creditValue=checkConfig.getOperatorCheck();
-                count = orderRepository.countByAuthStatus(Constant.MERCHANT_ID, userId, OrderEnum.OrderType.CARRIER);
+                count = orderRepository.countByAuthStatus(Constant.MERCHANT_ID, userId, OrderEnum.OrderType.CARRIER,UserAuthorizedStatusEnums.AUTH_SUCCESS);
 
                 break;
             case BACKLIST_FINANCE:
@@ -467,7 +467,7 @@ public class UserServiceImpl implements UserService {
                 orderTypes.add(OrderEnum.OrderType.BACKLIST_FINANCE);
                 orderTypes.add(OrderEnum.OrderType.BACKLIST_BUS);
                 creditValue=checkConfig.getBlackListCheck();
-                count = orderRepository.countByAuthStatus(Constant.MERCHANT_ID, userId, OrderEnum.OrderType.BACKLIST_FINANCE,OrderEnum.OrderType.BACKLIST_BUS);
+                count = orderRepository.countByAuthStatus(Constant.MERCHANT_ID, userId, OrderEnum.OrderType.BACKLIST_FINANCE,OrderEnum.OrderType.BACKLIST_BUS,UserAuthorizedStatusEnums.AUTH_SUCCESS);
 
                 break;
             default:

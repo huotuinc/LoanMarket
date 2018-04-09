@@ -5,6 +5,7 @@ import com.huotu.loanmarket.common.enums.EnumHelper;
 import com.huotu.loanmarket.common.enums.ICommonEnum;
 import com.huotu.loanmarket.service.enums.DeviceTypeEnum;
 import com.huotu.loanmarket.service.enums.MerchantConfigEnum;
+import com.huotu.loanmarket.service.enums.OrderEnum;
 import com.huotu.loanmarket.service.enums.UserAuthorizedStatusEnums;
 
 import javax.persistence.AttributeConverter;
@@ -46,6 +47,11 @@ public class EnumToIntegerConverter<T extends ICommonEnum> implements AttributeC
     @Converter
     public static class UserAuthorizedStatusEnumsConverter extends EnumToIntegerConverter<UserAuthorizedStatusEnums>
             implements AttributeConverter<UserAuthorizedStatusEnums, Integer> {
+    }
+
+    @Converter
+    public static class OrderTypeEnumsConverter extends EnumToIntegerConverter<OrderEnum.OrderType>
+            implements AttributeConverter<OrderEnum.OrderType, Integer> {
     }
 
 }

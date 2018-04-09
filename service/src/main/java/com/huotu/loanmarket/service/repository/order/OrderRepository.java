@@ -128,8 +128,8 @@ public interface OrderRepository extends JpaRepository<Order, String>, JpaSpecif
      * @param orderType2
      * @return
      */
-    @Query("select count(o.orderId) from Order o where o.merchant = ?1 and o.user.userId=?2 and (o.orderType=?3 or o.orderType=?4) and o.authStatus = 2 ")
-    int countByAuthStatus(Integer merchantId, Long userId,OrderEnum.OrderType orderType1,OrderEnum.OrderType orderType2);
+    @Query("select count(o.orderId) from Order o where o.merchant = ?1 and o.user.userId=?2 and (o.orderType=?3 or o.orderType=?4) and o.authStatus = ?5 ")
+    int countByAuthStatus(Integer merchantId, Long userId,OrderEnum.OrderType orderType1,OrderEnum.OrderType orderType2,UserAuthorizedStatusEnums authStatus);
 
     /**
      * 根据订单类型，获取认证数量
@@ -138,7 +138,7 @@ public interface OrderRepository extends JpaRepository<Order, String>, JpaSpecif
      * @param orderType
      * @return
      */
-    @Query("select count(o.orderId) from Order o where o.merchant = ?1 and o.user.userId=?2 and o.orderType=?3  and o.authStatus = 2 ")
-    int countByAuthStatus(Integer merchantId, Long userId,OrderEnum.OrderType orderType);
+    @Query("select count(o.orderId) from Order o where o.merchant = ?1 and o.user.userId=?2 and o.orderType=?3  and o.authStatus = ?4 ")
+    int countByAuthStatus(Integer merchantId, Long userId,OrderEnum.OrderType orderType,UserAuthorizedStatusEnums authStatus);
 
 }
