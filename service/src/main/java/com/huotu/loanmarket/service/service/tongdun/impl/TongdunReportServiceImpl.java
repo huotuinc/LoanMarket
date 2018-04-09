@@ -15,6 +15,7 @@ import com.huotu.loanmarket.service.service.order.OrderService;
 import com.huotu.loanmarket.service.service.tongdun.PreLoanRiskService;
 import com.huotu.loanmarket.service.service.tongdun.TongdunReportService;
 import com.huotu.loanmarket.service.service.tongdun.TongdunRequestLogService;
+import com.huotu.loanmarket.service.service.user.UserService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,8 @@ public class TongdunReportServiceImpl implements TongdunReportService {
     private OrderService orderService;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private UserService userService;
 
     @Override
     public ApiResult getRiskReport(String orderId, Long userId) {
@@ -129,6 +132,9 @@ public class TongdunReportServiceImpl implements TongdunReportService {
                 } else {
                     //更新订单状态
                     orderService.updateOrderAuthStatus(orderId, UserAuthorizedStatusEnums.AUTH_SUCCESS);
+
+                    userService.updateUserCreditValue(userId, OrderEnum.OrderType.BACKLIST_FINANCE);
+
                     //更改用户状态
                     if (!userInfo.getAuthStatus().equals(UserAuthorizedStatusEnums.AUTH_SUCCESS)) {
                         userRepository.updateAuthStatus(userInfo.getUserId(), UserAuthorizedStatusEnums.AUTH_SUCCESS);
