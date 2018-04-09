@@ -129,12 +129,6 @@ public class CarrierController {
             JsonObject jsonObject = new JsonParser().parse(notifyData).getAsJsonObject();
 
             if ("SUCCESS".equals(notifyEvent)) {
-                Order orderFind = orderService.findByOrderId(orderId);
-                if ("DS".equals(type)) {
-                    userService.updateUserCreditValue(orderFind.getUser().getUserId(), OrderEnum.OrderType.TAOBAO);
-                } else {
-                    userService.updateUserCreditValue(orderFind.getUser().getUserId(), OrderEnum.OrderType.CARRIER);
-                }
                 String taskId = jsonObject.get("task_id").getAsString();
                 log.info("task_id:" + taskId);
                 //回调成功,保存用户id和用户任务

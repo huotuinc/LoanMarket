@@ -188,7 +188,6 @@ public class SesameController {
             Order order = orderService.findByOrderId(orderId);
             //1.修改订单状态 2.保存行业名单信息 3.更新用户认账状态 4.设置信用估值
             if (response.isSuccess()) {
-                userService.updateUserCreditValue(userId, OrderEnum.OrderType.BACKLIST_BUS);
                 order.getUser().setAuthStatus(UserAuthorizedStatusEnums.AUTH_SUCCESS);
                 order.setAuthStatus(UserAuthorizedStatusEnums.AUTH_SUCCESS);
                 order.setAuthTime(LocalDateTime.now());
@@ -223,6 +222,7 @@ public class SesameController {
             }
             orderService.save(order);
             if (response.isSuccess()) {
+                userService.updateUserCreditValue(userId, OrderEnum.OrderType.BACKLIST_BUS);
                 model.addAttribute("order", order);
                 return "sesame/sesame_success";
             } else {
