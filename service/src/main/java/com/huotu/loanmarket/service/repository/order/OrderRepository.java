@@ -124,11 +124,21 @@ public interface OrderRepository extends JpaRepository<Order, String>, JpaSpecif
      * 根据订单类型，获取认证数量
      * @param merchantId
      * @param userId
-     * @param orderTypeList
+     * @param orderType1
+     * @param orderType2
      * @return
      */
-    @Query("select count(o.orderId) from Order o where o.merchant = ?1 and o.user.userId=?2 and o.orderType in?3 and o.authStatus = 2 ")
-    int countByAuthStatus(Integer merchantId, Long userId,List<OrderEnum.OrderType> orderTypeList);
+    @Query("select count(o.orderId) from Order o where o.merchant = ?1 and o.user.userId=?2 and (o.orderType=?3 or o.orderType=?4) and o.authStatus = 2 ")
+    int countByAuthStatus(Integer merchantId, Long userId,OrderEnum.OrderType orderType1,OrderEnum.OrderType orderType2);
 
+    /**
+     * 根据订单类型，获取认证数量
+     * @param merchantId
+     * @param userId
+     * @param orderType
+     * @return
+     */
+    @Query("select count(o.orderId) from Order o where o.merchant = ?1 and o.user.userId=?2 and o.orderType=?3  and o.authStatus = 2 ")
+    int countByAuthStatus(Integer merchantId, Long userId,OrderEnum.OrderType orderType);
 
 }

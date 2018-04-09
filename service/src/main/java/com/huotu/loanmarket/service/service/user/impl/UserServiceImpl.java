@@ -447,29 +447,35 @@ public class UserServiceImpl implements UserService {
         }
         List<OrderEnum.OrderType> orderTypes = new ArrayList<>();
         long creditValue=0;
+        int count=0;
         switch (orderType) {
             case JINGDONG:
             case TAOBAO:
                 orderTypes.add(OrderEnum.OrderType.JINGDONG);
                 orderTypes.add(OrderEnum.OrderType.TAOBAO);
                 creditValue=checkConfig.getElectronicBusinessCheck();
+                count = orderRepository.countByAuthStatus(Constant.MERCHANT_ID, userId, OrderEnum.OrderType.JINGDONG,OrderEnum.OrderType.TAOBAO);
                 break;
             case CARRIER:
                 orderTypes.add(OrderEnum.OrderType.CARRIER);
                 creditValue=checkConfig.getOperatorCheck();
+                count = orderRepository.countByAuthStatus(Constant.MERCHANT_ID, userId, OrderEnum.OrderType.CARRIER);
+
                 break;
             case BACKLIST_FINANCE:
             case BACKLIST_BUS:
                 orderTypes.add(OrderEnum.OrderType.BACKLIST_FINANCE);
                 orderTypes.add(OrderEnum.OrderType.BACKLIST_BUS);
                 creditValue=checkConfig.getBlackListCheck();
+                count = orderRepository.countByAuthStatus(Constant.MERCHANT_ID, userId, OrderEnum.OrderType.BACKLIST_FINANCE,OrderEnum.OrderType.BACKLIST_BUS);
+
                 break;
             default:
                 break;
         }
         if (orderTypes.size() > 0) {
             //获取当前类型订单认证的数量
-            int count = orderRepository.countByAuthStatus(Constant.MERCHANT_ID, userId, orderTypes);
+
             if (count == 1) {
 
                 User user= userRepository.findOne(userId);
