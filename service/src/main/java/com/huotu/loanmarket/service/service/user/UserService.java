@@ -3,6 +3,7 @@ package com.huotu.loanmarket.service.service.user;
 import com.huotu.loanmarket.service.aop.BusinessSafe;
 import com.huotu.loanmarket.service.entity.user.Invite;
 import com.huotu.loanmarket.service.entity.user.User;
+import com.huotu.loanmarket.service.enums.OrderEnum;
 import com.huotu.loanmarket.service.exceptions.ErrorMessageException;
 import com.huotu.loanmarket.service.model.PageListView;
 import com.huotu.loanmarket.service.model.user.UserInviteVo;
@@ -130,4 +131,11 @@ public interface UserService {
      * @param imgUrl
      */
     void setHeadImg(Long userId, String imgUrl);
+
+    /**
+     * 更新用户信用估值，订单认证完成时调用(注：认证状态必须已保存数据库)
+     * @param userId 用户ID
+     * @param orderType 当前订单类型
+     */
+    void updateUserCreditValue(Long userId, OrderEnum.OrderType orderType);
 }

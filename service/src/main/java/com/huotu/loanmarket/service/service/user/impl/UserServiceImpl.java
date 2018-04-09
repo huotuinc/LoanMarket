@@ -4,10 +4,12 @@ import com.huotu.loanmarket.common.Constant;
 import com.huotu.loanmarket.common.utils.RandomUtils;
 import com.huotu.loanmarket.common.utils.RequestUtils;
 import com.huotu.loanmarket.common.utils.StringUtilsExt;
+import com.huotu.loanmarket.service.entity.system.CheckConfig;
 import com.huotu.loanmarket.service.entity.system.SmsTemple;
 import com.huotu.loanmarket.service.entity.user.Invite;
 import com.huotu.loanmarket.service.entity.user.User;
 import com.huotu.loanmarket.service.entity.user.VerifyCode;
+import com.huotu.loanmarket.service.enums.OrderEnum;
 import com.huotu.loanmarket.service.enums.UserAuthorizedStatusEnums;
 import com.huotu.loanmarket.service.enums.UserResultCode;
 import com.huotu.loanmarket.service.exceptions.ErrorMessageException;
@@ -16,6 +18,7 @@ import com.huotu.loanmarket.service.model.user.UserInviteVo;
 import com.huotu.loanmarket.service.model.user.UserListVo;
 import com.huotu.loanmarket.service.model.user.UserSearcher;
 import com.huotu.loanmarket.service.repository.order.OrderRepository;
+import com.huotu.loanmarket.service.repository.system.CheckConfigRepository;
 import com.huotu.loanmarket.service.repository.system.VerifyCodeRepository;
 import com.huotu.loanmarket.service.repository.user.InviteRepository;
 import com.huotu.loanmarket.service.repository.user.UserRepository;
@@ -60,6 +63,8 @@ public class UserServiceImpl implements UserService {
     private InviteRepository inviteRepository;
     @Autowired
     private OrderRepository orderRepository;
+    @Autowired
+    private CheckConfigRepository checkConfigRepository;
 
 
     @Override
@@ -429,6 +434,52 @@ public class UserServiceImpl implements UserService {
             }
         } catch (Exception ex) {
             log.error(ex);
+        }
+    }
+
+
+    @Override
+    public void updateUserCreditValue(Long userId, OrderEnum.OrderType orderType) {
+        CheckConfig checkConfig = checkConfigRepository.findOne(Constant.MERCHANT_ID);
+        if (checkConfig == null) {
+            log.info("没找到信用估值配置数据");
+            return;
+        }
+        List<OrderEnum.OrderType> orderTypes = new ArrayList<>();
+        long creditValue=0;
+        switch (orderType) {
+            case JINGDONG:
+            case TAOBAO:
+                orderTypes.add(OrderEnum.OrderType.JINGDONG);
+                orderTypes.add(OrderEnum.OrderType.TAOBAO);
+                creditValue=checkConfig.getElectronicBusinessCheck();
+                break;
+            case CARRIER:
+                orderTypes.add(OrderEnum.OrderType.CARRIER);
+                creditValue=checkConfig.getOperatorCheck();
+                break;
+            case BACKLIST_FINANCE:
+            case BACKLIST_BUS:
+                orderTypes.add(OrderEnum.OrderType.BACKLIST_FINANCE);
+                orderTypes.add(OrderEnum.OrderType.BACKLIST_BUS);
+                creditValue=checkConfig.getBlackListCheck();
+                break;
+            default:
+                break;
+        }
+        if (orderTypes.size() > 0) {
+            //获取当前类型订单认证的数量
+            int count = orderRepository.countByAuthStatus(Constant.MERCHANT_ID, userId, orderTypes);
+            if (count == 1) {
+
+                User user= userRepository.findOne(userId);
+                if (user!=null)
+                {
+                    user.setCreditValue(Math.toIntExact(user.getCreditValue() + creditValue));
+                    userRepository.save(user);
+                }
+
+            }
         }
     }
 }

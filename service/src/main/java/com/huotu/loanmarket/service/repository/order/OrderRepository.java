@@ -121,4 +121,8 @@ public interface OrderRepository extends JpaRepository<Order, String>, JpaSpecif
     List<Order> findNotPayOrderByMerchantIdAndCreateTime(Integer merchantId,LocalDateTime createTime,OrderEnum.PayStatus payStatus,OrderEnum.OrderStatus orderStatus);
 
 
+    @Query("select count(o.orderId) from Order o where o.merchant = ?1 and o.user.userId=?2 and o.orderType in?3 and o.authStatus = 2 ")
+    int countByAuthStatus(Integer merchantId, Long userId,List<OrderEnum.OrderType> orderTypeList);
+
+
 }
