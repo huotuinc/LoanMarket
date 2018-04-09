@@ -17,11 +17,7 @@ import com.huotu.loanmarket.service.config.SesameSysConfig;
 import com.huotu.loanmarket.service.entity.order.Order;
 import com.huotu.loanmarket.service.entity.sesame.Industry;
 import com.huotu.loanmarket.service.entity.user.User;
-import com.huotu.loanmarket.service.enums.AppCode;
-import com.huotu.loanmarket.service.enums.SesameEnum;
-import com.huotu.loanmarket.service.enums.SesameResultCode;
-import com.huotu.loanmarket.service.enums.UserAuthorizedStatusEnums;
-import com.huotu.loanmarket.service.enums.UserResultCode;
+import com.huotu.loanmarket.service.enums.*;
 import com.huotu.loanmarket.service.exceptions.ErrorMessageException;
 import com.huotu.loanmarket.service.model.sesame.BizParams;
 import com.huotu.loanmarket.service.model.sesame.IdentityParam;
@@ -34,6 +30,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -68,6 +65,8 @@ public class SesameController {
     private LoanMarkConfigProvider loanMarkConfigProvider;
     @Autowired
     private OrderService orderService;
+    @Autowired
+    private UserService userService;
 
     @RequestMapping("/verifyIdAndName")
     @ResponseBody
@@ -187,8 +186,9 @@ public class SesameController {
             req.setOpenId(map.get("open_id"));
             ZhimaCreditWatchlistiiGetResponse response = client.execute(req);
             Order order = orderService.findByOrderId(orderId);
-            //1.修改订单状态 2.保存行业名单信息 3.更新用户认账状态
+            //1.修改订单状态 2.保存行业名单信息 3.更新用户认账状态 4.设置信用估值
             if (response.isSuccess()) {
+                userService.updateUserCreditValue(userId, OrderEnum.OrderType.BACKLIST_BUS);
                 order.getUser().setAuthStatus(UserAuthorizedStatusEnums.AUTH_SUCCESS);
                 order.setAuthStatus(UserAuthorizedStatusEnums.AUTH_SUCCESS);
                 order.setAuthTime(LocalDateTime.now());

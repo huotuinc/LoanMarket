@@ -20,6 +20,7 @@ import com.huotu.loanmarket.service.repository.carrier.RiskContactStatsRepositor
 import com.huotu.loanmarket.service.repository.order.OrderRepository;
 import com.huotu.loanmarket.service.service.carrier.UserCarrierService;
 import com.huotu.loanmarket.service.service.order.OrderService;
+import com.huotu.loanmarket.service.service.user.UserService;
 import com.huotu.loanmarket.webapi.controller.exception.OrderNotFoundException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
@@ -44,6 +45,7 @@ import java.util.concurrent.ExecutionException;
 
 /**
  * 运营商相关
+ *
  * @author luyuanyuan on 2017/11/22.
  */
 @RequestMapping("/api/carrier")
@@ -65,20 +67,22 @@ public class CarrierController {
     private RiskContactDetailRepository riskContactDetailRepository;
     @Autowired
     private ConsumeBillRepository consumeBillRepository;
+    @Autowired
+    private UserService userService;
 
     @RequestMapping("/saveTaskId")
     @ResponseBody
-    public ApiResult saveTabaoTaskId(String orderId,String taskId) {
+    public ApiResult saveTabaoTaskId(String orderId, String taskId) {
 
-        if(StringUtils.isBlank(orderId) || StringUtils.isBlank(taskId)){
-            return ApiResult.resultWith(5000,"任务id或订单id不能为空");
+        if (StringUtils.isBlank(orderId) || StringUtils.isBlank(taskId)) {
+            return ApiResult.resultWith(5000, "任务id或订单id不能为空");
         }
         Order order = orderService.findByOrderId(orderId);
         order.setAuthStatus(UserAuthorizedStatusEnums.AUTH_ING);
-        AsyncTask asyncTask = asyncTaskRepository.findByOrderIdAndType(orderId,Constant.DS);
-        if(asyncTask != null){
+        AsyncTask asyncTask = asyncTaskRepository.findByOrderIdAndType(orderId, Constant.DS);
+        if (asyncTask != null) {
             asyncTask.setTaskId(taskId);
-        }else{
+        } else {
             asyncTask = new AsyncTask();
             asyncTask.setMerchantId(Constant.MERCHANT_ID);
             asyncTask.setOrderId(orderId);
@@ -89,61 +93,68 @@ public class CarrierController {
         orderService.save(order);
         return ApiResult.resultWith(AppCode.SUCCESS);
     }
+
     @RequestMapping("/magicCallback")
     @ResponseBody
     public Object magicCallback(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setStatus(HttpStatus.OK.value());
-        Map<String,Object> map = new HashMap<>(2);
-        map.put("code",0);
+        Map<String, Object> map = new HashMap<>(2);
+        map.put("code", 0);
         try {
-        //回调事件
-        String notifyEvent = request.getParameter("notify_event");
-        //回调参数
-        String passbackParams = request.getParameter("passback_params");
-        if(StringUtils.isBlank(passbackParams)) {
-            map.put("message","回调处理成功");
-            return map;
-        }
-        String[] split = passbackParams.split(",");
-        String orderId = split[0];
-        String merchantId = split[1];
-        String type = split[2];
-        String notifyData = request.getParameter("notify_data");
-        log.info(MessageFormat.format("【数据魔盒】回调开始，订单ID：{0}，回调参数：{1}",orderId,notifyData));
-        Order order = orderRepository.findOne(orderId);
-        if (order == null) {
-            log.info(MessageFormat.format("订单不存在，订单id：{0}", orderId));
-            map.put("message","订单不存在，回调忽略");
-            return map;
-        }
-        if (UserAuthorizedStatusEnums.AUTH_SUCCESS.equals(order.getAuthStatus())) {
-            log.info(MessageFormat.format("【数据魔盒】重复调用，订单id：{0}",orderId));
-            map.put("message","重复调用");
-            return map;
-        }
-        JsonObject jsonObject = new JsonParser().parse(notifyData).getAsJsonObject();
-
-        if("SUCCESS".equals(notifyEvent)){
-            String taskId = jsonObject.get("task_id").getAsString();
-            log.info("task_id:" + taskId);
-            //回调成功,保存用户id和用户任务
-            AsyncTask asyncTask = asyncTaskRepository.findByOrderIdAndType(orderId,type);
-            if(asyncTask != null){
-                asyncTask.setTaskId(taskId);
-            }else{
-                 asyncTask = new AsyncTask();
-                 asyncTask.setMerchantId(Integer.valueOf(merchantId));
-                 asyncTask.setOrderId(orderId);
-                 asyncTask.setTaskId(taskId);
-                 asyncTask.setType(type);
+            //回调事件
+            String notifyEvent = request.getParameter("notify_event");
+            //回调参数
+            String passbackParams = request.getParameter("passback_params");
+            if (StringUtils.isBlank(passbackParams)) {
+                map.put("message", "回调处理成功");
+                return map;
             }
-            asyncTaskRepository.saveAndFlush(asyncTask);
-        }else{
-            log.error(MessageFormat.format("【数据魔盒】回调失败，回调通知事件:{0}",notifyEvent));
-        }
-        map.put("message","success");
-        }catch (Exception e) {
-            map.put("message","回调处理成功");
+            String[] split = passbackParams.split(",");
+            String orderId = split[0];
+            String merchantId = split[1];
+            String type = split[2];
+            String notifyData = request.getParameter("notify_data");
+            log.info(MessageFormat.format("【数据魔盒】回调开始，订单ID：{0}，回调参数：{1}", orderId, notifyData));
+            Order order = orderRepository.findOne(orderId);
+            if (order == null) {
+                log.info(MessageFormat.format("订单不存在，订单id：{0}", orderId));
+                map.put("message", "订单不存在，回调忽略");
+                return map;
+            }
+            if (UserAuthorizedStatusEnums.AUTH_SUCCESS.equals(order.getAuthStatus())) {
+                log.info(MessageFormat.format("【数据魔盒】重复调用，订单id：{0}", orderId));
+                map.put("message", "重复调用");
+                return map;
+            }
+            JsonObject jsonObject = new JsonParser().parse(notifyData).getAsJsonObject();
+
+            if ("SUCCESS".equals(notifyEvent)) {
+                Order orderFind = orderService.findByOrderId(orderId);
+                if ("DS".equals(type)) {
+                    userService.updateUserCreditValue(orderFind.getUser().getUserId(), OrderEnum.OrderType.TAOBAO);
+                } else {
+                    userService.updateUserCreditValue(orderFind.getUser().getUserId(), OrderEnum.OrderType.CARRIER);
+                }
+                String taskId = jsonObject.get("task_id").getAsString();
+                log.info("task_id:" + taskId);
+                //回调成功,保存用户id和用户任务
+                AsyncTask asyncTask = asyncTaskRepository.findByOrderIdAndType(orderId, type);
+                if (asyncTask != null) {
+                    asyncTask.setTaskId(taskId);
+                } else {
+                    asyncTask = new AsyncTask();
+                    asyncTask.setMerchantId(Integer.valueOf(merchantId));
+                    asyncTask.setOrderId(orderId);
+                    asyncTask.setTaskId(taskId);
+                    asyncTask.setType(type);
+                }
+                asyncTaskRepository.saveAndFlush(asyncTask);
+            } else {
+                log.error(MessageFormat.format("【数据魔盒】回调失败，回调通知事件:{0}", notifyEvent));
+            }
+            map.put("message", "success");
+        } catch (Exception e) {
+            map.put("message", "回调处理成功");
             return map;
         }
         return map;
@@ -151,6 +162,7 @@ public class CarrierController {
 
     /**
      * 查询结果
+     *
      * @param taskId
      * @param merchantId
      * @param orderId
@@ -158,19 +170,20 @@ public class CarrierController {
      */
     @RequestMapping("/queryResult")
     @ResponseBody
-    public ApiResult queryResult(String taskId, @RequestHeader("merchantId") Long merchantId, String orderId){
+    public ApiResult queryResult(String taskId, @RequestHeader("merchantId") Long merchantId, String orderId) {
         ApiResult apiResult;
         try {
-            apiResult = userCarrierService.queryResult(taskId, orderId,merchantId.intValue());
+            apiResult = userCarrierService.queryResult(taskId, orderId, merchantId.intValue());
         } catch (Exception e) {
-            log.error("未知错误",e);
-            return ApiResult.resultWith(AppCode.ERROR.getCode(),"未知错误");
+            log.error("未知错误", e);
+            return ApiResult.resultWith(AppCode.ERROR.getCode(), "未知错误");
         }
         return apiResult;
     }
 
     /**
      * 运营商展示数据
+     *
      * @param userId
      * @param orderId
      * @return
@@ -178,69 +191,72 @@ public class CarrierController {
      * @throws InterruptedException
      */
     @RequestMapping("/carrierShow")
-    public String carrierShow( Long userId,String orderId,Model model) {
+    public String carrierShow(Long userId, String orderId, Model model) {
         checkParam(userId, orderId);
         UserCarrierVo userCarrierVo = userCarrierService.carrierShow(orderId);
-        model.addAttribute("carrier",userCarrierVo);
-        model.addAttribute("orderId",orderId);
-        model.addAttribute("userId",userId);
+        model.addAttribute("carrier", userCarrierVo);
+        model.addAttribute("orderId", orderId);
+        model.addAttribute("userId", userId);
         return "report/carrierInfo";
     }
 
     private void checkParam(Long userId, String orderId) {
         Order order = orderService.findByOrderId(orderId);
-        if(order == null || !order.getUser().getUserId().equals(userId)) {
+        if (order == null || !order.getUser().getUserId().equals(userId)) {
             throw new OrderNotFoundException(Constant.ORDER_NOT_FOUND);
         }
-        if(!OrderEnum.OrderStatus.Normal.equals(order.getOrderStatus())){
-            throw new OrderNotFoundException("订单状态："+order.getOrderStatus().getName());
+        if (!OrderEnum.OrderStatus.Normal.equals(order.getOrderStatus())) {
+            throw new OrderNotFoundException("订单状态：" + order.getOrderStatus().getName());
         }
-        if(!UserAuthorizedStatusEnums.AUTH_SUCCESS.equals(order.getAuthStatus())){
-            throw new OrderNotFoundException("订单认证状态："+order.getAuthStatus().getName());
+        if (!UserAuthorizedStatusEnums.AUTH_SUCCESS.equals(order.getAuthStatus())) {
+            throw new OrderNotFoundException("订单认证状态：" + order.getAuthStatus().getName());
         }
 
     }
 
     /**
      * 风险联系人
+     *
      * @param userId
      * @param orderId
      * @return
      */
     @RequestMapping("/riskContactList")
-    public String riskContactList(Long userId,String orderId,Model model) {
+    public String riskContactList(Long userId, String orderId, Model model) {
         checkParam(userId, orderId);
         List<RiskContactStats> contactStatsList = riskContactStatsRepository.findByOrderId(orderId);
-        model.addAttribute("riskContactList",contactStatsList);
+        model.addAttribute("riskContactList", contactStatsList);
         return "report/riskContact";
     }
 
     /**
      * 风险联系人明细
+     *
      * @param userId
      * @param orderId
      * @return
      */
     @RequestMapping("/riskContactDetailList")
-    public String riskContactDetailList( Long userId, String orderId,Model model) {
+    public String riskContactDetailList(Long userId, String orderId, Model model) {
         checkParam(userId, orderId);
         List<RiskContactDetail> riskContactDetailList = riskContactDetailRepository.findByOrderId(orderId);
-        model.addAttribute("riskContactDetailList",riskContactDetailList);
+        model.addAttribute("riskContactDetailList", riskContactDetailList);
         return "report/riskContactDetail";
     }
 
     /**
      * 话费明细
+     *
      * @param userId
      * @param orderId
      * @return
      */
     @RequestMapping("/consumeBillList")
-    public String consumeBillList( Long userId,String orderId, Model model) {
+    public String consumeBillList(Long userId, String orderId, Model model) {
         checkParam(userId, orderId);
         List<ConsumeBill> consumeBillList = consumeBillRepository.findByOrderId(orderId);
         consumeBillList.sort(Comparator.comparing(ConsumeBill::getMonth));
-        model.addAttribute("consumeBillList",consumeBillList);
+        model.addAttribute("consumeBillList", consumeBillList);
         return "report/consumeBill";
     }
 
