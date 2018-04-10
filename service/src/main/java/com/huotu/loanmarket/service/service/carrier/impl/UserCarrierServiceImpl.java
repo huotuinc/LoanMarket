@@ -102,7 +102,6 @@ public class UserCarrierServiceImpl implements UserCarrierService {
 
 
     @Override
-    @Transactional
     public ApiResult queryResult(String taskId, String orderId, Integer merchantId) throws IOException {
         //获取运营商系统参数
         CarrierConfig carrierConfig = loanMarkConfigProvider.getCarrierConfig(merchantId);
