@@ -1,5 +1,7 @@
 package com.huotu.loanmarket.webapi.controller.sesame;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.antgroup.zmxy.openplatform.api.DefaultZhimaClient;
 import com.antgroup.zmxy.openplatform.api.ZhimaApiException;
 import com.antgroup.zmxy.openplatform.api.domain.ZmWatchListDetail;
@@ -29,6 +31,7 @@ import com.huotu.loanmarket.service.service.user.UserService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpResponse;
+import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
@@ -74,25 +77,32 @@ public class SesameController {
     public ApiResult verifyIdAndName(@RequestHeader(Constant.APP_MERCHANT_ID_KEY) Integer merchantId,
                                      @RequestHeader(value = Constant.APP_USER_ID_KEY, required = false) Long userId, String name, String idCardNum) {
         log.info("用户欺诈信息开始芝麻授权userId：" + userId);
-//        String host = "http://idcard.market.alicloudapi.com";
-//        String path = "/lianzhuo/idcard";
-//        String method = "GET";
-//        String appcode = "f3c92fddc07c4470ab2bd0590a8e359f";
-//        Map<String, String> headers = new HashMap<String, String>();
-//        //最后在header中的格式(中间是英文空格)为Authorization:APPCODE 83359fd73fe94948385f570e3c139105
-//        headers.put("Authorization", "APPCODE " + appcode);
-//        Map<String, String> querys = new HashMap<String, String>();
-//        querys.put("cardno", idCardNum);
-//        querys.put("name", name);
-//        try {
-//            HttpResponse response = HttpUtils.doGet(host, path, method, headers, querys);
-//            System.out.println(response.toString());
-//            //获取response的body
-//            //System.out.println(EntityUtils.toString(response.getEntity()));
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-        return ApiResult.resultWith(AppCode.SUCCESS);
+        String host = "http://idcard.market.alicloudapi.com";
+        String path = "/lianzhuo/idcard";
+        String method = "GET";
+        String appcode = "f3c92fddc07c4470ab2bd0590a8e359f";
+        Map<String, String> headers = new HashMap<String, String>();
+        //最后在header中的格式(中间是英文空格)为Authorization:APPCODE 83359fd73fe94948385f570e3c139105
+        headers.put("Authorization", "APPCODE " + appcode);
+        Map<String, String> querys = new HashMap<String, String>();
+        querys.put("cardno", idCardNum);
+        querys.put("name", name);
+        try {
+            HttpResponse response = HttpUtils.doGet(host, path, method, headers, querys);
+            //获取response的body
+            String retSrc = EntityUtils.toString(response.getEntity());
+            JSONObject result = JSON.parseObject(retSrc);
+            JSONObject respJson = (JSONObject) result.get("resp");
+            int code = (int) respJson.get("code");
+            if (code == 0) {
+                return ApiResult.resultWith(AppCode.SUCCESS);
+            }
+            return ApiResult.resultWith(SesameResultCode.NAME_AND_NUM_NOT_AGREEMENT);
+        } catch (Exception e) {
+            log.info("实名认证异常：" + e);
+            return ApiResult.resultWith(SesameResultCode.NAME_AND_NUM_NOT_AGREEMENT);
+        }
+
     }
 
     /**
