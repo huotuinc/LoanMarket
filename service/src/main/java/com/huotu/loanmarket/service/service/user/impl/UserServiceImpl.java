@@ -150,7 +150,7 @@ public class UserServiceImpl implements UserService {
                 userInfo.setRealName(StringUtilsExt.safeGetMobile(loginName));
                 userInfo.setChannelId(RequestUtils.getHeader(request, Constant.APP_CHANNELID_KEY, "default"));
                 userInfo.setInviterId(0L);
-
+                userInfo.setUserToken(RandomUtils.randomString());
                 String inviterName = "";
                 //判断当前注册人身份是否是借款人，且判断是否存在邀请人
                 if (inviter != null
@@ -187,7 +187,7 @@ public class UserServiceImpl implements UserService {
             VerifyCode code = verifyCodeRepository.findByMobileAndMerchantId(loginName);
             code.setUseStatus(true);
         }
-        userInfo.setUserToken(RandomUtils.randomString());
+
         userInfo.setLastLoginTime(LocalDateTime.now());
         userInfo.setLoginCount(userInfo.getLoginCount() + 1);
         if (request != null) {
