@@ -4,11 +4,14 @@ import com.huotu.loanmarket.common.Constant;
 import com.huotu.loanmarket.common.utils.ApiResult;
 import com.huotu.loanmarket.service.config.LoanMarkConfigProvider;
 import com.huotu.loanmarket.service.entity.carrier.AsyncTask;
+import com.huotu.loanmarket.service.entity.order.Order;
 import com.huotu.loanmarket.service.enums.AppCode;
 import com.huotu.loanmarket.service.repository.carrier.AsyncTaskRepository;
 import com.huotu.loanmarket.service.repository.carrier.UserCarrierRepository;
+import com.huotu.loanmarket.service.repository.order.OrderRepository;
 import com.huotu.loanmarket.service.service.carrier.UserCarrierService;
 import com.huotu.loanmarket.service.service.ds.DsService;
+import com.huotu.loanmarket.service.service.user.UserService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +36,7 @@ public class AuthenticationSchedule {
     private AsyncTaskRepository asyncTaskRepository;
     @Autowired
     private UserCarrierService userCarrierService;
-//    @Autowired
+    //    @Autowired
 //    private EmailService emailService;
     @Autowired
     private LoanMarkConfigProvider loanMarkConfigProvider;
@@ -42,6 +45,10 @@ public class AuthenticationSchedule {
     private UserCarrierRepository userCarrierRepository;
     @Autowired
     private DsService dsService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private OrderRepository orderRepository;
 
     /**
      * 处理数据魔盒回调任务
@@ -61,15 +68,20 @@ public class AuthenticationSchedule {
         String orderId = task.getOrderId();
         String type = task.getType();
         Integer merchantId = task.getMerchantId();
-        log.info(MessageFormat.format("【定时任务】开始处理数据魔盒回调任务，任务id：{0}，订单id：{1}，任务类型：{2}", taskId, orderId,type));
+        log.info(MessageFormat.format("【定时任务】开始处理数据魔盒回调任务，任务id：{0}，订单id：{1}，任务类型：{2}", taskId, orderId, type));
         try {
             ApiResult result;
-            if(Constant.YYS.equals(type)){
+            if (Constant.YYS.equals(type)) {
                 result = userCarrierService.queryResult(taskId, orderId, merchantId);
             } else {
                 result = dsService.queryResult(taskId, orderId, merchantId);
             }
             if (result.getResultCode().equals(AppCode.SUCCESS.getCode())) {
+                if (Constant.DS.equals(type)) {
+                    Order one = orderRepository.findOne(orderId);
+                    log.info(MessageFormat.format("初始化信用估值，userId：{0}，订单类型：{1}，订单状态：{2}", one.getUser().getUserId(), one.getOrderType().getName(), one.getAuthStatus()));
+                    userService.updateUserCreditValue(one.getUser().getUserId(), one.getOrderType());
+                }
                 asyncTaskRepository.delete(task);
             }
             log.info(MessageFormat.format("【定时任务】结束处理数据魔盒回调任务，处理结果：{0}", result.getResultMsg()));

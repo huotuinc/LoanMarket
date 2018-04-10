@@ -19,7 +19,6 @@ public interface DsService {
      * @return
      * @throws IOException
      */
-    @Transactional
     ApiResult queryResult(String taskId, String orderId, Integer merchantId) throws IOException;
 
     DsVo dsShow(String orderId);

@@ -70,8 +70,7 @@ public class DsServiceImpl implements DsService {
     private OrderService orderService;
 
     private HttpClientBuilder httpClientBuilder;
-    @Autowired
-    private UserService userService;
+
 
     @PostConstruct
     public void init() {
@@ -127,8 +126,6 @@ public class DsServiceImpl implements DsService {
             }
             order.setAuthTime(LocalDateTime.now());
             orderRepository.saveAndFlush(order);
-            log.info(MessageFormat.format("初始化信用估值，userId：{0}，订单类型：{1}", order.getUser().getUserId(), order.getOrderType().getName()));
-            userService.updateUserCreditValue(order.getUser().getUserId(), order.getOrderType());
             return ApiResult.resultWith(resultCode, operatorMessage);
         }
     }
