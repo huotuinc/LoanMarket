@@ -24,6 +24,7 @@ import com.huotu.loanmarket.service.repository.ds.ReceiverRepository;
 import com.huotu.loanmarket.service.repository.order.OrderRepository;
 import com.huotu.loanmarket.service.service.ds.DsService;
 import com.huotu.loanmarket.service.service.order.OrderService;
+import com.huotu.loanmarket.service.service.user.UserService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.client.config.RequestConfig;
@@ -47,6 +48,7 @@ import java.util.List;
 
 /**
  * 电商数据爬取服务
+ *
  * @author luyuanyuan on 2018/2/1.
  */
 @Service
@@ -68,6 +70,8 @@ public class DsServiceImpl implements DsService {
     private OrderService orderService;
 
     private HttpClientBuilder httpClientBuilder;
+    @Autowired
+    private UserService userService;
 
     @PostConstruct
     public void init() {
@@ -110,53 +114,55 @@ public class DsServiceImpl implements DsService {
                 //返回任务信息和原始数据
                 JsonObject data = jsonObject.getAsJsonObject("data").getAsJsonObject("task_data");
 //                String channelCode = data.get("channel_code").getAsString();
-                assembleData(data,orderId,order);
+                assembleData(data, orderId, order);
                 order.setAuthStatus(UserAuthorizedStatusEnums.AUTH_SUCCESS);
                 orderService.updateInviteStatus(order.getUser().getUserId());
                 order.getUser().setAuthStatus(UserAuthorizedStatusEnums.AUTH_SUCCESS);
                 resultCode = AppCode.SUCCESS.getCode();
-            } else if(operatorCode == 100 ||operatorCode == 2012){
+            } else if (operatorCode == 100 || operatorCode == 2012) {
                 resultCode = AppCode.ERROR.getCode();
-            } else{
-                log.error(MessageFormat.format("【数据魔盒】电商数据查询失败，订单id：{0}，任务id：{1},失败原因：{2}", orderId,taskId,operatorMessage));
+            } else {
+                log.error(MessageFormat.format("【数据魔盒】电商数据查询失败，订单id：{0}，任务id：{1},失败原因：{2}", orderId, taskId, operatorMessage));
                 order.setAuthStatus(UserAuthorizedStatusEnums.AUTH_ERROR);
                 resultCode = AppCode.SUCCESS.getCode();
             }
             order.setAuthTime(LocalDateTime.now());
             orderRepository.saveAndFlush(order);
-            return ApiResult.resultWith(resultCode,operatorMessage);
+            log.info(MessageFormat.format("初始化信用估值，userId：{0}，订单类型：{1}", order.getUser().getUserId(), order.getOrderType().getName()));
+            userService.updateUserCreditValue(order.getUser().getUserId(), order.getOrderType());
+            return ApiResult.resultWith(resultCode, operatorMessage);
         }
     }
 
-    private void assembleData(JsonObject data, String orderId,Order order) {
+    private void assembleData(JsonObject data, String orderId, Order order) {
         //保存电商用户基本信息
         JsonObject baseInfoData = data.getAsJsonObject("base_info");
-        if (baseInfoData != null){
+        if (baseInfoData != null) {
             BaseInfo baseInfo = saveBaseInfo(baseInfoData, orderId);
             order.setAccountName(baseInfo.getName() + "（" + baseInfo.getNickName() + "）");
             order.setAccountNo(baseInfo.getName() + "（" + baseInfo.getNickName() + "）");
         }
         //保存电商用户账户信息
         JsonObject accountInfoData = data.getAsJsonObject("account_info");
-        if(accountInfoData != null) {
-            saveAccountInfo(accountInfoData,orderId);
+        if (accountInfoData != null) {
+            saveAccountInfo(accountInfoData, orderId);
         }
         //保存电商订单
         JsonArray orderList = data.getAsJsonArray("order_list");
-        saveDsOrder(orderList,orderId);
+        saveDsOrder(orderList, orderId);
         //保存电商收货地址
         JsonArray receiverList = data.getAsJsonArray("receiver_list");
-        saveReceiver(receiverList,orderId);
+        saveReceiver(receiverList, orderId);
     }
 
     private void saveReceiver(JsonArray receiverList, String orderId) {
         List<Receiver> list = Lists.newArrayList();
         for (JsonElement jsonElement : receiverList) {
             JsonObject jsonObject = jsonElement.getAsJsonObject();
-            String name = !jsonObject.get("name").isJsonNull()?jsonObject.get("name").getAsString():null;
-            String area = !jsonObject.get("area").isJsonNull()?jsonObject.get("area").getAsString():null;
-            String address = !jsonObject.get("address").isJsonNull()?jsonObject.get("address").getAsString():null;
-            String mobile = !jsonObject.get("mobile").isJsonNull()?jsonObject.get("mobile").getAsString():null;
+            String name = !jsonObject.get("name").isJsonNull() ? jsonObject.get("name").getAsString() : null;
+            String area = !jsonObject.get("area").isJsonNull() ? jsonObject.get("area").getAsString() : null;
+            String address = !jsonObject.get("address").isJsonNull() ? jsonObject.get("address").getAsString() : null;
+            String mobile = !jsonObject.get("mobile").isJsonNull() ? jsonObject.get("mobile").getAsString() : null;
             Receiver receiver = new Receiver();
             receiver.setOrderId(orderId);
             receiver.setName(name);
@@ -172,12 +178,12 @@ public class DsServiceImpl implements DsService {
         List<DsOrder> list = Lists.newArrayList();
         for (JsonElement jsonElement : orderList) {
             JsonObject jsonObject = jsonElement.getAsJsonObject();
-            String dsOrderId = !jsonObject.get("order_id").isJsonNull()?jsonObject.get("order_id").getAsString():null;
-            BigDecimal orderAmount = !jsonObject.get("order_amount").isJsonNull()?jsonObject.get("order_amount")
-                    .getAsBigDecimal().divide(new BigDecimal("100"), 2, BigDecimal.ROUND_HALF_UP):null;
-            String orderType = !jsonObject.get("order_type").isJsonNull()?jsonObject.get("order_type").getAsString():null;
-            String orderTime = !jsonObject.get("order_time").isJsonNull()?jsonObject.get("order_time").getAsString():null;
-            String orderStatus = !jsonObject.get("order_status").isJsonNull()?jsonObject.get("order_status").getAsString():null;
+            String dsOrderId = !jsonObject.get("order_id").isJsonNull() ? jsonObject.get("order_id").getAsString() : null;
+            BigDecimal orderAmount = !jsonObject.get("order_amount").isJsonNull() ? jsonObject.get("order_amount")
+                    .getAsBigDecimal().divide(new BigDecimal("100"), 2, BigDecimal.ROUND_HALF_UP) : null;
+            String orderType = !jsonObject.get("order_type").isJsonNull() ? jsonObject.get("order_type").getAsString() : null;
+            String orderTime = !jsonObject.get("order_time").isJsonNull() ? jsonObject.get("order_time").getAsString() : null;
+            String orderStatus = !jsonObject.get("order_status").isJsonNull() ? jsonObject.get("order_status").getAsString() : null;
             DsOrder dsOrder = new DsOrder();
             dsOrder.setOrderId(orderId);
             dsOrder.setDsOrderId(dsOrderId);
@@ -192,17 +198,17 @@ public class DsServiceImpl implements DsService {
 
 
     private void saveAccountInfo(JsonObject accountInfoData, String orderId) {
-        BigDecimal accountBalance = !accountInfoData.get("account_balance").isJsonNull()?accountInfoData.get("account_balance")
-                .getAsBigDecimal().divide(new BigDecimal("100"), 2, BigDecimal.ROUND_HALF_UP):null;
+        BigDecimal accountBalance = !accountInfoData.get("account_balance").isJsonNull() ? accountInfoData.get("account_balance")
+                .getAsBigDecimal().divide(new BigDecimal("100"), 2, BigDecimal.ROUND_HALF_UP) : null;
         BigDecimal financialAccountBalance = !accountInfoData.get("financial_account_balance")
-                .isJsonNull()?accountInfoData.get("financial_account_balance")
-                .getAsBigDecimal().divide(new BigDecimal("100"), 2, BigDecimal.ROUND_HALF_UP):null;
+                .isJsonNull() ? accountInfoData.get("financial_account_balance")
+                .getAsBigDecimal().divide(new BigDecimal("100"), 2, BigDecimal.ROUND_HALF_UP) : null;
 
-        String creditPoint = !accountInfoData.get("credit_point").isJsonNull()?accountInfoData.get("credit_point").getAsString():"未知";
-        BigDecimal creditQuota = !accountInfoData.get("credit_quota").isJsonNull()?accountInfoData.get("credit_quota")
-                .getAsBigDecimal().divide(new BigDecimal("100"), 2, BigDecimal.ROUND_HALF_UP):null;
-        BigDecimal consumeQuota = !accountInfoData.get("consume_quota").isJsonNull()?accountInfoData.get("consume_quota")
-                .getAsBigDecimal().divide(new BigDecimal("100"), 2, BigDecimal.ROUND_HALF_UP):null;
+        String creditPoint = !accountInfoData.get("credit_point").isJsonNull() ? accountInfoData.get("credit_point").getAsString() : "未知";
+        BigDecimal creditQuota = !accountInfoData.get("credit_quota").isJsonNull() ? accountInfoData.get("credit_quota")
+                .getAsBigDecimal().divide(new BigDecimal("100"), 2, BigDecimal.ROUND_HALF_UP) : null;
+        BigDecimal consumeQuota = !accountInfoData.get("consume_quota").isJsonNull() ? accountInfoData.get("consume_quota")
+                .getAsBigDecimal().divide(new BigDecimal("100"), 2, BigDecimal.ROUND_HALF_UP) : null;
 
         AccountInfo accountInfo = new AccountInfo();
         accountInfo.setOrderId(orderId);
@@ -216,15 +222,15 @@ public class DsServiceImpl implements DsService {
     }
 
     private BaseInfo saveBaseInfo(JsonObject baseInfoData, String orderId) {
-        String userName = !baseInfoData.get("user_name").isJsonNull()?baseInfoData.get("user_name").getAsString():null;
-        String email = !baseInfoData.get("email").isJsonNull()?baseInfoData.get("email").getAsString():null;
-        String userLevel = !baseInfoData.get("user_level").isJsonNull()?baseInfoData.get("user_level").getAsString():null;
-        String nickName = !baseInfoData.get("nick_name").isJsonNull()?baseInfoData.get("nick_name").getAsString():null;
-        String name = !baseInfoData.get("name").isJsonNull()?baseInfoData.get("name").getAsString():null;
-        String gender = !baseInfoData.get("gender").isJsonNull()?baseInfoData.get("gender").getAsString():null;
-        String mobile = !baseInfoData.get("mobile").isJsonNull()?baseInfoData.get("mobile").getAsString():null;
-        String realName = !baseInfoData.get("real_name").isJsonNull()?baseInfoData.get("real_name").getAsString():null;
-        String identityCode = !baseInfoData.get("identity_code").isJsonNull()?baseInfoData.get("identity_code").getAsString():null;
+        String userName = !baseInfoData.get("user_name").isJsonNull() ? baseInfoData.get("user_name").getAsString() : null;
+        String email = !baseInfoData.get("email").isJsonNull() ? baseInfoData.get("email").getAsString() : null;
+        String userLevel = !baseInfoData.get("user_level").isJsonNull() ? baseInfoData.get("user_level").getAsString() : null;
+        String nickName = !baseInfoData.get("nick_name").isJsonNull() ? baseInfoData.get("nick_name").getAsString() : null;
+        String name = !baseInfoData.get("name").isJsonNull() ? baseInfoData.get("name").getAsString() : null;
+        String gender = !baseInfoData.get("gender").isJsonNull() ? baseInfoData.get("gender").getAsString() : null;
+        String mobile = !baseInfoData.get("mobile").isJsonNull() ? baseInfoData.get("mobile").getAsString() : null;
+        String realName = !baseInfoData.get("real_name").isJsonNull() ? baseInfoData.get("real_name").getAsString() : null;
+        String identityCode = !baseInfoData.get("identity_code").isJsonNull() ? baseInfoData.get("identity_code").getAsString() : null;
 
         BaseInfo baseInfo = new BaseInfo();
         baseInfo.setOrderId(orderId);
@@ -246,8 +252,8 @@ public class DsServiceImpl implements DsService {
         AccountInfo accountInfo = accountInfoRepository.findByOrderId(orderId);
 
         DsVo dsVo = new DsVo();
-        BeanUtils.copyProperties(baseInfo,dsVo);
-        BeanUtils.copyProperties(accountInfo,dsVo);
+        BeanUtils.copyProperties(baseInfo, dsVo);
+        BeanUtils.copyProperties(accountInfo, dsVo);
         return dsVo;
     }
 }

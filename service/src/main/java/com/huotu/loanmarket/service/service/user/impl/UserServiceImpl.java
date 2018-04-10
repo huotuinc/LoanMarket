@@ -135,7 +135,7 @@ public class UserServiceImpl implements UserService {
                       int loginType,
                       Long inviter,
                       @RequestParam(required = false) HttpServletRequest request) throws ErrorMessageException {
-        if (loginType==1){
+        if (loginType == 1) {
             if (!verifyCodeService.checkVerifyCode(loginName, loginPassword)) {
                 throw new ErrorMessageException(UserResultCode.CODE9);
             }
@@ -143,9 +143,9 @@ public class UserServiceImpl implements UserService {
 
         User userInfo = userRepository.findByUserName(loginName);
         if (userInfo == null) {
-            if (loginType==1){
+            if (loginType == 1) {
                 //验证码登录模式下，如果用户不存在，则注册用户
-                userInfo=new User();
+                userInfo = new User();
                 userInfo.setUserName(loginName);
                 userInfo.setRealName(StringUtilsExt.safeGetMobile(loginName));
                 userInfo.setChannelId(RequestUtils.getHeader(request, Constant.APP_CHANNELID_KEY, "default"));
@@ -156,8 +156,8 @@ public class UserServiceImpl implements UserService {
                 if (inviter != null
                         && inviter > 0) {
                     inviterName = userRepository.findUserNameByUserId(inviter);
-                    if(StringUtils.isEmpty(inviterName)){
-                        inviter=0L;
+                    if (StringUtils.isEmpty(inviterName)) {
+                        inviter = 0L;
                     }
                 }
                 userInfo.setInviterId(inviter);
@@ -169,8 +169,7 @@ public class UserServiceImpl implements UserService {
                 }
 
 
-            }
-            else {
+            } else {
                 throw new ErrorMessageException(UserResultCode.CODE5);
             }
         }
@@ -184,8 +183,7 @@ public class UserServiceImpl implements UserService {
             if (!userInfo.getPassword().equalsIgnoreCase(loginPassword)) {
                 throw new ErrorMessageException(UserResultCode.CODE6);
             }
-        }
-        else {
+        } else {
             VerifyCode code = verifyCodeRepository.findByMobileAndMerchantId(loginName);
             code.setUseStatus(true);
         }
@@ -446,28 +444,29 @@ public class UserServiceImpl implements UserService {
             return;
         }
         List<OrderEnum.OrderType> orderTypes = new ArrayList<>();
-        long creditValue=0;
-        int count=0;
+        long creditValue = 0;
+        int count = 0;
         switch (orderType) {
             case JINGDONG:
             case TAOBAO:
                 orderTypes.add(OrderEnum.OrderType.JINGDONG);
                 orderTypes.add(OrderEnum.OrderType.TAOBAO);
-                creditValue=checkConfig.getElectronicBusinessCheck();
-                count = orderRepository.countByAuthStatus(Constant.MERCHANT_ID, userId, OrderEnum.OrderType.JINGDONG,OrderEnum.OrderType.TAOBAO,UserAuthorizedStatusEnums.AUTH_SUCCESS);
+                creditValue = checkConfig.getElectronicBusinessCheck();
+                count = orderRepository.countByAuthStatus(Constant.MERCHANT_ID, userId, OrderEnum.OrderType.JINGDONG, OrderEnum.OrderType.TAOBAO, UserAuthorizedStatusEnums.AUTH_SUCCESS);
+                log.info("电商成功订单量：" + count);
                 break;
             case CARRIER:
                 orderTypes.add(OrderEnum.OrderType.CARRIER);
-                creditValue=checkConfig.getOperatorCheck();
-                count = orderRepository.countByAuthStatus(Constant.MERCHANT_ID, userId, OrderEnum.OrderType.CARRIER,UserAuthorizedStatusEnums.AUTH_SUCCESS);
+                creditValue = checkConfig.getOperatorCheck();
+                count = orderRepository.countByAuthStatus(Constant.MERCHANT_ID, userId, OrderEnum.OrderType.CARRIER, UserAuthorizedStatusEnums.AUTH_SUCCESS);
 
                 break;
             case BACKLIST_FINANCE:
             case BACKLIST_BUS:
                 orderTypes.add(OrderEnum.OrderType.BACKLIST_FINANCE);
                 orderTypes.add(OrderEnum.OrderType.BACKLIST_BUS);
-                creditValue=checkConfig.getBlackListCheck();
-                count = orderRepository.countByAuthStatus(Constant.MERCHANT_ID, userId, OrderEnum.OrderType.BACKLIST_FINANCE,OrderEnum.OrderType.BACKLIST_BUS,UserAuthorizedStatusEnums.AUTH_SUCCESS);
+                creditValue = checkConfig.getBlackListCheck();
+                count = orderRepository.countByAuthStatus(Constant.MERCHANT_ID, userId, OrderEnum.OrderType.BACKLIST_FINANCE, OrderEnum.OrderType.BACKLIST_BUS, UserAuthorizedStatusEnums.AUTH_SUCCESS);
 
                 break;
             default:
@@ -478,9 +477,8 @@ public class UserServiceImpl implements UserService {
 
             if (count == 1) {
 
-                User user= userRepository.findOne(userId);
-                if (user!=null)
-                {
+                User user = userRepository.findOne(userId);
+                if (user != null) {
                     user.setCreditValue(Math.toIntExact(user.getCreditValue() + creditValue));
                     userRepository.save(user);
                 }
