@@ -355,4 +355,23 @@ public class UserController {
         model.addAttribute("appUrl", generalConfig.getYingyongbaoAddr());
         return "register/register.html";
     }
+
+    /**
+     * 获取用户信用估值
+     * @param userId
+     * @return
+     */
+    @RequestMapping(value = "getUserCreditValue",method = RequestMethod.GET)
+    @ResponseBody
+    public  ApiResult getUserCreditValue(@RequestHeader(Constant.APP_USER_ID_KEY) Long userId){
+        User user = userService.findByMerchantIdAndUserId(Constant.MERCHANT_ID, userId);
+        int creditValue=0;
+        if (user!=null)
+        {
+            creditValue=user.getCreditValue();
+        }
+        Map map=new HashMap(5);
+        map.put("creditValue",creditValue);
+        return ApiResult.resultWith(AppCode.SUCCESS,map);
+    }
 }
