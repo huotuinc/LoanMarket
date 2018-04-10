@@ -56,7 +56,6 @@ public class AuthenticationSchedule {
         }
     }
 
-    @Transactional(rollbackFor = Exception.class)
     public void startHand(AsyncTask task) {
         String taskId = task.getTaskId();
         String orderId = task.getOrderId();
