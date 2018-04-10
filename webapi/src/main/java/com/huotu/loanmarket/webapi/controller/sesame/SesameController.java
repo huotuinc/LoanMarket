@@ -11,6 +11,7 @@ import com.antgroup.zmxy.openplatform.api.response.ZhimaCreditWatchlistiiGetResp
 import com.huotu.loanmarket.common.Constant;
 import com.huotu.loanmarket.common.enums.EnumHelper;
 import com.huotu.loanmarket.common.utils.ApiResult;
+import com.huotu.loanmarket.common.utils.HttpUtils;
 import com.huotu.loanmarket.common.utils.RandomUtils;
 import com.huotu.loanmarket.service.config.LoanMarkConfigProvider;
 import com.huotu.loanmarket.service.config.SesameSysConfig;
@@ -25,9 +26,9 @@ import com.huotu.loanmarket.service.model.sesame.SesameConfig;
 import com.huotu.loanmarket.service.service.order.OrderService;
 import com.huotu.loanmarket.service.service.sesame.SesameService;
 import com.huotu.loanmarket.service.service.user.UserService;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.http.HttpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
@@ -73,37 +74,24 @@ public class SesameController {
     public ApiResult verifyIdAndName(@RequestHeader(Constant.APP_MERCHANT_ID_KEY) Integer merchantId,
                                      @RequestHeader(value = Constant.APP_USER_ID_KEY, required = false) Long userId, String name, String idCardNum) {
         log.info("用户欺诈信息开始芝麻授权userId：" + userId);
-        // TODO: 2018/3/3 有待修改
-//        ZhimaCreditAntifraudVerifyRequest req = new ZhimaCreditAntifraudVerifyRequest();
-//        req.setChannel("apppc");
-//        req.setPlatform("zmop");
-//        req.setProductCode(SesameSysConfig.PRODUCT_CODE_CHEAT);
-//        req.setTransactionId(RandomUtils.getTransactionId());
-//        req.setCertNo(idCardNum);
-//        req.setCertType(SesameSysConfig.AUTHENTICATION_TYPE);
-//        req.setName(name);
-//        SesameConfig sesameConfig = loanMarkConfigProvider.getSesameConfig(merchantId);
-//        DefaultZhimaClient client = new DefaultZhimaClient(SesameSysConfig.SESAME_CREDIT_URL, sesameConfig.getAppId(), sesameConfig.getPrivateKey(), sesameConfig.getPublicKey());
+//        String host = "http://idcard.market.alicloudapi.com";
+//        String path = "/lianzhuo/idcard";
+//        String method = "GET";
+//        String appcode = "f3c92fddc07c4470ab2bd0590a8e359f";
+//        Map<String, String> headers = new HashMap<String, String>();
+//        //最后在header中的格式(中间是英文空格)为Authorization:APPCODE 83359fd73fe94948385f570e3c139105
+//        headers.put("Authorization", "APPCODE " + appcode);
+//        Map<String, String> querys = new HashMap<String, String>();
+//        querys.put("cardno", idCardNum);
+//        querys.put("name", name);
 //        try {
-//            ZhimaCreditAntifraudVerifyResponse response = client.execute(req);
-//            if (!StringUtils.isEmpty(response.getBizNo()) && response.getVerifyCode().size() > 0) {
-//                String[] strings = response.getVerifyCode().get(0).split("_");
-//                if (strings.length > 3 && !strings[3].equals("MA")) {
-//                    //不成功
-//                    return ApiResult.resultWith(SesameResultCode.NAME_AND_NUM_NOT_AGREEMENT);
-//                } else {
-//                    //成功
-//                    return ApiResult.resultWith(AppCode.SUCCESS);
-//                }
-//            } else {
-//                //不成功
-//                return ApiResult.resultWith(SesameResultCode.NAME_AND_NUM_NOT_AGREEMENT);
-//            }
-//
-//        } catch (ZhimaApiException e) {
-//            log.error("芝麻欺诈信息验证异常：" + e);
+//            HttpResponse response = HttpUtils.doGet(host, path, method, headers, querys);
+//            System.out.println(response.toString());
+//            //获取response的body
+//            //System.out.println(EntityUtils.toString(response.getEntity()));
+//        } catch (Exception e) {
+//            e.printStackTrace();
 //        }
-//        return ApiResult.resultWith(SesameResultCode.NAME_AND_NUM_NOT_AGREEMENT);
         return ApiResult.resultWith(AppCode.SUCCESS);
     }
 
@@ -196,6 +184,8 @@ public class SesameController {
                 List<ZmWatchListDetail> details = response.getDetails();
                 if (details == null || details.size() == 0) {
                     orderService.save(order);
+                    log.info(MessageFormat.format("初始化信用估值，userId：{0}，订单类型：{1}", userId, OrderEnum.OrderType.BACKLIST_BUS.getName()));
+                    userService.updateUserCreditValue(userId, OrderEnum.OrderType.BACKLIST_BUS);
                     //如果该用户是被邀请的，更新邀请表状态
                     model.addAttribute("order", order);
                     return "sesame/sesame_success";
