@@ -135,9 +135,15 @@ public class UserServiceImpl implements UserService {
                       int loginType,
                       Long inviter,
                       @RequestParam(required = false) HttpServletRequest request) throws ErrorMessageException {
+
+        String demoMobile="13088886666";
+
         if (loginType == 1) {
-            if (!verifyCodeService.checkVerifyCode(loginName, loginPassword)) {
-                throw new ErrorMessageException(UserResultCode.CODE9);
+            //如果当前登陆账号为测试账号，则无需判断验证码
+            if(!demoMobile.equalsIgnoreCase(loginName)) {
+                if (!verifyCodeService.checkVerifyCode(loginName, loginPassword)) {
+                    throw new ErrorMessageException(UserResultCode.CODE9);
+                }
             }
         }
 
@@ -184,8 +190,11 @@ public class UserServiceImpl implements UserService {
                 throw new ErrorMessageException(UserResultCode.CODE6);
             }
         } else {
-            VerifyCode code = verifyCodeRepository.findByMobileAndMerchantId(loginName);
-            code.setUseStatus(true);
+            //如果当前登陆账号为测试账号，则无需判断验证码
+            if(!demoMobile.equalsIgnoreCase(loginName)) {
+                VerifyCode code = verifyCodeRepository.findByMobileAndMerchantId(loginName);
+                code.setUseStatus(true);
+            }
         }
 
         userInfo.setLastLoginTime(LocalDateTime.now());
