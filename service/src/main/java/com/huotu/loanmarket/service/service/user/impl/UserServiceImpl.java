@@ -136,7 +136,7 @@ public class UserServiceImpl implements UserService {
                       Long inviter,
                       @RequestParam(required = false) HttpServletRequest request) throws ErrorMessageException {
 
-        String demoMobile="13088886666";
+        String demoMobile="13088884444";
 
         if (loginType == 1) {
             //如果当前登陆账号为测试账号，则无需判断验证码
